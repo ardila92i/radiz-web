@@ -119,18 +119,15 @@
         if(mts.length===0){
           cardMantenimientos.innerHTML='<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
         }else{
-          const totalM=mts.reduce((s,m)=>s+(Number(m['VALOR'])||0),0);
+          const totalM=mts.reduce((s,m)=>s+(Number(m['VALOR MTOS'])||0),0);
           const itemsM=mts.map(m=>
             '<li>'+
-            '<strong>ID mantenimiento:</strong> '+(m['ID MANTENIMIENTO']||'')+'<br>'+
             '<strong>ID vehículo:</strong> '+(m['ID VEHÍCULO']||'')+'<br>'+
-            '<strong>ID contrato:</strong> '+(m['ID CONTRATO']||'')+'<br>'+
-            '<strong>Fecha:</strong> '+formatearFecha(m['FECHA'])+'<br>'+
-            '<strong>Tipo mto:</strong> '+(m['TIPO MTO']||'')+'<br>'+
-            '<strong>Descripción:</strong> '+(m['DESCRIPCIÓN']||m['DESCRIPCION']||'')+'<br>'+
-            '<strong>Mto realizados:</strong> '+(m['MTO REALIZADOS']||'')+'<br>'+
-            '<strong>Valor:</strong> '+formatearNumero(m['VALOR'])+'<br>'+
-            '<strong>Taller:</strong> '+(m['TALLER']||'')+'<br>'+
+            '<strong>Fecha ult. mantenimiento:</strong> '+formatearFecha(m['FECHA ULT. MANTENIMIENTO'])+'<br>'+
+            '<strong>Tipo ult. mantenimiento:</strong> '+(m['TIPO ULT. MANTENIMIENTO']||'')+'<br>'+
+            '<strong>MTOs realizados:</strong> '+(m['MTOS REALIZADOS']||'')+'<br>'+
+            '<strong>Valor MTOs:</strong> '+formatearNumero(m['VALOR MTOS'])+'<br>'+
+            '<strong>Taller asignado:</strong> '+(m['TALLER ASIGNADO']||'')+'<br>'+
             '<strong>Observaciones:</strong> '+(m['OBSERVACIONES']||'')+
             '</li>'
           ).join('');
