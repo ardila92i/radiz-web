@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Portal de Clientes RADIZ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f3f4f6;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+      padding: 24px 28px 32px;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 1.6rem;
+      color: #111827;
+    }
+    .subtitle {
+      color: #6b7280;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+    }
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+    label {
+      font-size: 0.9rem;
+      color: #374151;
+      font-weight: 600;
+    }
+    input[type="text"] {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    input[type="text"]:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37,99,235,0.15);
+    }
+    button {
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      background: #2563eb;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    .status {
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      min-height: 1.2em;
+    }
+    .status.error {
+      color: #b91c1c;
+    }
+    .status.ok {
+      color: #065f46;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .card {
+      border-radius: 10px;
+      border: 1px solid #e5e7eb;
+      padding: 14px 16px;
+      background: #f9fafb;
+      font-size: 0.9rem;
+    }
+    .card h2 {
+      margin: 0 0 8px;
+      font-size: 1rem;
+      color: #111827;
+    }
+    .card p {
+      margin: 3px 0;
+      color: #4b5563;
+    }
+    ul {
+      padding-left: 18px;
+      margin: 6px 0;
+    }
+    li {
+      margin-bottom: 2px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .badge-activo {
+      background: #dcfce7;
+      color: #166534;
+    }
+    .badge-inactivo {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+    footer {
+      margin-top: 24px;
+      font-size: 0.75rem;
+      color: #9ca3af;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .container {
+        margin: 16px;
+        padding: 18px 16px 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Portal de Clientes RADIZ</h1>
+    <p class="subtitle">
+      Ingresa el <strong>ID del contrato</strong> para consultar el estado, pagos y mantenimientos.
+    </p>
+
+    <div class="form-row">
+      <div style="flex:1">
+        <label for="idContrato">ID CONTRATO</label><br />
+        <input type="text" id="idContrato" placeholder="Ejemplo: R-0001" />
+      </div>
+      <div>
+        <button id="btnConsultar" onclick="consultar()">
+          Consultar
+        </button>
+      </div>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <div class="grid" id="resultados" style="display:none;">
+      <div class="card" id="cardContrato"></div>
+      <div class="card" id="cardPagos"></div>
+      <div class="card" id="cardMantenimientos"></div>
+    </div>
+
+    <footer>
+      Versión interna • RADIZ Renting Vehicular
+    </footer>
+  </div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
+
+    async function consultar() {
+      const input = document.getElementById('idContrato');
+      const id = input.value.trim();
+      const status = document.getElementById('status');
+      const btn = document.getElementById('btnConsultar');
+      const resultados = document.getElementById('resultados');
+      const cardContrato = document.getElementById('cardContrato');
+      const cardPagos = document.getElementById('cardPagos');
+      const cardMantenimientos = document.getElementById('cardMantenimientos');
+
+      status.className = 'status';
+      resultados.style.display = 'none';
+      status.textContent = '';
+
+      if (!id) {
+        status.classList.add('error');
+        status.textContent = 'Por favor ingresa un ID de contrato.';
+        return;
+      }
+
+      btn.disabled = true;
+      status.textContent = 'Consultando información...';
+
+      try {
+        const url = API_URL + '?id=' + encodeURIComponent(id);
+        const resp = await fetch(url);
+        const data = await resp.json();
+
+        if (!data.ok) {
+          status.className = 'status error';
+          status.textContent = data.error || 'No se encontró información para ese contrato.';
+          btn.disabled = false;
+          return;
+        }
+
+        // Contrato
+        const c = data.contrato || {};
+        const estado = (c['ESTADO'] || '').toString().toUpperCase();
+        const tipoUsuario = c['TIPO USUARIO'] || '';
+        const beneficios = c['BENEFICIOS'] || '';
+
+        cardContrato.innerHTML = `
+          <h2>Contrato</h2>
+          <p><strong>ID:</strong> ${c['ID CONTRATO'] || ''}</p>
+          <p><strong>Tipo usuario:</strong> ${tipoUsuario}</p>
+          <p><strong>Vehículo:</strong> ${c['ID VEHÍCULO'] || ''}</p>
+          <p><strong>Inicio:</strong> ${formatearFecha(c['INICIO'])}</p>
+          <p><strong>Fin:</strong> ${formatearFecha(c['FIN'])}</p>
+          <p><strong>Tarifa semanal:</strong> ${formatearNumero(c['TARIFA SEMANAL'])}</p>
+          <p><strong>Beneficios:</strong> ${beneficios}</p>
+          <p>
+            <span class="badge ${estado === 'ACTIVO' ? 'badge-activo' : 'badge-inactivo'}">
+              ${estado || 'SIN ESTADO'}
+            </span>
+          </p>
+        `;
+
+        // Pagos
+        const pagos = data.pagos || [];
+        if (pagos.length === 0) {
+          cardPagos.innerHTML = `
+            <h2>Pagos</h2>
+            <p>No hay pagos registrados para este contrato.</p>
+          `;
+        } else {
+          const total = pagos.reduce((s, p) => s + (Number(p['VALOR PAGO']) || 0), 0);
+          const items = pagos.map(p => `
+            <li>${formatearFecha(p['FECHA PAGO'])} · ${formatearNumero(p['VALOR PAGO'])} (${p['MÉTODO'] || p['METODO'] || ''})</li>
+          `).join('');
+          cardPagos.innerHTML = `
+            <h2>Pagos</h2>
+            <p><strong>Total pagado:</strong> ${formatearNumero(total)}</p>
+            <ul>${items}</ul>
+          `;
+        }
+
+        // Mantenimientos
+        const mts = data.mantenimientos || [];
+        if (mts.length === 0) {
+          cardMantenimientos.innerHTML = `
+            <h2>Mantenimientos</h2>
+            <p>No hay mantenimientos registrados para este contrato.</p>
+          `;
+        } else {
+          const totalM = mts.reduce((s, m) => s + (Number(m['VALOR']) || 0), 0);
+          const itemsM = mts.map(m => `
+            <li>${formatearFecha(m['FECHA'])} · ${m['TIPO MTO'] || ''} · ${formatearNumero(m['VALOR'])}</li>
+          `).join('');
+          cardMantenimientos.innerHTML = `
+            <h2>Mantenimientos</h2>
+            <p><strong>Total mantenimientos:</strong> ${formatearNumero(totalM)}</p>
+            <ul>${itemsM}</ul>
+          `;
+        }
+
+        resultados.style.display = 'grid';
+        status.className = 'status ok';
+        status.textContent = 'Información cargada correctamente.';
+
+      } catch (err) {
+        console.error(err);
+        status.className = 'status error';
+        status.textContent = 'Error al consultar la información. Intenta de nuevo.';
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function formatearNumero(n) {
+      const num = Number(n);
+      if (isNaN(num)) return n || '';
+      return num.toLocaleString('es-CO', { style: 'currency', currency: 'COP', maximumFractionDigits: 0 });
+    }
+
+    function formatearFecha(v) {
+      if (!v) return '';
+      try {
+        const d = new Date(v);
+        if (isNaN(d.getTime())) return v;
+        return d.toLocaleDateString('es-CO');
+      } catch (e) {
+        return v;
+      }
+    }
+  </script>
+</body>
+</html>
