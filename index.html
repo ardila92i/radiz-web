@@ -20,7 +20,7 @@
     .status.error{color:#b91c1c}
     .status.ok{color:#065f46}
     .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:16px}
-    .card{border-radius:10px;border:1px solid #e5e7eb;padding:14px 16px;background:#f9fafb;font-size:.9rem}
+    .card{border-radius:10px;border:1px solid:#e5e7eb;padding:14px 16px;background:#f9fafb;font-size:.9rem}
     .card h2{margin:0 0 8px;font-size:1rem;color:#111827}
     .card p{margin:3px 0;color:#4b5563}
     ul{padding-left:18px;margin:6px 0}
@@ -59,7 +59,7 @@
       <p style="font-size:.9rem;color:#6b7280;margin:4px 0 12px;">Ingresa el monto a pagar y completa el proceso con Wompi.</p>
       <label for="montoPago" style="display:block;margin-bottom:6px;">Monto a pagar (COP)</label>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-        <input id="montoPago" type="number" min="100000" step="1000" placeholder="Ej: 170000" style="padding:8px 10px;border-radius:8px;border:1px solid #d1d5db;width:200px;" />
+        <input id="montoPago" type="number" min="100000" step="1000" placeholder="Ej: 170000" style="padding:8px 10px;border-radius:8px;border:1px solid:#d1d5db;width:200px;" />
         <button type="button" onclick="crearPagoWompi()">Pagar con Wompi</button>
       </div>
       <p id="pagoError" style="color:#dc2626;margin-top:8px;display:none;font-size:.85rem;">Ingresa un monto válido (mínimo 100.000).</p>
@@ -114,7 +114,8 @@
           ).join('');
           cardPagos.innerHTML='<h2>Pagos</h2><ul>'+items+'</ul>';
         }
-        const mts=data.mantenimientos||[];
+        const rawM=data.mantenimientos??data.mantenimiento??data.mtos??data.manten??[];
+        const mts=Array.isArray(rawM)?rawM:(rawM?[rawM]:[]);
         if(mts.length===0){
           cardMantenimientos.innerHTML='<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
         }else{
