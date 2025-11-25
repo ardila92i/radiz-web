@@ -323,36 +323,41 @@
       }
     }
   </script>
+<script>
+  const WOMPI_PUBLIC_KEY = 'PUB_KEY_AQUI';
+  const WOMPI_REDIRECT_URL = 'https://portal.radizco.com/';
 
-  <script>
-    const WOMPI_PUBLIC_KEY = 'PUB_KEY_AQUI';
-    const WOMPI_REDIRECT_URL = 'https://portal.radizco.com/';
+  function crearPagoWompi() {
+    const montoInput = document.getElementById('montoPago');
+    const contratoInput = document.getElementById('idContrato');
 
-    function crearPagoWompi() {
-      const montoInput = document.getElementById('montoPago');
-      const errorLabel = document.getElementById('pagoError');
-      const valor = parseInt(montoInput.value, 10);
+    const valor = parseInt(montoInput.value, 10);
+    const contrato = (contratoInput.value || '').trim().toUpperCase();
 
-      errorLabel.style.display = 'none';
-
-      if (!valor || valor < 1000) {
-        errorLabel.style.display = 'block';
-        return;
-      }
-
-      const idContrato = (document.getElementById('idContrato').value || '').trim();
-      const reference = 'PAGO_' + (idContrato || 'SIN_CONTRATO') + '_' + Date.now();
-
-      const checkout = new WidgetCheckout({
-        currency: 'COP',
-        amountInCents: valor * 100,
-        reference: reference,
-        publicKey: WOMPI_PUBLIC_KEY,
-        redirectUrl: WOMPI_REDIRECT_URL
-      });
-
-      checkout.open();
+    if (!contrato) {
+      alert('Primero escribe el ID del contrato antes de pagar.');
+      return;
     }
-  </script>
+
+    if (!valor || valor < 1000) {
+      alert('Ingresa un monto válido (mínimo 1.000).');
+      return;
+    }
+
+    const amountInCents = valor * 100;
+
+    const referencia = `RADIZ_${contrato}_${Date.now()}`;
+
+    const checkout = new WidgetCheckout({
+      currency: 'COP',
+      amountInCents: amountInCents,
+      reference: referencia,
+      publicKey: WOMPI_PUBLIC_KEY,
+      redirectUrl: WOMPI_REDIRECT_URL
+    });
+
+    checkout.open();
+  }
+</script>
 </body>
 </html>
