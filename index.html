@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>Portal de Clientes RADIZ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://checkout.wompi.co/widget.js" async></script>
   <style>
     body {
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -168,6 +169,30 @@
       <div class="card" id="cardMantenimientos"></div>
     </div>
 
+    <div id="seccionPago" style="margin-top: 24px;">
+      <h2 style="font-size:1rem; margin:0 0 4px; color:#111827;">Realizar pago</h2>
+      <p style="font-size:0.9rem; color:#6b7280; margin:4px 0 12px;">
+        Ingresa el monto que deseas pagar y completa el proceso en Wompi.
+      </p>
+      <label for="montoPago" style="display:block; margin-bottom:6px;">Monto a pagar (COP)</label>
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <input
+          id="montoPago"
+          type="number"
+          min="1000"
+          step="1000"
+          placeholder="Ej: 170000"
+          style="padding:8px 10px; border-radius:8px; border:1px solid #d1d5db; width:200px;"
+        />
+        <button type="button" onclick="crearPagoWompi()">
+          Pagar con Wompi
+        </button>
+      </div>
+      <p id="pagoError" style="color:#dc2626; margin-top:8px; display:none; font-size:0.85rem;">
+        Ingresa un monto válido (mínimo 1.000).
+      </p>
+    </div>
+
     <footer>
       Versión interna • RADIZ Renting Vehicular
     </footer>
@@ -211,7 +236,6 @@
           return;
         }
 
-        // Contrato
         const c = data.contrato || {};
         const estado = (c['ESTADO'] || '').toString().toUpperCase();
         const tipoUsuario = c['TIPO USUARIO'] || '';
@@ -233,7 +257,6 @@
           </p>
         `;
 
-        // Pagos
         const pagos = data.pagos || [];
         if (pagos.length === 0) {
           cardPagos.innerHTML = `
@@ -252,7 +275,6 @@
           `;
         }
 
-        // Mantenimientos
         const mts = data.mantenimientos || [];
         if (mts.length === 0) {
           cardMantenimientos.innerHTML = `
@@ -299,6 +321,37 @@
       } catch (e) {
         return v;
       }
+    }
+  </script>
+
+  <script>
+    const WOMPI_PUBLIC_KEY = 'PUB_KEY_AQUI';
+    const WOMPI_REDIRECT_URL = 'https://portal.radizco.com/';
+
+    function crearPagoWompi() {
+      const montoInput = document.getElementById('montoPago');
+      const errorLabel = document.getElementById('pagoError');
+      const valor = parseInt(montoInput.value, 10);
+
+      errorLabel.style.display = 'none';
+
+      if (!valor || valor < 1000) {
+        errorLabel.style.display = 'block';
+        return;
+      }
+
+      const idContrato = (document.getElementById('idContrato').value || '').trim();
+      const reference = 'PAGO_' + (idContrato || 'SIN_CONTRATO') + '_' + Date.now();
+
+      const checkout = new WidgetCheckout({
+        currency: 'COP',
+        amountInCents: valor * 100,
+        reference: reference,
+        publicKey: WOMPI_PUBLIC_KEY,
+        redirectUrl: WOMPI_REDIRECT_URL
+      });
+
+      checkout.open();
     }
   </script>
 </body>
