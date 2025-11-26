@@ -542,7 +542,16 @@
 
       if(tipo==='AFILIADO'){
         // === AFILIADO ===
-        const af=data.afiliado||{};
+        const afiliados=data.afiliados||[];
+        const vehiculosAll=data.vehiculos||[];
+
+        const idAfiliado=(c['ID AFILIADO']||id).toString().trim();
+
+        // Buscar afiliado por ID AFILIADO en la tabla completa
+        const af = afiliados.find(a =>
+          String(a['ID AFILIADO'] || '').trim() === idAfiliado
+        ) || {};
+
         datosAfiliadoActual=af;
 
         // Nombre desde AFILIADOS; si falta, usa ID CLIENTE
@@ -564,6 +573,7 @@
           }
         }
 
+        // Tarjeta principal del afiliado
         cardContrato.innerHTML=
           '<h2>Afiliado</h2>'+
           '<p><strong>ID contrato:</strong> '+(c['ID CONTRATO']||id)+'</p>'+
@@ -580,8 +590,14 @@
           '<p><strong>Días de corte:</strong> '+diasCorte+'</p>'+
           '<p><strong>Inicio contrato:</strong> '+formatearFecha(c['INICIO'])+'</p>';
 
-        const vehiculos=data.vehiculosContrato||[];
-        const numVehiculos=Array.isArray(vehiculos)?vehiculos.length:0;
+        // Vehículos asociados al afiliado o al contrato
+        const vehiculosContrato = vehiculosAll.filter(v => {
+          const idContrVeh = String(v['ID CONTRATO'] || '').trim();
+          const idAfiliadoVeh = String(v['ID AFILIADO'] || '').trim();
+          return idContrVeh === id || idAfiliadoVeh === idAfiliado;
+        });
+
+        const numVehiculos=vehiculosContrato.length;
         resumenAfiliadoVehiculos=numVehiculos;
 
         const mtsAfiliado=mts.filter(m=>String(m['ID CONTRATO']||'').trim()===id);
@@ -593,7 +609,7 @@
           '<p><strong>Cantidad de vehículos afiliados:</strong> '+(numVehiculos||'0')+'</p>'+
           '<p><strong>Mantenimientos registrados:</strong> '+(numMts||'0')+'</p>';
 
-        // actualizar modales afiliado (solo lectura de datos ya calculados)
+        // actualizar modales afiliado
         const modalFecha=document.getElementById('modalFechaPagosTexto');
         modalFecha.textContent='Días de corte de pagos: '+diasCorte;
 
@@ -606,8 +622,8 @@
           'Valor total liquidado: '+valorLiqTexto;
 
         // menú para afiliados
-        document.getElementById('menuRenting').style.display='none';
-        document.getElementById('menuAfiliado').style.display='block';
+        menuRenting.style.display='none';
+        menuAfiliado.style.display='block';
         fabMenu.style.display='block';
 
       }else{
@@ -669,8 +685,8 @@
         const tallerEjemplo='Taller asignado: '+(mts[0]?.['TALLER ASIGNADO']||'Información no disponible.');
         document.getElementById('modalTallerTexto').textContent=tallerEjemplo;
 
-        document.getElementById('menuRenting').style.display='block';
-        document.getElementById('menuAfiliado').style.display='none';
+        menuRenting.style.display='block';
+        menuAfiliado.style.display='none';
         fabMenu.style.display='block';
       }
 
