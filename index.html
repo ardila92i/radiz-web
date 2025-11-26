@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://checkout.wompi.co; connect-src 'self' https://script.google.com https://checkout.wompi.co; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; frame-src https://checkout.wompi.co;">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://checkout.wompi.co; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://checkout.wompi.co; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; frame-src https://checkout.wompi.co;">
   <title>PORTAL CLIENTES</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://checkout.wompi.co/widget.js" async></script>
@@ -68,7 +68,10 @@
     <footer>Versión interna • RADIZ Suministro Vehicular</footer>
   </div>
   <script>
+    // Pega AQUÍ exactamente la URL de tu Apps Script que probaste en el navegador
+    // y que devuelve {"ok":true,...} cuando le agregas ?id=R-0001
     const API_URL='https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
+
     const WOMPI_PUBLIC_KEY='pub_test_3dus3DoqOnuXmuGDbXVVVZEbhUNsHVfI';
     const WOMPI_REDIRECT_URL='https://portal.radizco.com/';
 
@@ -212,33 +215,9 @@
         redirectUrl:WOMPI_REDIRECT_URL
       });
 
-      // Al cerrar el widget, registramos el pago en la hoja PAGOS_PORTAL
-      checkout.open(async function(result){
-        const transaction=result && result.transaction;
+      checkout.open(function(result){
+        const transaction=result.transaction;
         console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
-
-        try{
-          if(transaction && transaction.id){
-            const body=new URLSearchParams();
-            body.append('accion','registrar_pago');
-            body.append('referencia',reference);
-            body.append('idContrato',idContrato);
-            body.append('monto',String(valor));
-
-            const resp=await fetch(API_URL,{
-              method:'POST',
-              headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},
-              body
-            });
-
-            const data=await resp.json().catch(()=>null);
-            console.log('Registro de pago en hoja:',data);
-          }else{
-            console.log('No se registró el pago en la hoja porque no hay transacción válida.');
-          }
-        }catch(err){
-          console.error('Error registrando pago en hoja:',err);
-        }
       });
     }
   </script>
