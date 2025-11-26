@@ -7,39 +7,333 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://checkout.wompi.co/widget.js" async></script>
   <style>
-    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f3f4f6;margin:0;padding:0}
-    .container{max-width:900px;margin:40px auto;background:#fff;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.06);padding:24px 28px 32px}
-    h1{margin-top:0;font-size:1.6rem;color:#111827}
-    .subtitle{color:#6b7280;font-size:.95rem;margin-bottom:20px}
-    .form-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;align-items:center}
-    label{font-size:.9rem;color:#374151;font-weight:600}
-    input[type=text]{flex:1;min-width:200px;padding:10px 12px;border-radius:8px;border:1px solid:#d1d5db;font-size:.95rem;outline:none}
-    input[type=text]:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,235,.15)}
-    button{padding:10px 18px;border-radius:999px;border:none;font-size:.95rem;font-weight:600;cursor:pointer;background:#2563eb;color:#fff;display:inline-flex;align-items:center;gap:6px}
-    button:disabled{opacity:.6;cursor:default}
-    .status{font-size:.9rem;margin-bottom:16px;min-height:1.2em}
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:linear-gradient(to bottom,#0050d7 0%,#f3f4f6 55%,#e5e7eb 100%);
+      margin:0;
+      padding:24px 8px;
+    }
+    .container{
+      max-width:900px;
+      margin:0 auto;
+      background:#fff;
+      border-radius:12px;
+      box-shadow:0 10px 25px rgba(0,0,0,.08);
+      padding:24px 28px 28px;
+    }
+    .top-bar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:8px;
+    }
+    .logo-top img{
+      max-width:260px;
+      max-height:120px;
+      object-fit:contain;
+    }
+    h1{
+      margin:8px 0 10px;
+      font-size:1.6rem;
+      color:#111827;
+    }
+    .subtitle{
+      color:#6b7280;
+      font-size:.95rem;
+      margin-bottom:20px;
+    }
+    .form-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-bottom:20px;
+      align-items:center;
+    }
+    label{
+      font-size:.9rem;
+      color:#374151;
+      font-weight:600;
+    }
+    input[type=text]{
+      flex:1;
+      min-width:200px;
+      padding:10px 12px;
+      border-radius:8px;
+      border:1px solid:#d1d5db;
+      font-size:.95rem;
+      outline:none;
+    }
+    input[type=text]:focus{
+      border-color:#2563eb;
+      box-shadow:0 0 0 1px rgba(37,99,235,.15);
+    }
+    button{
+      padding:10px 18px;
+      border-radius:999px;
+      border:none;
+      font-size:.95rem;
+      font-weight:600;
+      cursor:pointer;
+      background:#2563eb;
+      color:#fff;
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      white-space:nowrap;
+    }
+    button:disabled{
+      opacity:.6;
+      cursor:default;
+    }
+    .status{
+      font-size:.9rem;
+      margin-bottom:16px;
+      min-height:1.2em;
+      color:#374151;
+    }
     .status.error{color:#b91c1c}
     .status.ok{color:#065f46}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:16px}
-    .card{border-radius:10px;border:1px solid:#e5e7eb;padding:14px 16px;background:#f9fafb;font-size:.9rem}
-    .card h2{margin:0 0 8px;font-size:1rem;color:#111827}
-    .card p{margin:3px 0;color:#4b5563}
-    ul{padding-left:18px;margin:6px 0}
-    li{margin-bottom:4px}
-    .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:600;text-transform:uppercase}
-    .badge-activo{background:#dcfce7;color:#166534}
-    .badge-inactivo{background:#fee2e2;color:#b91c1c}
-    footer{margin-top:24px;font-size:.75rem;color:#9ca3af;text-align:center}
-    .logo-top{text-align:center;margin-bottom:12px}
-    .logo-top img{max-width:260px;max-height:120px;object-fit:contain}
-    @media(max-width:600px){.container{margin:16px;padding:18px 16px 22px}}
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:16px;
+      margin-top:16px;
+    }
+    .card{
+      border-radius:10px;
+      border:1px solid:#e5e7eb;
+      padding:14px 16px;
+      background:#f9fafb;
+      font-size:.9rem;
+    }
+    .card h2{
+      margin:0 0 8px;
+      font-size:1.05rem;
+      color:#111827;
+      font-weight:700;
+    }
+    .card p{
+      margin:3px 0;
+      color:#111827;
+    }
+    .card strong{
+      font-weight:600;
+    }
+    ul{
+      padding-left:18px;
+      margin:6px 0;
+    }
+    li{
+      margin-bottom:4px;
+      color:#111827;
+    }
+    .badge{
+      display:inline-block;
+      padding:2px 8px;
+      border-radius:999px;
+      font-size:.75rem;
+      font-weight:600;
+      text-transform:uppercase;
+    }
+    .badge-activo{
+      background:#dcfce7;
+      color:#166534;
+    }
+    .badge-inactivo{
+      background:#fee2e2;
+      color:#b91c1c;
+    }
+    footer{
+      margin-top:24px;
+      font-size:.75rem;
+      color:#9ca3af;
+      text-align:center;
+    }
+    #seccionPago h2{
+      font-size:1rem;
+      margin:0 0 4px;
+      color:#111827;
+      font-weight:600;
+    }
+    #seccionPago p{
+      font-size:.9rem;
+      color:#4b5563;
+      margin:4px 0 12px;
+    }
+    #montoPago{
+      padding:8px 10px;
+      border-radius:8px;
+      border:1px solid:#d1d5db;
+      width:200px;
+      font-size:.95rem;
+    }
+    #montoPago:focus{
+      border-color:#2563eb;
+      box-shadow:0 0 0 1px rgba(37,99,235,.15);
+      outline:none;
+    }
+    #pagoError{
+      color:#dc2626;
+      margin-top:8px;
+      display:none;
+      font-size:.85rem;
+    }
+    .menu-button{
+      width:40px;
+      height:40px;
+      border-radius:999px;
+      background:#2563eb;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:0;
+    }
+    .menu-icon{
+      width:18px;
+      height:14px;
+      position:relative;
+    }
+    .menu-icon span{
+      position:absolute;
+      left:0;
+      right:0;
+      height:2px;
+      background:#fff;
+      border-radius:999px;
+    }
+    .menu-icon span:nth-child(1){top:0}
+    .menu-icon span:nth-child(2){top:6px}
+    .menu-icon span:nth-child(3){top:12px}
+    .menu-dropdown{
+      position:absolute;
+      right:28px;
+      top:70px;
+      background:#fff;
+      border:1px solid #e5e7eb;
+      border-radius:10px;
+      box-shadow:0 10px 25px rgba(0,0,0,.12);
+      padding:8px 0;
+      min-width:190px;
+      z-index:20;
+      display:none;
+    }
+    .menu-dropdown button{
+      background:transparent;
+      color:#111827;
+      width:100%;
+      justify-content:flex-start;
+      border-radius:0;
+      padding:8px 16px;
+      font-weight:500;
+    }
+    .menu-dropdown button:hover{
+      background:#f3f4f6;
+    }
+    .top-bar-wrapper{
+      position:relative;
+    }
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:30;
+    }
+    .modal{
+      background:#fff;
+      border-radius:12px;
+      max-width:420px;
+      width:90%;
+      padding:20px 22px 18px;
+      box-shadow:0 20px 40px rgba(15,23,42,.25);
+    }
+    .modal h2{
+      margin:0 0 10px;
+      font-size:1.15rem;
+      color:#111827;
+    }
+    .modal p{
+      font-size:.9rem;
+      color:#374151;
+      margin:6px 0;
+    }
+    .modal-actions{
+      margin-top:16px;
+      text-align:right;
+    }
+    .modal-close{
+      background:#e5e7eb;
+      color:#111827;
+      padding:8px 16px;
+      font-size:.9rem;
+    }
+    .modal-close:hover{
+      background:#d1d5db;
+    }
+    .modal input[type=email]{
+      width:100%;
+      padding:8px 10px;
+      border-radius:8px;
+      border:1px solid #d1d5db;
+      font-size:.9rem;
+      margin-top:4px;
+    }
+    .modal input[type=email]:focus{
+      border-color:#2563eb;
+      outline:none;
+      box-shadow:0 0 0 1px rgba(37,99,235,.15);
+    }
+    .modal-primary{
+      background:#2563eb;
+      color:#fff;
+      padding:8px 16px;
+      font-size:.9rem;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+    }
+    .modal-primary:hover{
+      filter:brightness(0.95);
+    }
+    @media(max-width:600px){
+      .container{
+        margin:0;
+        padding:18px 16px 22px;
+      }
+      .menu-dropdown{
+        right:16px;
+        top:64px;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="logo-top"><img src="logoradiz.png" alt="Logo RADIZ" id="logo-radiz" /></div>
+    <div class="top-bar-wrapper">
+      <div class="top-bar">
+        <div class="logo-top">
+          <img src="logoradiz.png" alt="Logo RADIZ" id="logo-radiz" />
+        </div>
+        <button class="menu-button" id="menuToggle" aria-label="Abrir menú">
+          <div class="menu-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </button>
+      </div>
+      <div class="menu-dropdown" id="menuDropdown">
+        <button type="button" data-modal="beneficios">Beneficios</button>
+        <button type="button" data-modal="historial">Historial de pagos</button>
+        <button type="button" data-modal="taller">Taller asignado</button>
+      </div>
+    </div>
+
     <h1>PORTAL CLIENTES</h1>
     <p class="subtitle">Ingresa el <strong>ID del contrato</strong> para consultar el estado, pagos y mantenimientos.</p>
+
     <div class="form-row">
       <div style="flex:1">
         <label for="idContrato">ID CONTRATO</label><br />
@@ -49,24 +343,40 @@
         <button id="btnConsultar" onclick="consultar()">Consultar</button>
       </div>
     </div>
+
     <div id="status" class="status"></div>
+
     <div class="grid" id="resultados" style="display:none;">
       <div class="card" id="cardContrato"></div>
       <div class="card" id="cardPagos"></div>
       <div class="card" id="cardMantenimientos"></div>
     </div>
+
     <div id="seccionPago" style="margin-top:24px;">
-      <h2 style="font-size:1rem;margin:0 0 4px;color:#111827;">Realizar pago</h2>
-      <p style="font-size:.9rem;color:#6b7280;margin:4px 0 12px;">Ingresa el monto a pagar y completa el proceso con Wompi.</p>
+      <h2>Realizar pago</h2>
+      <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
       <label for="montoPago" style="display:block;margin-bottom:6px;">Monto a pagar (COP)</label>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
-        <input id="montoPago" type="number" min="100000" step="1000" placeholder="Ej: 170000" style="padding:8px 10px;border-radius:8px;border:1px solid:#d1d5db;width:200px;" />
+        <input id="montoPago" type="number" min="100000" step="1000" placeholder="Ej: 170000" />
         <button type="button" onclick="crearPagoWompi()">Pagar con Wompi</button>
       </div>
-      <p id="pagoError" style="color:#dc2626;margin-top:8px;display:none;font-size:.85rem;">Ingresa un monto válido (mínimo 100.000).</p>
+      <p id="pagoError">Ingresa un monto válido (mínimo 100.000).</p>
     </div>
+
     <footer>Versión interna • RADIZ Suministro Vehicular</footer>
   </div>
+
+  <!-- Modal genérico -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h2 id="modalTitle"></h2>
+      <div id="modalContent"></div>
+      <div class="modal-actions">
+        <button type="button" class="modal-close" id="modalClose">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const API_URL='https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
     const WOMPI_PUBLIC_KEY='pub_test_3dus3DoqOnuXmuGDbXVVVZEbhUNsHVfI';
@@ -110,7 +420,7 @@
 
         cardContrato.innerHTML=
           '<h2>Contrato</h2>'+
-          '<p><strong>ID:</strong> '+(c['ID CONTRATO']||'')+'</p>'+
+          '<p><strong>ID contrato:</strong> '+(c['ID CONTRATO']||'')+'</p>'+
           '<p><strong>Tipo usuario:</strong> '+(c['TIPO USUARIO']||'')+'</p>'+
           '<p><strong>Vehículo:</strong> '+(c['ID VEHÍCULO']||'')+'</p>'+
           '<p><strong>Inicio:</strong> '+formatearFecha(c['INICIO'])+'</p>'+
@@ -165,6 +475,7 @@
         status.className='status ok';
         status.textContent='Información cargada correctamente.';
       }catch(e){
+        console.error(e);
         status.className='status error';
         status.textContent='Error al consultar la información. Intenta de nuevo.';
       }finally{
@@ -212,34 +523,121 @@
         redirectUrl:WOMPI_REDIRECT_URL
       });
 
-      // === CALLBACK: registrar pago en PAGOS_PORTAL cuando esté aprobado ===
-      checkout.open(async function(result){
-        const transaction=result && result.transaction;
-        console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
-
-        if(!transaction) return;
-        if(transaction.status!=='APPROVED') return;
-
-        const referenciaTx = transaction.reference || reference;
-        const montoPesos = Math.round((transaction.amountInCents || (valor*100)) / 100);
-
+      checkout.open(function(result){
         try{
-          await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-            },
-            body: new URLSearchParams({
-              accion: 'registrar_pago',
-              referencia: referenciaTx,
-              idContrato: idContrato,
-              monto: String(montoPesos)
-            }).toString()
-          });
+          const transaction=result && result.transaction ? result.transaction : {};
+          console.log('Transacción Wompi:', transaction.id, transaction.status);
+          registrarPagoEnPortal(reference,idContrato,valor,transaction);
         }catch(err){
-          console.error('Error registrando pago en PAGOS_PORTAL:', err);
+          console.error('Error procesando callback de Wompi',err);
         }
       });
+    }
+
+    async function registrarPagoEnPortal(referencia,idContrato,monto,transaction){
+      try{
+        const payload=new URLSearchParams({
+          accion:'registrar_pago',
+          referencia:referencia,
+          idContrato:idContrato||'',
+          monto:String(monto||0),
+          wompiId:transaction && transaction.id ? transaction.id : '',
+          wompiStatus:transaction && transaction.status ? transaction.status : ''
+        });
+
+        await fetch(API_URL,{
+          method:'POST',
+          headers:{'Content-Type':'application/x-www-form-urlencoded'},
+          body:payload
+        });
+      }catch(e){
+        console.error('Error al registrar pago en hoja PAGOS_PORTAL',e);
+      }
+    }
+
+    // --- Menú y modales ---
+
+    const menuToggle=document.getElementById('menuToggle');
+    const menuDropdown=document.getElementById('menuDropdown');
+    const modalBackdrop=document.getElementById('modalBackdrop');
+    const modalTitle=document.getElementById('modalTitle');
+    const modalContent=document.getElementById('modalContent');
+    const modalClose=document.getElementById('modalClose');
+
+    menuToggle.addEventListener('click',()=>{
+      const visible=menuDropdown.style.display==='block';
+      menuDropdown.style.display=visible?'none':'block';
+    });
+
+    document.addEventListener('click',e=>{
+      if(!menuDropdown.contains(e.target) && !menuToggle.contains(e.target)){
+        menuDropdown.style.display='none';
+      }
+    });
+
+    menuDropdown.addEventListener('click',e=>{
+      const btn=e.target.closest('button[data-modal]');
+      if(!btn)return;
+      const tipo=btn.getAttribute('data-modal');
+      abrirModal(tipo);
+      menuDropdown.style.display='none';
+    });
+
+    modalClose.addEventListener('click',cerrarModal);
+    modalBackdrop.addEventListener('click',e=>{
+      if(e.target===modalBackdrop)cerrarModal();
+    });
+
+    function abrirModal(tipo){
+      if(tipo==='beneficios'){
+        modalTitle.textContent='Beneficios de tu plan';
+        modalContent.innerHTML=
+          '<p><strong>PLAN BÁSICO</strong></p>'+
+          '<p>Beneficios de ejemplo:</p>'+
+          '<ul>'+
+          '<li>Uso del vehículo para trabajo y uso personal.</li>'+
+          '<li>Soporte y seguimiento en ruta.</li>'+
+          '<li>Recordatorio de mantenimientos programados.</li>'+
+          '</ul>';
+      }else if(tipo==='historial'){
+        modalTitle.textContent='Recibe tu historial de pagos';
+        modalContent.innerHTML=
+          '<p>Escribe tu correo electrónico y te enviaremos tu historial de pagos en formato PDF.</p>'+
+          '<label for="historialEmail" style="font-size:.85rem;font-weight:600;color:#374151;">Correo electrónico</label>'+
+          '<input type="email" id="historialEmail" placeholder="ejemplo@correo.com" />'+
+          '<div class="modal-actions" style="margin-top:14px;text-align:right;">'+
+          '<button type="button" class="modal-primary" id="btnEnviarHistorial">Enviar historial</button>'+
+          '</div>';
+
+        const btnEnviar=modalContent.querySelector('#btnEnviarHistorial');
+        if(btnEnviar){
+          btnEnviar.onclick=function(){
+            const input=document.getElementById('historialEmail');
+            const email=(input.value||'').trim();
+            const valido=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            if(!valido){
+              alert('Por favor ingresa un correo válido.');
+              input.focus();
+              return;
+            }
+            alert('Hemos recibido tu solicitud. En breve recibirás tu historial en PDF en: '+email);
+          };
+        }
+      }else if(tipo==='taller'){
+        modalTitle.textContent='Taller asignado';
+        modalContent.innerHTML=
+          '<p><strong>Nombre del taller:</strong> AKT CL 70</p>'+
+          '<p><strong>Dirección:</strong> Calle 70 # 45-10 (Ejemplo)</p>'+
+          '<p><strong>Teléfono:</strong> (300) 000 0000</p>'+
+          '<p><strong>Horario:</strong> Lunes a sábado de 8:00 a.m. a 6:00 p.m.</p>'+
+          '<p>Para cualquier novedad con tu vehículo puedes comunicarte directamente con el taller asignado o con nuestra línea de soporte.</p>';
+      }
+
+      modalBackdrop.style.display='flex';
+    }
+
+    function cerrarModal(){
+      modalBackdrop.style.display='none';
     }
   </script>
 </body>
