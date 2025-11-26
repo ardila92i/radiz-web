@@ -185,6 +185,23 @@
       return d.toLocaleDateString('es-CO');
     }
 
+    async function registrarPagoPortal(referencia,idContrato,valor){
+      try{
+        const body=new URLSearchParams();
+        body.append('accion','registrar_pago');
+        body.append('referencia',referencia);
+        body.append('idContrato',idContrato);
+        body.append('monto',String(valor));
+        await fetch(API_URL,{
+          method:'POST',
+          headers:{'Content-Type':'application/x-www-form-urlencoded'},
+          body:body.toString()
+        });
+      }catch(e){
+        console.error('Error registrando pago en PAGOS_PORTAL:',e);
+      }
+    }
+
     function crearPagoWompi(){
       const montoInput=document.getElementById('montoPago');
       const errorLabel=document.getElementById('pagoError');
@@ -203,6 +220,8 @@
 
       const idContrato=(document.getElementById('idContrato').value||'').trim();
       const reference='PAGO_'+(idContrato||'SIN_CONTRATO')+'_'+Date.now();
+
+      registrarPagoPortal(reference,idContrato,valor);
 
       const checkout=new WidgetCheckout({
         currency:'COP',
