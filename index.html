@@ -68,10 +68,7 @@
     <footer>Versión interna • RADIZ Suministro Vehicular</footer>
   </div>
   <script>
-    // Pega AQUÍ exactamente la URL de tu Apps Script que probaste en el navegador
-    // y que devuelve {"ok":true,...} cuando le agregas ?id=R-0001
     const API_URL='https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
-
     const WOMPI_PUBLIC_KEY='pub_test_3dus3DoqOnuXmuGDbXVVVZEbhUNsHVfI';
     const WOMPI_REDIRECT_URL='https://portal.radizco.com/';
 
@@ -215,9 +212,33 @@
         redirectUrl:WOMPI_REDIRECT_URL
       });
 
-      checkout.open(function(result){
-        const transaction=result.transaction;
+      // === CALLBACK: registrar pago en PAGOS_PORTAL cuando esté aprobado ===
+      checkout.open(async function(result){
+        const transaction=result && result.transaction;
         console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
+
+        if(!transaction) return;
+        if(transaction.status!=='APPROVED') return;
+
+        const referenciaTx = transaction.reference || reference;
+        const montoPesos = Math.round((transaction.amountInCents || (valor*100)) / 100);
+
+        try{
+          await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            body: new URLSearchParams({
+              accion: 'registrar_pago',
+              referencia: referenciaTx,
+              idContrato: idContrato,
+              monto: String(montoPesos)
+            }).toString()
+          });
+        }catch(err){
+          console.error('Error registrando pago en PAGOS_PORTAL:', err);
+        }
       });
     }
   </script>
