@@ -6,34 +6,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://checkout.wompi.co/widget.js" async></script>
   <style>
-    :root{
-      --radiz-blue:#2563eb;
-      --text-dark:#111827;
-      --text-muted:#4b5563;
-      --card-bg:#ffffff;
-      --badge-green-bg:#dcfce7;
-      --badge-green-text:#166534;
-      --badge-red-bg:#fee2e2;
-      --badge-red-text:#b91c1c;
-    }
-    *{box-sizing:border-box;}
-
-    /* Fondo gris nuevamente */
     body{
       font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       background:#f3f4f6;
       margin:0;
-      padding:24px 16px;
+      padding:0;
+    }
+    .page-wrapper{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px 12px;
     }
     .container{
-      max-width:900px;
-      margin:0 auto;
-      background:#f9fafb;
-      border-radius:18px;
-      box-shadow:0 18px 40px rgba(15,23,42,.20);
-      padding:24px 28px 28px;
+      width:100%;
+      max-width:960px;
+      background:#fff;
+      border-radius:16px;
+      box-shadow:0 18px 45px rgba(15,23,42,0.15);
+      padding:22px 26px 28px;
+      position:relative;
     }
-
     .top-bar{
       display:flex;
       align-items:center;
@@ -42,75 +36,16 @@
     }
     .logo-top img{
       max-width:220px;
-      max-height:90px;
+      max-height:80px;
       object-fit:contain;
     }
-
-    /* MENÚ SUPERIOR (solo aparece cuando hay contrato cargado) */
-    .menu-wrapper{
-      position:relative;
-      display:none; /* se muestra desde JS cuando la consulta OK */
-    }
-    .menu-button{
-      border:none;
-      background:rgba(15,23,42,.06);
-      border-radius:999px;
-      padding:8px 10px;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-    }
-    .menu-button span{
-      font-size:.8rem;
-      font-weight:600;
-      color:var(--text-dark);
-    }
-    .menu-icon{
-      width:16px;
-      height:12px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-    }
-    .menu-icon div{
-      height:2px;
-      border-radius:999px;
-      background:var(--text-dark);
-    }
-    .menu-dropdown{
-      position:absolute;
-      right:0;
-      top:110%;
-      background:#ffffff;
-      border-radius:12px;
-      box-shadow:0 12px 30px rgba(15,23,42,.25);
-      padding:6px 0;
-      min-width:190px;
-      z-index:20;
-      display:none;
-    }
-    .menu-item{
-      padding:8px 14px;
-      font-size:.87rem;
-      color:var(--text-dark);
-      cursor:pointer;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .menu-item:hover{
-      background:#eff6ff;
-    }
-
     h1{
-      margin-top:0;
+      margin:4px 0 8px;
       font-size:1.7rem;
-      color:var(--text-dark);
+      color:#111827;
     }
     .subtitle{
-      color:var(--text-muted);
+      color:#4b5563;
       font-size:.95rem;
       margin-bottom:20px;
     }
@@ -118,12 +53,12 @@
       display:flex;
       flex-wrap:wrap;
       gap:12px;
-      margin-bottom:20px;
-      align-items:center;
+      margin-bottom:16px;
+      align-items:flex-end;
     }
     label{
       font-size:.9rem;
-      color:var(--text-dark);
+      color:#374151;
       font-weight:600;
     }
     input[type=text],input[type=number],input[type=email]{
@@ -131,15 +66,15 @@
       min-width:200px;
       padding:10px 12px;
       border-radius:8px;
-      border:1px solid #d1d5db;
+      border:1px solid:#d1d5db;
       font-size:.95rem;
       outline:none;
-      background:#ffffff;
+      box-sizing:border-box;
     }
     input[type=text]:focus,
     input[type=number]:focus,
     input[type=email]:focus{
-      border-color:var(--radiz-blue);
+      border-color:#2563eb;
       box-shadow:0 0 0 1px rgba(37,99,235,.15);
     }
     button{
@@ -149,54 +84,66 @@
       font-size:.95rem;
       font-weight:600;
       cursor:pointer;
-      background:var(--radiz-blue);
+      background:#2563eb;
       color:#fff;
       display:inline-flex;
       align-items:center;
       gap:6px;
+      white-space:nowrap;
     }
-    button:disabled{opacity:.6;cursor:default}
+    button:disabled{
+      opacity:.6;
+      cursor:default;
+    }
+    .btn-secondary{
+      background:#e5e7eb;
+      color:#111827;
+    }
     .status{
       font-size:.9rem;
-      margin-bottom:16px;
+      margin-bottom:12px;
       min-height:1.2em;
     }
-    .status.error{color:#b91c1c}
-    .status.ok{color:#065f46}
-
+    .status.error{color:#b91c1c;}
+    .status.ok{color:#065f46;}
     .grid{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
       gap:16px;
-      margin-top:16px;
+      margin-top:10px;
+      margin-bottom:18px;
     }
     .card{
-      border-radius:10px;
+      border-radius:12px;
       border:1px solid #e5e7eb;
       padding:14px 16px;
-      background:var(--card-bg);
-      font-size:.9rem;
+      background:#f9fafb;
+      font-size:.92rem;
     }
     .card h2{
       margin:0 0 8px;
-      font-size:1.1rem;
-      color:var(--text-dark);
+      font-size:1rem;
+      color:#111827;
       font-weight:700;
     }
     .card p{
       margin:3px 0;
-      color:var(--text-dark);
+      color:#111827;
       font-size:.9rem;
     }
-    .card ul{
+    .card strong{
+      color:#111827;
+      font-weight:600;
+    }
+    ul{
       padding-left:18px;
       margin:6px 0;
     }
-    .card li{
+    li{
       margin-bottom:4px;
-      color:var(--text-dark);
+      color:#111827;
+      font-size:.9rem;
     }
-
     .badge{
       display:inline-block;
       padding:2px 8px;
@@ -205,109 +152,157 @@
       font-weight:600;
       text-transform:uppercase;
     }
-    .badge-activo{background:var(--badge-green-bg);color:var(--badge-green-text)}
-    .badge-inactivo{background:var(--badge-red-bg);color:var(--badge-red-text)}
-
-    #seccionPago{
-      margin-top:24px;
-      font-size:.9rem;
+    .badge-activo{
+      background:#dcfce7;
+      color:#166534;
     }
-
+    .badge-inactivo{
+      background:#fee2e2;
+      color:#b91c1c;
+    }
+    #seccionPago{
+      margin-top:16px;
+      border-top:1px solid #e5e7eb;
+      padding-top:14px;
+    }
     footer{
-      margin-top:24px;
+      margin-top:18px;
       font-size:.75rem;
       color:#9ca3af;
       text-align:center;
     }
 
-    /* MODAL GENÉRICO */
+    /* Menú superior derecho */
+    .menu-wrapper{
+      position:relative;
+    }
+    .menu-button{
+      width:38px;
+      height:38px;
+      border-radius:999px;
+      padding:0;
+      align-items:center;
+      justify-content:center;
+      font-size:1.4rem;
+      line-height:1;
+      background:#2563eb;
+      display:none;
+    }
+    .menu-dropdown{
+      position:absolute;
+      top:44px;
+      right:0;
+      background:#fff;
+      border-radius:12px;
+      box-shadow:0 14px 35px rgba(15,23,42,0.25);
+      padding:6px 0;
+      min-width:190px;
+      z-index:20;
+      display:none;
+    }
+    .menu-dropdown.open{display:block;}
+    .menu-item{
+      width:100%;
+      padding:8px 14px;
+      background:transparent;
+      border:none;
+      color:#111827;
+      font-size:.9rem;
+      text-align:left;
+      border-radius:0;
+    }
+    .menu-item:hover{
+      background:#eff6ff;
+    }
+
+    /* Modal genérico */
     .modal-overlay{
       position:fixed;
       inset:0;
-      background:rgba(15,23,42,.45);
+      background:rgba(15,23,42,0.45);
       display:none;
       align-items:center;
       justify-content:center;
       z-index:40;
+      padding:16px;
     }
     .modal{
-      background:#ffffff;
+      background:#fff;
       border-radius:16px;
       max-width:420px;
-      width:90%;
-      box-shadow:0 18px 40px rgba(15,23,42,.4);
-      padding:18px 20px 16px;
+      width:100%;
+      box-shadow:0 18px 45px rgba(15,23,42,0.4);
+      padding:16px 18px 18px;
     }
     .modal-header{
       display:flex;
-      justify-content:space-between;
       align-items:center;
+      justify-content:space-between;
       margin-bottom:8px;
     }
     .modal-title{
-      font-size:1.05rem;
-      font-weight:700;
-      color:var(--text-dark);
+      font-size:1rem;
+      margin:0;
+      color:#111827;
     }
     .modal-close{
-      border:none;
       background:transparent;
-      font-size:1.1rem;
-      cursor:pointer;
-      color:var(--text-muted);
+      border:none;
+      font-size:1.4rem;
+      line-height:1;
+      color:#6b7280;
+      padding:2px 4px;
+      border-radius:999px;
+    }
+    .modal-close:hover{
+      background:#e5e7eb;
+      color:#111827;
     }
     .modal-body{
       font-size:.9rem;
-      color:var(--text-dark);
+      color:#111827;
     }
-    .modal-body p{margin:6px 0;}
-    .modal-actions{
-      margin-top:14px;
-      text-align:right;
-      font-size:.8rem;
-      color:var(--text-muted);
+    .modal-body p{
+      margin:6px 0;
+    }
+    .modal-body label{
+      display:block;
+      margin-top:8px;
+      margin-bottom:4px;
     }
 
-    @media(max-width:600px){
-      body{padding:16px 8px;}
-      .container{padding:18px 16px 22px;}
-      .top-bar{flex-direction:row;}
-      h1{font-size:1.5rem;}
+    @media(max-width:640px){
+      .container{
+        padding:18px 16px 22px;
+      }
+      .top-bar{
+        align-items:flex-start;
+      }
+      .logo-top img{
+        max-width:180px;
+      }
     }
   </style>
 </head>
 <body>
+<div class="page-wrapper">
   <div class="container">
-    <!-- barra superior: logo + menú -->
     <div class="top-bar">
       <div class="logo-top">
         <img src="logoradiz.png" alt="Logo RADIZ" id="logo-radiz" />
       </div>
-
-      <!-- Menú (se muestra solo cuando hay contrato cargado) -->
-      <div class="menu-wrapper" id="menuWrapper">
-        <button class="menu-button" id="menuButton" type="button" onclick="toggleMenu()">
-          <div class="menu-icon">
-            <div></div><div></div><div></div>
-          </div>
-          <span>Menú</span>
+      <div class="menu-wrapper">
+        <button id="menuButton" class="menu-button" type="button" aria-label="Menú">
+          ☰
         </button>
-        <div class="menu-dropdown" id="menuDropdown">
-          <div class="menu-item" onclick="openModal('beneficios')">
-            Beneficios <span>›</span>
-          </div>
-          <div class="menu-item" onclick="openModal('historial')">
-            Historial de pagos <span>›</span>
-          </div>
-          <div class="menu-item" onclick="openModal('taller')">
-            Taller asignado <span>›</span>
-          </div>
-        </div>
+        <div id="menuDropdown" class="menu-dropdown"></div>
       </div>
     </div>
 
     <h1>PORTAL CLIENTES</h1>
-    <p class="subtitle">Ingresa el <strong>ID del contrato</strong> para consultar el estado, pagos y mantenimientos.</p>
+    <p class="subtitle">
+      Ingresa el <strong>ID del contrato</strong> para consultar el estado, pagos y mantenimientos.
+    </p>
 
     <div class="form-row">
       <div style="flex:1">
@@ -315,7 +310,7 @@
         <input type="text" id="idContrato" placeholder="Ejemplo: R-0001" />
       </div>
       <div>
-        <button id="btnConsultar" onclick="consultar()">Consultar</button>
+        <button id="btnConsultar" type="button">Consultar</button>
       </div>
     </div>
 
@@ -328,15 +323,16 @@
     </div>
 
     <div id="seccionPago">
-      <h2 style="font-size:1rem;margin:0 0 4px;color:var(--text-dark);">Realizar pago</h2>
-      <p style="font-size:.9rem;color:var(--text-muted);margin:4px 0 12px;">
+      <h2 style="font-size:1rem;margin:0 0 4px;color:#111827;">Realizar pago</h2>
+      <p style="font-size:.9rem;color:#4b5563;margin:4px 0 12px;">
         Ingresa el monto a pagar y completa el proceso con Wompi.
       </p>
       <label for="montoPago" style="display:block;margin-bottom:6px;">Monto a pagar (COP)</label>
       <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
         <input id="montoPago" type="number" min="100000" step="1000"
-               placeholder="Ej: 170000" style="width:200px;" />
-        <button type="button" onclick="crearPagoWompi()">Pagar con Wompi</button>
+               placeholder="Ej: 170000"
+               style="padding:8px 10px;border-radius:8px;border:1px solid:#d1d5db;width:200px;" />
+        <button type="button" id="btnWompi">Pagar con Wompi</button>
       </div>
       <p id="pagoError" style="color:#dc2626;margin-top:8px;display:none;font-size:.85rem;">
         Ingresa un monto válido (mínimo 100.000).
@@ -345,304 +341,374 @@
 
     <footer>Versión interna • RADIZ Suministro Vehicular</footer>
   </div>
+</div>
 
-  <!-- Modal genérico -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <div class="modal-header">
-        <div class="modal-title" id="modalTitle">Título</div>
-        <button class="modal-close" type="button" onclick="closeModal()">×</button>
-      </div>
-      <div class="modal-body" id="modalBody"></div>
-      <div class="modal-actions" id="modalActions"></div>
+<!-- Modal genérico -->
+<div id="modalOverlay" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 class="modal-title" id="modalTitle">Título</h2>
+      <button type="button" class="modal-close" onclick="cerrarModal()">×</button>
     </div>
+    <div class="modal-body" id="modalBody"></div>
   </div>
+</div>
 
-  <script>
-    /* MISMA API_URL QUE YA TENÍAS FUNCIONANDO */
-    const API_URL = 'https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
+<script>
+  // === CONFIGURACIÓN (NO SE MODIFICA API_URL NI WOMPI) ===
+  const API_URL = 'https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
+  const WOMPI_PUBLIC_KEY = 'pub_test_3dus3DoqOnuXmuGDbXVVVZEbhUNsHVfI';
+  const WOMPI_REDIRECT_URL = 'https://portal.radizco.com/';
 
-    const WOMPI_PUBLIC_KEY = 'pub_test_3dus3DoqOnuXmuGDbXVVVZEbhUNsHVfI';
-    const WOMPI_REDIRECT_URL = 'https://portal.radizco.com/';
+  const btnConsultar = document.getElementById('btnConsultar');
+  const statusEl = document.getElementById('status');
+  const resultadosEl = document.getElementById('resultados');
+  const cardContrato = document.getElementById('cardContrato');
+  const cardPagos = document.getElementById('cardPagos');
+  const cardMantenimientos = document.getElementById('cardMantenimientos');
+  const menuButton = document.getElementById('menuButton');
+  const menuDropdown = document.getElementById('menuDropdown');
 
-    // variables para modales
-    let ultimoContrato = null;
-    let ultimosPagos = [];
-    let ultimosMantenimientos = [];
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalBody = document.getElementById('modalBody');
 
-    /* === MENÚ === */
-    function toggleMenu(){
-      const dd = document.getElementById('menuDropdown');
-      dd.style.display = dd.style.display === 'block' ? 'none' : 'block';
+  let contratoActual = null;
+  let pagosActuales = [];
+  let mantenimientosActuales = [];
+  let tipoClienteActual = 'RENTING'; // 'RENTING' o 'AFILIADO'
+  let datosAfiliado = null;
+
+  btnConsultar.addEventListener('click', consultar);
+  document.getElementById('btnWompi').addEventListener('click', crearPagoWompi);
+  menuButton.addEventListener('click', toggleMenu);
+  document.addEventListener('click', function(ev){
+    if(!menuDropdown.contains(ev.target) && ev.target !== menuButton){
+      menuDropdown.classList.remove('open');
     }
-    document.addEventListener('click', (e)=>{
-      const wrapper = document.getElementById('menuWrapper');
-      const dd = document.getElementById('menuDropdown');
-      if(wrapper && !wrapper.contains(e.target)){
-        dd.style.display = 'none';
+  });
+
+  async function consultar(){
+    const id = document.getElementById('idContrato').value.trim();
+    statusEl.className = 'status';
+    statusEl.textContent = '';
+    resultadosEl.style.display = 'none';
+    menuButton.style.display = 'none';
+    menuDropdown.classList.remove('open');
+
+    if(!id){
+      statusEl.classList.add('error');
+      statusEl.textContent = 'Por favor ingresa un ID de contrato.';
+      return;
+    }
+
+    btnConsultar.disabled = true;
+    statusEl.textContent = 'Consultando información...';
+
+    try{
+      const resp = await fetch(API_URL + '?id=' + encodeURIComponent(id) + '&_=' + Date.now());
+      const data = await resp.json();
+
+      if(!data.ok){
+        statusEl.className = 'status error';
+        statusEl.textContent = data.error || 'No se encontró información para ese contrato.';
+        btnConsultar.disabled = false;
+        return;
       }
+
+      contratoActual = data.contrato || {};
+      pagosActuales = Array.isArray(data.pagos) ? data.pagos : [];
+      mantenimientosActuales = Array.isArray(data.mantenimientos) ? data.mantenimientos : [];
+
+      const idUpper = (contratoActual['ID CONTRATO'] || '').toString().toUpperCase();
+      const tipoUsuario = (contratoActual['TIPO USUARIO'] || '').toString().toUpperCase();
+      const esAfiliado = idUpper.startsWith('A-') || tipoUsuario.includes('AFILIADO');
+
+      tipoClienteActual = esAfiliado ? 'AFILIADO' : 'RENTING';
+      datosAfiliado = esAfiliado ? calcularResumenAfiliado() : null;
+
+      if(esAfiliado){
+        pintarVistaAfiliado();
+      }else{
+        pintarVistaRenting();
+      }
+
+      resultadosEl.style.display = 'grid';
+      statusEl.className = 'status ok';
+      statusEl.textContent = 'Información cargada correctamente.';
+
+      // Menú sólo visible cuando ya hay contrato cargado
+      actualizarMenu();
+      menuButton.style.display = 'inline-flex';
+
+    }catch(e){
+      console.error(e);
+      statusEl.className = 'status error';
+      statusEl.textContent = 'Error al consultar la información. Intenta de nuevo.';
+    }finally{
+      btnConsultar.disabled = false;
+    }
+  }
+
+  function pintarVistaRenting(){
+    const c = contratoActual || {};
+    const estado = (c['ESTADO'] || '').toString().toUpperCase();
+
+    cardContrato.innerHTML =
+      '<h2>Contrato</h2>'+
+      '<p><strong>ID:</strong> '+(c['ID CONTRATO']||'')+'</p>'+
+      '<p><strong>Tipo usuario:</strong> '+(c['TIPO USUARIO']||'')+'</p>'+
+      '<p><strong>Vehículo:</strong> '+(c['ID VEHÍCULO']||'')+'</p>'+
+      '<p><strong>Inicio:</strong> '+formatearFecha(c['INICIO'])+'</p>'+
+      '<p><strong>Fin:</strong> '+formatearFecha(c['FIN'])+'</p>'+
+      '<p><strong>Tarifa semanal:</strong> '+formatearNumero(c['TARIFA SEMANAL'])+'</p>'+
+      '<p><strong>Beneficios:</strong> '+(c['BENEFICIOS']||'')+'</p>'+
+      '<p><span class="badge '+(estado==='ACTIVO'?'badge-activo':'badge-inactivo')+'">'+(estado||'SIN ESTADO')+'</span></p>';
+
+    const pagos = pagosActuales;
+    if(!pagos || pagos.length === 0){
+      cardPagos.innerHTML = '<h2>Pagos</h2><p>No hay pagos registrados para este contrato.</p>';
+    }else{
+      const items = pagos.map(p =>
+        '<li>'+
+          '<strong>ID pago:</strong> '+(p['ID PAGO']||'')+'<br>'+
+          '<strong>ID contrato:</strong> '+(p['ID CONTRATO']||'')+'<br>'+
+          '<strong>Días de corte:</strong> '+(p['DÍAS DE CORTE']||p['DIAS DE CORTE']||'')+'<br>'+
+          '<strong>Gasto mantenimientos:</strong> '+formatearNumero(p['GASTO MANTENIMIENTOS'])+'<br>'+
+          '<strong>Tarifas completadas:</strong> '+(p['TARIFAS COMPLETADAS']||'')+'<br>'+
+          '<strong>Tarifas vencidas:</strong> '+(p['TARIFAS VENCIDAS']||'')+'<br>'+
+          '<strong>Referencia:</strong> '+(p['REFERENCIA']||'')+
+        '</li>'
+      ).join('');
+      cardPagos.innerHTML = '<h2>Pagos</h2><ul>'+items+'</ul>';
+    }
+
+    const mts = Array.isArray(mantenimientosActuales) ? mantenimientosActuales : [];
+    if(mts.length === 0){
+      cardMantenimientos.innerHTML = '<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
+    }else{
+      const totalM = mts.reduce((s,m)=>s+(Number(m['VALOR MTOS'])||0),0);
+      const ultimo = mts[mts.length - 1];
+
+      cardMantenimientos.innerHTML =
+        '<h2>Mantenimientos</h2>'+
+        '<p><strong>Último mantenimiento:</strong> '+formatearFecha(ultimo['FECHA ULT. MANTENIMIENTO'])+'</p>'+
+        '<p><strong>Tipo:</strong> '+(ultimo['TIPO ULT. MANTENIMIENTO']||'')+'</p>'+
+        '<p><strong>Realizados:</strong> '+(ultimo['MTOS REALIZADOS']||'')+'</p>'+
+        '<p><strong>Valor general:</strong> '+formatearNumero(totalM)+'</p>';
+    }
+  }
+
+  function calcularResumenAfiliado(){
+    const c = contratoActual || {};
+    const pagos = Array.isArray(pagosActuales) ? pagosActuales : [];
+    const mts = Array.isArray(mantenimientosActuales) ? mantenimientosActuales : [];
+
+    const numLiquidaciones = pagos.length;
+
+    let totalLiquidaciones = 0;
+    pagos.forEach(p=>{
+      const v = Number(
+        p['VALOR LIQUIDACIÓN'] || p['VALOR LIQ'] || p['VALOR'] || p['TOTAL'] || 0
+      );
+      if(!isNaN(v)) totalLiquidaciones += v;
     });
 
-    /* === CONSULTAR === */
-    async function consultar(){
-      const id=document.getElementById('idContrato').value.trim();
-      const status=document.getElementById('status');
-      const btn=document.getElementById('btnConsultar');
-      const resultados=document.getElementById('resultados');
-      const cardContrato=document.getElementById('cardContrato');
-      const cardPagos=document.getElementById('cardPagos');
-      const cardMantenimientos=document.getElementById('cardMantenimientos');
-      const menuWrapper=document.getElementById('menuWrapper');
+    const fechaInicio = c['INICIO'];
 
-      status.className='status';
-      status.textContent='';
-      resultados.style.display='none';
-      menuWrapper.style.display='none'; // ocultamos el menú hasta que cargue
-
-      if(!id){
-        status.classList.add('error');
-        status.textContent='Por favor ingresa un ID de contrato.';
-        return;
-      }
-
-      btn.disabled=true;
-      status.textContent='Consultando información...';
-
-      try{
-        const resp=await fetch(API_URL+'?id='+encodeURIComponent(id));
-        const data=await resp.json();
-
-        if(!data.ok){
-          status.className='status error';
-          status.textContent=data.error||'No se encontró información para ese contrato.';
-          btn.disabled=false;
-          return;
-        }
-
-        const c=data.contrato||{};
-        const estado=(c['ESTADO']||'').toString().toUpperCase();
-
-        cardContrato.innerHTML=
-          '<h2>Contrato</h2>'+
-          '<p><strong>ID:</strong> '+(c['ID CONTRATO']||'')+'</p>'+
-          '<p><strong>Tipo usuario:</strong> '+(c['TIPO USUARIO']||'')+'</p>'+
-          '<p><strong>Vehículo:</strong> '+(c['ID VEHÍCULO']||'')+'</p>'+
-          '<p><strong>Inicio:</strong> '+formatearFecha(c['INICIO'])+'</p>'+
-          '<p><strong>Fin:</strong> '+formatearFecha(c['FIN'])+'</p>'+
-          '<p><strong>Tarifa semanal:</strong> '+formatearNumero(c['TARIFA SEMANAL'])+'</p>'+
-          '<p><strong>Beneficios:</strong> '+(c['BENEFICIOS']||'')+'</p>'+
-          '<p><span class="badge '+(estado==='ACTIVO'?'badge-activo':'badge-inactivo')+'">'+(estado||'SIN ESTADO')+'</span></p>';
-
-        const pagos=data.pagos||[];
-        if(pagos.length===0){
-          cardPagos.innerHTML='<h2>Pagos</h2><p>No hay pagos registrados para este contrato.</p>';
-        }else{
-          const items=pagos.map(p=>
-            '<li>'+
-            '<strong>ID pago:</strong> '+(p['ID PAGO']||'')+'<br>'+
-            '<strong>ID contrato:</strong> '+(p['ID CONTRATO']||'')+'<br>'+
-            '<strong>Días de corte:</strong> '+(p['DÍAS DE CORTE']||p['DIAS DE CORTE']||'')+'<br>'+
-            '<strong>Gasto mantenimientos:</strong> '+formatearNumero(p['GASTO MANTENIMIENTOS'])+'<br>'+
-            '<strong>Tarifas completadas:</strong> '+(p['TARIFAS COMPLETADAS']||'')+'<br>'+
-            '<strong>Tarifas vencidas:</strong> '+(p['TARIFAS VENCIDAS']||'')+'<br>'+
-            '<strong>Referencia:</strong> '+(p['REFERENCIA']||'')+
-            '</li>'
-          ).join('');
-          cardPagos.innerHTML='<h2>Pagos</h2><ul>'+items+'</ul>';
-        }
-
-        const rawM=data.mantenimientos??data.mantenimiento??data.mtos??data.manten??[];
-        const mts=Array.isArray(rawM)?rawM:(rawM?[rawM]:[]);
-
-        if(mts.length===0){
-          cardMantenimientos.innerHTML='<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
-        }else{
-          // Usamos la primera fila como resumen
-          const m = mts[0] || {};
-          const ultimo = formatearFecha(
-            m['ÚLTIMO MANTENIMIENTO'] ||
-            m['ULTIMO MANTENIMIENTO'] ||
-            m['FECHA ULT. MANTENIMIENTO'] ||
-            m['FECHA ULTIMO MANTENIMIENTO']
-          );
-          const tipo = m['TIPO'] || m['TIPO ULT. MANTENIMIENTO'] || '';
-          const realizados = m['REALIZADOS'] || m['MTOS REALIZADOS'] || '';
-          const valorGeneral = formatearNumero(
-            m['VALOR GENERAL'] ||
-            m['VALOR MTOS']
-          );
-          const taller = m['TALLER ASIGNADO'] || '';
-
-          cardMantenimientos.innerHTML =
-            '<h2>Mantenimientos</h2>'+
-            '<p><strong>Último mantenimiento:</strong> '+(ultimo||'')+'</p>'+
-            '<p><strong>Tipo:</strong> '+(tipo||'')+'</p>'+
-            '<p><strong>Realizados:</strong> '+(realizados||'')+'</p>'+
-            '<p><strong>Valor general:</strong> '+(valorGeneral||'')+'</p>'+
-            '<p><strong>Taller asignado:</strong> '+(taller||'')+'</p>';
-        }
-
-        // Guardamos datos para el menú
-        ultimoContrato = c;
-        ultimosPagos = pagos;
-        ultimosMantenimientos = mts;
-        menuWrapper.style.display = 'block';
-
-        resultados.style.display='grid';
-        status.className='status ok';
-        status.textContent='Información cargada correctamente.';
-      }catch(e){
-        console.error(e);
-        status.className='status error';
-        status.textContent='Error al consultar la información. Intenta de nuevo.';
-      }finally{
-        btn.disabled=false;
-      }
+    // Conteo simple de vehículos basado en el campo ID VEHÍCULO (separado por comas o espacios)
+    const vehiculosStr = (c['ID VEHÍCULO'] || c['ID VEHICULO'] || '').toString().trim();
+    let numVehiculos = 0;
+    if(vehiculosStr){
+      numVehiculos = vehiculosStr.split(/[,;\s]+/).filter(Boolean).length;
     }
 
-    function formatearNumero(n){
-      const num=Number(n);
-      if(isNaN(num))return n||'';
-      return num.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
+    const numMantenimientos = mts.length;
+
+    return {
+      numLiquidaciones,
+      totalLiquidaciones,
+      numVehiculos,
+      fechaInicio,
+      numMantenimientos
+    };
+  }
+
+  function pintarVistaAfiliado(){
+    const c = contratoActual || {};
+    const d = datosAfiliado || {numLiquidaciones:0,totalLiquidaciones:0,numVehiculos:0,fechaInicio:null,numMantenimientos:0};
+    const estado = (c['ESTADO'] || '').toString().toUpperCase();
+
+    cardContrato.innerHTML =
+      '<h2>Afiliado</h2>'+
+      '<p><strong>ID contrato:</strong> '+(c['ID CONTRATO']||'')+'</p>'+
+      '<p><strong>Cliente:</strong> '+(c['ID CLIENTE']||'')+'</p>'+
+      '<p><strong>Estado:</strong> '+(estado||'')+'</p>'+
+      '<p><strong>Fecha de inicio:</strong> '+formatearFecha(d.fechaInicio)+'</p>';
+
+    cardPagos.innerHTML =
+      '<h2>Liquidaciones</h2>'+
+      '<p><strong>Número de liquidaciones:</strong> '+d.numLiquidaciones+'</p>'+
+      '<p><strong>Valor total de liquidaciones:</strong> '+formatearNumero(d.totalLiquidaciones)+'</p>';
+
+    cardMantenimientos.innerHTML =
+      '<h2>Flota y mantenimientos</h2>'+
+      '<p><strong>Vehículos afiliados:</strong> '+d.numVehiculos+'</p>'+
+      '<p><strong>Mantenimientos realizados:</strong> '+d.numMantenimientos+'</p>';
+  }
+
+  // === MENÚ SUPERIOR SEGÚN TIPO DE CLIENTE ===
+  function actualizarMenu(){
+    let items = [];
+    if(tipoClienteActual === 'AFILIADO'){
+      items = [
+        {id:'fechaPagos', label:'Fecha de pagos'},
+        {id:'cantidadVehiculos', label:'Cantidad de vehículos'},
+        {id:'liquidaciones', label:'Liquidaciones'}
+      ];
+    }else{
+      items = [
+        {id:'beneficios', label:'Beneficios'},
+        {id:'historial', label:'Historial de pagos'},
+        {id:'taller', label:'Taller asignado'}
+      ];
     }
 
-    function formatearFecha(v){
-      if(!v)return'';
-      const d=new Date(v);
-      if(isNaN(d.getTime()))return v;
-      return d.toLocaleDateString('es-CO');
-    }
+    menuDropdown.innerHTML = items.map(it =>
+      '<button type="button" class="menu-item" data-action="'+it.id+'">'+it.label+'</button>'
+    ).join('');
 
-    /* === PAGO WOMPI (igual que antes, solo con callbackUrl ya aprobado) === */
-    function crearPagoWompi(){
-      const montoInput=document.getElementById('montoPago');
-      const errorLabel=document.getElementById('pagoError');
-      const valor=parseInt(montoInput.value,10);
-
-      errorLabel.style.display='none';
-      if(!valor||valor<100000){
-        errorLabel.style.display='block';
-        return;
-      }
-
-      if(typeof WidgetCheckout==='undefined'){
-        alert('No se pudo cargar el checkout de Wompi. Por favor recarga la página.');
-        return;
-      }
-
-      const idContrato=(document.getElementById('idContrato').value||'').trim();
-      const reference='PAGO_'+(idContrato||'SIN_CONTRATO')+'_'+Date.now();
-
-      const checkout=new WidgetCheckout({
-        currency:'COP',
-        amountInCents:valor*100,
-        reference:reference,
-        publicKey:WOMPI_PUBLIC_KEY,
-        redirectUrl:WOMPI_REDIRECT_URL,
-        callbackUrl: API_URL + '?accion=callback_wompi'
+    menuDropdown.querySelectorAll('.menu-item').forEach(btn=>{
+      btn.addEventListener('click', function(){
+        const action = this.getAttribute('data-action');
+        menuDropdown.classList.remove('open');
+        abrirModal(action);
       });
+    });
+  }
 
-      checkout.open(function(result){
-        const transaction=result.transaction;
-        console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
-      });
+  function toggleMenu(){
+    if(!contratoActual) return;
+    menuDropdown.classList.toggle('open');
+  }
+
+  // === MODAL ===
+  function abrirModal(action){
+    if(!contratoActual) return;
+
+    if(tipoClienteActual === 'AFILIADO'){
+      renderModalAfiliado(action);
+    }else{
+      renderModalRenting(action);
     }
 
-    /* === MODALES === */
-    function openModal(tipo){
-      const overlay=document.getElementById('modalOverlay');
-      const titleEl=document.getElementById('modalTitle');
-      const bodyEl=document.getElementById('modalBody');
-      const actionsEl=document.getElementById('modalActions');
+    modalOverlay.style.display = 'flex';
+  }
 
-      actionsEl.textContent='';
+  function renderModalRenting(action){
+    const c = contratoActual || {};
+    const mts = Array.isArray(mantenimientosActuales) ? mantenimientosActuales : [];
 
-      if(tipo==='beneficios'){
-        const plan = (ultimoContrato && (ultimoContrato['BENEFICIOS'] || ultimoContrato['PLAN'])) || '';
-        titleEl.textContent='Beneficios de tu plan';
-        bodyEl.innerHTML = plan
-          ? '<p><strong>Plan asignado:</strong> '+plan+'</p>'
-          : '<p>No hay información de beneficios disponible para este contrato.</p>';
+    if(action === 'beneficios'){
+      modalTitle.textContent = 'Beneficios del plan';
+      const beneficios = (c['BENEFICIOS'] || 'PLAN BÁSICO');
+      modalBody.innerHTML =
+        '<p><strong>Plan actual:</strong> '+beneficios+'</p>'+
+        '<p style="margin-top:8px;">Para actualizar tu plan comunícate con tu asesor comercial.</p>';
+    }else if(action === 'historial'){
+      modalTitle.textContent = 'Historial de pagos';
+      const idContrato = (c['ID CONTRATO'] || '');
+      modalBody.innerHTML =
+        '<p>Ingresa tu correo electrónico y el ID de tu contrato. El historial se enviará al correo registrado.</p>'+
+        '<label for="histEmail">Correo electrónico</label>'+
+        '<input id="histEmail" type="email" placeholder="ejemplo@correo.com" />'+
+        '<label for="histContrato">ID contrato</label>'+
+        '<input id="histContrato" type="text" value="'+idContrato+'" />'+
+        '<button type="button" style="margin-top:10px;" onclick="alert(\'Función de envío en desarrollo.\')">Solicitar historial</button>';
+    }else if(action === 'taller'){
+      modalTitle.textContent = 'Taller asignado';
+      let taller = 'Taller asignado pendiente.';
+      if(mts.length){
+        const ultimo = mts[mts.length - 1];
+        taller = ultimo['TALLER ASIGNADO'] || taller;
       }
+      modalBody.innerHTML =
+        '<p><strong>Taller asignado:</strong> '+taller+'</p>'+
+        '<p style="margin-top:6px;">Para coordinar un mantenimiento comunícate con el taller o con tu asesor RADIZ.</p>';
+    }
+  }
 
-      if(tipo==='historial'){
-        titleEl.textContent='Solicitar historial de pagos';
-        const idContrato = ultimoContrato ? (ultimoContrato['ID CONTRATO'] || '') : '';
-        bodyEl.innerHTML =
-          '<p>Ingresa tu correo y confirma el ID de contrato para solicitar el historial de pagos.</p>'+
-          '<form id="historialForm">'+
-            '<label for="histEmail">Correo electrónico</label><br>'+
-            '<input type="email" id="histEmail" required placeholder="ejemplo@correo.com" style="width:100%;margin:4px 0 8px;"><br>'+
-            '<label for="histContrato">ID contrato</label><br>'+
-            '<input type="text" id="histContrato" value="'+idContrato+'" style="width:100%;margin:4px 0 8px;"><br>'+
-            '<div style="margin-top:10px;text-align:right;">'+
-              '<button type="submit">Enviar solicitud</button>'+
-            '</div>'+
-          '</form>';
-        actionsEl.textContent='Recibirás el historial en el correo que registres.';
-        setTimeout(()=>{
-          const form=document.getElementById('historialForm');
-          if(form){
-            form.addEventListener('submit', enviarSolicitudHistorial);
-          }
-        },0);
-      }
+  function renderModalAfiliado(action){
+    const d = datosAfiliado || {numLiquidaciones:0,totalLiquidaciones:0,numVehiculos:0,fechaInicio:null,numMantenimientos:0};
 
-      if(tipo==='taller'){
-        titleEl.textContent='Taller asignado';
-        let contenido='<p>No hay información de taller asignado.</p>';
-        const m = Array.isArray(ultimosMantenimientos) && ultimosMantenimientos.length
-          ? ultimosMantenimientos[0]
-          : null;
-        if(m){
-          // Solo mostramos la información del taller (vendrá desde Google Sheets)
-          contenido =
-            '<p><strong>Taller asignado:</strong> '+(m['TALLER ASIGNADO']||'')+'</p>';
-        }
-        bodyEl.innerHTML=contenido;
-      }
+    if(action === 'fechaPagos'){
+      modalTitle.textContent = 'Fecha de pagos a afiliados';
+      modalBody.innerHTML =
+        '<p>Los pagos a afiliados se realizan según el calendario acordado con la empresa.</p>'+
+        '<p style="margin-top:6px;">Consulta con tu asesor RADIZ para conocer las fechas exactas de pago.</p>';
+    }else if(action === 'cantidadVehiculos'){
+      modalTitle.textContent = 'Cantidad de vehículos';
+      modalBody.innerHTML =
+        '<p><strong>Vehículos afiliados actualmente:</strong> '+d.numVehiculos+'</p>'+
+        '<p style="margin-top:6px;">Si quieres aumentar o reducir tu flota, comunícate con tu asesor RADIZ.</p>';
+    }else if(action === 'liquidaciones'){
+      modalTitle.textContent = 'Resumen de liquidaciones';
+      modalBody.innerHTML =
+        '<p><strong>Número de liquidaciones:</strong> '+d.numLiquidaciones+'</p>'+
+        '<p><strong>Valor total:</strong> '+formatearNumero(d.totalLiquidaciones)+'</p>';
+    }
+  }
 
-      overlay.style.display='flex';
+  function cerrarModal(){
+    modalOverlay.style.display = 'none';
+  }
+
+  // === UTILIDADES ===
+  function formatearNumero(n){
+    const num = Number(n);
+    if(isNaN(num)) return n || '';
+    return num.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
+  }
+
+  function formatearFecha(v){
+    if(!v) return '';
+    const d = new Date(v);
+    if(isNaN(d.getTime())) return v;
+    return d.toLocaleDateString('es-CO');
+  }
+
+  function crearPagoWompi(){
+    const montoInput = document.getElementById('montoPago');
+    const errorLabel = document.getElementById('pagoError');
+    const valor = parseInt(montoInput.value,10);
+
+    errorLabel.style.display = 'none';
+    if(!valor || valor < 100000){
+      errorLabel.style.display = 'block';
+      return;
     }
 
-    function closeModal(){
-      document.getElementById('modalOverlay').style.display='none';
+    if(typeof WidgetCheckout === 'undefined'){
+      alert('No se pudo cargar el checkout de Wompi. Por favor recarga la página.');
+      return;
     }
 
-    async function enviarSolicitudHistorial(event){
-      event.preventDefault();
-      const email=document.getElementById('histEmail').value.trim();
-      const idContrato=document.getElementById('histContrato').value.trim() ||
-                        (ultimoContrato && ultimoContrato['ID CONTRATO']) || '';
+    const idContrato = (document.getElementById('idContrato').value || '').trim();
+    const reference = 'PAGO_'+(idContrato || 'SIN_CONTRATO')+'_'+Date.now();
 
-      if(!email){
-        alert('Por favor ingresa tu correo electrónico.');
-        return;
-      }
+    const checkout = new WidgetCheckout({
+      currency:'COP',
+      amountInCents:valor*100,
+      reference:reference,
+      publicKey:WOMPI_PUBLIC_KEY,
+      redirectUrl:WOMPI_REDIRECT_URL
+    });
 
-      try{
-        const body = new URLSearchParams();
-        body.append('accion','solicitar_historial');
-        body.append('email',email);
-        body.append('idContrato',idContrato);
-
-        const resp = await fetch(API_URL,{
-          method:'POST',
-          body
-        });
-        const data = await resp.json();
-        if(data.ok){
-          alert('Solicitud enviada correctamente. Pronto recibirás el historial en tu correo.');
-          closeModal();
-        }else{
-          console.error(data);
-          alert('No se pudo enviar la solicitud. Intenta de nuevo más tarde.');
-        }
-      }catch(err){
-        console.error(err);
-        alert('Ocurrió un error al enviar la solicitud.');
-      }
-    }
-  </script>
+    checkout.open(function(result){
+      const transaction = result.transaction;
+      console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
+    });
+  }
+</script>
 </body>
 </html>
