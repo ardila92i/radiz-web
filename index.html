@@ -29,7 +29,6 @@
       border-radius:20px;
       box-shadow:0 15px 40px rgba(15,23,42,.12);
       padding:28px 32px 32px;
-      overflow:visible;
     }
     .logo-top{
       text-align:center;
@@ -191,7 +190,7 @@
     /* FAB menú */
     .fab-menu{
       position:absolute;
-      top:24px;
+      top:22px;
       right:24px;
       z-index:20;
       display:none;
@@ -202,7 +201,7 @@
       border-radius:999px;
       background:#2563eb;
       border:none;
-      box-shadow:0 10px 24px rgba(37,99,235,.45);
+      box-shadow:0 15px 35px rgba(37,99,235,.55);
       display:flex;
       align-items:center;
       justify-content:center;
@@ -212,7 +211,7 @@
     .fab-btn:hover{
       transform:translateY(-1px);
       background:#1d4ed8;
-      box-shadow:0 14px 32px rgba(37,99,235,.55);
+      box-shadow:0 18px 40px rgba(37,99,235,.65);
     }
     .fab-btn span{
       display:block;
@@ -496,8 +495,6 @@
     const cardPagos=document.getElementById('cardPagos');
     const cardMantenimientos=document.getElementById('cardMantenimientos');
     const fabMenu=document.getElementById('fabMenu');
-    const menuRenting=document.getElementById('menuRenting');
-    const menuAfiliado=document.getElementById('menuAfiliado');
 
     status.className='status';
     status.textContent='';
@@ -541,12 +538,11 @@
       cardPagos.innerHTML='';
       cardMantenimientos.innerHTML='';
 
-      if(tipo==='AFILIADO'){
+      if(tipo.indexOf('AFILIADO')!==-1){
         // === AFILIADO ===
         const af=data.afiliado||{};
         datosAfiliadoActual=af;
 
-        // Nombre desde AFILIADOS; si falta, usa ID CLIENTE
         const nombreAf = af['NOMBRE'] || c['ID CLIENTE'] || 'Dato no disponible';
         const documentoAf = af['NO DOCUMENTO'] || 'Dato no disponible';
 
@@ -594,7 +590,6 @@
           '<p><strong>Cantidad de vehículos afiliados:</strong> '+(numVehiculos||'0')+'</p>'+
           '<p><strong>Mantenimientos registrados:</strong> '+(numMts||'0')+'</p>';
 
-        // actualizar modales afiliado
         const modalFecha=document.getElementById('modalFechaPagosTexto');
         modalFecha.textContent='Días de corte de pagos: '+diasCorte;
 
@@ -606,13 +601,12 @@
         document.getElementById('modalLiquidacionesTexto2').textContent=
           'Valor total liquidado: '+valorLiqTexto;
 
-        // menú para afiliados
-        menuRenting.style.display='none';
-        menuAfiliado.style.display='block';
+        document.getElementById('menuRenting').style.display='none';
+        document.getElementById('menuAfiliado').style.display='block';
         fabMenu.style.display='block';
 
       }else{
-        // === RENTING (clientes R, etc.) ===
+        // === RENTING ===
         datosAfiliadoActual=null;
 
         const estado=(c['ESTADO']||'').toString().toUpperCase();
@@ -665,13 +659,12 @@
             '<ul>'+itemsM+'</ul>';
         }
 
-        // menú renting
         document.getElementById('modalBeneficiosTexto').textContent=beneficiosTexto||'Información no disponible.';
         const tallerEjemplo='Taller asignado: '+(mts[0]?.['TALLER ASIGNADO']||'Información no disponible.');
         document.getElementById('modalTallerTexto').textContent=tallerEjemplo;
 
-        menuRenting.style.display='block';
-        menuAfiliado.style.display='none';
+        document.getElementById('menuRenting').style.display='block';
+        document.getElementById('menuAfiliado').style.display='none';
         fabMenu.style.display='block';
       }
 
@@ -700,7 +693,9 @@
     return d.toLocaleDateString('es-CO');
   }
 
-  // === NUEVO: crear pago Wompi con firma de integridad ===
+  // ===========================
+  //   CREAR PAGO CON WOMPI
+  // ===========================
   async function crearPagoWompi(){
     const montoInput=document.getElementById('montoPago');
     const errorLabel=document.getElementById('pagoError');
@@ -717,54 +712,53 @@
       return;
     }
 
-    const idContrato=(document.getElementById('idContrato').value||'').trim();
-    const reference='PAGO_'+(idContrato||'SIN_CONTRATO')+'_'+Date.now();
-    const amountInCents = valor * 100;
-    const currency = 'COP';
+    const idContrato=(document.getElementById('idContrato').value||'').trim() || 'SIN_CONTRATO';
 
-    // 1. Pedir firma de integridad al backend
-    let integritySignature = null;
     try{
-      const formData = new URLSearchParams();
-      formData.append('accion','firmar_pago');
-      formData.append('reference', reference);
-      formData.append('amountInCents', amountInCents.toString());
-      formData.append('currency', currency);
+      // 1) Pedimos al backend la firma de integridad
+      const formData=new URLSearchParams();
+      formData.append('accion','generar_firma');
+      formData.append('idContrato',idContrato);
+      formData.append('monto',valor);
 
-      const resp = await fetch(API_CALLBACK_URL,{
+      const resp=await fetch(API_URL,{
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
         body:formData.toString()
       });
-      const data = await resp.json();
 
-      if(data.ok && data.signature){
-        integritySignature = data.signature;
-      }else{
-        console.error('Error al generar firma:', data);
-        alert('No se pudo generar la firma de seguridad para el pago.');
+      const data=await resp.json();
+      if(!data.ok){
+        console.error('Error generando firma:',data);
+        alert('No se pudo generar la firma de pago. Intenta nuevamente.');
         return;
       }
-    }catch(err){
-      console.error('Error de red generando firma:', err);
-      alert('Error al preparar el pago. Intenta de nuevo.');
-      return;
+
+      const reference=data.reference;
+      const amountInCents=data.amountInCents;
+      const currency=data.currency;
+      const integritySignature=data.integritySignature;
+
+      // 2) Abrimos el widget con la firma correcta
+      const checkout=new WidgetCheckout({
+        currency:currency,
+        amountInCents:amountInCents,
+        reference:reference,
+        publicKey:WOMPI_PUBLIC_KEY,
+        redirectUrl:WOMPI_REDIRECT_URL,
+        // 👉 ESTE NOMBRE ES CLAVE:
+        "signature:integrity": integritySignature
+      });
+
+      checkout.open(function(result){
+        const transaction=result.transaction;
+        console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
+      });
+
+    }catch(e){
+      console.error('Error en crearPagoWompi:',e);
+      alert('Ocurrió un error al iniciar el pago. Intenta de nuevo.');
     }
-
-    // 2. Abrir checkout Wompi con la firma
-    const checkout=new WidgetCheckout({
-      currency: currency,
-      amountInCents: amountInCents,
-      reference: reference,
-      publicKey: WOMPI_PUBLIC_KEY,
-      redirectUrl: WOMPI_REDIRECT_URL,
-      integritySignature: integritySignature
-    });
-
-    checkout.open(function(result){
-      const transaction=result.transaction;
-      console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
-    });
   }
 
   async function enviarSolicitudHistorial(){
