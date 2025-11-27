@@ -29,7 +29,7 @@
       border-radius:20px;
       box-shadow:0 15px 40px rgba(15,23,42,.12);
       padding:28px 32px 32px;
-      overflow:visible; /* para que el FAB no se recorte */
+      overflow:visible;
     }
     .logo-top{
       text-align:center;
@@ -543,16 +543,7 @@
 
       if(tipo==='AFILIADO'){
         // === AFILIADO ===
-        const afiliados=data.afiliados||[];
-        const vehiculosAll=data.vehiculos||[];
-
-        const idAfiliado=(c['ID AFILIADO']||id).toString().trim();
-
-        // Buscar afiliado por ID AFILIADO en la tabla completa
-        const af = afiliados.find(a =>
-          String(a['ID AFILIADO'] || '').trim() === idAfiliado
-        ) || {};
-
+        const af=data.afiliado||{};
         datosAfiliadoActual=af;
 
         // Nombre desde AFILIADOS; si falta, usa ID CLIENTE
@@ -574,7 +565,6 @@
           }
         }
 
-        // Tarjeta principal del afiliado
         cardContrato.innerHTML=
           '<h2>Afiliado</h2>'+
           '<p><strong>ID contrato:</strong> '+(c['ID CONTRATO']||id)+'</p>'+
@@ -591,14 +581,8 @@
           '<p><strong>Días de corte:</strong> '+diasCorte+'</p>'+
           '<p><strong>Inicio contrato:</strong> '+formatearFecha(c['INICIO'])+'</p>';
 
-        // Vehículos asociados al afiliado o al contrato
-        const vehiculosContrato = vehiculosAll.filter(v => {
-          const idContrVeh = String(v['ID CONTRATO'] || '').trim();
-          const idAfiliadoVeh = String(v['ID AFILIADO'] || '').trim();
-          return idContrVeh === id || idAfiliadoVeh === idAfiliado;
-        });
-
-        const numVehiculos=vehiculosContrato.length;
+        const vehiculos=data.vehiculosContrato||[];
+        const numVehiculos=Array.isArray(vehiculos)?vehiculos.length:0;
         resumenAfiliadoVehiculos=numVehiculos;
 
         const mtsAfiliado=mts.filter(m=>String(m['ID CONTRATO']||'').trim()===id);
@@ -716,7 +700,8 @@
     return d.toLocaleDateString('es-CO');
   }
 
-  function crearPagoWompi(){
+  // === NUEVO: crear pago Wompi con firma de integridad ===
+  async function crearPagoWompi(){
     const montoInput=document.getElementById('montoPago');
     const errorLabel=document.getElementById('pagoError');
     const valor=parseInt(montoInput.value,10);
@@ -734,13 +719,46 @@
 
     const idContrato=(document.getElementById('idContrato').value||'').trim();
     const reference='PAGO_'+(idContrato||'SIN_CONTRATO')+'_'+Date.now();
+    const amountInCents = valor * 100;
+    const currency = 'COP';
 
+    // 1. Pedir firma de integridad al backend
+    let integritySignature = null;
+    try{
+      const formData = new URLSearchParams();
+      formData.append('accion','firmar_pago');
+      formData.append('reference', reference);
+      formData.append('amountInCents', amountInCents.toString());
+      formData.append('currency', currency);
+
+      const resp = await fetch(API_CALLBACK_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:formData.toString()
+      });
+      const data = await resp.json();
+
+      if(data.ok && data.signature){
+        integritySignature = data.signature;
+      }else{
+        console.error('Error al generar firma:', data);
+        alert('No se pudo generar la firma de seguridad para el pago.');
+        return;
+      }
+    }catch(err){
+      console.error('Error de red generando firma:', err);
+      alert('Error al preparar el pago. Intenta de nuevo.');
+      return;
+    }
+
+    // 2. Abrir checkout Wompi con la firma
     const checkout=new WidgetCheckout({
-      currency:'COP',
-      amountInCents:valor*100,
-      reference:reference,
-      publicKey:WOMPI_PUBLIC_KEY,
-      redirectUrl:WOMPI_REDIRECT_URL
+      currency: currency,
+      amountInCents: amountInCents,
+      reference: reference,
+      publicKey: WOMPI_PUBLIC_KEY,
+      redirectUrl: WOMPI_REDIRECT_URL,
+      integritySignature: integritySignature
     });
 
     checkout.open(function(result){
