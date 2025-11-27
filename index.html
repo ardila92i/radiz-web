@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>PORTAL CLIENTES</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://checkout.wompi.co/widget.js" async></script>
+  <script src="https://checkout.wompi.co/widget.js"></script>
   <style>
     *{box-sizing:border-box}
     body{
@@ -29,14 +29,15 @@
       border-radius:20px;
       box-shadow:0 15px 40px rgba(15,23,42,.12);
       padding:28px 32px 32px;
+      overflow:hidden;
     }
     .logo-top{
-      text-align:center;
+      text-align:left;
       margin-bottom:12px;
     }
     .logo-top img{
-      max-width:260px;
-      max-height:120px;
+      max-width:220px;
+      max-height:80px;
       object-fit:contain;
     }
     h1{
@@ -190,8 +191,8 @@
     /* FAB menú */
     .fab-menu{
       position:absolute;
-      top:22px;
-      right:24px;
+      top:24px;
+      right:26px;
       z-index:20;
       display:none;
     }
@@ -237,8 +238,8 @@
     /* Menú flotante */
     .menu-panel{
       position:absolute;
-      top:86px;
-      right:28px;
+      top:90px;
+      right:32px;
       background:#ffffff;
       border-radius:14px;
       box-shadow:0 12px 30px rgba(15,23,42,.22);
@@ -317,8 +318,15 @@
         border-radius:16px;
       }
       .fab-menu{
-        top:16px;
-        right:16px;
+        top:18px;
+        right:18px;
+      }
+      .menu-panel{
+        top:78px;
+        right:20px;
+      }
+      .logo-top{
+        text-align:center;
       }
     }
   </style>
@@ -466,7 +474,7 @@
   const API_URL='https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
   const WOMPI_PUBLIC_KEY='pub_test_3dus3DoqOnuXmuGDbXVVVZEbhUNsHVfI';
   const WOMPI_REDIRECT_URL='https://portal.radizco.com/';
-  const API_CALLBACK_URL = API_URL; // mismo endpoint para POST
+  const API_CALLBACK_URL = API_URL;
 
   let tipoUsuarioActual=null;
   let datosContratoActual=null;
@@ -533,13 +541,11 @@
       const mts=Array.isArray(rawM)?rawM:(rawM?[rawM]:[]);
       const beneficiosTexto=c['BENEFICIOS']||'Información no disponible';
 
-      // limpiar tarjetas
       cardContrato.innerHTML='';
       cardPagos.innerHTML='';
       cardMantenimientos.innerHTML='';
 
-      if(tipo.indexOf('AFILIADO')!==-1){
-        // === AFILIADO ===
+      if(tipo.includes('AFILIADO')){
         const af=data.afiliado||{};
         datosAfiliadoActual=af;
 
@@ -590,12 +596,10 @@
           '<p><strong>Cantidad de vehículos afiliados:</strong> '+(numVehiculos||'0')+'</p>'+
           '<p><strong>Mantenimientos registrados:</strong> '+(numMts||'0')+'</p>';
 
-        const modalFecha=document.getElementById('modalFechaPagosTexto');
-        modalFecha.textContent='Días de corte de pagos: '+diasCorte;
-
+        document.getElementById('modalFechaPagosTexto').textContent=
+          'Días de corte de pagos: '+diasCorte;
         document.getElementById('modalVehiculosTexto').textContent=
           'Número de vehículos: '+(numVehiculos||'0');
-
         document.getElementById('modalLiquidacionesTexto1').textContent=
           'Número de liquidaciones: '+numLiqTexto;
         document.getElementById('modalLiquidacionesTexto2').textContent=
@@ -606,7 +610,6 @@
         fabMenu.style.display='block';
 
       }else{
-        // === RENTING ===
         datosAfiliadoActual=null;
 
         const estado=(c['ESTADO']||'').toString().toUpperCase();
@@ -693,9 +696,7 @@
     return d.toLocaleDateString('es-CO');
   }
 
-  // ===========================
-  //   CREAR PAGO CON WOMPI
-  // ===========================
+  // -------- Wompi con firma de integridad ----------
   async function crearPagoWompi(){
     const montoInput=document.getElementById('montoPago');
     const errorLabel=document.getElementById('pagoError');
@@ -707,47 +708,42 @@
       return;
     }
 
-    if(typeof WidgetCheckout==='undefined'){
-      alert('No se pudo cargar el checkout de Wompi. Por favor recarga la página.');
-      return;
-    }
-
     const idContrato=(document.getElementById('idContrato').value||'').trim() || 'SIN_CONTRATO';
 
     try{
-      // 1) Pedimos al backend la firma de integridad
-      const formData=new URLSearchParams();
+      // Pedimos al backend que genere la firma
+      const formData = new URLSearchParams();
       formData.append('accion','generar_firma');
       formData.append('idContrato',idContrato);
-      formData.append('monto',valor);
+      formData.append('monto',String(valor));
 
-      const resp=await fetch(API_URL,{
+      const resp = await fetch(API_URL,{
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
         body:formData.toString()
       });
+      const data = await resp.json();
 
-      const data=await resp.json();
       if(!data.ok){
-        console.error('Error generando firma:',data);
-        alert('No se pudo generar la firma de pago. Intenta nuevamente.');
+        console.error('Error al generar firma',data);
+        alert(data.error || 'No se pudo generar la firma de integridad.');
         return;
       }
 
-      const reference=data.reference;
-      const amountInCents=data.amountInCents;
-      const currency=data.currency;
-      const integritySignature=data.integritySignature;
+      const { reference, amountInCents, currency, integritySignature } = data;
 
-      // 2) Abrimos el widget con la firma correcta
+      if(typeof WidgetCheckout==='undefined'){
+        alert('No se pudo cargar el checkout de Wompi. Por favor recarga la página.');
+        return;
+      }
+
       const checkout=new WidgetCheckout({
         currency:currency,
         amountInCents:amountInCents,
         reference:reference,
         publicKey:WOMPI_PUBLIC_KEY,
-        redirectUrl:WOMPI_REDIRECT_URL,
-        // 👉 ESTE NOMBRE ES CLAVE:
-        "signature:integrity": integritySignature
+        signature:{ integrity: integritySignature },
+        redirectUrl:WOMPI_REDIRECT_URL
       });
 
       checkout.open(function(result){
@@ -755,9 +751,9 @@
         console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
       });
 
-    }catch(e){
-      console.error('Error en crearPagoWompi:',e);
-      alert('Ocurrió un error al iniciar el pago. Intenta de nuevo.');
+    }catch(err){
+      console.error(err);
+      alert('Ocurrió un error al iniciar el pago. Intenta nuevamente.');
     }
   }
 
