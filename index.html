@@ -466,7 +466,7 @@
 <script>
   // === CONFIGURACIÓN FRONT ===
   const API_URL = 'https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
-  const WOMPI_PUBLIC_KEY = 'pub_test_3dus3DoqOnuXmuGDbXVVVZEbhUNsHVfI';
+  const WOMPI_PUBLIC_KEY = 'pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06';
   const WOMPI_REDIRECT_URL = 'https://portal.radizco.com/';
 
   let tipoUsuarioActual = null;
@@ -739,6 +739,8 @@
       const reference=data.reference;
       const currency=data.currency;
       const integritySignature=data.integritySignature;
+
+      console.log('Wompi payload:', {reference, amountInCents, currency, integritySignature});
 
       // 2) Abrimos WidgetCheckout con firma de integridad
       const checkout=new WidgetCheckout({
