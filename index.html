@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <title>PORTAL CLIENTES</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://checkout.wompi.co/widget.js"></script>
+  <!-- Wompi Widget -->
+  <script src="https://checkout.wompi.co/widget.js" async></script>
   <style>
     *{box-sizing:border-box}
     body{
@@ -29,15 +30,14 @@
       border-radius:20px;
       box-shadow:0 15px 40px rgba(15,23,42,.12);
       padding:28px 32px 32px;
-      overflow:hidden;
     }
     .logo-top{
-      text-align:left;
+      text-align:center;
       margin-bottom:12px;
     }
     .logo-top img{
-      max-width:220px;
-      max-height:80px;
+      max-width:260px;
+      max-height:120px;
       object-fit:contain;
     }
     h1{
@@ -191,8 +191,8 @@
     /* FAB menú */
     .fab-menu{
       position:absolute;
-      top:24px;
-      right:26px;
+      top:22px;
+      right:24px;
       z-index:20;
       display:none;
     }
@@ -238,8 +238,8 @@
     /* Menú flotante */
     .menu-panel{
       position:absolute;
-      top:90px;
-      right:32px;
+      top:86px;
+      right:28px;
       background:#ffffff;
       border-radius:14px;
       box-shadow:0 12px 30px rgba(15,23,42,.22);
@@ -318,15 +318,8 @@
         border-radius:16px;
       }
       .fab-menu{
-        top:18px;
-        right:18px;
-      }
-      .menu-panel{
-        top:78px;
-        right:20px;
-      }
-      .logo-top{
-        text-align:center;
+        top:16px;
+        right:16px;
       }
     }
   </style>
@@ -471,16 +464,16 @@
 </div>
 
 <script>
-  const API_URL='https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
-  const WOMPI_PUBLIC_KEY='pub_test_3dus3DoqOnuXmuGDbXVVVZEbhUNsHVfI';
-  const WOMPI_REDIRECT_URL='https://portal.radizco.com/';
-  const API_CALLBACK_URL = API_URL;
+  // === CONFIGURACIÓN FRONT ===
+  const API_URL = 'https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
+  const WOMPI_PUBLIC_KEY = 'pub_test_3dus3DoqOnuXmuGDbXVVVZEbhUNsHVfI';
+  const WOMPI_REDIRECT_URL = 'https://portal.radizco.com/';
 
-  let tipoUsuarioActual=null;
-  let datosContratoActual=null;
-  let datosAfiliadoActual=null;
-  let resumenAfiliadoVehiculos=0;
-  let resumenAfiliadoMantenimientos=0;
+  let tipoUsuarioActual = null;
+  let datosContratoActual = null;
+  let datosAfiliadoActual = null;
+  let resumenAfiliadoVehiculos = 0;
+  let resumenAfiliadoMantenimientos = 0;
 
   function toggleMenu(){
     const panel=document.getElementById('menuPanel');
@@ -541,11 +534,16 @@
       const mts=Array.isArray(rawM)?rawM:(rawM?[rawM]:[]);
       const beneficiosTexto=c['BENEFICIOS']||'Información no disponible';
 
+      const menuRenting=document.getElementById('menuRenting');
+      const menuAfiliado=document.getElementById('menuAfiliado');
+
+      // limpiar tarjetas
       cardContrato.innerHTML='';
       cardPagos.innerHTML='';
       cardMantenimientos.innerHTML='';
 
-      if(tipo.includes('AFILIADO')){
+      if(tipo.indexOf('AFILIADO')!==-1){
+        // === AFILIADO ===
         const af=data.afiliado||{};
         datosAfiliadoActual=af;
 
@@ -596,6 +594,7 @@
           '<p><strong>Cantidad de vehículos afiliados:</strong> '+(numVehiculos||'0')+'</p>'+
           '<p><strong>Mantenimientos registrados:</strong> '+(numMts||'0')+'</p>';
 
+        // modales afiliado
         document.getElementById('modalFechaPagosTexto').textContent=
           'Días de corte de pagos: '+diasCorte;
         document.getElementById('modalVehiculosTexto').textContent=
@@ -605,11 +604,12 @@
         document.getElementById('modalLiquidacionesTexto2').textContent=
           'Valor total liquidado: '+valorLiqTexto;
 
-        document.getElementById('menuRenting').style.display='none';
-        document.getElementById('menuAfiliado').style.display='block';
+        menuRenting.style.display='none';
+        menuAfiliado.style.display='block';
         fabMenu.style.display='block';
 
       }else{
+        // === RENTING ===
         datosAfiliadoActual=null;
 
         const estado=(c['ESTADO']||'').toString().toUpperCase();
@@ -666,8 +666,8 @@
         const tallerEjemplo='Taller asignado: '+(mts[0]?.['TALLER ASIGNADO']||'Información no disponible.');
         document.getElementById('modalTallerTexto').textContent=tallerEjemplo;
 
-        document.getElementById('menuRenting').style.display='block';
-        document.getElementById('menuAfiliado').style.display='none';
+        menuRenting.style.display='block';
+        menuAfiliado.style.display='none';
         fabMenu.style.display='block';
       }
 
@@ -696,7 +696,7 @@
     return d.toLocaleDateString('es-CO');
   }
 
-  // -------- Wompi con firma de integridad ----------
+  // === CREAR PAGO CON FIRMA DE INTEGRIDAD ===
   async function crearPagoWompi(){
     const montoInput=document.getElementById('montoPago');
     const errorLabel=document.getElementById('pagoError');
@@ -708,42 +708,46 @@
       return;
     }
 
+    if(typeof WidgetCheckout==='undefined'){
+      alert('No se pudo cargar el checkout de Wompi. Por favor recarga la página.');
+      return;
+    }
+
     const idContrato=(document.getElementById('idContrato').value||'').trim() || 'SIN_CONTRATO';
 
     try{
-      // Pedimos al backend que genere la firma
-      const formData = new URLSearchParams();
+      // 1) Pedimos al Apps Script que genere referencia + firma
+      const formData=new URLSearchParams();
       formData.append('accion','generar_firma');
       formData.append('idContrato',idContrato);
       formData.append('monto',String(valor));
 
-      const resp = await fetch(API_URL,{
+      const resp=await fetch(API_URL,{
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
         body:formData.toString()
       });
-      const data = await resp.json();
+      const data=await resp.json();
 
       if(!data.ok){
-        console.error('Error al generar firma',data);
-        alert(data.error || 'No se pudo generar la firma de integridad.');
+        console.error('Error generar_firma:',data);
+        alert('No se pudo preparar el pago. Intenta de nuevo.');
         return;
       }
 
-      const { reference, amountInCents, currency, integritySignature } = data;
+      const amountInCents=data.amountInCents;
+      const reference=data.reference;
+      const currency=data.currency;
+      const integritySignature=data.integritySignature;
 
-      if(typeof WidgetCheckout==='undefined'){
-        alert('No se pudo cargar el checkout de Wompi. Por favor recarga la página.');
-        return;
-      }
-
+      // 2) Abrimos WidgetCheckout con firma de integridad
       const checkout=new WidgetCheckout({
         currency:currency,
         amountInCents:amountInCents,
         reference:reference,
         publicKey:WOMPI_PUBLIC_KEY,
-        signature:{ integrity: integritySignature },
-        redirectUrl:WOMPI_REDIRECT_URL
+        redirectUrl:WOMPI_REDIRECT_URL,
+        signature:{ integrity: integritySignature }
       });
 
       checkout.open(function(result){
@@ -753,7 +757,7 @@
 
     }catch(err){
       console.error(err);
-      alert('Ocurrió un error al iniciar el pago. Intenta nuevamente.');
+      alert('Error al conectar con el servidor de pagos. Intenta de nuevo.');
     }
   }
 
@@ -777,7 +781,7 @@
       formData.append('correo',correo);
       formData.append('idContrato',idHist);
 
-      const resp=await fetch(API_CALLBACK_URL,{
+      const resp=await fetch(API_URL,{
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
         body:formData.toString()
