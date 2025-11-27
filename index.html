@@ -1,369 +1,246 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Portal de Clientes RADIZ</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://checkout.wompi.co; connect-src 'self' https://script.google.com https://script.googleusercontent.com https://checkout.wompi.co; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; frame-src https://checkout.wompi.co;">
+  <title>PORTAL CLIENTES</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Script oficial del Widget de Wompi -->
-  <script src="https://checkout.wompi.co/widget.js"></script>
-
-  <!-- Aquí puedes conservar TU CSS original; este es solo ejemplo suave -->
+  <script src="https://checkout.wompi.co/widget.js" async></script>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #f3f4f6;
-      color: #111827;
-    }
-
-    .page {
-      max-width: 1100px;
-      margin: 32px auto;
-      padding: 16px;
-    }
-
-    .header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-
-    .header-logo {
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      color: #fff;
-      background: #1d4ed8;
-    }
-
-    .header-title {
-      font-size: 1.25rem;
-      font-weight: 700;
-    }
-
-    .header-subtitle {
-      font-size: 0.875rem;
-      color: #6b7280;
-    }
-
-    .layout {
-      display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-      gap: 24px;
-    }
-
-    .card {
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 20px 24px;
-      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
-    }
-
-    .card-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .card-subtitle {
-      font-size: 0.85rem;
-      color: #6b7280;
-      margin-bottom: 16px;
-    }
-
-    .field-group {
-      margin-bottom: 12px;
-    }
-
-    .field-label {
-      font-size: 0.85rem;
-      font-weight: 500;
-      color: #6b7280;
-      margin-bottom: 2px;
-    }
-
-    .field-value {
-      font-size: 0.95rem;
-      font-weight: 500;
-      color: #111827;
-    }
-
-    .amount-big {
-      font-size: 1.8rem;
-      font-weight: 700;
-      color: #0f172a;
-    }
-
-    .amount-big span {
-      font-size: 0.9rem;
-      font-weight: 500;
-      color: #6b7280;
-      margin-left: 4px;
-    }
-
-    .input {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid #e5e7eb;
-      font-size: 0.95rem;
-      outline: none;
-      background: #f9fafb;
-    }
-
-    .input:focus {
-      border-color: #2563eb;
-      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.15);
-      background: #ffffff;
-    }
-
-    .btn-primary {
-      width: 100%;
-      border: none;
-      border-radius: 999px;
-      padding: 12px 18px;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #ffffff;
-      background: linear-gradient(135deg, #1d4ed8, #2563eb);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      cursor: pointer;
-      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.12s ease;
-      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.38);
-      margin-top: 12px;
-    }
-
-    .btn-primary:hover {
-      filter: brightness(1.05);
-      transform: translateY(-1px);
-      box-shadow: 0 16px 40px rgba(37, 99, 235, 0.45);
-    }
-
-    .btn-primary:active {
-      transform: translateY(0);
-      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
-    }
-
-    .btn-primary-icon {
-      width: 18px;
-      height: 18px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      background: #eff6ff;
-      color: #1d4ed8;
-      font-size: 0.8rem;
-    }
-
-    .helper-text {
-      margin-top: 6px;
-      font-size: 0.8rem;
-      color: #6b7280;
-    }
-
-    @media (max-width: 800px) {
-      .layout {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
+    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f3f4f6;margin:0;padding:0}
+    .container{max-width:900px;margin:40px auto;background:#fff;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.06);padding:24px 28px 32px}
+    h1{margin-top:0;font-size:1.6rem;color:#111827}
+    .subtitle{color:#6b7280;font-size:.95rem;margin-bottom:20px}
+    .form-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:20px;align-items:center}
+    label{font-size:.9rem;color:#374151;font-weight:600}
+    input[type=text]{flex:1;min-width:200px;padding:10px 12px;border-radius:8px;border:1px solid:#d1d5db;font-size:.95rem;outline:none}
+    input[type=text]:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,235,.15)}
+    button{padding:10px 18px;border-radius:999px;border:none;font-size:.95rem;font-weight:600;cursor:pointer;background:#2563eb;color:#fff;display:inline-flex;align-items:center;gap:6px}
+    button:disabled{opacity:.6;cursor:default}
+    .status{font-size:.9rem;margin-bottom:16px;min-height:1.2em}
+    .status.error{color:#b91c1c}
+    .status.ok{color:#065f46}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:16px}
+    .card{border-radius:10px;border:1px solid:#e5e7eb;padding:14px 16px;background:#f9fafb;font-size:.9rem}
+    .card h2{margin:0 0 8px;font-size:1rem;color:#111827}
+    .card p{margin:3px 0;color:#4b5563}
+    ul{padding-left:18px;margin:6px 0}
+    li{margin-bottom:4px}
+    .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:600;text-transform:uppercase}
+    .badge-activo{background:#dcfce7;color:#166534}
+    .badge-inactivo{background:#fee2e2;color:#b91c1c}
+    footer{margin-top:24px;font-size:.75rem;color:#9ca3af;text-align:center}
+    .logo-top{text-align:center;margin-bottom:12px}
+    .logo-top img{max-width:260px;max-height:120px;object-fit:contain}
+    @media(max-width:600px){.container{margin:16px;padding:18px 16px 22px}}
   </style>
 </head>
-
 <body>
-  <div class="page">
-    <!-- CABECERA -->
-    <header class="header">
-      <div class="header-logo">R</div>
-      <div>
-        <div class="header-title">RADIZ Vehicular</div>
-        <div class="header-subtitle">Portal de pagos · clientes afiliados</div>
+  <div class="container">
+    <div class="logo-top"><img src="logoradiz.png" alt="Logo RADIZ" id="logo-radiz" /></div>
+    <h1>PORTAL CLIENTES</h1>
+    <p class="subtitle">Ingresa el <strong>ID del contrato</strong> para consultar el estado, pagos y mantenimientos.</p>
+    <div class="form-row">
+      <div style="flex:1">
+        <label for="idContrato">ID CONTRATO</label><br />
+        <input type="text" id="idContrato" placeholder="Ejemplo: R-0001" />
       </div>
-    </header>
-
-    <div class="layout">
-      <!-- COLUMNA IZQUIERDA: RESUMEN (aquí puedes poner tus propios datos desde Sheets) -->
-      <section class="card">
-        <div class="card-title">Resumen de tu servicio</div>
-        <div class="card-subtitle">
-          Aquí puedes reemplazar este texto por los datos que traes desde Google Sheets.
-        </div>
-
-        <div class="field-group">
-          <div class="field-label">Cliente</div>
-          <div class="field-value" id="clienteNombre">Juan Pérez</div>
-        </div>
-
-        <div class="field-group">
-          <div class="field-label">Documento</div>
-          <div class="field-value" id="clienteDocumento">1.111.111.111</div>
-        </div>
-
-        <div class="field-group">
-          <div class="field-label">Servicio</div>
-          <div class="field-value" id="servicioDescripcion">Renting motocicleta RADIZ</div>
-        </div>
-
-        <div class="field-group">
-          <div class="field-label">Periodo</div>
-          <div class="field-value" id="servicioPeriodo">01/12/2025 - 31/12/2025</div>
-        </div>
-      </section>
-
-      <!-- COLUMNA DERECHA: PAGO PENDIENTE -->
-      <section class="card">
-        <div class="card-title">Pago pendiente</div>
-        <div class="card-subtitle">
-          Configura el valor y la referencia. Al hacer clic en el botón se abrirá el pago seguro con Wompi.
-        </div>
-
-        <div class="field-group">
-          <div class="field-label">Valor pendiente</div>
-          <div class="amount-big">
-            $170.000 <span>COP</span>
-          </div>
-        </div>
-
-        <!-- INPUT MONTO A PAGAR -->
-        <div class="field-group">
-          <label class="field-label" for="valorPagar">Valor a pagar (COP)</label>
-          <input
-            id="valorPagar"
-            class="input"
-            type="number"
-            min="1"
-            step="1"
-            value="170000"
-          />
-        </div>
-
-        <!-- INPUT REFERENCIA ÚNICA -->
-        <div class="field-group">
-          <label class="field-label" for="referenciaPago">Referencia única de pago</label>
-          <input
-            id="referenciaPago"
-            class="input"
-            type="text"
-            value="RADIZ-DEC-2025-001"
-          />
-        </div>
-
-        <!-- BOTÓN WOMPI -->
-        <button id="pagarWompi" type="button" class="btn-primary">
-          <span class="btn-primary-icon">💳</span>
-          <span>Pagar con Wompi</span>
-        </button>
-
-        <p class="helper-text">
-          Al hacer clic abriremos el formulario oficial de Wompi para completar tu pago de forma segura.
-        </p>
-      </section>
+      <div>
+        <button id="btnConsultar" onclick="consultar()">Consultar</button>
+      </div>
     </div>
+    <div id="status" class="status"></div>
+    <div class="grid" id="resultados" style="display:none;">
+      <div class="card" id="cardContrato"></div>
+      <div class="card" id="cardPagos"></div>
+      <div class="card" id="cardMantenimientos"></div>
+    </div>
+    <div id="seccionPago" style="margin-top:24px;">
+      <h2 style="font-size:1rem;margin:0 0 4px;color:#111827;">Realizar pago</h2>
+      <p style="font-size:.9rem;color:#6b7280;margin:4px 0 12px;">Ingresa el monto a pagar y completa el proceso con Wompi.</p>
+      <label for="montoPago" style="display:block;margin-bottom:6px;">Monto a pagar (COP)</label>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+        <input id="montoPago" type="number" min="100000" step="1000" placeholder="Ej: 170000" style="padding:8px 10px;border-radius:8px;border:1px solid:#d1d5db;width:200px;" />
+        <button type="button" onclick="crearPagoWompi()">Pagar con Wompi</button>
+      </div>
+      <p id="pagoError" style="color:#dc2626;margin-top:8px;display:none;font-size:.85rem;">Ingresa un monto válido (mínimo 100.000).</p>
+    </div>
+    <footer>Versión interna • RADIZ Suministro Vehicular</footer>
   </div>
-
-  <!-- LÓGICA WIDGET WOMPI (ESTO ES LO IMPORTANTE) -->
   <script>
-    // Obtiene el valor de un input buscando entre varios IDs posibles
-    function getValueFromPossibleIds(ids) {
-      for (var i = 0; i < ids.length; i++) {
-        var el = document.getElementById(ids[i]);
-        if (el) return el.value;
-      }
-      return '';
-    }
+    const API_URL='https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
+    const WOMPI_PUBLIC_KEY='pub_test_3dus3DoqOnuXmuGDbXVVVZEbhUNsHVfI';
+    const WOMPI_REDIRECT_URL='https://portal.radizco.com/';
 
-    function parseAmountToCents(amountStr) {
-      if (!amountStr) return NaN;
-      // eliminar separadores de miles, espacios, etc.
-      var clean = String(amountStr).replace(/[^\d]/g, '');
-      var value = parseInt(clean, 10);
-      if (isNaN(value) || value <= 0) return NaN;
-      return value * 100; // COP -> centavos
-    }
+    async function consultar(){
+      const id=document.getElementById('idContrato').value.trim();
+      const status=document.getElementById('status');
+      const btn=document.getElementById('btnConsultar');
+      const resultados=document.getElementById('resultados');
+      const cardContrato=document.getElementById('cardContrato');
+      const cardPagos=document.getElementById('cardPagos');
+      const cardMantenimientos=document.getElementById('cardMantenimientos');
 
-    function initWompiButton() {
-      var button =
-        document.getElementById('pagarWompi') ||
-        document.getElementById('btnPagarWompi') ||
-        document.getElementById('payButton');
+      status.className='status';
+      status.textContent='';
+      resultados.style.display='none';
 
-      if (!button) {
-        console.error('No se encontró el botón de pago (pagarWompi / btnPagarWompi / payButton).');
+      if(!id){
+        status.classList.add('error');
+        status.textContent='Por favor ingresa un ID de contrato.';
         return;
       }
 
-      button.addEventListener('click', function () {
-        // 1) Tomar monto y referencia del formulario (soporta varios IDs por si ya tienes otros)
-        var amountStr = getValueFromPossibleIds(['paymentAmount', 'valorPagar', 'amountInput']);
-        var reference = getValueFromPossibleIds(['paymentReference', 'referenciaPago', 'referenceInput']).trim();
+      btn.disabled=true;
+      status.textContent='Consultando información...';
 
-        var amountInCents = parseAmountToCents(amountStr);
+      try{
+        const resp=await fetch(API_URL+'?id='+encodeURIComponent(id));
+        const data=await resp.json();
 
-        if (!reference) {
-          alert('Por favor ingresa una referencia de pago.');
+        if(!data.ok){
+          status.className='status error';
+          status.textContent=data.error||'No se encontró información para ese contrato.';
+          btn.disabled=false;
           return;
         }
 
-        if (!amountInCents || isNaN(amountInCents)) {
-          alert('Por favor ingresa un valor a pagar válido.');
-          return;
+        const c=data.contrato||{};
+        const estado=(c['ESTADO']||'').toString().toUpperCase();
+
+        cardContrato.innerHTML=
+          '<h2>Contrato</h2>'+
+          '<p><strong>ID:</strong> '+(c['ID CONTRATO']||'')+'</p>'+
+          '<p><strong>Tipo usuario:</strong> '+(c['TIPO USUARIO']||'')+'</p>'+
+          '<p><strong>Vehículo:</strong> '+(c['ID VEHÍCULO']||'')+'</p>'+
+          '<p><strong>Inicio:</strong> '+formatearFecha(c['INICIO'])+'</p>'+
+          '<p><strong>Fin:</strong> '+formatearFecha(c['FIN'])+'</p>'+
+          '<p><strong>Tarifa semanal:</strong> '+formatearNumero(c['TARIFA SEMANAL'])+'</p>'+
+          '<p><strong>Beneficios:</strong> '+(c['BENEFICIOS']||'')+'</p>'+
+          '<p><span class="badge '+(estado==='ACTIVO'?'badge-activo':'badge-inactivo')+'">'+(estado||'SIN ESTADO')+'</span></p>';
+
+        const pagos=data.pagos||[];
+        if(pagos.length===0){
+          cardPagos.innerHTML='<h2>Pagos</h2><p>No hay pagos registrados para este contrato.</p>';
+        }else{
+          const items=pagos.map(p=>
+            '<li>'+
+            '<strong>ID pago:</strong> '+(p['ID PAGO']||'')+'<br>'+
+            '<strong>ID contrato:</strong> '+(p['ID CONTRATO']||'')+'<br>'+
+            '<strong>Días de corte:</strong> '+(p['DÍAS DE CORTE']||p['DIAS DE CORTE']||'')+'<br>'+
+            '<strong>Gasto mantenimientos:</strong> '+formatearNumero(p['GASTO MANTENIMIENTOS'])+'<br>'+
+            '<strong>Tarifas completadas:</strong> '+(p['TARIFAS COMPLETADAS']||'')+'<br>'+
+            '<strong>Tarifas vencidas:</strong> '+(p['TARIFAS VENCIDAS']||'')+'<br>'+
+            '<strong>Referencia:</strong> '+(p['REFERENCIA']||'')+
+            '</li>'
+          ).join('');
+          cardPagos.innerHTML='<h2>Pagos</h2><ul>'+items+'</ul>';
         }
 
-        // 2) Llamar al servidor para que genere la firma de integridad
-        button.disabled = true;
-        button.style.opacity = '0.8';
+        const rawM=data.mantenimientos??data.mantenimiento??data.mtos??data.manten??[];
+        const mts=Array.isArray(rawM)?rawM:(rawM?[rawM]:[]);
 
-        google.script.run
-          .withSuccessHandler(function (config) {
-            button.disabled = false;
-            button.style.opacity = '1';
+        if(mts.length===0){
+          cardMantenimientos.innerHTML='<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
+        }else{
+          const totalM=mts.reduce((s,m)=>s+(Number(m['VALOR MTOS'])||0),0);
+          const itemsM=mts.map(m=>
+            '<li>'+
+            '<strong>ID vehículo:</strong> '+(m['ID VEHÍCULO']||'')+'<br>'+
+            '<strong>Fecha ult. mantenimiento:</strong> '+formatearFecha(m['FECHA ULT. MANTENIMIENTO'])+'<br>'+
+            '<strong>Tipo ult. mantenimiento:</strong> '+(m['TIPO ULT. MANTENIMIENTO']||'')+'<br>'+
+            '<strong>MTOs realizados:</strong> '+(m['MTOS REALIZADOS']||'')+'<br>'+
+            '<strong>Valor MTOs:</strong> '+formatearNumero(m['VALOR MTOS'])+'<br>'+
+            '<strong>Taller asignado:</strong> '+(m['TALLER ASIGNADO']||'')+'<br>'+
+            '<strong>Observaciones:</strong> '+(m['OBSERVACIONES']||'')+
+            '</li>'
+          ).join('');
+          cardMantenimientos.innerHTML=
+            '<h2>Mantenimientos</h2>'+
+            '<p><strong>Total mantenimientos:</strong> '+formatearNumero(totalM)+'</p>'+
+            '<ul>'+itemsM+'</ul>';
+        }
 
-            try {
-              // 3) Crear instancia del WidgetCheckout con la firma generada en el servidor
-              var checkout = new WidgetCheckout({
-                currency: config.currency,
-                amountInCents: config.amountInCents,
-                reference: config.reference,
-                publicKey: config.publicKey,
-                signature: { integrity: config.integrity }
-              });
-
-              // 4) Abrir el widget
-              checkout.open(function (result) {
-                // Aquí podrías hacer algo con el resultado si quieres.
-                console.log('Resultado transacción Wompi:', result);
-              });
-            } catch (e) {
-              console.error('Error al abrir WidgetCheckout:', e);
-              alert('Ocurrió un error al abrir la pasarela de pago.');
-            }
-          })
-          .withFailureHandler(function (err) {
-            button.disabled = false;
-            button.style.opacity = '1';
-            console.error('Error generando firma en Apps Script:', err);
-            alert('No se pudo generar la firma de pago. Intenta nuevamente.');
-          })
-          .getWompiConfig(reference, amountInCents);
-      });
+        resultados.style.display='grid';
+        status.className='status ok';
+        status.textContent='Información cargada correctamente.';
+      }catch(e){
+        status.className='status error';
+        status.textContent='Error al consultar la información. Intenta de nuevo.';
+      }finally{
+        btn.disabled=false;
+      }
     }
 
-    // Inicializar cuando el HTML está listo
-    document.addEventListener('DOMContentLoaded', initWompiButton);
+    function formatearNumero(n){
+      const num=Number(n);
+      if(isNaN(num))return n||'';
+      return num.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
+    }
+
+    function formatearFecha(v){
+      if(!v)return'';
+      const d=new Date(v);
+      if(isNaN(d.getTime()))return v;
+      return d.toLocaleDateString('es-CO');
+    }
+
+    function crearPagoWompi(){
+      const montoInput=document.getElementById('montoPago');
+      const errorLabel=document.getElementById('pagoError');
+      const valor=parseInt(montoInput.value,10);
+
+      errorLabel.style.display='none';
+      if(!valor||valor<100000){
+        errorLabel.style.display='block';
+        return;
+      }
+
+      if(typeof WidgetCheckout==='undefined'){
+        alert('No se pudo cargar el checkout de Wompi. Por favor recarga la página.');
+        return;
+      }
+
+      const idContrato=(document.getElementById('idContrato').value||'').trim();
+      const reference='PAGO_'+(idContrato||'SIN_CONTRATO')+'_'+Date.now();
+
+      const checkout=new WidgetCheckout({
+        currency:'COP',
+        amountInCents:valor*100,
+        reference:reference,
+        publicKey:WOMPI_PUBLIC_KEY,
+        redirectUrl:WOMPI_REDIRECT_URL
+      });
+
+      // === CALLBACK: registrar pago en PAGOS_PORTAL cuando esté aprobado ===
+      checkout.open(async function(result){
+        const transaction=result && result.transaction;
+        console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
+
+        if(!transaction) return;
+        if(transaction.status!=='APPROVED') return;
+
+        const referenciaTx = transaction.reference || reference;
+        const montoPesos = Math.round((transaction.amountInCents || (valor*100)) / 100);
+
+        try{
+          await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            body: new URLSearchParams({
+              accion: 'registrar_pago',
+              referencia: referenciaTx,
+              idContrato: idContrato,
+              monto: String(montoPesos)
+            }).toString()
+          });
+        }catch(err){
+          console.error('Error registrando pago en PAGOS_PORTAL:', err);
+        }
+      });
+    }
   </script>
 </body>
 </html>
