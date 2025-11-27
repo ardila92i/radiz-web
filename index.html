@@ -29,6 +29,7 @@
       border-radius:20px;
       box-shadow:0 15px 40px rgba(15,23,42,.12);
       padding:28px 32px 32px;
+      overflow:visible; /* para que el FAB no se recorte */
     }
     .logo-top{
       text-align:center;
@@ -190,7 +191,7 @@
     /* FAB menú */
     .fab-menu{
       position:absolute;
-      top:22px;
+      top:24px;
       right:24px;
       z-index:20;
       display:none;
@@ -201,7 +202,7 @@
       border-radius:999px;
       background:#2563eb;
       border:none;
-      box-shadow:0 15px 35px rgba(37,99,235,.55);
+      box-shadow:0 10px 24px rgba(37,99,235,.45);
       display:flex;
       align-items:center;
       justify-content:center;
@@ -211,7 +212,7 @@
     .fab-btn:hover{
       transform:translateY(-1px);
       background:#1d4ed8;
-      box-shadow:0 18px 40px rgba(37,99,235,.65);
+      box-shadow:0 14px 32px rgba(37,99,235,.55);
     }
     .fab-btn span{
       display:block;
