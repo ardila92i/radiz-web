@@ -1,443 +1,369 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Portal de Clientes RADIZ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root {
-      --radiz-blue: #0046af;
-      --radiz-blue-dark: #00327c;
-      --bg: #f3f4f6;
-      --text-main: #111827;
-      --text-muted: #6b7280;
-      --border-soft: #e5e7eb;
-      --radius-lg: 14px;
-    }
 
+  <!-- Script oficial del Widget de Wompi -->
+  <script src="https://checkout.wompi.co/widget.js"></script>
+
+  <!-- Aquí puedes conservar TU CSS original; este es solo ejemplo suave -->
+  <style>
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
-        sans-serif;
-      background: radial-gradient(circle at top, #e5f0ff, #f9fafb 60%);
-      color: var(--text-main);
+      margin: 0;
       min-height: 100vh;
-      padding: 24px 12px;
-      display: flex;
-      justify-content: center;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f3f4f6;
+      color: #111827;
     }
 
     .page {
-      width: 100%;
-      max-width: 1024px;
-      background: #ffffff;
-      border-radius: 24px;
-      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.12);
-      padding: 24px;
-    }
-
-    @media (min-width: 768px) {
-      .page {
-        padding: 32px 40px;
-      }
+      max-width: 1100px;
+      margin: 32px auto;
+      padding: 16px;
     }
 
     .header {
       display: flex;
-      flex-wrap: wrap;
       align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      gap: 12px;
       margin-bottom: 24px;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .logo {
-      width: 46px;
-      height: 46px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--radiz-blue), #00a0ff);
+    .header-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #ffffff;
-      font-weight: 800;
-      font-size: 18px;
-      letter-spacing: 0.04em;
+      font-weight: 700;
+      color: #fff;
+      background: #1d4ed8;
     }
 
-    .brand-text-title {
-      font-size: 20px;
+    .header-title {
+      font-size: 1.25rem;
       font-weight: 700;
     }
 
-    .brand-text-sub {
-      font-size: 12px;
-      color: var(--text-muted);
+    .header-subtitle {
+      font-size: 0.875rem;
+      color: #6b7280;
     }
 
-    .badge {
-      padding: 4px 9px;
-      border-radius: 999px;
-      background: #e0f2fe;
-      color: #0369a1;
-      font-size: 11px;
-      font-weight: 600;
-    }
-
-    .cards-grid {
+    .layout {
       display: grid;
-      grid-template-columns: 1.1fr 1.2fr;
-      gap: 20px;
-    }
-
-    @media (max-width: 780px) {
-      .cards-grid {
-        grid-template-columns: 1fr;
-      }
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+      gap: 24px;
     }
 
     .card {
-      background: #f9fafb;
-      border-radius: var(--radius-lg);
-      padding: 16px 18px;
-      border: 1px solid var(--border-soft);
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      gap: 8px;
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 20px 24px;
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
     }
 
     .card-title {
-      font-size: 15px;
+      font-size: 1.05rem;
       font-weight: 600;
+      margin-bottom: 8px;
     }
 
-    .card-sub {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .pill {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      background: #e5f3ff;
-      color: #1d4ed8;
-      font-weight: 600;
-    }
-
-    .amount {
-      font-size: 26px;
-      font-weight: 700;
-      color: var(--radiz-blue-dark);
-      margin: 6px 0;
-    }
-
-    .amount small {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-left: 4px;
-      font-weight: 500;
-    }
-
-    .list {
-      list-style: none;
-      margin-top: 6px;
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .list li {
-      margin-bottom: 4px;
-    }
-
-    .pay-actions {
-      margin-top: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
+    .card-subtitle {
+      font-size: 0.85rem;
+      color: #6b7280;
+      margin-bottom: 16px;
     }
 
     .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-top: 8px;
-      font-size: 13px;
+      margin-bottom: 12px;
     }
 
-    .field-group label {
+    .field-label {
+      font-size: 0.85rem;
       font-weight: 500;
+      color: #6b7280;
+      margin-bottom: 2px;
     }
 
-    .field-group input {
+    .field-value {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #111827;
+    }
+
+    .amount-big {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .amount-big span {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #6b7280;
+      margin-left: 4px;
+    }
+
+    .input {
+      width: 100%;
+      padding: 10px 12px;
       border-radius: 999px;
-      border: 1px solid var(--border-soft);
-      padding: 7px 12px;
-      font-size: 13px;
+      border: 1px solid #e5e7eb;
+      font-size: 0.95rem;
       outline: none;
+      background: #f9fafb;
     }
 
-    .field-group input:focus {
-      border-color: var(--radiz-blue);
-      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.35);
+    .input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.15);
+      background: #ffffff;
     }
 
-    .btn-main {
+    .btn-primary {
+      width: 100%;
       border: none;
-      outline: none;
-      cursor: pointer;
       border-radius: 999px;
-      padding: 10px 16px;
-      background: linear-gradient(135deg, var(--radiz-blue), #1d4ed8);
-      color: #ffffff;
-      font-size: 14px;
+      padding: 12px 18px;
+      font-size: 1rem;
       font-weight: 600;
+      color: #ffffff;
+      background: linear-gradient(135deg, #1d4ed8, #2563eb);
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
-      transition: transform 0.08s ease, box-shadow 0.08s ease,
-        filter 0.08s ease;
-      box-shadow: 0 10px 28px rgba(37, 99, 235, 0.35);
-      margin-top: 10px;
+      cursor: pointer;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.12s ease;
+      box-shadow: 0 12px 30px rgba(37, 99, 235, 0.38);
+      margin-top: 12px;
     }
 
-    .btn-main:hover {
+    .btn-primary:hover {
       filter: brightness(1.05);
       transform: translateY(-1px);
-      box-shadow: 0 14px 32px rgba(37, 99, 235, 0.45);
+      box-shadow: 0 16px 40px rgba(37, 99, 235, 0.45);
     }
 
-    .btn-main:active {
+    .btn-primary:active {
       transform: translateY(0);
-      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.35);
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
     }
 
-    .btn-main span.icon {
+    .btn-primary-icon {
       width: 18px;
       height: 18px;
       border-radius: 999px;
-      border: 1px solid rgba(248, 250, 252, 0.8);
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-size: 0.8rem;
     }
 
-    .note {
-      font-size: 11px;
-      color: var(--text-muted);
+    .helper-text {
+      margin-top: 6px;
+      font-size: 0.8rem;
+      color: #6b7280;
     }
 
-    .status {
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .status.ok {
-      color: #15803d;
-    }
-
-    .status.error {
-      color: #b91c1c;
-    }
-
-    #wompi-button-container {
-      margin-top: 14px;
+    @media (max-width: 800px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
     }
   </style>
 </head>
+
 <body>
-  <main class="page">
-    <!-- ENCABEZADO -->
+  <div class="page">
+    <!-- CABECERA -->
     <header class="header">
-      <div class="brand">
-        <div class="logo">R</div>
-        <div>
-          <div class="brand-text-title">RADIZ Vehicular</div>
-          <div class="brand-text-sub">Portal de pagos · clientes afiliados</div>
-        </div>
+      <div class="header-logo">R</div>
+      <div>
+        <div class="header-title">RADIZ Vehicular</div>
+        <div class="header-subtitle">Portal de pagos · clientes afiliados</div>
       </div>
-      <span class="badge">Pagos seguros con Wompi</span>
     </header>
 
-    <!-- CONTENIDO PRINCIPAL -->
-    <section class="cards-grid">
-      <!-- Resumen del cliente (ejemplo) -->
-      <article class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Resumen de tu servicio</div>
-            <div class="card-sub">
-              Aquí puedes reemplazar por los datos que traes desde Google Sheets.
-            </div>
-          </div>
-        </div>
-        <ul class="list">
-          <li><strong>Cliente:</strong> Juan Pérez</li>
-          <li><strong>Documento:</strong> 1.111.111.111</li>
-          <li><strong>Servicio:</strong> Renting motocicleta RADIZ</li>
-          <li><strong>Periodo:</strong> 01/12/2025 - 31/12/2025</li>
-        </ul>
-      </article>
-
-      <!-- Tarjeta de pago -->
-      <article class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Pago pendiente</div>
-            <div class="card-sub">
-              Configura el valor y la referencia para generar el botón de Wompi.
-            </div>
-          </div>
-          <span class="pill">Generación segura</span>
+    <div class="layout">
+      <!-- COLUMNA IZQUIERDA: RESUMEN (aquí puedes poner tus propios datos desde Sheets) -->
+      <section class="card">
+        <div class="card-title">Resumen de tu servicio</div>
+        <div class="card-subtitle">
+          Aquí puedes reemplazar este texto por los datos que traes desde Google Sheets.
         </div>
 
-        <div class="amount">
-          <span id="amountLabel">$170.000</span> <small>COP</small>
+        <div class="field-group">
+          <div class="field-label">Cliente</div>
+          <div class="field-value" id="clienteNombre">Juan Pérez</div>
         </div>
 
-        <div class="pay-actions">
-          <div class="field-group">
-            <label for="amountCop">Valor a pagar (COP)</label>
-            <input
-              type="number"
-              id="amountCop"
-              min="1000"
-              step="1000"
-              value="170000"
-            />
-          </div>
-
-          <div class="field-group">
-            <label for="reference">Referencia única de pago</label>
-            <input
-              type="text"
-              id="reference"
-              value="RADIZ-DEC-2025-001"
-            />
-          </div>
-
-          <button id="btnPagarWompi" class="btn-main">
-            <span class="icon">💳</span>
-            <span>Generar botón y pagar con Wompi</span>
-          </button>
-
-          <p class="note">
-            Al hacer clic generaremos la firma de integridad en el servidor y
-            mostraremos el botón oficial de Wompi para completar tu pago.
-          </p>
-
-          <p id="status" class="status"></p>
-
-          <!-- Aquí se insertará el <form> con el script de Wompi -->
-          <div id="wompi-button-container"></div>
+        <div class="field-group">
+          <div class="field-label">Documento</div>
+          <div class="field-value" id="clienteDocumento">1.111.111.111</div>
         </div>
-      </article>
-    </section>
-  </main>
 
+        <div class="field-group">
+          <div class="field-label">Servicio</div>
+          <div class="field-value" id="servicioDescripcion">Renting motocicleta RADIZ</div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Periodo</div>
+          <div class="field-value" id="servicioPeriodo">01/12/2025 - 31/12/2025</div>
+        </div>
+      </section>
+
+      <!-- COLUMNA DERECHA: PAGO PENDIENTE -->
+      <section class="card">
+        <div class="card-title">Pago pendiente</div>
+        <div class="card-subtitle">
+          Configura el valor y la referencia. Al hacer clic en el botón se abrirá el pago seguro con Wompi.
+        </div>
+
+        <div class="field-group">
+          <div class="field-label">Valor pendiente</div>
+          <div class="amount-big">
+            $170.000 <span>COP</span>
+          </div>
+        </div>
+
+        <!-- INPUT MONTO A PAGAR -->
+        <div class="field-group">
+          <label class="field-label" for="valorPagar">Valor a pagar (COP)</label>
+          <input
+            id="valorPagar"
+            class="input"
+            type="number"
+            min="1"
+            step="1"
+            value="170000"
+          />
+        </div>
+
+        <!-- INPUT REFERENCIA ÚNICA -->
+        <div class="field-group">
+          <label class="field-label" for="referenciaPago">Referencia única de pago</label>
+          <input
+            id="referenciaPago"
+            class="input"
+            type="text"
+            value="RADIZ-DEC-2025-001"
+          />
+        </div>
+
+        <!-- BOTÓN WOMPI -->
+        <button id="pagarWompi" type="button" class="btn-primary">
+          <span class="btn-primary-icon">💳</span>
+          <span>Pagar con Wompi</span>
+        </button>
+
+        <p class="helper-text">
+          Al hacer clic abriremos el formulario oficial de Wompi para completar tu pago de forma segura.
+        </p>
+      </section>
+    </div>
+  </div>
+
+  <!-- LÓGICA WIDGET WOMPI (ESTO ES LO IMPORTANTE) -->
   <script>
-    function formatCurrency(value) {
-      return value.toLocaleString('es-CO');
+    // Obtiene el valor de un input buscando entre varios IDs posibles
+    function getValueFromPossibleIds(ids) {
+      for (var i = 0; i < ids.length; i++) {
+        var el = document.getElementById(ids[i]);
+        if (el) return el.value;
+      }
+      return '';
     }
 
-    const amountInput = document.getElementById('amountCop');
-    const amountLabel = document.getElementById('amountLabel');
-    const referenceInput = document.getElementById('reference');
-    const button = document.getElementById('btnPagarWompi');
-    const statusEl = document.getElementById('status');
-    const container = document.getElementById('wompi-button-container');
+    function parseAmountToCents(amountStr) {
+      if (!amountStr) return NaN;
+      // eliminar separadores de miles, espacios, etc.
+      var clean = String(amountStr).replace(/[^\d]/g, '');
+      var value = parseInt(clean, 10);
+      if (isNaN(value) || value <= 0) return NaN;
+      return value * 100; // COP -> centavos
+    }
 
-    amountInput.addEventListener('input', function () {
-      const v = Number(this.value || 0);
-      if (!isNaN(v) && v > 0) {
-        amountLabel.textContent = '$' + formatCurrency(v);
-      }
-    });
+    function initWompiButton() {
+      var button =
+        document.getElementById('pagarWompi') ||
+        document.getElementById('btnPagarWompi') ||
+        document.getElementById('payButton');
 
-    button.addEventListener('click', function (e) {
-      e.preventDefault();
-      statusEl.textContent = '';
-      statusEl.className = 'status';
-
-      const amountCop = Number(amountInput.value);
-      const reference = (referenceInput.value || '').trim();
-
-      if (!amountCop || amountCop <= 0) {
-        statusEl.textContent = 'Ingresa un valor válido en COP.';
-        statusEl.classList.add('error');
+      if (!button) {
+        console.error('No se encontró el botón de pago (pagarWompi / btnPagarWompi / payButton).');
         return;
       }
 
-      if (!reference) {
-        statusEl.textContent = 'Ingresa una referencia de pago válida.';
-        statusEl.classList.add('error');
-        return;
-      }
+      button.addEventListener('click', function () {
+        // 1) Tomar monto y referencia del formulario (soporta varios IDs por si ya tienes otros)
+        var amountStr = getValueFromPossibleIds(['paymentAmount', 'valorPagar', 'amountInput']);
+        var reference = getValueFromPossibleIds(['paymentReference', 'referenciaPago', 'referenceInput']).trim();
 
-      const amountInCents = Math.round(amountCop * 100);
+        var amountInCents = parseAmountToCents(amountStr);
 
-      statusEl.textContent = 'Generando firma segura para Wompi...';
+        if (!reference) {
+          alert('Por favor ingresa una referencia de pago.');
+          return;
+        }
 
-      google.script.run
-        .withSuccessHandler(function (config) {
-          statusEl.textContent =
-            'Firma generada. Botón de Wompi listo para usar.';
-          statusEl.classList.remove('error');
-          statusEl.classList.add('ok');
+        if (!amountInCents || isNaN(amountInCents)) {
+          alert('Por favor ingresa un valor a pagar válido.');
+          return;
+        }
 
-          container.innerHTML = '';
+        // 2) Llamar al servidor para que genere la firma de integridad
+        button.disabled = true;
+        button.style.opacity = '0.8';
 
-          const form = document.createElement('form');
+        google.script.run
+          .withSuccessHandler(function (config) {
+            button.disabled = false;
+            button.style.opacity = '1';
 
-          const script = document.createElement('script');
-          script.src = 'https://checkout.wompi.co/widget.js';
-          script.setAttribute('data-render', 'button');
-          script.setAttribute('data-public-key', config.publicKey);
-          script.setAttribute('data-currency', config.currency);
-          script.setAttribute('data-amount-in-cents', config.amountInCents);
-          script.setAttribute('data-reference', config.reference);
-          script.setAttribute(
-            'data-signature:integrity',
-            config.signatureIntegrity
-          );
+            try {
+              // 3) Crear instancia del WidgetCheckout con la firma generada en el servidor
+              var checkout = new WidgetCheckout({
+                currency: config.currency,
+                amountInCents: config.amountInCents,
+                reference: config.reference,
+                publicKey: config.publicKey,
+                signature: { integrity: config.integrity }
+              });
 
-          // Si en algún momento quieres usar redirect-url o expiration-time:
-          // script.setAttribute('data-redirect-url', 'https://tusitio.com/resultado');
-          if (config.expirationTime) {
-            script.setAttribute('data-expiration-time', config.expirationTime);
-          }
+              // 4) Abrir el widget
+              checkout.open(function (result) {
+                // Aquí podrías hacer algo con el resultado si quieres.
+                console.log('Resultado transacción Wompi:', result);
+              });
+            } catch (e) {
+              console.error('Error al abrir WidgetCheckout:', e);
+              alert('Ocurrió un error al abrir la pasarela de pago.');
+            }
+          })
+          .withFailureHandler(function (err) {
+            button.disabled = false;
+            button.style.opacity = '1';
+            console.error('Error generando firma en Apps Script:', err);
+            alert('No se pudo generar la firma de pago. Intenta nuevamente.');
+          })
+          .getWompiConfig(reference, amountInCents);
+      });
+    }
 
-          form.appendChild(script);
-          container.appendChild(form);
-        })
-        .withFailureHandler(function (err) {
-          statusEl.textContent =
-            'Error generando la firma: ' + (err && err.message ? err.message : err);
-          statusEl.classList.remove('ok');
-          statusEl.classList.add('error');
-          container.innerHTML = '';
-        })
-        .getWompiConfig(reference, amountInCents, 'COP', null);
-    });
+    // Inicializar cuando el HTML está listo
+    document.addEventListener('DOMContentLoaded', initWompiButton);
   </script>
 </body>
 </html>
