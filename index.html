@@ -35,15 +35,14 @@
       overflow:visible;
     }
 
+    /* Logo Radiz: tamaño base original */
     .logo-top{
-      display:flex;
-      align-items:center;
-      justify-content:flex-start;
-      margin-bottom:10px;
+      text-align:center;
+      margin-bottom:12px;
     }
     .logo-top img{
-      max-width:210px;
-      max-height:80px;
+      max-width:260px;
+      max-height:120px;
       object-fit:contain;
     }
 
@@ -58,6 +57,7 @@
       border:1px solid #bfdbfe;
     }
     .welcome-icon{
+      position:relative;
       width:32px;
       height:32px;
       border-radius:999px;
@@ -65,9 +65,30 @@
       align-items:center;
       justify-content:center;
       background:#2563eb;
-      color:#ffffff;
-      font-size:1.1rem;
+      color:transparent;
       flex-shrink:0;
+    }
+    .welcome-icon::before{
+      content:"";
+      position:absolute;
+      width:3px;
+      height:10px;
+      border-radius:999px;
+      background:#ffffff;
+      top:11px;
+      left:50%;
+      transform:translateX(-50%);
+    }
+    .welcome-icon::after{
+      content:"";
+      position:absolute;
+      width:3px;
+      height:3px;
+      border-radius:999px;
+      background:#ffffff;
+      top:7px;
+      left:50%;
+      transform:translateX(-50%);
     }
     .welcome-text-title{
       font-size:.95rem;
@@ -154,6 +175,7 @@
       margin-bottom:18px;
     }
 
+    /* Iconos tipo línea en cards principales */
     .card-contrato::before,
     .card-pagos::before,
     .card-mantenimientos::before,
@@ -165,17 +187,48 @@
       width:30px;
       height:30px;
       border-radius:999px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-size:1.1rem;
       background:#eff6ff;
-      color:#2563eb;
     }
-    .card-contrato::before{content:"📄";}
-    .card-pagos::before{content:"💳";}
-    .card-mantenimientos::before{content:"🔧";}
-    .card-pago::before{content:"💳";}
+
+    /* Documento (Contrato) */
+    .card-contrato::after{
+      content:"";
+      position:absolute;
+      top:20px;
+      left:22px;
+      width:18px;
+      height:22px;
+      border-radius:4px;
+      border:2px solid #2563eb;
+      box-sizing:border-box;
+    }
+
+    /* Tarjeta de pago (Pagos y Realizar pago) */
+    .card-pagos::after,
+    .card-pago::after{
+      content:"";
+      position:absolute;
+      top:23px;
+      left:20px;
+      width:20px;
+      height:14px;
+      border-radius:3px;
+      border:2px solid #2563eb;
+      box-sizing:border-box;
+    }
+
+    /* Llave/rueda (Mantenimientos) */
+    .card-mantenimientos::after{
+      content:"";
+      position:absolute;
+      top:22px;
+      left:21px;
+      width:16px;
+      height:16px;
+      border-radius:999px;
+      border:2px solid #f97316;
+      box-sizing:border-box;
+    }
 
     .card-contrato h2,
     .card-pagos h2,
@@ -201,6 +254,7 @@
       color:#111827;
     }
     .section-icon{
+      position:relative;
       width:28px;
       height:28px;
       border-radius:999px;
@@ -208,9 +262,30 @@
       align-items:center;
       justify-content:center;
       background:#eff6ff;
-      color:#2563eb;
-      font-size:1rem;
       flex-shrink:0;
+    }
+    /* Icono de lupa en líneas */
+    .section-icon::before{
+      content:"";
+      position:absolute;
+      width:13px;
+      height:13px;
+      border-radius:999px;
+      border:2px solid #2563eb;
+      top:6px;
+      left:7px;
+      box-sizing:border-box;
+    }
+    .section-icon::after{
+      content:"";
+      position:absolute;
+      width:8px;
+      height:2px;
+      border-radius:999px;
+      background:#2563eb;
+      bottom:7px;
+      right:6px;
+      transform:rotate(45deg);
     }
 
     .form-row{
@@ -544,7 +619,7 @@
     </div>
 
     <div class="welcome-banner">
-      <div class="welcome-icon">ℹ️</div>
+      <div class="welcome-icon"></div>
       <div>
         <p class="welcome-text-title">¡Bienvenido a tu portal Radiz!</p>
         <p class="welcome-text-sub">Consulta tu contrato, revisa tus pagos y realiza pagos en línea de forma segura.</p>
@@ -554,9 +629,6 @@
     <header class="portal-header">
       <div>
         <h1>PORTAL CLIENTES</h1>
-        <p class="subtitle">
-          Ingresa el <strong>ID del contrato</strong> para consultar el estado, pagos y mantenimientos.
-        </p>
       </div>
       <div class="portal-badge">
         <span class="badge-pill">Radiz Vehicular</span>
@@ -565,7 +637,7 @@
 
     <div class="card card-consulta">
       <div class="section-title">
-        <div class="section-icon">🔍</div>
+        <div class="section-icon"></div>
         <span>Consulta de contrato</span>
       </div>
       <div class="form-row">
