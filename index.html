@@ -686,10 +686,10 @@
           <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
           <label for="montoPago">Monto a pagar (COP)</label>
           <div class="row-pago">
-            <input id="montoPago" type="number" min="100000" step="1000" placeholder="Ej: 170000">
+            <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
             <button type="button" onclick="crearPagoWompi()">Pagar con Wompi</button>
           </div>
-          <p id="pagoError">Ingresa un monto válido (mínimo 100.000).</p>
+          <p id="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
         </div>
 
         <div class="grid" id="resultados" style="display:none;">
@@ -789,6 +789,10 @@
   let resumenAfiliadoVehiculos=0;
   let resumenAfiliadoMantenimientos=0;
 
+  // NUEVOS FLAGS: control de consulta previa
+  let contratoConsultado = false;
+  let ultimoIdConsultado = null;
+
   function toggleMenu(){
     const panel=document.getElementById('menuPanel');
     panel.style.display=panel.style.display==='block'?'none':'block';
@@ -818,6 +822,10 @@
     resultados.style.display='none';
     fabMenu.style.display='none';
     document.getElementById('menuPanel').style.display='none';
+
+    // al iniciar una nueva consulta, reseteamos el flag
+    contratoConsultado = false;
+    ultimoIdConsultado = null;
 
     if(!id){
       status.classList.add('error');
@@ -1008,6 +1016,11 @@
       resultados.style.display='grid';
       status.className='status ok';
       status.textContent='Información cargada correctamente.';
+
+      // consulta exitosa -> habilita pagos
+      contratoConsultado = true;
+      ultimoIdConsultado = id;
+
     }catch(e){
       console.error(e);
       status.className='status error';
@@ -1063,17 +1076,19 @@
     const valor=parseInt(montoInput.value,10);
 
     // reset mensaje
-    errorLabel.textContent='Ingresa un monto válido (mínimo 100.000).';
+    errorLabel.textContent='Ingresa un monto válido (mínimo 170.000).';
     errorLabel.style.display='none';
 
-    if(!valor||valor<100000){
+    const idContrato=(document.getElementById('idContrato').value||'').trim();
+
+    // Requisito: debe haber consultado el contrato antes de pagar
+    if(!idContrato || !contratoConsultado || ultimoIdConsultado !== idContrato){
+      errorLabel.textContent='Digite su código de contrato.';
       errorLabel.style.display='block';
       return;
     }
 
-    const idContrato=(document.getElementById('idContrato').value||'').trim();
-    if(!idContrato){
-      errorLabel.textContent='Primero ingresa un ID de contrato válido.';
+    if(!valor || valor<170000){
       errorLabel.style.display='block';
       return;
     }
