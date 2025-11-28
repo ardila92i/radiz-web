@@ -119,22 +119,6 @@
       font-size:.95rem;
       margin:0;
     }
-    .portal-badge{
-      display:flex;
-      align-items:flex-start;
-      justify-content:flex-end;
-    }
-    .badge-pill{
-      padding:4px 10px;
-      border-radius:999px;
-      font-size:.75rem;
-      font-weight:600;
-      background:#f97316;
-      color:#ffffff;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      white-space:nowrap;
-    }
 
     .card{
       position:relative;
@@ -358,35 +342,6 @@
     .status.error{color:#b91c1c}
     .status.ok{color:#065f46}
 
-    .summary-tabs{
-      display:flex;
-      gap:8px;
-      margin:4px 0 10px;
-    }
-    .summary-tab{
-      display:flex;
-      align-items:center;
-      gap:6px;
-      padding:6px 12px;
-      border-radius:999px;
-      font-size:.8rem;
-      background:#f3f4f6;
-      color:#4b5563;
-    }
-    .summary-tab span{
-      line-height:1;
-    }
-    .summary-tab:first-child{
-      background:#2563eb;
-      color:#ffffff;
-    }
-    .summary-tab:first-child span{
-      font-weight:600;
-    }
-    .summary-tab:hover{
-      background:#e5edff;
-    }
-
     .grid{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
@@ -576,9 +531,6 @@
         flex-direction:column;
         align-items:flex-start;
       }
-      .portal-badge{
-        justify-content:flex-start;
-      }
       .fab-menu{
         top:16px;
         right:16px;
@@ -630,9 +582,6 @@
       <div>
         <h1>PORTAL CLIENTES</h1>
       </div>
-      <div class="portal-badge">
-        <span class="badge-pill">Radiz Vehicular</span>
-      </div>
     </header>
 
     <div class="card card-consulta">
@@ -661,18 +610,6 @@
         <button type="button" onclick="crearPagoWompi()">Pagar con Wompi</button>
       </div>
       <p id="pagoError">Ingresa un monto válido (mínimo 100.000).</p>
-    </div>
-
-    <div class="summary-tabs">
-      <div class="summary-tab">
-        📄 <span>Contrato</span>
-      </div>
-      <div class="summary-tab">
-        💳 <span>Pagos</span>
-      </div>
-      <div class="summary-tab">
-        🔧 <span>Mantenimientos</span>
-      </div>
     </div>
 
     <div class="grid" id="resultados" style="display:none;">
