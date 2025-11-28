@@ -35,7 +35,7 @@
       overflow:visible;
     }
 
-    /* Logo Radiz: tamaño base original */
+    /* Logo Radiz */
     .logo-top{
       text-align:center;
       margin-bottom:12px;
@@ -46,7 +46,7 @@
       object-fit:contain;
     }
 
-    /* === GRID PRINCIPAL DOS COLUMNAS === */
+    /* GRID PRINCIPAL DOS COLUMNAS */
     .main-grid{
       display:grid;
       grid-template-columns:minmax(0,1.05fr) minmax(0,1.15fr);
@@ -204,13 +204,13 @@
     }
 
     .card-consulta{
-      margin-bottom:16px;
+      margin-bottom:18px;
     }
     .card-pago{
       margin-bottom:18px;
     }
 
-    /* Iconos con SVG para tarjetas de resultados */
+    /* Iconos SVG para tarjetas de resultados */
     .card-contrato::before,
     .card-pagos::before,
     .card-mantenimientos::before{
@@ -233,13 +233,11 @@
     .card-mantenimientos::before{
       background-image:url('ícono_mantenimientos.svg');
     }
-
     .card-contrato h2,
     .card-pagos h2,
     .card-mantenimientos h2{
       margin-left:40px;
     }
-
     .card-mantenimientos:hover{
       background:#fff7ed;
       border-color:#f97316;
@@ -254,8 +252,8 @@
       margin-bottom:6px;
     }
     .section-title span{
-      font-size:1.05rem;       /* mismo tamaño que h2 de las tarjetas */
-      font-weight:700;         /* misma negrita */
+      font-size:1.05rem;
+      font-weight:700;
       color:#111827;
     }
     .section-icon{
@@ -269,8 +267,8 @@
       background:#eff6ff;
       flex-shrink:0;
     }
-    /* Lupa en líneas para "Consulta de contrato" */
-    .section-icon::before{
+    /* Icono de lupa (consulta) */
+    .section-icon-search::before{
       content:"";
       position:absolute;
       width:13px;
@@ -281,7 +279,7 @@
       left:7px;
       box-sizing:border-box;
     }
-    .section-icon::after{
+    .section-icon-search::after{
       content:"";
       position:absolute;
       width:8px;
@@ -291,6 +289,14 @@
       bottom:7px;
       right:6px;
       transform:rotate(45deg);
+    }
+    /* Icono $ en líneas (pago) */
+    .section-icon-money::before{
+      content:"$";
+      position:absolute;
+      font-size:16px;
+      font-weight:700;
+      color:#2563eb;
     }
 
     label{
@@ -642,7 +648,7 @@
       </div>
     </div>
 
-    <!-- GRID PRINCIPAL: IZQUIERDA CARD CORPORATIVA, DERECHA PANEL -->
+    <!-- GRID PRINCIPAL -->
     <div class="main-grid">
       <!-- COLUMNA IZQUIERDA: CARD CORPORATIVA -->
       <div class="brand-card">
@@ -675,7 +681,7 @@
         <!-- Consulta de contrato -->
         <div class="card card-consulta">
           <div class="section-title">
-            <div class="section-icon"></div>
+            <div class="section-icon section-icon-search"></div>
             <span>Consulta de contrato</span>
           </div>
           <div class="form-row">
@@ -693,7 +699,7 @@
         <!-- Realizar pago -->
         <div class="card card-pago" id="seccionPago">
           <div class="section-title">
-            <div class="section-icon"></div>
+            <div class="section-icon section-icon-money"></div>
             <span>Realizar pago</span>
           </div>
           <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
@@ -823,7 +829,7 @@
   const WOMPI_PUBLIC_KEY='pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06';
   const WOMPI_INTEGRITY_KEY='prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN';
   const WOMPI_REDIRECT_URL='https://portal.radizco.com/';
-  const API_CALLBACK_URL = API_URL; // mismo endpoint para POST
+  const API_CALLBACK_URL = API_URL;
 
   let tipoUsuarioActual=null;
   let datosContratoActual=null;
@@ -899,7 +905,6 @@
       cardMantenimientos.innerHTML='';
 
       if(tipo==='AFILIADO'){
-        // === AFILIADO ===
         const afiliados=data.afiliados||[];
         const vehiculosAll=data.vehiculos||[];
 
@@ -979,7 +984,6 @@
         fabMenu.style.display='block';
 
       }else{
-        // === RENTING (clientes R, etc.) ===
         datosAfiliadoActual=null;
 
         const estado=(c['ESTADO']||'').toString().toUpperCase();
