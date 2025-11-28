@@ -717,10 +717,10 @@
           <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
           <label for="montoPago">Monto a pagar (COP)</label>
           <div class="row-pago">
-            <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
+            <input id="montoPago" type="number" min="20000" step="1000" placeholder="Ej: 20000">
             <button type="button" class="btn-main" onclick="crearPagoWompi()">Pagar con Wompi</button>
           </div>
-          <p id="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
+          <p id="pagoError">Ingresa un monto válido (mínimo 20.000).</p>
           <p id="pagoContratoError">Digita tu código de contrato.</p>
         </div>
 
@@ -1105,7 +1105,7 @@
       return;
     }
 
-    if(!valor||valor<170000){
+    if(!valor||valor<20000){
       errorLabel.style.display='block';
       return;
     }
@@ -1127,8 +1127,8 @@
         amountInCents:amountInCents,
         reference:reference,
         publicKey:WOMPI_PUBLIC_KEY,
-        redirectUrl:WOMPI_REDIRECT_URL,
-        integritySignature:integritySignature
+        signature:{ integrity: integritySignature },
+        redirectUrl:WOMPI_REDIRECT_URL
       });
 
       checkout.open(function(result){
