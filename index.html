@@ -1146,7 +1146,7 @@
   async function registrarPagoEnSheet(reference, valor, idContrato){
     try{
       const formData=new URLSearchParams();
-      formData.append('accion','registrar_pago_portal');
+      formData.append('accion','registrar_pago');
       formData.append('referencia',reference);
       formData.append('monto',valor);
       formData.append('idContrato',idContrato);
