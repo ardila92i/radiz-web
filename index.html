@@ -5,14 +5,15 @@
   <title>PORTAL CLIENTES</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- PWA -->
+  <!-- Wompi -->
+  <script src="https://checkout.wompi.co/widget.js" async></script>
+
+  <!-- PWA / APP -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#0f172a">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <link rel="apple-touch-icon" href="icon-192.png">
 
-  <script src="https://checkout.wompi.co/widget.js" async></script>
   <style>
     *{box-sizing:border-box}
 
@@ -384,28 +385,6 @@
       box-shadow:0 16px 32px rgba(249,115,22,.6);
     }
 
-    /* Botón delgado "Descarga la App" */
-    .app-download-row{
-      margin-top:8px;
-      display:flex;
-      justify-content:center;
-    }
-    .btn-thin{
-      padding:6px 14px;
-      border-radius:999px;
-      border:1px solid #d1d5db;
-      background:#ffffff;
-      color:#2563eb;
-      font-size:.8rem;
-      font-weight:500;
-      box-shadow:none;
-      min-width:0;
-    }
-    .btn-thin:hover{
-      background:#eff6ff;
-      box-shadow:none;
-    }
-
     .status{
       font-size:.9rem;
       margin-top:4px;
@@ -494,6 +473,8 @@
       margin-top:18px;
       display:flex;
       justify-content:center;
+      flex-wrap:wrap;
+      gap:8px;
     }
 
     /* FAB menú */
@@ -754,16 +735,12 @@
           <p id="pagoContratoError">Digita tu código de contrato.</p>
         </div>
 
-        <!-- Botón Link de afiliado -->
+        <!-- Botón Link de afiliado + Descarga App -->
         <div class="affiliate-row">
           <button type="button" class="btn-main btn-afiliado" onclick="abrirModal('modalAfiliado')">
             Link de referidos
           </button>
-        </div>
-
-        <!-- Botón delgado "Descarga la App" -->
-        <div class="app-download-row">
-          <button type="button" class="btn-thin" onclick="mostrarInstruccionesApp()">
+          <button type="button" class="btn-main" id="btnDescargaApp" onclick="manejarDescargaApp()">
             Descarga la App
           </button>
         </div>
@@ -1171,7 +1148,7 @@
       checkout.open(function(result){
         const transaction=result.transaction;
         console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
-        // Registrar siempre la intención de pago para trazabilidad
+        // Registramos la intención de pago para trazabilidad
         registrarPagoEnSheet(reference, valor, idContrato);
       });
     }catch(e){
@@ -1260,18 +1237,84 @@
     }
   }
 
-  function mostrarInstruccionesApp(){
-    alert('Para instalar la app de RADIZ, abre este portal desde el navegador de tu celular y usa la opción "Añadir a la pantalla de inicio".');
+  // ==========================
+  // PWA: registro del Service Worker
+  // ==========================
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('sw.js')
+        .then(function(reg){ console.log('SW registrado', reg.scope); })
+        .catch(function(err){ console.error('Error registrando SW', err); });
+    });
   }
 
-  // Registro del Service Worker para PWA
-  if('serviceWorker' in navigator){
-    window.addEventListener('load',function(){
-      navigator.serviceWorker.register('sw.js')
-        .catch(function(err){
-          console.log('ServiceWorker registration failed:',err);
-        });
-    });
+  // ==========================
+  // LÓGICA PWA – DESCARGA APP
+  // ==========================
+  let deferredInstallPrompt = null;
+
+  // Guardar el evento beforeinstallprompt cuando Chrome lo dispare
+  window.addEventListener('beforeinstallprompt', function (event) {
+    event.preventDefault(); // evitamos que Chrome muestre su banner automático
+    deferredInstallPrompt = event;
+    console.log('Evento beforeinstallprompt capturado');
+  });
+
+  // Detectar si ya está en modo app (standalone)
+  function estaEnModoApp() {
+    const isStandaloneMedia = window.matchMedia &&
+      window.matchMedia('(display-mode: standalone)').matches;
+    const isStandaloneNavigator = window.navigator.standalone; // iOS
+    return !!(isStandaloneMedia || isStandaloneNavigator);
+  }
+
+  // Detectar iOS (Safari)
+  function esIOS() {
+    return /iphone|ipad|ipod/i.test(window.navigator.userAgent || '');
+  }
+
+  function mostrarInstruccionesIOS() {
+    alert(
+      'Para instalar RADIZ en tu iPhone:\n\n' +
+      '1. Toca el ícono de compartir (cuadro con flecha).\n' +
+      '2. Selecciona "Agregar a pantalla de inicio".\n' +
+      '3. Confirma el nombre y toca "Agregar".'
+    );
+  }
+
+  async function manejarDescargaApp() {
+    // 1) Si ya está instalada, avisamos
+    if (estaEnModoApp()) {
+      alert('La aplicación RADIZ ya está instalada en este dispositivo.');
+      return;
+    }
+
+    // 2) iOS (Safari): no existe beforeinstallprompt, mostramos instrucciones
+    if (esIOS()) {
+      mostrarInstruccionesIOS();
+      return;
+    }
+
+    // 3) Android/Chrome con evento beforeinstallprompt disponible
+    if (deferredInstallPrompt) {
+      try {
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        console.log('Resultado instalación:', choice && choice.outcome);
+        deferredInstallPrompt = null;
+      } catch (e) {
+        console.error('Error al mostrar el prompt de instalación', e);
+      }
+      return;
+    }
+
+    // 4) Fallback genérico: explicamos cómo instalar manualmente
+    alert(
+      'Para instalar RADIZ en tu dispositivo:\n\n' +
+      '1. Abre este portal en Chrome.\n' +
+      '2. Toca el menú (⋮) y selecciona "Instalar aplicación" o\n' +
+      '   "Añadir a pantalla de inicio".'
+    );
   }
 </script>
 </body>
