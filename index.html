@@ -5,14 +5,19 @@
   <title>PORTAL CLIENTES</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <!-- Colores PWA / navegador -->
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <!-- Manifest e íconos (usamos el logo grande para todo) -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-512.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <link rel="apple-touch-icon" href="icon-512.png">
+
   <!-- Wompi -->
   <script src="https://checkout.wompi.co/widget.js" async></script>
-
-  <!-- PWA / APP -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0f172a">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="apple-touch-icon" href="icon-192.png">
 
   <style>
     *{box-sizing:border-box}
@@ -385,6 +390,31 @@
       box-shadow:0 16px 32px rgba(249,115,22,.6);
     }
 
+    /* Botón "Descarga la App" sobrio (mismo estilo en iOS y Android) */
+    .btn-app{
+      padding:8px 18px;
+      border-radius:999px;
+      border:1px solid #d1d5db;
+      background:#f9fafb;
+      color:#1d4ed8;
+      font-size:.9rem;
+      font-weight:600;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:none;
+      white-space:nowrap;
+      min-width:0;
+    }
+    .btn-app:hover{
+      background:#e5f0ff;
+      border-color:#bfdbfe;
+      color:#1d4ed8;
+      box-shadow:none;
+      transform:none;
+    }
+
     .status{
       font-size:.9rem;
       margin-top:4px;
@@ -473,8 +503,6 @@
       margin-top:18px;
       display:flex;
       justify-content:center;
-      flex-wrap:wrap;
-      gap:8px;
     }
 
     /* FAB menú */
@@ -735,12 +763,16 @@
           <p id="pagoContratoError">Digita tu código de contrato.</p>
         </div>
 
-        <!-- Botón Link de afiliado + Descarga App -->
+        <!-- Botón Link de afiliado -->
         <div class="affiliate-row">
           <button type="button" class="btn-main btn-afiliado" onclick="abrirModal('modalAfiliado')">
             Link de referidos
           </button>
-          <button type="button" class="btn-main" id="btnDescargaApp" onclick="manejarDescargaApp()">
+        </div>
+
+        <!-- Botón Descarga la App -->
+        <div class="affiliate-row">
+          <button type="button" class="btn-app" onclick="manejarDescargaApp()">
             Descarga la App
           </button>
         </div>
@@ -1148,7 +1180,7 @@
       checkout.open(function(result){
         const transaction=result.transaction;
         console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
-        // Registramos la intención de pago para trazabilidad
+        // Registrar siempre la intención de pago para trazabilidad
         registrarPagoEnSheet(reference, valor, idContrato);
       });
     }catch(e){
@@ -1237,83 +1269,92 @@
     }
   }
 
-  // ==========================
-  // PWA: registro del Service Worker
-  // ==========================
+  /* --------- PWA: Service Worker + instalación de App --------- */
+
+  // Registrar service worker
   if('serviceWorker' in navigator){
-    window.addEventListener('load', function(){
+    window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js')
-        .then(function(reg){ console.log('SW registrado', reg.scope); })
-        .catch(function(err){ console.error('Error registrando SW', err); });
+        .then(reg => console.log('Service Worker registrado:', reg.scope))
+        .catch(err => console.error('Error registrando Service Worker', err));
     });
   }
 
-  // ==========================
-  // LÓGICA PWA – DESCARGA APP
-  // ==========================
   let deferredInstallPrompt = null;
 
-  // Guardar el evento beforeinstallprompt cuando Chrome lo dispare
-  window.addEventListener('beforeinstallprompt', function (event) {
-    event.preventDefault(); // evitamos que Chrome muestre su banner automático
-    deferredInstallPrompt = event;
+  // Capturar el evento beforeinstallprompt (Android/Chrome)
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
     console.log('Evento beforeinstallprompt capturado');
   });
 
-  // Detectar si ya está en modo app (standalone)
-  function estaEnModoApp() {
-    const isStandaloneMedia = window.matchMedia &&
-      window.matchMedia('(display-mode: standalone)').matches;
-    const isStandaloneNavigator = window.navigator.standalone; // iOS
-    return !!(isStandaloneMedia || isStandaloneNavigator);
+  function esIOS(){
+    const ua = window.navigator.userAgent || '';
+    return /iphone|ipad|ipod/i.test(ua);
   }
 
-  // Detectar iOS (Safari)
-  function esIOS() {
-    return /iphone|ipad|ipod/i.test(window.navigator.userAgent || '');
+  function esAndroid(){
+    const ua = window.navigator.userAgent || '';
+    return /android/i.test(ua);
   }
 
-  function mostrarInstruccionesIOS() {
+  function estaEnModoApp(){
+    return window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true;
+  }
+
+  function mostrarInstruccionesIOS(){
     alert(
-      'Para instalar RADIZ en tu iPhone:\n\n' +
-      '1. Toca el ícono de compartir (cuadro con flecha).\n' +
-      '2. Selecciona "Agregar a pantalla de inicio".\n' +
-      '3. Confirma el nombre y toca "Agregar".'
+      'Para instalar la app RADIZ en iPhone/iPad:\n\n' +
+      '1. Toca el ícono "Compartir" (cuadro con flecha hacia arriba).\n' +
+      '2. Elige "Añadir a pantalla de inicio".\n' +
+      '3. Confirma con "Añadir".'
     );
   }
 
-  async function manejarDescargaApp() {
-    // 1) Si ya está instalada, avisamos
-    if (estaEnModoApp()) {
+  async function manejarDescargaApp(){
+    // Ya está instalada
+    if(estaEnModoApp()){
       alert('La aplicación RADIZ ya está instalada en este dispositivo.');
       return;
     }
 
-    // 2) iOS (Safari): no existe beforeinstallprompt, mostramos instrucciones
-    if (esIOS()) {
+    // iOS: sólo instrucciones
+    if(esIOS()){
       mostrarInstruccionesIOS();
       return;
     }
 
-    // 3) Android/Chrome con evento beforeinstallprompt disponible
-    if (deferredInstallPrompt) {
-      try {
+    // Android/Chrome con evento de instalación disponible
+    if(deferredInstallPrompt){
+      try{
         deferredInstallPrompt.prompt();
         const choice = await deferredInstallPrompt.userChoice;
         console.log('Resultado instalación:', choice && choice.outcome);
         deferredInstallPrompt = null;
-      } catch (e) {
+      }catch(e){
         console.error('Error al mostrar el prompt de instalación', e);
       }
       return;
     }
 
-    // 4) Fallback genérico: explicamos cómo instalar manualmente
+    // Android sin evento: explicar cómo instalar desde el menú
+    if(esAndroid()){
+      alert(
+        'Chrome todavía no muestra el cuadro automático de instalación.\n\n' +
+        'Para instalar la app RADIZ:\n' +
+        '1. Toca el ícono de tres puntos (⋮) en la esquina superior derecha.\n' +
+        '2. Elige "Instalar aplicación" o "Añadir a pantalla de inicio".\n' +
+        '3. Confirma con "Instalar".'
+      );
+      return;
+    }
+
+    // Otros navegadores
     alert(
-      'Para instalar RADIZ en tu dispositivo:\n\n' +
-      '1. Abre este portal en Chrome.\n' +
-      '2. Toca el menú (⋮) y selecciona "Instalar aplicación" o\n' +
-      '   "Añadir a pantalla de inicio".'
+      'Para instalar la app RADIZ en tu dispositivo, usa la opción ' +
+      '"Instalar aplicación" o "Añadir a pantalla de inicio" del navegador.'
     );
   }
 </script>
