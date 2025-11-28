@@ -35,7 +35,7 @@
       overflow:visible;
     }
 
-    /* Logo Radiz */
+    /* Logo Radiz: tamaño base original */
     .logo-top{
       text-align:center;
       margin-bottom:12px;
@@ -46,7 +46,7 @@
       object-fit:contain;
     }
 
-    /* GRID PRINCIPAL */
+    /* === ESTRUCTURA A DOS COLUMNAS === */
     .main-grid{
       display:grid;
       grid-template-columns:minmax(0,1.05fr) minmax(0,1.15fr);
@@ -54,7 +54,6 @@
       margin-top:8px;
     }
 
-    /* Card corporativa izquierda */
     .brand-card{
       position:relative;
       border-radius:22px;
@@ -76,7 +75,7 @@
     .brand-overlay{
       position:absolute;
       inset:0;
-      background:linear-gradient(180deg,rgba(15,23,42,.15) 10%,rgba(15,23,42,.86) 80%);
+      background:linear-gradient(180deg,rgba(15,23,42,.15) 10%,rgba(15,23,42,.78) 80%);
     }
     .brand-copy{
       position:absolute;
@@ -86,7 +85,7 @@
     }
     .brand-kicker{
       margin:0 0 4px;
-      font-size:.78rem;
+      font-size:.8rem;
       text-transform:uppercase;
       letter-spacing:.08em;
       color:#bfdbfe;
@@ -94,9 +93,10 @@
     }
     .brand-copy h2{
       margin:0;
-      font-size:1.35rem;
+      font-size:1.2rem; /* un poco más pequeño, estilo moderno */
       line-height:1.25;
-      font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",system-ui,sans-serif;
+      letter-spacing:.03em;
+      font-weight:650;
     }
 
     .panel-main{
@@ -113,7 +113,7 @@
       border-radius:16px;
       padding:10px 14px;
       margin-bottom:18px;
-      border:1px solid:#bfdbfe;
+      border:1px solid #bfdbfe;
     }
     .welcome-icon{
       position:relative;
@@ -183,12 +183,6 @@
       font-size:.9rem;
       transition:border-color .15s,box-shadow .15s,transform .1s,background .15s;
     }
-    .card h2{
-      margin:0 0 8px;
-      font-size:1.05rem;
-      font-weight:700;
-      color:#111827;
-    }
     .card p{
       margin:3px 0;
       color:#111827;
@@ -208,15 +202,11 @@
     .card-consulta{
       margin-bottom:16px;
     }
-
     .card-pago{
       margin-bottom:18px;
     }
 
-    /* Iconos tipo línea en cards principales */
-    .card-contrato::before,
-    .card-pagos::before,
-    .card-mantenimientos::before,
+    /* Icono en tarjeta "Realizar pago" (círculo de fondo + tarjeta) */
     .card-pago::before{
       content:"";
       position:absolute;
@@ -227,58 +217,35 @@
       border-radius:999px;
       background:#eff6ff;
     }
-
-    /* Documento (Contrato) */
-    .card-contrato::after{
+    .card-pago::after{
       content:"";
       position:absolute;
-      top:20px;
-      left:22px;
-      width:18px;
-      height:22px;
-      border-radius:4px;
+      top:23px;
+      left:20px;
+      width:20px;
+      height:14px;
+      border-radius:3px;
       border:2px solid #2563eb;
       box-sizing:border-box;
     }
 
-    /* Ícono $ (Pagos y Realizar pago) */
-    .card-pagos::after,
-    .card-pago::after{
-      content:"";
-      position:absolute;
-      top:20px;
-      left:23px;
-      width:18px;
-      height:18px;
-      border-radius:4px;
-      box-sizing:border-box;
-      background:
-        linear-gradient(#2563eb,#2563eb) center/2px 14px no-repeat,
-        linear-gradient(#2563eb,#2563eb) center/10px 2px no-repeat,
-        radial-gradient(circle at 50% 4px,#2563eb 0,#2563eb 1px,transparent 1px 100%);
+    /* Encabezado de tarjetas con ícono SVG */
+    .card-header{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:8px;
     }
-
-    /* Herramienta (Mantenimientos) */
-    .card-mantenimientos::before{
-      background:#fff7ed;
+    .card-header h2{
+      margin:0;
+      font-size:1.05rem;
+      font-weight:700;
+      color:#111827;
     }
-    .card-mantenimientos::after{
-      content:"";
-      position:absolute;
-      top:21px;
-      left:22px;
-      width:16px;
-      height:16px;
-      box-sizing:border-box;
-      background:
-        linear-gradient(45deg,#f97316 0,#f97316 2px,transparent 2px,transparent 100%),
-        linear-gradient(-45deg,#f97316 0,#f97316 2px,transparent 2px,transparent 100%);
-    }
-
-    .card-contrato h2,
-    .card-pagos h2,
-    .card-mantenimientos h2{
-      margin-left:40px;
+    .card-icon{
+      width:22px;
+      height:22px;
+      flex-shrink:0;
     }
 
     .card-mantenimientos:hover{
@@ -309,7 +276,7 @@
       background:#eff6ff;
       flex-shrink:0;
     }
-    /* Icono lupa */
+    /* Icono de lupa en líneas */
     .section-icon::before{
       content:"";
       position:absolute;
@@ -340,7 +307,13 @@
       margin-top:6px;
       margin-bottom:10px;
       align-items:flex-end;
+      justify-content:space-between;
     }
+    .form-row > div:last-child{
+      display:flex;
+      justify-content:flex-end;
+    }
+
     label{
       font-size:.9rem;
       font-weight:600;
@@ -366,6 +339,7 @@
       background:#ffffff;
     }
 
+    /* Botones generales */
     button{
       padding:11px 22px;
       border-radius:999px;
@@ -393,6 +367,22 @@
       cursor:default;
       box-shadow:none;
       transform:none;
+    }
+
+    /* Botones principales alineados y del mismo ancho */
+    .btn-cta{
+      min-width:190px;
+      justify-content:center;
+    }
+
+    /* Botón naranja Link de afiliado */
+    .btn-afiliado{
+      background:#f97316;
+      box-shadow:0 12px 26px rgba(249,115,22,.45);
+    }
+    .btn-afiliado:hover{
+      background:#ea580c;
+      box-shadow:0 16px 32px rgba(249,115,22,.6);
     }
 
     .status{
@@ -449,6 +439,7 @@
       gap:8px;
       align-items:center;
       flex-wrap:wrap;
+      justify-content:space-between;
     }
     #montoPago{
       width:220px;
@@ -458,6 +449,13 @@
       margin-top:6px;
       font-size:.85rem;
       display:none;
+    }
+
+    /* Wrapper botón de afiliado (alineado a la derecha) */
+    .affiliate-wrapper{
+      display:flex;
+      justify-content:flex-end;
+      margin-top:4px;
     }
 
     /* FAB menú */
@@ -608,6 +606,9 @@
       #montoPago{
         width:100%;
       }
+      .affiliate-wrapper{
+        justify-content:center;
+      }
     }
   </style>
 </head>
@@ -681,7 +682,7 @@
               <input type="text" id="idContrato" placeholder="Ejemplo: R-0001">
             </div>
             <div>
-              <button id="btnConsultar" onclick="consultar()">Consultar</button>
+              <button id="btnConsultar" class="btn-cta" onclick="consultar()">Consultar</button>
             </div>
           </div>
           <div id="status" class="status"></div>
@@ -693,15 +694,40 @@
           <label for="montoPago">Monto a pagar (COP)</label>
           <div class="row-pago">
             <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
-            <button type="button" onclick="crearPagoWompi()">Pagar con Wompi</button>
+            <button type="button" class="btn-cta" onclick="crearPagoWompi()">Pagar con Wompi</button>
           </div>
           <p id="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
         </div>
 
         <div class="grid" id="resultados" style="display:none;">
-          <div class="card card-contrato" id="cardContrato"></div>
-          <div class="card card-pagos" id="cardPagos"></div>
-          <div class="card card-mantenimientos" id="cardMantenimientos"></div>
+          <div class="card card-contrato">
+            <div class="card-header">
+              <img src="ícono_contrato.svg" alt="Ícono contrato" class="card-icon">
+              <h2 id="cardContratoTitle">Contrato</h2>
+            </div>
+            <div id="cardContrato"></div>
+          </div>
+          <div class="card card-pagos">
+            <div class="card-header">
+              <img src="ícono_pagos.svg" alt="Ícono pagos" class="card-icon">
+              <h2>Pagos</h2>
+            </div>
+            <div id="cardPagos"></div>
+          </div>
+          <div class="card card-mantenimientos">
+            <div class="card-header">
+              <img src="ícono_mantenimientos.svg" alt="Ícono mantenimientos" class="card-icon">
+              <h2>Mantenimientos</h2>
+            </div>
+            <div id="cardMantenimientos"></div>
+          </div>
+        </div>
+
+        <!-- BOTÓN LINK DE AFILIADO -->
+        <div class="affiliate-wrapper">
+          <button type="button" class="btn-cta btn-afiliado" onclick="abrirModal('modalAfiliado')">
+            Link de afiliado
+          </button>
         </div>
 
         <footer>Versión interna • RADIZ Suministro Vehicular</footer>
@@ -782,11 +808,32 @@
   </div>
 </div>
 
+<!-- MODAL LINK AFILIADO -->
+<div class="modal-backdrop" id="modalAfiliado">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Link de afiliado</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalAfiliado')">&times;</button>
+    </div>
+    <p>
+      Comparte nuestro link de referidos con tu código de contrato (ejemplo: R-0001) y gana
+      hasta $70.000 pesos por cada referido aprobado.
+    </p>
+    <p style="margin-top:10px;">
+      <a href="https://forms.gle/5rWhfVXhR4k3ibxu8" target="_blank" rel="noopener noreferrer">
+        Link del formulario
+      </a>
+    </p>
+  </div>
+</div>
+
 <script>
   const API_URL='https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
   const WOMPI_PUBLIC_KEY='pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06';
+  const WOMPI_INTEGRITY_KEY='prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN';
   const WOMPI_REDIRECT_URL='https://portal.radizco.com/';
-  const API_CALLBACK_URL = API_URL;
+  const API_CALLBACK_URL = API_URL; // mismo endpoint para POST
+  const MIN_PAGO = 170000;
 
   let tipoUsuarioActual=null;
   let datosContratoActual=null;
@@ -800,7 +847,8 @@
   }
   function abrirModal(id){
     document.getElementById(id).style.display='flex';
-    document.getElementById('menuPanel').style.display='none';
+    const panel=document.getElementById('menuPanel');
+    if(panel) panel.style.display='none';
   }
   function cerrarModal(id){
     document.getElementById(id).style.display='none';
@@ -811,18 +859,33 @@
     const status=document.getElementById('status');
     const btn=document.getElementById('btnConsultar');
     const resultados=document.getElementById('resultados');
-    const cardContrato=document.getElementById('cardContrato');
-    const cardPagos=document.getElementById('cardPagos');
-    const cardMantenimientos=document.getElementById('cardMantenimientos');
+    const cardContratoBody=document.getElementById('cardContrato');
+    const cardPagosBody=document.getElementById('cardPagos');
+    const cardMantenimientosBody=document.getElementById('cardMantenimientos');
+    const cardContratoTitle=document.getElementById('cardContratoTitle');
     const fabMenu=document.getElementById('fabMenu');
     const menuRenting=document.getElementById('menuRenting');
     const menuAfiliado=document.getElementById('menuAfiliado');
+    const pagoError=document.getElementById('pagoError');
 
     status.className='status';
     status.textContent='';
     resultados.style.display='none';
     fabMenu.style.display='none';
     document.getElementById('menuPanel').style.display='none';
+    cardContratoBody.innerHTML='';
+    cardPagosBody.innerHTML='';
+    cardMantenimientosBody.innerHTML='';
+    cardContratoTitle.textContent='Contrato';
+    datosContratoActual=null;
+    tipoUsuarioActual=null;
+    datosAfiliadoActual=null;
+
+    // restaurar mensaje por defecto de pago
+    if(pagoError){
+      pagoError.textContent='Ingresa un monto válido (mínimo 170.000).';
+      pagoError.style.display='none';
+    }
 
     if(!id){
       status.classList.add('error');
@@ -855,11 +918,6 @@
       const mts=Array.isArray(rawM)?rawM:(rawM?[rawM]:[]);
       const beneficiosTexto=c['BENEFICIOS']||'Información no disponible';
 
-      // limpiar tarjetas
-      cardContrato.innerHTML='';
-      cardPagos.innerHTML='';
-      cardMantenimientos.innerHTML='';
-
       if(tipo==='AFILIADO'){
         // === AFILIADO ===
         const afiliados=data.afiliados||[];
@@ -891,8 +949,9 @@
           }
         }
 
-        cardContrato.innerHTML=
-          '<h2>Afiliado</h2>'+
+        cardContratoTitle.textContent='Afiliado';
+
+        cardContratoBody.innerHTML =
           '<p><strong>ID contrato:</strong> '+(c['ID CONTRATO']||id)+'</p>'+
           '<p><strong>Nombre:</strong> '+nombreAf+'</p>'+
           '<p><strong>Documento:</strong> '+documentoAf+'</p>'+
@@ -902,8 +961,7 @@
         const pagoRelacionado=pagos.find(p=>String(p['ID CONTRATO']).trim()===id);
         const diasCorte=pagoRelacionado?(pagoRelacionado['DÍAS DE CORTE']||pagoRelacionado['DIAS DE CORTE']||'Dato no disponible'):'Dato no disponible';
 
-        cardPagos.innerHTML=
-          '<h2>Pagos</h2>'+
+        cardPagosBody.innerHTML =
           '<p><strong>Días de corte:</strong> '+diasCorte+'</p>'+
           '<p><strong>Inicio contrato:</strong> '+formatearFecha(c['INICIO'])+'</p>';
 
@@ -920,8 +978,7 @@
         const numMts=mtsAfiliado.length;
         resumenAfiliadoMantenimientos=numMts;
 
-        cardMantenimientos.innerHTML=
-          '<h2>Vehículos y mantenimientos</h2>'+
+        cardMantenimientosBody.innerHTML =
           '<p><strong>Cantidad de vehículos afiliados:</strong> '+(numVehiculos||'0')+'</p>'+
           '<p><strong>Mantenimientos registrados:</strong> '+(numMts||'0')+'</p>';
 
@@ -941,13 +998,13 @@
         fabMenu.style.display='block';
 
       }else{
-        // === RENTING ===
+        // === RENTING (clientes R, etc.) ===
         datosAfiliadoActual=null;
+        cardContratoTitle.textContent='Contrato';
 
         const estado=(c['ESTADO']||'').toString().toUpperCase();
 
-        cardContrato.innerHTML=
-          '<h2>Contrato</h2>'+
+        cardContratoBody.innerHTML =
           '<p><strong>ID:</strong> '+(c['ID CONTRATO']||'')+'</p>'+
           '<p><strong>Tipo usuario:</strong> '+(c['TIPO USUARIO']||'')+'</p>'+
           '<p><strong>Vehículo:</strong> '+(c['ID VEHÍCULO']||'')+'</p>'+
@@ -958,7 +1015,7 @@
           '<p><span class="badge '+(estado==='ACTIVO'?'badge-activo':'badge-inactivo')+'">'+(estado||'SIN ESTADO')+'</span></p>';
 
         if(pagos.length===0){
-          cardPagos.innerHTML='<h2>Pagos</h2><p>No hay pagos registrados para este contrato.</p>';
+          cardPagosBody.innerHTML='<p>No hay pagos registrados para este contrato.</p>';
         }else{
           const items=pagos.map(p=>
             '<li>'+
@@ -971,11 +1028,11 @@
             '<strong>Referencia:</strong> '+(p['REFERENCIA']||'')+
             '</li>'
           ).join('');
-          cardPagos.innerHTML='<h2>Pagos</h2><ul>'+items+'</ul>';
+          cardPagosBody.innerHTML='<ul>'+items+'</ul>';
         }
 
         if(mts.length===0){
-          cardMantenimientos.innerHTML='<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
+          cardMantenimientosBody.innerHTML='<p>No hay mantenimientos registrados para este contrato.</p>';
         }else{
           const totalM=mts.reduce((s,m)=>s+(Number(m['VALOR MTOS'])||0),0);
           const itemsM=mts.map(m=>
@@ -988,8 +1045,7 @@
             '<strong>Taller asignado:</strong> '+(m['TALLER ASIGNADO']||'')+
             '</li>'
           ).join('');
-          cardMantenimientos.innerHTML=
-            '<h2>Mantenimientos</h2>'+
+          cardMantenimientosBody.innerHTML=
             '<p><strong>Total mantenimientos:</strong> '+formatearNumero(totalM)+'</p>'+
             '<ul>'+itemsM+'</ul>';
         }
@@ -1036,13 +1092,14 @@
 
     errorLabel.style.display='none';
 
-    if(!idContrato){
-      errorLabel.textContent='digite su código de contrato';
+    // Validar que el contrato haya sido consultado previamente
+    if(!idContrato || !datosContratoActual){
+      errorLabel.textContent='Digite su código de contrato.';
       errorLabel.style.display='block';
       return;
     }
 
-    if(!valor||valor<170000){
+    if(!valor || valor<MIN_PAGO){
       errorLabel.textContent='Ingresa un monto válido (mínimo 170.000).';
       errorLabel.style.display='block';
       return;
@@ -1054,36 +1111,59 @@
     }
 
     const reference='PAGO_'+idContrato+'_'+Date.now();
+    const amountInCents=valor*100;
+    const currency='COP';
 
-    // Registrar intento de pago en la hoja PAGOS_PORTAL
     try{
+      // Registrar intento de pago en Google Sheets (estado PENDIENTE)
       const formData=new URLSearchParams();
       formData.append('accion','registrar_pago');
       formData.append('referencia',reference);
       formData.append('idContrato',idContrato);
-      formData.append('monto',valor.toString());
+      formData.append('monto',valor);
 
-      await fetch(API_CALLBACK_URL,{
+      fetch(API_CALLBACK_URL,{
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
         body:formData.toString()
+      }).catch(err=>console.error('Error registrando pago en Sheets:',err));
+
+      const integritySignature = await crearFirmaIntegridad(reference, amountInCents, currency);
+
+      const checkout=new WidgetCheckout({
+        currency,
+        amountInCents,
+        reference,
+        publicKey:WOMPI_PUBLIC_KEY,
+        redirectUrl:WOMPI_REDIRECT_URL,
+        signature:{ integrity: integritySignature }
+      });
+
+      checkout.open(function(result){
+        const transaction=result.transaction;
+        console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
       });
     }catch(e){
-      console.error('Error registrando el pago en la hoja:',e);
+      console.error(e);
+      alert('Ocurrió un error al preparar el pago. Intenta nuevamente.');
     }
+  }
 
-    const checkout=new WidgetCheckout({
-      currency:'COP',
-      amountInCents:valor*100,
-      reference:reference,
-      publicKey:WOMPI_PUBLIC_KEY,
-      redirectUrl:WOMPI_REDIRECT_URL
-    });
-
-    checkout.open(function(result){
-      const transaction=result.transaction;
-      console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
-    });
+  async function crearFirmaIntegridad(reference, amountInCents, currency){
+    const encoder=new TextEncoder();
+    const keyData=encoder.encode(WOMPI_INTEGRITY_KEY);
+    const cryptoKey=await crypto.subtle.importKey(
+      'raw',
+      keyData,
+      {name:'HMAC',hash:'SHA-256'},
+      false,
+      ['sign']
+    );
+    const data=encoder.encode(reference+amountInCents+currency);
+    const signature=await crypto.subtle.sign('HMAC',cryptoKey,data);
+    return Array.from(new Uint8Array(signature))
+      .map(b=>b.toString(16).padStart(2,'0'))
+      .join('');
   }
 
   async function enviarSolicitudHistorial(){
