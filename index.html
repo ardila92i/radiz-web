@@ -446,6 +446,19 @@
       display:none;
     }
 
+    /* Fila de consulta (misma lógica que pagos) */
+    .row-consulta{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      flex-wrap:wrap;
+      margin-top:6px;
+      margin-bottom:10px;
+    }
+    #idContrato{
+      width:220px;
+    }
+
     /* Botón Link de afiliado centrado */
     .affiliate-row{
       margin-top:18px;
@@ -616,6 +629,9 @@
       #montoPago{
         width:100%;
       }
+      #idContrato{
+        width:100%;
+      }
     }
   </style>
 </head>
@@ -684,14 +700,10 @@
             <div class="section-icon section-icon-search"></div>
             <span>Consulta de contrato</span>
           </div>
-          <div class="form-row">
-            <div style="flex:1;min-width:220px;">
-              <label for="idContrato">ID CONTRATO</label><br>
-              <input type="text" id="idContrato" placeholder="Ejemplo: R-0001">
-            </div>
-            <div>
-              <button id="btnConsultar" class="btn-main" onclick="consultar()">Consultar</button>
-            </div>
+          <label for="idContrato">ID CONTRATO</label>
+          <div class="row-consulta">
+            <input type="text" id="idContrato" placeholder="Ejemplo: R-0001">
+            <button id="btnConsultar" class="btn-main" onclick="consultar()">Consultar</button>
           </div>
           <div id="status" class="status"></div>
         </div>
