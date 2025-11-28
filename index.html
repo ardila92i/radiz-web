@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <title>PORTAL CLIENTES</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
   <script src="https://checkout.wompi.co/widget.js" async></script>
   <style>
     *{box-sizing:border-box}
@@ -376,6 +384,28 @@
       box-shadow:0 16px 32px rgba(249,115,22,.6);
     }
 
+    /* Botón delgado "Descarga la App" */
+    .app-download-row{
+      margin-top:8px;
+      display:flex;
+      justify-content:center;
+    }
+    .btn-thin{
+      padding:6px 14px;
+      border-radius:999px;
+      border:1px solid #d1d5db;
+      background:#ffffff;
+      color:#2563eb;
+      font-size:.8rem;
+      font-weight:500;
+      box-shadow:none;
+      min-width:0;
+    }
+    .btn-thin:hover{
+      background:#eff6ff;
+      box-shadow:none;
+    }
+
     .status{
       font-size:.9rem;
       margin-top:4px;
@@ -728,6 +758,13 @@
         <div class="affiliate-row">
           <button type="button" class="btn-main btn-afiliado" onclick="abrirModal('modalAfiliado')">
             Link de referidos
+          </button>
+        </div>
+
+        <!-- Botón delgado "Descarga la App" -->
+        <div class="app-download-row">
+          <button type="button" class="btn-thin" onclick="mostrarInstruccionesApp()">
+            Descarga la App
           </button>
         </div>
 
@@ -1221,6 +1258,20 @@
       msg.style.color='#b91c1c';
       msg.textContent='No se pudo copiar automáticamente. Selecciona y copia el link manualmente.';
     }
+  }
+
+  function mostrarInstruccionesApp(){
+    alert('Para instalar la app de RADIZ, abre este portal desde el navegador de tu celular y usa la opción "Añadir a la pantalla de inicio".');
+  }
+
+  // Registro del Service Worker para PWA
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){
+      navigator.serviceWorker.register('sw.js')
+        .catch(function(err){
+          console.log('ServiceWorker registration failed:',err);
+        });
+    });
   }
 </script>
 </body>
