@@ -7,13 +7,15 @@
   <script src="https://checkout.wompi.co/widget.js" async></script>
   <style>
     *{box-sizing:border-box}
+
     body{
       margin:0;
       padding:0;
       font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:#f3f4f6;
+      background:#f5f6f8;
       color:#111827;
     }
+
     .page{
       min-height:100vh;
       display:flex;
@@ -21,40 +23,202 @@
       justify-content:center;
       padding:32px 16px;
     }
+
     .container{
       position:relative;
       width:100%;
       max-width:960px;
-      background:#fff;
-      border-radius:20px;
-      box-shadow:0 15px 40px rgba(15,23,42,.12);
+      background:#ffffff;
+      border-radius:24px;
+      box-shadow:0 18px 45px rgba(15,23,42,.14);
       padding:28px 32px 32px;
-      overflow:visible; /* para que el FAB no se recorte */
+      overflow:visible;
     }
+
     .logo-top{
-      text-align:center;
-      margin-bottom:12px;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      margin-bottom:10px;
     }
     .logo-top img{
-      max-width:260px;
-      max-height:120px;
+      max-width:210px;
+      max-height:80px;
       object-fit:contain;
+    }
+
+    .welcome-banner{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      background:#e0f2fe;
+      border-radius:16px;
+      padding:10px 14px;
+      margin-bottom:18px;
+      border:1px solid #bfdbfe;
+    }
+    .welcome-icon{
+      width:32px;
+      height:32px;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#2563eb;
+      color:#ffffff;
+      font-size:1.1rem;
+      flex-shrink:0;
+    }
+    .welcome-text-title{
+      font-size:.95rem;
+      font-weight:600;
+      margin:0 0 2px;
+      color:#0f172a;
+    }
+    .welcome-text-sub{
+      margin:0;
+      font-size:.85rem;
+      color:#4b5563;
+    }
+
+    .portal-header{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:16px;
+      margin-bottom:12px;
     }
     h1{
       margin:0 0 4px;
-      font-size:1.8rem;
+      font-size:1.9rem;
       letter-spacing:.03em;
     }
     .subtitle{
       color:#4b5563;
       font-size:.95rem;
+      margin:0;
+    }
+    .portal-badge{
+      display:flex;
+      align-items:flex-start;
+      justify-content:flex-end;
+    }
+    .badge-pill{
+      padding:4px 10px;
+      border-radius:999px;
+      font-size:.75rem;
+      font-weight:600;
+      background:#f97316;
+      color:#ffffff;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      white-space:nowrap;
+    }
+
+    .card{
+      position:relative;
+      border-radius:18px;
+      border:1px solid #e5e7eb;
+      padding:16px 18px 16px;
+      background:#ffffff;
+      font-size:.9rem;
+      transition:border-color .15s,box-shadow .15s,transform .1s,background .15s;
+    }
+    .card h2{
+      margin:0 0 8px;
+      font-size:1.05rem;
+      font-weight:700;
+      color:#111827;
+    }
+    .card p{
+      margin:3px 0;
+      color:#111827;
+      font-size:.9rem;
+    }
+    .card p strong{
+      font-weight:600;
+    }
+
+    .card:hover{
+      border-color:#2563eb;
+      box-shadow:0 16px 34px rgba(37,99,235,.18);
+      background:#f9fbff;
+      transform:translateY(-1px);
+    }
+
+    .card-consulta{
+      margin-bottom:16px;
+    }
+
+    .card-pago{
       margin-bottom:18px;
     }
+
+    .card-contrato::before,
+    .card-pagos::before,
+    .card-mantenimientos::before,
+    .card-pago::before{
+      content:"";
+      position:absolute;
+      top:16px;
+      left:16px;
+      width:30px;
+      height:30px;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.1rem;
+      background:#eff6ff;
+      color:#2563eb;
+    }
+    .card-contrato::before{content:"📄";}
+    .card-pagos::before{content:"💳";}
+    .card-mantenimientos::before{content:"🔧";}
+    .card-pago::before{content:"💳";}
+
+    .card-contrato h2,
+    .card-pagos h2,
+    .card-mantenimientos h2{
+      margin-left:40px;
+    }
+
+    .card-mantenimientos:hover{
+      background:#fff7ed;
+      border-color:#f97316;
+      box-shadow:0 18px 38px rgba(249,115,22,.22);
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:6px;
+    }
+    .section-title span{
+      font-size:.9rem;
+      font-weight:600;
+      color:#111827;
+    }
+    .section-icon{
+      width:28px;
+      height:28px;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#eff6ff;
+      color:#2563eb;
+      font-size:1rem;
+      flex-shrink:0;
+    }
+
     .form-row{
       display:flex;
       flex-wrap:wrap;
       gap:12px;
-      margin-bottom:16px;
+      margin-top:6px;
+      margin-bottom:10px;
       align-items:flex-end;
     }
     label{
@@ -71,14 +235,17 @@
       border:1px solid #d1d5db;
       font-size:.95rem;
       outline:none;
-      transition:border-color .15s,box-shadow .15s;
+      transition:border-color .15s,box-shadow .15s,background .15s;
+      background:#f9fafb;
     }
     input[type="text"]:focus,
     input[type="number"]:focus,
     input[type="email"]:focus{
       border-color:#2563eb;
       box-shadow:0 0 0 1px rgba(37,99,235,.18);
+      background:#ffffff;
     }
+
     button{
       padding:11px 22px;
       border-radius:999px;
@@ -92,14 +259,14 @@
       align-items:center;
       justify-content:center;
       gap:6px;
-      box-shadow:0 10px 25px rgba(37,99,235,.4);
+      box-shadow:0 12px 26px rgba(37,99,235,.45);
       transition:transform .1s,box-shadow .1s,background .1s;
       white-space:nowrap;
     }
     button:hover{
       transform:translateY(-1px);
       background:#1d4ed8;
-      box-shadow:0 14px 30px rgba(37,99,235,.5);
+      box-shadow:0 16px 32px rgba(37,99,235,.55);
     }
     button:disabled{
       opacity:.65;
@@ -107,43 +274,55 @@
       box-shadow:none;
       transform:none;
     }
+
     .status{
       font-size:.9rem;
-      margin-bottom:10px;
+      margin-top:4px;
       min-height:1.2em;
     }
     .status.error{color:#b91c1c}
     .status.ok{color:#065f46}
+
+    .summary-tabs{
+      display:flex;
+      gap:8px;
+      margin:4px 0 10px;
+    }
+    .summary-tab{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:.8rem;
+      background:#f3f4f6;
+      color:#4b5563;
+    }
+    .summary-tab span{
+      line-height:1;
+    }
+    .summary-tab:first-child{
+      background:#2563eb;
+      color:#ffffff;
+    }
+    .summary-tab:first-child span{
+      font-weight:600;
+    }
+    .summary-tab:hover{
+      background:#e5edff;
+    }
+
     .grid{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
       gap:16px;
-      margin-top:8px;
-      margin-bottom:24px;
+      margin-top:6px;
+      margin-bottom:18px;
     }
-    .card{
-      border-radius:14px;
-      border:1px solid #e5e7eb;
-      padding:14px 16px 16px;
-      background:#f9fafb;
-      font-size:.9rem;
-    }
-    .card h2{
-      margin:0 0 8px;
-      font-size:1.05rem;
-      font-weight:700;
-      color:#111827;
-    }
-    .card p{
-      margin:3px 0;
-      color:#111827;
-      font-size:.9rem;
-    }
-    .card p strong{
-      font-weight:600;
-    }
+
     ul{padding-left:18px;margin:6px 0}
     li{margin-bottom:4px}
+
     .badge{
       display:inline-block;
       padding:2px 8px;
@@ -154,8 +333,9 @@
     }
     .badge-activo{background:#dcfce7;color:#166534}
     .badge-inactivo{background:#fee2e2;color:#b91c1c}
+
     footer{
-      margin-top:24px;
+      margin-top:10px;
       font-size:.75rem;
       color:#9ca3af;
       text-align:center;
@@ -166,6 +346,7 @@
       font-size:1rem;
       margin:0 0 4px;
       color:#111827;
+      margin-left:40px;
     }
     #seccionPago p{
       font-size:.9rem;
@@ -235,7 +416,6 @@
     .fab-btn span::before{top:-6px}
     .fab-btn span::after{top:6px}
 
-    /* Menú flotante */
     .menu-panel{
       position:absolute;
       top:86px;
@@ -315,11 +495,21 @@
     @media(max-width:640px){
       .container{
         padding:22px 18px 24px;
-        border-radius:16px;
+        border-radius:18px;
+      }
+      .portal-header{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+      .portal-badge{
+        justify-content:flex-start;
       }
       .fab-menu{
         top:16px;
         right:16px;
+      }
+      #montoPago{
+        width:100%;
       }
     }
   </style>
@@ -353,30 +543,44 @@
       </div>
     </div>
 
-    <h1>PORTAL CLIENTES</h1>
-    <p class="subtitle">
-      Ingresa el <strong>ID del contrato</strong> para consultar el estado, pagos y mantenimientos.
-    </p>
-
-    <div class="form-row">
-      <div style="flex:1;min-width:220px;">
-        <label for="idContrato">ID CONTRATO</label><br>
-        <input type="text" id="idContrato" placeholder="Ejemplo: R-0001">
-      </div>
+    <div class="welcome-banner">
+      <div class="welcome-icon">ℹ️</div>
       <div>
-        <button id="btnConsultar" onclick="consultar()">Consultar</button>
+        <p class="welcome-text-title">¡Bienvenido a tu portal Radiz!</p>
+        <p class="welcome-text-sub">Consulta tu contrato, revisa tus pagos y realiza pagos en línea de forma segura.</p>
       </div>
     </div>
 
-    <div id="status" class="status"></div>
+    <header class="portal-header">
+      <div>
+        <h1>PORTAL CLIENTES</h1>
+        <p class="subtitle">
+          Ingresa el <strong>ID del contrato</strong> para consultar el estado, pagos y mantenimientos.
+        </p>
+      </div>
+      <div class="portal-badge">
+        <span class="badge-pill">Radiz Vehicular</span>
+      </div>
+    </header>
 
-    <div class="grid" id="resultados" style="display:none;">
-      <div class="card" id="cardContrato"></div>
-      <div class="card" id="cardPagos"></div>
-      <div class="card" id="cardMantenimientos"></div>
+    <div class="card card-consulta">
+      <div class="section-title">
+        <div class="section-icon">🔍</div>
+        <span>Consulta de contrato</span>
+      </div>
+      <div class="form-row">
+        <div style="flex:1;min-width:220px;">
+          <label for="idContrato">ID CONTRATO</label><br>
+          <input type="text" id="idContrato" placeholder="Ejemplo: R-0001">
+        </div>
+        <div>
+          <button id="btnConsultar" onclick="consultar()">Consultar</button>
+        </div>
+      </div>
+      <div id="status" class="status"></div>
     </div>
 
-    <div id="seccionPago" style="margin-top:8px;">
+    <div class="card card-pago" id="seccionPago">
       <h2>Realizar pago</h2>
       <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
       <label for="montoPago">Monto a pagar (COP)</label>
@@ -385,6 +589,24 @@
         <button type="button" onclick="crearPagoWompi()">Pagar con Wompi</button>
       </div>
       <p id="pagoError">Ingresa un monto válido (mínimo 100.000).</p>
+    </div>
+
+    <div class="summary-tabs">
+      <div class="summary-tab">
+        📄 <span>Contrato</span>
+      </div>
+      <div class="summary-tab">
+        💳 <span>Pagos</span>
+      </div>
+      <div class="summary-tab">
+        🔧 <span>Mantenimientos</span>
+      </div>
+    </div>
+
+    <div class="grid" id="resultados" style="display:none;">
+      <div class="card card-contrato" id="cardContrato"></div>
+      <div class="card card-pagos" id="cardPagos"></div>
+      <div class="card card-mantenimientos" id="cardMantenimientos"></div>
     </div>
 
     <footer>Versión interna • RADIZ Suministro Vehicular</footer>
