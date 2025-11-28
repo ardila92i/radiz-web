@@ -717,10 +717,10 @@
           <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
           <label for="montoPago">Monto a pagar (COP)</label>
           <div class="row-pago">
-            <input id="montoPago" type="number" min="20000" step="1000" placeholder="Ej: 20000">
+            <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
             <button type="button" class="btn-main" onclick="crearPagoWompi()">Pagar con Wompi</button>
           </div>
-          <p id="pagoError">Ingresa un monto válido (mínimo 20.000).</p>
+          <p id="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
           <p id="pagoContratoError">Digita tu código de contrato.</p>
         </div>
 
@@ -1105,7 +1105,7 @@
       return;
     }
 
-    if(!valor||valor<20000){
+    if(!valor||valor<170000){
       errorLabel.style.display='block';
       return;
     }
@@ -1134,10 +1134,8 @@
       checkout.open(function(result){
         const transaction=result.transaction;
         console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
-
-        if(transaction && transaction.status==='APPROVED'){
-          registrarPagoEnSheet(reference, valor, idContrato);
-        }
+        // Registrar siempre la intención de pago para trazabilidad
+        registrarPagoEnSheet(reference, valor, idContrato);
       });
     }catch(e){
       console.error('Error generando firma de integridad',e);
@@ -1152,7 +1150,7 @@
       formData.append('referencia',reference);
       formData.append('monto',valor);
       formData.append('idContrato',idContrato);
-      formData.append('origen','PORTAL');
+      formData.append('origen','PORTAL_WEB');
 
       await fetch(API_CALLBACK_URL,{
         method:'POST',
