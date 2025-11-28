@@ -113,7 +113,7 @@
       border-radius:16px;
       padding:10px 14px;
       margin-bottom:18px;
-      border:1px solid #bfdbfe;
+      border:1px solid:#bfdbfe;
     }
     .welcome-icon{
       position:relative;
@@ -255,7 +255,7 @@
       background:
         linear-gradient(#2563eb,#2563eb) center/2px 14px no-repeat,
         linear-gradient(#2563eb,#2563eb) center/10px 2px no-repeat,
-        radial-gradient(circle at 50% 4px,#2563eb 0, #2563eb 1px,transparent 1px 100%);
+        radial-gradient(circle at 50% 4px,#2563eb 0,#2563eb 1px,transparent 1px 100%);
     }
 
     /* Herramienta (Mantenimientos) */
@@ -395,12 +395,6 @@
       transform:none;
     }
 
-    /* Mismo ancho para botones principales */
-    .btn-main{
-      min-width:190px;
-      justify-content:center;
-    }
-
     .status{
       font-size:.9rem;
       margin-top:4px;
@@ -455,33 +449,15 @@
       gap:8px;
       align-items:center;
       flex-wrap:wrap;
-      justify-content:space-between;
     }
     #montoPago{
       width:220px;
-      flex:1;
-      min-width:160px;
     }
     #pagoError{
       color:#dc2626;
       margin-top:6px;
       font-size:.85rem;
       display:none;
-    }
-
-    /* Botón Link de afiliado */
-    .affiliate-wrapper{
-      display:flex;
-      justify-content:flex-end;
-      margin-top:14px;
-    }
-    .btn-afiliado{
-      background:#f97316;
-      box-shadow:0 12px 26px rgba(249,115,22,.45);
-    }
-    .btn-afiliado:hover{
-      background:#ea580c;
-      box-shadow:0 16px 32px rgba(249,115,22,.55);
     }
 
     /* FAB menú */
@@ -705,7 +681,7 @@
               <input type="text" id="idContrato" placeholder="Ejemplo: R-0001">
             </div>
             <div>
-              <button id="btnConsultar" class="btn-main" onclick="consultar()">Consultar</button>
+              <button id="btnConsultar" onclick="consultar()">Consultar</button>
             </div>
           </div>
           <div id="status" class="status"></div>
@@ -717,7 +693,7 @@
           <label for="montoPago">Monto a pagar (COP)</label>
           <div class="row-pago">
             <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
-            <button type="button" class="btn-main" onclick="crearPagoWompi()">Pagar con Wompi</button>
+            <button type="button" onclick="crearPagoWompi()">Pagar con Wompi</button>
           </div>
           <p id="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
         </div>
@@ -726,11 +702,6 @@
           <div class="card card-contrato" id="cardContrato"></div>
           <div class="card card-pagos" id="cardPagos"></div>
           <div class="card card-mantenimientos" id="cardMantenimientos"></div>
-        </div>
-
-        <!-- Botón Link de afiliado -->
-        <div class="affiliate-wrapper">
-          <button type="button" class="btn-afiliado btn-main" onclick="abrirModalAfiliado()">Link de afiliado</button>
         </div>
 
         <footer>Versión interna • RADIZ Suministro Vehicular</footer>
@@ -808,24 +779,6 @@
     </div>
     <p id="modalLiquidacionesTexto1">Número de liquidaciones: Dato no disponible.</p>
     <p id="modalLiquidacionesTexto2">Valor total liquidado: Dato no disponible.</p>
-  </div>
-</div>
-
-<!-- MODAL LINK AFILIADO -->
-<div class="modal-backdrop" id="modalAfiliado">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Link de afiliado</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalAfiliado')">&times;</button>
-    </div>
-    <p id="textoAfiliado">
-      Comparte nuestro link de referidos con tu código de contrato (ejemplo: R-0001) y gana hasta $70.000 pesos por cada referido aprobado.
-    </p>
-    <label for="linkAfiliado">Link del formulario</label>
-    <input type="text" id="linkAfiliado" readonly value="https://forms.gle/5rWhfVXhR4k3ibxu8">
-    <div class="modal-actions">
-      <button type="button" onclick="copiarLinkAfiliado()">Copiar link</button>
-    </div>
   </div>
 </div>
 
@@ -1084,7 +1037,7 @@
     errorLabel.style.display='none';
 
     if(!idContrato){
-      errorLabel.textContent='Digita tu código de contrato antes de pagar.';
+      errorLabel.textContent='digite su código de contrato';
       errorLabel.style.display='block';
       return;
     }
@@ -1170,35 +1123,6 @@
       console.error(e);
       msg.style.color='#b91c1c';
       msg.textContent='Error al enviar la solicitud. Intenta de nuevo.';
-    }
-  }
-
-  function abrirModalAfiliado(){
-    const modal=document.getElementById('modalAfiliado');
-    const inputLink=document.getElementById('linkAfiliado');
-    const codigo=(document.getElementById('idContrato').value||'').trim();
-
-    // Mensaje fijo solicitado
-    document.getElementById('textoAfiliado').textContent =
-      'Comparte nuestro link de referidos con tu código de contrato (ejemplo: R-0001) y gana hasta $70.000 pesos por cada referido aprobado.';
-
-    let base='https://forms.gle/5rWhfVXhR4k3ibxu8';
-    if(codigo){
-      base = base + '?contrato='+encodeURIComponent(codigo);
-    }
-    inputLink.value=base;
-
-    modal.style.display='flex';
-  }
-
-  function copiarLinkAfiliado(){
-    const input=document.getElementById('linkAfiliado');
-    input.select();
-    input.setSelectionRange(0,99999);
-    try{
-      document.execCommand('copy');
-    }catch(e){
-      navigator.clipboard && navigator.clipboard.writeText(input.value).catch(()=>{});
     }
   }
 </script>
