@@ -46,7 +46,7 @@
       object-fit:contain;
     }
 
-    /* === ESTRUCTURA A DOS COLUMNAS === */
+    /* === NUEVA ESTRUCTURA A DOS COLUMNAS === */
     .main-grid{
       display:grid;
       grid-template-columns:minmax(0,1.05fr) minmax(0,1.15fr);
@@ -102,7 +102,7 @@
       flex-direction:column;
     }
 
-    /* Banner bienvenida */
+    /* Banner bienvenida (sin cambios de estilo) */
     .welcome-banner{
       display:flex;
       align-items:flex-start;
@@ -636,20 +636,21 @@
       </div>
     </div>
 
-    <!-- GRID PRINCIPAL -->
+    <!-- GRID PRINCIPAL: IZQUIERDA CARD CORPORATIVA, DERECHA PANEL -->
     <div class="main-grid">
-      <!-- CARD CORPORATIVA IZQUIERDA -->
+      <!-- COLUMNA IZQUIERDA: CARD CORPORATIVA -->
       <div class="brand-card">
         <div class="brand-image">
-          <img src="radiz-driver.jpg.jpg" alt="Conductor Radiz frente a vehículos de carga">
+          <img src="radiz-driver.jpg" alt="Conductor Radiz frente a vehículos de carga">
         </div>
         <div class="brand-overlay"></div>
         <div class="brand-copy">
+          <p class="brand-kicker">Radiz Suministro Vehicular</p>
           <h2>Vehículos que dignifican la vida</h2>
         </div>
       </div>
 
-      <!-- PANEL DERECHA -->
+      <!-- COLUMNA DERECHA: PANEL DEL PORTAL (LO YA APROBADO) -->
       <div class="panel-main">
         <div class="welcome-banner">
           <div class="welcome-icon"></div>
@@ -858,17 +859,18 @@
       if(tipo==='AFILIADO'){
         // === AFILIADO ===
         const afiliados=data.afiliados||[];
-        the vehicles and affiliates from the sheets.
         const vehiculosAll=data.vehiculos||[];
 
         const idAfiliado=(c['ID AFILIADO']||id).toString().trim();
 
+        // Buscar afiliado por ID AFILIADO en la tabla completa
         const af = afiliados.find(a =>
           String(a['ID AFILIADO'] || '').trim() === idAfiliado
         ) || {};
 
         datosAfiliadoActual=af;
 
+        // Nombre desde AFILIADOS; si falta, usa ID CLIENTE
         const nombreAf = af['NOMBRE'] || c['ID CLIENTE'] || 'Dato no disponible';
         const documentoAf = af['NO DOCUMENTO'] || 'Dato no disponible';
 
@@ -887,6 +889,7 @@
           }
         }
 
+        // Tarjeta principal del afiliado
         cardContrato.innerHTML=
           '<h2>Afiliado</h2>'+
           '<p><strong>ID contrato:</strong> '+(c['ID CONTRATO']||id)+'</p>'+
@@ -903,6 +906,7 @@
           '<p><strong>Días de corte:</strong> '+diasCorte+'</p>'+
           '<p><strong>Inicio contrato:</strong> '+formatearFecha(c['INICIO'])+'</p>';
 
+        // Vehículos asociados al afiliado o al contrato
         const vehiculosContrato = vehiculosAll.filter(v => {
           const idContrVeh = String(v['ID CONTRATO'] || '').trim();
           const idAfiliadoVeh = String(v['ID AFILIADO'] || '').trim();
@@ -921,6 +925,7 @@
           '<p><strong>Cantidad de vehículos afiliados:</strong> '+(numVehiculos||'0')+'</p>'+
           '<p><strong>Mantenimientos registrados:</strong> '+(numMts||'0')+'</p>';
 
+        // actualizar modales afiliado
         const modalFecha=document.getElementById('modalFechaPagosTexto');
         modalFecha.textContent='Días de corte de pagos: '+diasCorte;
 
@@ -932,6 +937,7 @@
         document.getElementById('modalLiquidacionesTexto2').textContent=
           'Valor total liquidado: '+valorLiqTexto;
 
+        // menú para afiliados
         menuRenting.style.display='none';
         menuAfiliado.style.display='block';
         fabMenu.style.display='block';
@@ -990,6 +996,7 @@
             '<ul>'+itemsM+'</ul>';
         }
 
+        // menú renting
         document.getElementById('modalBeneficiosTexto').textContent=beneficiosTexto||'Información no disponible.';
         const tallerEjemplo='Taller asignado: '+(mts[0]?.['TALLER ASIGNADO']||'Información no disponible.');
         document.getElementById('modalTallerTexto').textContent=tallerEjemplo;
