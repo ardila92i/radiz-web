@@ -4,7 +4,21 @@
   <meta charset="UTF-8" />
   <title>PORTAL CLIENTES</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Colores PWA / navegador -->
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <!-- Manifest e íconos (usamos el logo grande para todo) -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-512.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <link rel="apple-touch-icon" href="icon-512.png">
+
+  <!-- Wompi -->
   <script src="https://checkout.wompi.co/widget.js" async></script>
+
   <style>
     *{box-sizing:border-box}
 
@@ -376,6 +390,31 @@
       box-shadow:0 16px 32px rgba(249,115,22,.6);
     }
 
+    /* Botón "Descarga la App" sobrio (mismo estilo en iOS y Android) */
+    .btn-app{
+      padding:8px 18px;
+      border-radius:999px;
+      border:1px solid #d1d5db;
+      background:#f9fafb;
+      color:#1d4ed8;
+      font-size:.9rem;
+      font-weight:600;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      box-shadow:none;
+      white-space:nowrap;
+      min-width:0;
+    }
+    .btn-app:hover{
+      background:#e5f0ff;
+      border-color:#bfdbfe;
+      color:#1d4ed8;
+      box-shadow:none;
+      transform:none;
+    }
+
     .status{
       font-size:.9rem;
       margin-top:4px;
@@ -728,6 +767,13 @@
         <div class="affiliate-row">
           <button type="button" class="btn-main btn-afiliado" onclick="abrirModal('modalAfiliado')">
             Link de referidos
+          </button>
+        </div>
+
+        <!-- Botón Descarga la App -->
+        <div class="affiliate-row">
+          <button type="button" class="btn-app" onclick="manejarDescargaApp()">
+            Descarga la App
           </button>
         </div>
 
@@ -1221,6 +1267,95 @@
       msg.style.color='#b91c1c';
       msg.textContent='No se pudo copiar automáticamente. Selecciona y copia el link manualmente.';
     }
+  }
+
+  /* --------- PWA: Service Worker + instalación de App --------- */
+
+  // Registrar service worker
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(reg => console.log('Service Worker registrado:', reg.scope))
+        .catch(err => console.error('Error registrando Service Worker', err));
+    });
+  }
+
+  let deferredInstallPrompt = null;
+
+  // Capturar el evento beforeinstallprompt (Android/Chrome)
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    console.log('Evento beforeinstallprompt capturado');
+  });
+
+  function esIOS(){
+    const ua = window.navigator.userAgent || '';
+    return /iphone|ipad|ipod/i.test(ua);
+  }
+
+  function esAndroid(){
+    const ua = window.navigator.userAgent || '';
+    return /android/i.test(ua);
+  }
+
+  function estaEnModoApp(){
+    return window.matchMedia('(display-mode: standalone)').matches ||
+      window.navigator.standalone === true;
+  }
+
+  function mostrarInstruccionesIOS(){
+    alert(
+      'Para instalar la app RADIZ en iPhone/iPad:\n\n' +
+      '1. Toca el ícono "Compartir" (cuadro con flecha hacia arriba).\n' +
+      '2. Elige "Añadir a pantalla de inicio".\n' +
+      '3. Confirma con "Añadir".'
+    );
+  }
+
+  async function manejarDescargaApp(){
+    // Ya está instalada
+    if(estaEnModoApp()){
+      alert('La aplicación RADIZ ya está instalada en este dispositivo.');
+      return;
+    }
+
+    // iOS: sólo instrucciones
+    if(esIOS()){
+      mostrarInstruccionesIOS();
+      return;
+    }
+
+    // Android/Chrome con evento de instalación disponible
+    if(deferredInstallPrompt){
+      try{
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        console.log('Resultado instalación:', choice && choice.outcome);
+        deferredInstallPrompt = null;
+      }catch(e){
+        console.error('Error al mostrar el prompt de instalación', e);
+      }
+      return;
+    }
+
+    // Android sin evento: explicar cómo instalar desde el menú
+    if(esAndroid()){
+      alert(
+        'Chrome todavía no muestra el cuadro automático de instalación.\n\n' +
+        'Para instalar la app RADIZ:\n' +
+        '1. Toca el ícono de tres puntos (⋮) en la esquina superior derecha.\n' +
+        '2. Elige "Instalar aplicación" o "Añadir a pantalla de inicio".\n' +
+        '3. Confirma con "Instalar".'
+      );
+      return;
+    }
+
+    // Otros navegadores
+    alert(
+      'Para instalar la app RADIZ en tu dispositivo, usa la opción ' +
+      '"Instalar aplicación" o "Añadir a pantalla de inicio" del navegador.'
+    );
   }
 </script>
 </body>
