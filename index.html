@@ -1,1536 +1,255 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <title>PORTAL CLIENTES</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-
-  <!-- Colores PWA / navegador -->
-  <meta name="theme-color" content="#0f172a">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-
-  <!-- Manifest e íconos -->
-  <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
-  <link rel="apple-touch-icon" href="icon-512.png">
-
-  <!-- Wompi -->
-  <script src="https://checkout.wompi.co/widget.js" async></script>
-
-  <style>
-    *{box-sizing:border-box}
-
-    body{
-      margin:0;
-      padding:0;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:#f5f6f8;
-      color:#111827;
-    }
-
-    .page{
-      min-height:100vh;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      padding:32px 16px;
-    }
-
-    .container{
-      position:relative;
-      width:100%;
-      max-width:960px;
-      background:#ffffff;
-      border-radius:24px;
-      box-shadow:0 18px 45px rgba(15,23,42,.14);
-      padding:28px 32px 32px;
-      overflow:visible;
-    }
-
-    /* Logo Radiz */
-    .logo-top{
-      text-align:center;
-      margin-bottom:12px;
-    }
-    .logo-top img{
-      max-width:260px;
-      max-height:120px;
-      object-fit:contain;
-    }
-
-    /* GRID PRINCIPAL DOS COLUMNAS */
-    .main-grid{
-      display:grid;
-      grid-template-columns:minmax(0,1.05fr) minmax(0,1.15fr);
-      gap:24px;
-      margin-top:8px;
-    }
-
-    .brand-card{
-      position:relative;
-      border-radius:22px;
-      overflow:hidden;
-      background:#0f172a;
-      min-height:380px;
-      box-shadow:0 18px 40px rgba(15,23,42,.32);
-      color:#f9fafb;
-    }
-    .brand-image{
-      position:absolute;
-      inset:0;
-    }
-    .brand-image img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-    }
-    .brand-overlay{
-      position:absolute;
-      inset:0;
-      background:linear-gradient(180deg,rgba(15,23,42,.15) 10%,rgba(15,23,42,.78) 80%);
-    }
-    .brand-copy{
-      position:absolute;
-      left:18px;
-      right:18px;
-      bottom:18px;
-    }
-    .brand-kicker{
-      margin:0 0 4px;
-      font-size:.8rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      color:#bfdbfe;
-      font-weight:600;
-    }
-    .brand-copy h2{
-      margin:0;
-      font-size:1.45rem;
-      line-height:1.25;
-      font-weight:700;
-    }
-
-    .panel-main{
-      display:flex;
-      flex-direction:column;
-    }
-
-    /* Banner bienvenida */
-    .welcome-banner{
-      display:flex;
-      align-items:flex-start;
-      gap:10px;
-      background:#e0f2fe;
-      border-radius:16px;
-      padding:10px 14px;
-      margin-bottom:18px;
-      border:1px solid #bfdbfe;
-    }
-    .welcome-icon{
-      position:relative;
-      width:32px;
-      height:32px;
-      border-radius:999px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:#2563eb;
-      color:transparent;
-      flex-shrink:0;
-    }
-    .welcome-icon::before{
-      content:"";
-      position:absolute;
-      width:3px;
-      height:10px;
-      border-radius:999px;
-      background:#ffffff;
-      top:11px;
-      left:50%;
-      transform:translateX(-50%);
-    }
-    .welcome-icon::after{
-      content:"";
-      position:absolute;
-      width:3px;
-      height:3px;
-      border-radius:999px;
-      background:#ffffff;
-      top:7px;
-      left:50%;
-      transform:translateX(-50%);
-    }
-    .welcome-text-title{
-      font-size:.95rem;
-      font-weight:600;
-      margin:0 0 2px;
-      color:#0f172a;
-    }
-    .welcome-text-sub{
-      margin:0;
-      font-size:.85rem;
-      color:#4b5563;
-    }
-
-    .portal-header{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:16px;
-      margin-bottom:12px;
-    }
-    h1{
-      margin:0 0 4px;
-      font-size:1.9rem;
-      letter-spacing:.03em;
-    }
-
-    .card{
-      position:relative;
-      border-radius:18px;
-      border:1px solid #e5e7eb;
-      padding:16px 18px 16px;
-      background:#ffffff;
-      font-size:.9rem;
-      transition:border-color .15s,box-shadow .15s,transform .1s,background .15s;
-    }
-    .card h2{
-      margin:0 0 8px;
-      font-size:1.05rem;
-      font-weight:700;
-      color:#111827;
-    }
-    .card p{
-      margin:3px 0;
-      color:#111827;
-      font-size:.9rem;
-    }
-    .card p strong{
-      font-weight:600;
-    }
-    .card:hover{
-      border-color:#2563eb;
-      box-shadow:0 16px 34px rgba(37,99,235,.18);
-      background:#f9fbff;
-      transform:translateY(-1px);
-    }
-
-    .card-consulta{
-      margin-bottom:18px;
-    }
-    .card-pago{
-      margin-bottom:18px;
-    }
-
-    /* Iconos SVG para tarjetas de resultados */
-    .card-contrato::before,
-    .card-pagos::before,
-    .card-mantenimientos::before{
-      content:"";
-      position:absolute;
-      top:18px;
-      left:18px;
-      width:26px;
-      height:26px;
-      background-size:contain;
-      background-repeat:no-repeat;
-      background-position:center;
-    }
-    .card-contrato::before{
-      background-image:url('ícono_contrato1.svg');
-    }
-    .card-pagos::before{
-      background-image:url('ícono_pagos.svg');
-    }
-    .card-mantenimientos::before{
-      background-image:url('ícono_mantenimientos.svg');
-    }
-    .card-contrato h2,
-    .card-pagos h2,
-    .card-mantenimientos h2{
-      margin-left:40px;
-    }
-    .card-mantenimientos:hover{
-      background:#fff7ed;
-      border-color:#f97316;
-      box-shadow:0 18px 38px rgba(249,115,22,.22);
-    }
-
-    /* Títulos de sección (consulta / pago) */
-    .section-title{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      margin-bottom:6px;
-    }
-    .section-title span{
-      font-size:1.05rem;
-      font-weight:700;
-      color:#111827;
-    }
-    .section-icon{
-      position:relative;
-      width:28px;
-      height:28px;
-      border-radius:999px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:#eff6ff;
-      flex-shrink:0;
-    }
-    /* Icono de lupa (consulta) */
-    .section-icon-search::before{
-      content:"";
-      position:absolute;
-      width:13px;
-      height:13px;
-      border-radius:999px;
-      border:2px solid #2563eb;
-      top:6px;
-      left:7px;
-      box-sizing:border-box;
-    }
-    .section-icon-search::after{
-      content:"";
-      position:absolute;
-      width:8px;
-      height:2px;
-      border-radius:999px;
-      background:#2563eb;
-      bottom:7px;
-      right:6px;
-      transform:rotate(45deg);
-    }
-    /* Icono $ en líneas (pago) */
-    .section-icon-money::before{
-      content:"$";
-      position:absolute;
-      font-size:16px;
-      font-weight:700;
-      color:#2563eb;
-    }
-
-    label{
-      font-size:.9rem;
-      font-weight:600;
-      color:#374151;
-    }
-    .form-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:12px;
-      margin-top:6px;
-      margin-bottom:10px;
-      align-items:flex-end;
-    }
-    input[type="text"],
-    input[type="number"],
-    input[type="email"],
-    textarea{
-      width:100%;
-      padding:10px 12px;
-      border-radius:9px;
-      border:1px solid #d1d5db;
-      font-size:.95rem;
-      outline:none;
-      transition:border-color .15s,box-shadow .15s,background .15s;
-      background:#f9fafb;
-      font-family:inherit;
-    }
-    input[type="text"]:focus,
-    input[type="number"]:focus,
-    input[type="email"]:focus,
-    textarea:focus{
-      border-color:#2563eb;
-      box-shadow:0 0 0 1px rgba(37,99,235,.18);
-      background:#ffffff;
-    }
-
-    button{
-      padding:11px 22px;
-      border-radius:999px;
-      border:none;
-      font-size:.95rem;
-      font-weight:600;
-      cursor:pointer;
-      background:#2563eb;
-      color:#fff;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      box-shadow:0 12px 26px rgba(37,99,235,.45);
-      transition:transform .1s,box-shadow .1s,background .1s;
-      white-space:nowrap;
-    }
-    button:hover{
-      transform:translateY(-1px);
-      background:#1d4ed8;
-      box-shadow:0 16px 32px rgba(37,99,235,.55);
-    }
-    button:disabled{
-      opacity:.65;
-      cursor:default;
-      box-shadow:none;
-      transform:none;
-    }
-
-    /* Botones principales alineados y del mismo tamaño */
-    .btn-main{
-      min-width:190px;
-      justify-content:center;
-    }
-
-    .btn-afiliado{
-      background:#f97316;
-      box-shadow:0 12px 26px rgba(249,115,22,.45);
-    }
-    .btn-afiliado:hover{
-      background:#ea580c;
-      box-shadow:0 16px 32px rgba(249,115,22,.6);
-    }
-
-    /* Botón "Descarga la App" sobrio */
-    .btn-app{
-      padding:8px 18px;
-      border-radius:999px;
-      border:1px solid #d1d5db;
-      background:#f9fafb;
-      color:#1d4ed8;
-      font-size:.9rem;
-      font-weight:600;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      box-shadow:none;
-      white-space:nowrap;
-      min-width:0;
-    }
-    .btn-app:hover{
-      background:#e5f0ff;
-      border-color:#bfdbfe;
-      color:#1d4ed8;
-      box-shadow:none;
-      transform:none;
-    }
-
-    .status{
-      font-size:.9rem;
-      margin-top:4px;
-      min-height:1.2em;
-    }
-    .status.error{color:#b91c1c}
-    .status.ok{color:#065f46}
-
-    .grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-      gap:16px;
-      margin-top:6px;
-      margin-bottom:18px;
-    }
-
-    ul{padding-left:18px;margin:6px 0}
-    li{margin-bottom:4px}
-
-    .badge{
-      display:inline-block;
-      padding:2px 8px;
-      border-radius:999px;
-      font-size:.75rem;
-      font-weight:600;
-      text-transform:uppercase;
-    }
-    .badge-activo{background:#dcfce7;color:#166534}
-    .badge-inactivo{background:#fee2e2;color:#b91c1c}
-
-    footer{
-      margin-top:10px;
-      font-size:.75rem;
-      color:#9ca3af;
-      text-align:center;
-    }
-
-    /* Pago Wompi */
-    #seccionPago h2{
-      font-size:1.05rem;
-      margin:0 0 4px;
-      color:#111827;
-    }
-    #seccionPago p{
-      font-size:.9rem;
-      color:#4b5563;
-      margin:4px 0 10px;
-    }
-    #seccionPago .row-pago{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
-    #montoPago{
-      width:220px;
-    }
-    #pagoError{
-      color:#dc2626;
-      margin-top:6px;
-      font-size:.85rem;
-      display:none;
-    }
-    #pagoContratoError{
-      color:#dc2626;
-      margin-top:4px;
-      font-size:.85rem;
-      display:none;
-    }
-
-    /* Fila de consulta */
-    .row-consulta{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      flex-wrap:wrap;
-      margin-top:6px;
-      margin-bottom:10px;
-    }
-    #idContrato{
-      width:220px;
-    }
-
-    /* Botón Link de afiliado centrado */
-    .affiliate-row{
-      margin-top:18px;
-      display:flex;
-      justify-content:center;
-    }
-
-    /* FAB menú */
-    .fab-menu{
-      position:absolute;
-      top:24px;
-      right:24px;
-      z-index:20;
-      display:none;
-    }
-    .fab-btn{
-      width:54px;
-      height:54px;
-      border-radius:999px;
-      background:#2563eb;
-      border:none;
-      box-shadow:0 10px 24px rgba(37,99,235,.45);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      transition:transform .12s,box-shadow .12s,background .12s;
-    }
-    .fab-btn:hover{
-      transform:translateY(-1px);
-      background:#1d4ed8;
-      box-shadow:0 14px 32px rgba(37,99,235,.55);
-    }
-    .fab-btn span{
-      display:block;
-      width:22px;
-      height:2px;
-      border-radius:999px;
-      background:#fff;
-      position:relative;
-    }
-    .fab-btn span::before,
-    .fab-btn span::after{
-      content:"";
-      position:absolute;
-      left:0;
-      width:22px;
-      height:2px;
-      border-radius:999px;
-      background:#fff;
-    }
-    .fab-btn span::before{top:-6px}
-    .fab-btn span::after{top:6px}
-
-    .menu-panel{
-      position:absolute;
-      top:86px;
-      right:28px;
-      background:#ffffff;
-      border-radius:14px;
-      box-shadow:0 12px 30px rgba(15,23,42,.22);
-      padding:8px 0;
-      width:220px;
-      display:none;
-      z-index:25;
-    }
-    .menu-title{
-      font-size:.8rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      font-weight:600;
-      color:#6b7280;
-      padding:6px 14px 4px;
-    }
-    .menu-item{
-      padding:7px 14px;
-      font-size:.9rem;
-      cursor:pointer;
-      color:#111827;
-    }
-    .menu-item:hover{
-      background:#eff6ff;
-      color:#1d4ed8;
-    }
-
-    /* Modales */
-    .modal-backdrop{
-      position:fixed;
-      inset:0;
-      background:rgba(15,23,42,.45);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:40;
-    }
-    .modal{
-      background:#fff;
-      border-radius:18px;
-      max-width:480px;
-      width:90%;
-      padding:18px 20px 18px;
-      box-shadow:0 20px 45px rgba(15,23,42,.4);
-      font-size:.9rem;
-    }
-    .modal-header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      margin-bottom:8px;
-    }
-    .modal-header h3{
-      margin:0;
-      font-size:1.05rem;
-    }
-    .modal-close{
-      border:none;
-      background:transparent;
-      font-size:1.3rem;
-      cursor:pointer;
-      color:#6b7280;
-    }
-    .modal p{margin:4px 0;color:#111827}
-    .modal label{display:block;margin-top:8px;margin-bottom:3px}
-    .modal-actions{
-      margin-top:14px;
-      display:flex;
-      justify-content:flex-end;
-      gap:8px;
-    }
-
-    .link-copy-row{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      margin-top:4px;
-    }
-    .link-copy-row input{
-      flex:1;
-    }
-    .copy-msg{
-      font-size:.8rem;
-      margin-top:6px;
-      color:#6b7280;
-    }
-
-    .modal-msg{
-      font-size:.8rem;
-      margin-top:6px;
-      color:#6b7280;
-    }
-    .modal-msg.error{
-      color:#b91c1c;
-    }
-    .modal-msg.ok{
-      color:#065f46;
-    }
-
-    /* Imagen de beneficios Renting */
-    .img-beneficios-renting{
-      max-width:100%;
-      height:auto;
-      border-radius:12px;
-      display:block;
-      margin:4px auto;
-    }
-
-    @media(max-width:900px){
-      .main-grid{
-        grid-template-columns:1fr;
-      }
-      .brand-card{
-        min-height:260px;
-      }
-    }
-
-    @media(max-width:640px){
-      .container{
-        padding:22px 18px 24px;
-        border-radius:18px;
-      }
-      .portal-header{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-      .fab-menu{
-        top:16px;
-        right:16px;
-      }
-      #montoPago{
-        width:100%;
-      }
-      #idContrato{
-        width:100%;
-      }
-    }
-  </style>
-</head>
-<body>
-<div class="page">
-  <div class="container">
-    <div class="logo-top">
-      <img src="logoradiz.png" alt="Logo RADIZ" id="logo-radiz">
-    </div>
-
-    <!-- Botón menú flotante -->
-    <div class="fab-menu" id="fabMenu">
-      <button class="fab-btn" type="button" onclick="toggleMenu()">
-        <span></span>
-      </button>
-      <div class="menu-panel" id="menuPanel">
-        <div class="menu-title" id="menuTitle">Opciones</div>
-        <!-- Para renting (solo IDs tipo R) -->
-        <div id="menuRenting" style="display:none;">
-          <div class="menu-item" onclick="abrirModal('modalBeneficios')">Beneficios</div>
-          <div class="menu-item" onclick="solicitarGrua()">Solicitar grúa</div>
-          <div class="menu-item" onclick="abrirModal('modalActualizarKm')">Actualizar kilometraje</div>
-          <div class="menu-item">Señales</div>
-          <div class="menu-item">Historial de pagos</div>
-          <div class="menu-item">Historial de mantenimientos</div>
-          <div class="menu-item" onclick="abrirModal('modalSaldoFavor')">Mi saldo a favor</div>
-          <div class="menu-item" onclick="abrirModal('modalIncidente')">Notificar incidente</div>
-        </div>
-        <!-- Para afiliados -->
-        <div id="menuAfiliado" style="display:none;">
-          <div class="menu-item" onclick="abrirModal('modalFechaPagosAfiliado')">Fecha de pagos</div>
-          <div class="menu-item" onclick="abrirModal('modalVehiculosAfiliado')">Cantidad de vehículos</div>
-          <div class="menu-item" onclick="abrirModal('modalLiquidacionesAfiliado')">Liquidaciones</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- GRID PRINCIPAL -->
-    <div class="main-grid">
-      <!-- COLUMNA IZQUIERDA: CARD CORPORATIVA -->
-      <div class="brand-card">
-        <div class="brand-image">
-          <img src="radiz-driver.jpg.jpg" alt="Conductor Radiz frente a vehículos de carga">
-        </div>
-        <div class="brand-overlay"></div>
-        <div class="brand-copy">
-          <p class="brand-kicker">Una marca de Proyecto I45 S.A.S.</p>
-          <h2>Vehículos que dignifican</h2>
-        </div>
-      </div>
-
-      <!-- COLUMNA DERECHA: PANEL DEL PORTAL -->
-      <div class="panel-main">
-        <div class="welcome-banner">
-          <div class="welcome-icon"></div>
-          <div>
-            <p class="welcome-text-title">¡Bienvenido a tu portal Radiz!</p>
-            <p class="welcome-text-sub">Consulta tu contrato, revisa tus pagos y realiza pagos en línea de forma segura.</p>
-          </div>
-        </div>
-
-        <header class="portal-header">
-          <div>
-            <h1>PORTAL CLIENTES</h1>
-          </div>
-        </header>
-
-        <!-- Consulta de contrato -->
-        <div class="card card-consulta">
-          <div class="section-title">
-            <div class="section-icon section-icon-search"></div>
-            <span>Consulta de contrato</span>
-          </div>
-          <label for="idContrato">ID</label>
-          <div class="row-consulta">
-            <input type="text" id="idContrato" placeholder="Ejemplo: R7467">
-            <button id="btnConsultar" class="btn-main" onclick="consultar()">Consultar</button>
-          </div>
-          <div id="status" class="status"></div>
-        </div>
-
-        <!-- Realizar pago -->
-        <div class="card card-pago" id="seccionPago">
-          <div class="section-title">
-            <div class="section-icon section-icon-money"></div>
-            <span>Realizar pago</span>
-          </div>
-          <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
-          <label for="montoPago">Monto a pagar (COP)</label>
-          <div class="row-pago">
-            <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
-            <button type="button" class="btn-main" onclick="crearPagoWompi()">Pagar con Wompi</button>
-          </div>
-          <p id="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
-          <p id="pagoContratoError">Digita tu ID antes de pagar.</p>
-        </div>
-
-        <!-- Botón Link de afiliado -->
-        <div class="affiliate-row">
-          <button type="button" class="btn-main btn-afiliado" onclick="abrirModal('modalAfiliado')">
-            Link de referidos
-          </button>
-        </div>
-
-        <!-- Botón Descarga la App -->
-        <div class="affiliate-row">
-          <button type="button" class="btn-app" onclick="manejarDescargaApp()">
-            Descarga la App
-          </button>
-        </div>
-
-        <!-- Resultados -->
-        <div class="grid" id="resultados" style="display:none;">
-          <div class="card card-contrato" id="cardContrato"></div>
-          <div class="card card-pagos" id="cardPagos"></div>
-          <div class="card card-mantenimientos" id="cardMantenimientos"></div>
-        </div>
-
-        <footer>Versión interna • RADIZ Suministro Vehicular</footer>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- MODALES RENTING -->
-<div class="modal-backdrop" id="modalBeneficios">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Beneficios del plan</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalBeneficios')">&times;</button>
-    </div>
-    <p id="modalBeneficiosTexto">Información no disponible.</p>
-  </div>
-</div>
-
-<div class="modal-backdrop" id="modalHistorialPagos">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Solicitar historial de pagos</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalHistorialPagos')">&times;</button>
-    </div>
-    <p style="margin-bottom:6px;">Ingresa tu correo electrónico y el ID para enviarte el historial en PDF.</p>
-    <label for="correoHistorial">Correo electrónico</label>
-    <input type="email" id="correoHistorial" placeholder="ejemplo@correo.com">
-    <label for="idHistorial">ID</label>
-    <input type="text" id="idHistorial" placeholder="Ej: R7467">
-    <p id="historialMsg" style="font-size:.85rem;margin-top:6px;color:#6b7280;"></p>
-    <div class="modal-actions">
-      <button type="button" onclick="cerrarModal('modalHistorialPagos')">Cerrar</button>
-      <button type="button" onclick="enviarSolicitudHistorial()">Enviar solicitud</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-backdrop" id="modalTaller">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Taller asignado</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalTaller')">&times;</button>
-    </div>
-    <p id="modalTallerTexto">Información no disponible.</p>
-  </div>
-</div>
-
-<!-- MODAL ACTUALIZAR KILOMETRAJE -->
-<div class="modal-backdrop" id="modalActualizarKm">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Actualizar kilometraje</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalActualizarKm')">&times;</button>
-    </div>
-    <p>Ingresa el nuevo kilometraje y la placa del vehículo.</p>
-    <label for="kmNuevo">Kilometraje actual</label>
-    <input type="number" id="kmNuevo" min="0" placeholder="Ej: 25340">
-    <label for="kmPlaca">Placa / ID vehículo</label>
-    <input type="text" id="kmPlaca" placeholder="Ej: WRC01H">
-    <p id="kmMsg" class="modal-msg"></p>
-    <div class="modal-actions">
-      <button type="button" onclick="cerrarModal('modalActualizarKm')">Cerrar</button>
-      <button type="button" onclick="enviarActualizacionKm()">Enviar</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODAL SALDO A FAVOR -->
-<div class="modal-backdrop" id="modalSaldoFavor">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Mi saldo a favor</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalSaldoFavor')">&times;</button>
-    </div>
-    <p>Tienes un saldo a favor por concepto de referidos: <strong>$0.00</strong>.</p>
-  </div>
-</div>
-
-<!-- MODAL NOTIFICAR INCIDENTE -->
-<div class="modal-backdrop" id="modalIncidente">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Notificar incidente</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalIncidente')">&times;</button>
-    </div>
-    <p>Cuéntanos qué sucedió con el vehículo.</p>
-    <label for="incidenteTexto">Descripción del incidente</label>
-    <textarea id="incidenteTexto" rows="4" placeholder="Ej: Describa brevemente lo ocurrido..."></textarea>
-    <label for="incidentePlaca">Placa / ID vehículo</label>
-    <input type="text" id="incidentePlaca" placeholder="Ej: WRC01H">
-    <label for="incidenteFecha">Fecha del incidente</label>
-    <input type="text" id="incidenteFecha" placeholder="Ej: 05/12/2025">
-    <p id="incidenteMsg" class="modal-msg"></p>
-    <div class="modal-actions">
-      <button type="button" onclick="cerrarModal('modalIncidente')">Cerrar</button>
-      <button type="button" onclick="enviarIncidente()">Enviar</button>
-    </div>
-  </div>
-</div>
-
-<!-- MODALES AFILIADOS -->
-<div class="modal-backdrop" id="modalFechaPagosAfiliado">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Fecha de pagos al afiliado</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalFechaPagosAfiliado')">&times;</button>
-    </div>
-    <p id="modalFechaPagosTexto">Dato no disponible.</p>
-  </div>
-</div>
-
-<div class="modal-backdrop" id="modalVehiculosAfiliado">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Cantidad de vehículos afiliados</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalVehiculosAfiliado')">&times;</button>
-    </div>
-    <p id="modalVehiculosTexto">Número de vehículos: Dato no disponible.</p>
-  </div>
-</div>
-
-<div class="modal-backdrop" id="modalLiquidacionesAfiliado">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Resumen de liquidaciones</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalLiquidacionesAfiliado')">&times;</button>
-    </div>
-    <p id="modalLiquidacionesTexto1">Número de liquidaciones: Dato no disponible.</p>
-    <p id="modalLiquidacionesTexto2">Valor total liquidado: Dato no disponible.</p>
-  </div>
-</div>
-
-<!-- MODAL LINK DE AFILIADO -->
-<div class="modal-backdrop" id="modalAfiliado">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Link de afiliado</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalAfiliado')">&times;</button>
-    </div>
-    <p>
-      Comparte nuestro link de referidos con tu ID (ejemplo: R7467) y gana hasta
-      $70.000 pesos por cada referido aprobado.
-    </p>
-    <label for="linkAfiliadoInput">Link del formulario</label>
-    <div class="link-copy-row">
-      <input id="linkAfiliadoInput" type="text" readonly value="https://forms.gle/Lv1Rkp9qWQigUS4g8">
-      <button type="button" onclick="copiarLinkAfiliado()">Copiar</button>
-    </div>
-    <p id="linkAfiliadoMsg" class="copy-msg"></p>
-  </div>
-</div>
-
-<script>
-  const API_URL='https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
-  const WOMPI_PUBLIC_KEY='pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06';
-  const WOMPI_INTEGRITY_KEY='prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN';
-  const WOMPI_REDIRECT_URL='https://portal.radizco.com/';
-  const API_CALLBACK_URL = API_URL;
-
-  let tipoUsuarioActual=null;
-  let datosContratoActual=null;
-  let datosAfiliadoActual=null;
-
-  function toggleMenu(){
-    const panel=document.getElementById('menuPanel');
-    panel.style.display=panel.style.display==='block'?'none':'block';
-  }
-  function abrirModal(id){
-    document.getElementById(id).style.display='flex';
-    const menu=document.getElementById('menuPanel');
-    if(menu) menu.style.display='none';
-  }
-  function cerrarModal(id){
-    document.getElementById(id).style.display='none';
-  }
-
-  async function consultar(){
-    const id=document.getElementById('idContrato').value.trim().toUpperCase();
-    const status=document.getElementById('status');
-    const btn=document.getElementById('btnConsultar');
-    const resultados=document.getElementById('resultados');
-    const cardContrato=document.getElementById('cardContrato');
-    const cardPagos=document.getElementById('cardPagos');
-    const cardMantenimientos=document.getElementById('cardMantenimientos');
-    const fabMenu=document.getElementById('fabMenu');
-    const menuRenting=document.getElementById('menuRenting');
-    const menuAfiliado=document.getElementById('menuAfiliado');
-
-    status.className='status';
-    status.textContent='';
-    resultados.style.display='none';
-    fabMenu.style.display='none';
-    menuRenting.style.display='none';
-    menuAfiliado.style.display='none';
-    document.getElementById('menuPanel').style.display='none';
-
-    if(!id){
-      status.classList.add('error');
-      status.textContent='Por favor ingresa un ID.';
-      return;
-    }
-
-    btn.disabled=true;
-    status.textContent='Consultando información...';
-
-    try{
-      const resp=await fetch(API_URL+'?id='+encodeURIComponent(id));
-      const data=await resp.json();
-
-      if(!data.ok){
-        status.className='status error';
-        status.textContent=data.error||'No se encontró información para ese ID.';
-        btn.disabled=false;
-        return;
-      }
-
-      const c=data.contrato||{};
-      datosContratoActual=c;
-
-      const tipo=(c['TIPO USUARIO']||'').toString().toUpperCase();
-      tipoUsuarioActual=tipo;
-
-      const pagos=data.pagos||[];
-      const rawM=data.mantenimientos??data.mantenimiento??[];
-      const mts=Array.isArray(rawM)?rawM:(rawM?[rawM]:[]);
-      const beneficiosTexto=c['BENEFICIOS']||'Información no disponible';
-
-      cardContrato.innerHTML='';
-      cardPagos.innerHTML='';
-      cardMantenimientos.innerHTML='';
-
-      const afiliados=data.afiliados||[];
-      const vehiculosAll=data.vehiculos||[];
-
-      if(tipo==='AFILIADO'){
-        const idAfiliado=(c['ID AFILIADO']||id).toString().trim().toUpperCase();
-
-        const af = afiliados.find(a =>
-          String(a['ID AFILIADO'] || '').trim().toUpperCase() === idAfiliado
-        ) || {};
-
-        datosAfiliadoActual=af;
-
-        const nombreAf = af['NOMBRE'] || c['ID CLIENTE'] || 'Dato no disponible';
-        const fechaAfRaw = af['FECHA AFILIACIÓN'] || af['FECHA AFILIACION'] || '';
-        const fechaAf = formatearFecha(fechaAfRaw);
-
-        const numLiq = af['NO LIQUIDACIONES']!==undefined && af['NO LIQUIDACIONES']!=='' ? af['NO LIQUIDACIONES'] : '0';
-
-        let valorLiqTexto='0';
-        if(af['VALOR LIQUIDADO']!==undefined && af['VALOR LIQUIDADO']!==''){
-          const bruto=af['VALOR LIQUIDADO'];
-          if(typeof bruto==='number'){
-            valorLiqTexto=formatearNumero(bruto);
-          }else{
-            valorLiqTexto=String(bruto);
-          }
-        }
-
-        cardContrato.innerHTML=
-          '<h2>Contrato</h2>'+
-          '<p><strong>ID afiliado:</strong> '+idAfiliado+'</p>'+
-          '<p><strong>Nombre:</strong> '+nombreAf+'</p>'+
-          '<p><strong>Inicio de afiliación:</strong> '+(fechaAf||'Dato no disponible')+'</p>'+
-          '<p><strong>Tipo de usuario:</strong> Participación</p>';
-
-        const pagoRelacionado=pagos.find(p=>{
-          const idAf = String(p['ID AFILIADO']||'').trim().toUpperCase();
-          const idCt = String(p['ID CONTRATO']||'').trim().toUpperCase();
-          return idAf===idAfiliado || idCt===id;
-        });
-        const diasCorte=pagoRelacionado?(pagoRelacionado['DÍAS DE CORTE']||pagoRelacionado['DIAS DE CORTE']||'Dato no disponible'):'Dato no disponible';
-
-        cardPagos.innerHTML=
-          '<h2>Pagos</h2>'+
-          '<p><strong>Día de corte:</strong> '+diasCorte+'</p>'+
-          '<p><strong>No. de liquidaciones:</strong> '+numLiq+'</p>'+
-          '<p><strong>Valor liquidado:</strong> '+valorLiqTexto+'</p>';
-
-        const vehiculosAf = vehiculosAll.filter(v =>
-          String(v['ID AFILIADO']||'').trim().toUpperCase() === idAfiliado
-        );
-        const cantidadVeh = vehiculosAf.length;
-        const placas = vehiculosAf
-          .map(v => v['ID VEHÍCULO'] || v['ID VEHICULO'] || '')
-          .filter(Boolean)
-          .join(', ') || 'Sin vehículos asociados';
-
-        cardMantenimientos.innerHTML=
-          '<h2>Flota</h2>'+
-          '<p><strong>Cantidad de vehículos:</strong> '+cantidadVeh+'</p>'+
-          '<p><strong>Placas asociadas:</strong> '+placas+'</p>'+
-          '<p><strong>Ventas:</strong> 0</p>';
-
-        document.getElementById('modalFechaPagosTexto').textContent=
-          'Día de corte de pagos: '+diasCorte;
-        document.getElementById('modalVehiculosTexto').textContent=
-          'Número de vehículos: '+cantidadVeh;
-        document.getElementById('modalLiquidacionesTexto1').textContent=
-          'Número de liquidaciones: '+numLiq;
-        document.getElementById('modalLiquidacionesTexto2').textContent=
-          'Valor total liquidado: '+valorLiqTexto;
-
-        menuRenting.style.display='none';
-        menuAfiliado.style.display='block';
-        fabMenu.style.display='block';
-
-      }else{
-        datosAfiliadoActual=null;
-
-        const estado=(c['ESTADO']||'').toString().toUpperCase();
-
-        cardContrato.innerHTML=
-          '<h2>Contrato</h2>'+
-          '<p><strong>ID:</strong> '+(c['ID CONTRATO']||'')+'</p>'+
-          '<p><strong>Tipo usuario:</strong> '+(c['TIPO USUARIO']||'')+'</p>'+
-          '<p><strong>Vehículo:</strong> '+(c['ID VEHÍCULO']||c['ID VEHICULO']||'')+'</p>'+
-          '<p><strong>Inicio:</strong> '+formatearFecha(c['INICIO'])+'</p>'+
-          '<p><strong>Fin:</strong> '+formatearFecha(c['FIN'])+'</p>'+
-          '<p><strong>Tarifa semanal:</strong> '+formatearNumero(c['TARIFA SEMANAL'])+'</p>'+
-          '<p><strong>Beneficios:</strong> '+beneficiosTexto+'</p>'+
-          '<p><span class="badge '+(estado==='ACTIVO'?'badge-activo':'badge-inactivo')+'">'+(estado||'SIN ESTADO')+'</span></p>';
-
-        if(pagos.length===0){
-          cardPagos.innerHTML='<h2>Pagos</h2><p>No hay pagos registrados para este contrato.</p>';
-        }else{
-          const p=pagos[0];
-          cardPagos.innerHTML=
-            '<h2>Pagos</h2>'+
-            '<p><strong>Día de corte:</strong> '+(p['DÍAS DE CORTE']||p['DIAS DE CORTE']||'')+'</p>'+
-            '<p><strong>Tarifas completadas:</strong> '+(p['TARIFAS COMPLETADAS']||'0')+'</p>'+
-            '<p><strong>Tarifas vencidas:</strong> '+(p['TARIFAS VENCIDAS']||'0')+'</p>';
-        }
-
-        if(mts.length===0){
-          cardMantenimientos.innerHTML='<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
-        }else{
-          const totalM=mts.reduce((s,m)=>s+(Number(m['VALOR GENERAL']||m['VALOR MTOS'])||0),0);
-          const m=mts[0];
-          cardMantenimientos.innerHTML=
-            '<h2>Mantenimientos</h2>'+
-            '<p><strong>Total mantenimientos:</strong> '+formatearNumero(totalM)+'</p>'+
-            '<p><strong>Placa:</strong> '+(m['ID VEHÍCULO']||m['ID VEHICULO']||'')+'</p>'+
-            '<p><strong>Último mantenimiento:</strong> '+formatearFecha(m['ÚLTIMO MANTENIMIENTO']||m['ULTIMO MANTENIMIENTO']||m['FECHA ULT. MANTENIMIENTO'])+'</p>'+
-            '<p><strong>Tipo de mantenimiento:</strong> '+(m['TIPO']||m['TIPO ULT. MANTENIMIENTO']||'')+'</p>'+
-            '<p><strong>Realizados:</strong> '+(m['REALIZADOS']||m['MTOS REALIZADOS']||'')+'</p>'+
-            '<p><strong>Taller asignado:</strong> '+(m['TALLER ASIGNADO']||'')+'</p>';
-        }
-
-        const idContratoActual = (c['ID CONTRATO']||'').toString().trim().toUpperCase();
-        const esRentingId = idContratoActual.startsWith('R');
-
-        const modalBeneficios=document.getElementById('modalBeneficiosTexto');
-        if(esRentingId){
-          modalBeneficios.innerHTML=
-            '<img src="beneficios_renting.png" alt="Beneficios Renting Radiz" class="img-beneficios-renting">';
-        }else{
-          modalBeneficios.textContent=beneficiosTexto||'Información no disponible.';
-        }
-
-        const tallerEjemplo='Taller asignado: '+(mts[0]?.['TALLER ASIGNADO']||'Información no disponible.');
-        document.getElementById('modalTallerTexto').textContent=tallerEjemplo;
-
-        if(esRentingId){
-          menuRenting.style.display='block';
-          menuAfiliado.style.display='none';
-          fabMenu.style.display='block';
-        }else{
-          menuRenting.style.display='none';
-          menuAfiliado.style.display='none';
-          fabMenu.style.display='none';
-        }
-      }
-
-      resultados.style.display='grid';
-      status.className='status ok';
-      status.textContent='Información cargada correctamente.';
-    }catch(e){
-      console.error(e);
-      status.className='status error';
-      status.textContent='Error al consultar la información. Intenta de nuevo.';
-    }finally{
-      btn.disabled=false;
-    }
-  }
-
-  function formatearNumero(n){
-    const num=Number(n);
-    if(isNaN(num))return n||'';
-    return num.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
-  }
-
-  function formatearFecha(v){
-    if(!v)return'';
-    const d=new Date(v);
-    if(isNaN(d.getTime()))return v;
-    return d.toLocaleDateString('es-CO');
-  }
-
-  async function generarIntegritySignature(reference, amountInCents, currency){
-    const encoder=new TextEncoder();
-    const data=`${reference}${amountInCents}${currency}${WOMPI_INTEGRITY_KEY}`;
-    const hashBuffer=await crypto.subtle.digest('SHA-256', encoder.encode(data));
-    const hashArray=Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b=>b.toString(16).padStart(2,'0')).join('');
-  }
-
-  async function crearPagoWompi(){
-    const montoInput=document.getElementById('montoPago');
-    const errorLabel=document.getElementById('pagoError');
-    const contratoError=document.getElementById('pagoContratoError');
-    const valor=parseInt(montoInput.value,10);
-    const idContrato=(document.getElementById('idContrato').value||'').trim().toUpperCase();
-
-    errorLabel.style.display='none';
-    contratoError.style.display='none';
-
-    if(!idContrato){
-      contratoError.style.display='block';
-      return;
-    }
-
-    if(!valor||valor<170000){
-      errorLabel.style.display='block';
-      return;
-    }
-
-    if(typeof WidgetCheckout==='undefined'){
-      alert('No se pudo cargar el checkout de Wompi. Por favor recarga la página.');
-      return;
-    }
-
-    const amountInCents = valor*100;
-    const reference='PAGO_'+idContrato+'_'+Date.now();
-    const currency='COP';
-
-    try{
-      const integritySignature=await generarIntegritySignature(reference,amountInCents,currency);
-
-      const checkout=new WidgetCheckout({
-        currency:currency,
-        amountInCents:amountInCents,
-        reference:reference,
-        publicKey:WOMPI_PUBLIC_KEY,
-        signature:{ integrity: integritySignature },
-        redirectUrl:WOMPI_REDIRECT_URL
-      });
-
-      checkout.open(function(result){
-        const transaction=result.transaction;
-        console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
-        registrarPagoEnSheet(reference, valor, idContrato);
-      });
-    }catch(e){
-      console.error('Error generando firma de integridad',e);
-      alert('No fue posible iniciar el pago. Intenta de nuevo.');
-    }
-  }
-
-  async function registrarPagoEnSheet(reference, valor, idContrato){
-    try{
-      const formData=new URLSearchParams();
-      formData.append('accion','registrar_pago');
-      formData.append('referencia',reference);
-      formData.append('monto',valor);
-      formData.append('idContrato',idContrato);
-      formData.append('origen','PORTAL_WEB');
-
-      await fetch(API_CALLBACK_URL,{
-        method:'POST',
-        headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body:formData.toString()
-      });
-    }catch(e){
-      console.error('Error registrando pago en hoja',e);
-    }
-  }
-
-  async function enviarSolicitudHistorial(){
-    const correo=document.getElementById('correoHistorial').value.trim();
-    const idHist=document.getElementById('idHistorial').value.trim();
-    const msg=document.getElementById('historialMsg');
-
-    msg.style.color='#6b7280';
-    msg.textContent='Enviando solicitud...';
-
-    if(!correo||!idHist){
-      msg.style.color='#b91c1c';
-      msg.textContent='Debes ingresar el correo y el ID.';
-      return;
-    }
-
-    try{
-      const formData=new URLSearchParams();
-      formData.append('accion','solicitar_historial');
-      formData.append('correo',correo);
-      formData.append('idContrato',idHist);
-
-      const resp=await fetch(API_CALLBACK_URL,{
-        method:'POST',
-        headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body:formData.toString()
-      });
-      const data=await resp.json();
-      if(data.ok){
-        msg.style.color='#065f46';
-        msg.textContent='Solicitud enviada correctamente. Revisaremos y te enviaremos el historial al correo.';
-      }else{
-        msg.style.color='#b91c1c';
-        msg.textContent=data.error||'Ocurrió un problema al enviar la solicitud.';
-      }
-    }catch(e){
-      console.error(e);
-      msg.style.color='#b91c1c';
-      msg.textContent='Error al enviar la solicitud. Intenta de nuevo.';
-    }
-  }
-
-  function copiarLinkAfiliado(){
-    const input=document.getElementById('linkAfiliadoInput');
-    const msg=document.getElementById('linkAfiliadoMsg');
-    input.focus();
-    input.select();
-    try{
-      const ok=document.execCommand('copy');
-      if(ok){
-        msg.style.color='#065f46';
-        msg.textContent='Link copiado al portapapeles.';
-      }else{
-        msg.style.color='#b91c1c';
-        msg.textContent='No se pudo copiar automáticamente. Selecciona y copia el link manualmente.';
-      }
-    }catch(e){
-      console.error(e);
-      msg.style.color='#b91c1c';
-      msg.textContent='No se pudo copiar automáticamente. Selecciona y copia el link manualmente.';
-    }
-  }
-
-  /* ----- Opciones extra menú Renting ----- */
-
-  function solicitarGrua(){
-    const url='https://wa.me/573159406263?text='+
-      encodeURIComponent('Hola, necesito asistencia de grúa para mi vehículo RADIZ.');
-    window.open(url,'_blank');
-  }
-
-  async function enviarActualizacionKm(){
-    const kmInput=document.getElementById('kmNuevo');
-    const placaInput=document.getElementById('kmPlaca');
-    const msg=document.getElementById('kmMsg');
-
-    msg.className='modal-msg';
-    msg.textContent='';
-
-    const kmValor=parseInt(kmInput.value,10);
-    const placa=(placaInput.value||'').trim().toUpperCase();
-
-    if(!placa||isNaN(kmValor)||kmValor<0){
-      msg.classList.add('error');
-      msg.textContent='Debes ingresar un kilometraje válido y la placa.';
-      return;
-    }
-
-    msg.textContent='Enviando actualización...';
-
-    try{
-      const formData=new URLSearchParams();
-      formData.append('accion','actualizar_kilometraje'); // requiere lógica en Apps Script
-      formData.append('placa',placa);
-      formData.append('kilometraje',kmValor);
-
-      const resp=await fetch(API_CALLBACK_URL,{
-        method:'POST',
-        headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body:formData.toString()
-      });
-      const data=await resp.json();
-
-      if(data.ok){
-        msg.classList.add('ok');
-        msg.textContent='Kilometraje actualizado correctamente (prueba: requiere confirmación en el sistema).';
-      }else{
-        msg.classList.add('error');
-        msg.textContent=data.error || 'No se pudo registrar el kilometraje (prueba).';
-      }
-    }catch(e){
-      console.error(e);
-      msg.classList.add('error');
-      msg.textContent='Error al enviar la actualización (prueba).';
-    }
-  }
-
-  async function enviarIncidente(){
-    const detalle=document.getElementById('incidenteTexto').value.trim();
-    const placa=(document.getElementById('incidentePlaca').value||'').trim().toUpperCase();
-    const fecha=(document.getElementById('incidenteFecha').value||'').trim();
-    const msg=document.getElementById('incidenteMsg');
-
-    msg.className='modal-msg';
-    msg.textContent='';
-
-    if(!detalle||!placa||!fecha){
-      msg.classList.add('error');
-      msg.textContent='Debes describir el incidente, la placa y la fecha.';
-      return;
-    }
-
-    msg.textContent='Enviando incidente...';
-
-    try{
-      const formData=new URLSearchParams();
-      formData.append('accion','notificar_incidente'); // requiere lógica en Apps Script
-      formData.append('placa',placa);
-      formData.append('fecha',fecha);
-      formData.append('detalle',detalle);
-
-      const resp=await fetch(API_CALLBACK_URL,{
-        method:'POST',
-        headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body:formData.toString()
-      });
-      const data=await resp.json();
-
-      if(data.ok){
-        msg.classList.add('ok');
-        msg.textContent='Incidente registrado correctamente (prueba: requiere confirmación en el sistema).';
-      }else{
-        msg.classList.add('error');
-        msg.textContent=data.error || 'No se pudo registrar el incidente (prueba).';
-      }
-    }catch(e){
-      console.error(e);
-      msg.classList.add('error');
-      msg.textContent='Error al enviar el incidente (prueba).';
-    }
-  }
-
-  /* --------- PWA: Service Worker + instalación de App --------- */
-
-  if('serviceWorker' in navigator){
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('sw.js')
-        .then(reg => console.log('Service Worker registrado:', reg.scope))
-        .catch(err => console.error('Error registrando Service Worker', err));
+// === CONFIGURACIÓN BÁSICA ===
+const SHEET_NAMES = {
+  contratos: 'CONTRATOS',
+  pagos: 'PAGOS',
+  mantenimientos: 'MANTENIMIENTOS',
+  pagosPortal: 'PAGOS_PORTAL',
+  afiliados: 'AFILIADOS',
+  vehiculos: 'VEHÍCULOS'
+};
+
+// Función principal: se llama con ?id=ID_CONTRATO
+function doGet(e) {
+  e = e || { parameter: {} };
+  const idContrato = (e.parameter.id || '').trim();
+
+  if (!idContrato) {
+    return jsonResponse({
+      ok: false,
+      error: 'Falta el parámetro id (ID CONTRATO).'
     });
   }
 
-  let deferredInstallPrompt = null;
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredInstallPrompt = e;
-    console.log('Evento beforeinstallprompt capturado');
+  // Hojas base
+  const contratos = getSheetAsObjects(ss.getSheetByName(SHEET_NAMES.contratos));
+  const pagos = getSheetAsObjects(ss.getSheetByName(SHEET_NAMES.pagos));
+  const mantenimientos = getSheetAsObjects(ss.getSheetByName(SHEET_NAMES.mantenimientos));
+  const afiliados = getSheetAsObjects(ss.getSheetByName(SHEET_NAMES.afiliados));
+  const vehiculos = getSheetAsObjects(ss.getSheetByName(SHEET_NAMES.vehiculos));
+
+  // Buscar contrato
+  const contrato = contratos.find(function (r) {
+    return String(r['ID CONTRATO']).trim() === idContrato;
   });
 
-  function esIOS(){
-    const ua = window.navigator.userAgent || '';
-    return /iphone|ipad|ipod/i.test(ua);
+  if (!contrato) {
+    return jsonResponse({
+      ok: false,
+      error: 'Contrato no encontrado.',
+      idContrato: idContrato
+    });
   }
 
-  function esAndroid(){
-    const ua = window.navigator.userAgent || '';
-    return /android/i.test(ua);
-  }
+  // Datos comunes
+  const pagosContrato = pagos.filter(function (r) {
+    return String(r['ID CONTRATO']).trim() === idContrato;
+  });
 
-  function estaEnModoApp(){
-    return window.matchMedia('(display-mode: standalone)').matches ||
-      window.navigator.standalone === true;
-  }
+  const mantenimientosContrato = mantenimientos.filter(function (r) {
+    return String(r['ID CONTRATO']).trim() === idContrato;
+  });
 
-  function mostrarInstruccionesIOS(){
-    alert(
-      'Para instalar la app RADIZ en iPhone/iPad:\n\n' +
-      '1. Toca el ícono "Compartir" (cuadro con flecha hacia arriba).\n' +
-      '2. Elige "Añadir a pantalla de inicio".\n' +
-      '3. Confirma con "Añadir".'
-    );
-  }
+  // Resultado base: devolvemos también TODA la tabla de afiliados y vehículos
+  var resultado = {
+    ok: true,
+    idContrato: idContrato,
+    contrato: contrato,
+    pagos: pagosContrato,
+    mantenimientos: mantenimientosContrato,
+    afiliados: afiliados,
+    vehiculos: vehiculos
+  };
 
-  async function manejarDescargaApp(){
-    if(estaEnModoApp()){
-      alert('La aplicación RADIZ ya está instalada en este dispositivo.');
-      return;
-    }
+  return jsonResponse(resultado);
+}
 
-    if(esIOS()){
-      mostrarInstruccionesIOS();
-      return;
-    }
+// Registrar pagos y otras acciones desde el portal (POST)
+function doPost(e) {
+  e = e || { parameter: {} };
+  const accion = (e.parameter.accion || '').toString();
 
-    if(deferredInstallPrompt){
-      try{
-        deferredInstallPrompt.prompt();
-        const choice = await deferredInstallPrompt.userChoice;
-        console.log('Resultado instalación:', choice && choice.outcome);
-        deferredInstallPrompt = null;
-      }catch(e){
-        console.error('Error al mostrar el prompt de instalación', e);
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  if (accion === 'registrar_pago' || accion === 'registrar_pago_portal') {
+    const referencia = (e.parameter.referencia || '').toString();
+    const idContrato = (e.parameter.idContrato || '').toString();
+    const monto = Number(e.parameter.monto || 0);
+
+    // Nuevos parámetros opcionales desde el portal
+    const statusWompiRaw = (e.parameter.statusWompi || '').toString().toUpperCase();
+    const estadoParamRaw = (e.parameter.estado || '').toString().toUpperCase();
+
+    // Clasificación final: APROBADA / DECLINADA / PENDIENTE
+    let estadoFinal = 'PENDIENTE';
+
+    if (estadoParamRaw === 'APROBADA' || estadoParamRaw === 'DECLINADA' || estadoParamRaw === 'PENDIENTE') {
+      estadoFinal = estadoParamRaw;
+    } else {
+      if (statusWompiRaw === 'APPROVED') {
+        estadoFinal = 'APROBADA';
+      } else if (statusWompiRaw === 'DECLINED') {
+        estadoFinal = 'DECLINADA';
+      } else {
+        estadoFinal = 'PENDIENTE';
       }
-      return;
     }
 
-    if(esAndroid()){
-      alert(
-        'Chrome todavía no muestra el cuadro automático de instalación.\n\n' +
-        'Para instalar la app RADIZ:\n' +
-        '1. Toca el ícono de tres puntos (⋮) en la esquina superior derecha.\n' +
-        '2. Elige "Instalar aplicación" o "Añadir a pantalla de inicio".\n' +
-        '3. Confirma con "Instalar".'
-      );
-      return;
+    const hoja = ss.getSheetByName(SHEET_NAMES.pagosPortal);
+    if (!hoja) {
+      return jsonResponse({ ok: false, error: 'Hoja PAGOS_PORTAL no encontrada.' });
     }
 
-    alert(
-      'Para instalar la app RADIZ en tu dispositivo, usa la opción ' +
-      '"Instalar aplicación" o "Añadir a pantalla de inicio" del navegador.'
-    );
+    hoja.appendRow([
+      new Date(),
+      referencia,
+      idContrato,
+      monto,
+      estadoFinal,
+      'PORTAL_WEB'
+    ]);
+
+    return jsonResponse({ ok: true });
   }
-</script>
-</body>
-</html>
+
+  // --- NUEVO: actualizar kilometraje en hoja VEHÍCULOS, columna G (KILOMETRAJE) ---
+  if (accion === 'actualizar_kilometraje') {
+    const idContrato = (e.parameter.idContrato || '').toString().trim();
+    const idVehiculo = (e.parameter.idVehiculo || '').toString().trim();
+    const kilometraje = Number(e.parameter.kilometraje || 0);
+
+    if (!idContrato || !kilometraje) {
+      return jsonResponse({
+        ok: false,
+        error: 'Faltan datos para actualizar el kilometraje.'
+      });
+    }
+
+    const hojaVeh = ss.getSheetByName(SHEET_NAMES.vehiculos);
+    if (!hojaVeh) {
+      return jsonResponse({ ok: false, error: 'Hoja VEHÍCULOS no encontrada.' });
+    }
+
+    const registros = getSheetAsObjects(hojaVeh);
+    let index = registros.findIndex(function (r) {
+      const idC = String(r['ID CONTRATO'] || '').trim();
+      const idV = String(r['ID VEHÍCULO'] || r['ID VEHICULO'] || '').trim();
+      return idC === idContrato || (idVehiculo && idV === idVehiculo);
+    });
+
+    if (index === -1) {
+      return jsonResponse({
+        ok: false,
+        error: 'No se encontró el vehículo para ese contrato.'
+      });
+    }
+
+    // +2 porque en getSheetAsObjects se omite la fila de encabezados
+    const fila = index + 2;
+    const headers = hojaVeh.getDataRange().getValues()[0];
+    const colKm = headers.indexOf('KILOMETRAJE') + 1;
+
+    if (colKm <= 0) {
+      return jsonResponse({
+        ok: false,
+        error: 'No se encontró la columna KILOMETRAJE en VEHÍCULOS.'
+      });
+    }
+
+    hojaVeh.getRange(fila, colKm).setValue(kilometraje);
+
+    return jsonResponse({ ok: true });
+  }
+
+  // --- NUEVO: notificar incidente -> hoja VEHÍCULOS, columna I (OBSERVACIONES) ---
+  if (accion === 'notificar_incidente') {
+    const idContrato = (e.parameter.idContrato || '').toString().trim();
+    const idVehiculo = (e.parameter.idVehiculo || '').toString().trim();
+    const descripcion = (e.parameter.descripcion || '').toString().trim();
+    const fecha = (e.parameter.fecha || '').toString().trim();
+
+    if (!idContrato || !descripcion) {
+      return jsonResponse({
+        ok: false,
+        error: 'Faltan datos para registrar el incidente.'
+      });
+    }
+
+    const hojaVeh = ss.getSheetByName(SHEET_NAMES.vehiculos);
+    if (!hojaVeh) {
+      return jsonResponse({ ok: false, error: 'Hoja VEHÍCULOS no encontrada.' });
+    }
+
+    const registros = getSheetAsObjects(hojaVeh);
+    let index = registros.findIndex(function (r) {
+      const idC = String(r['ID CONTRATO'] || '').trim();
+      const idV = String(r['ID VEHÍCULO'] || r['ID VEHICULO'] || '').trim();
+      return idC === idContrato || (idVehiculo && idV === idVehiculo);
+    });
+
+    if (index === -1) {
+      return jsonResponse({
+        ok: false,
+        error: 'No se encontró el vehículo para registrar el incidente.'
+      });
+    }
+
+    const fila = index + 2;
+    const headers = hojaVeh.getDataRange().getValues()[0];
+    const colObs = headers.indexOf('OBSERVACIONES') + 1;
+
+    if (colObs <= 0) {
+      return jsonResponse({
+        ok: false,
+        error: 'No se encontró la columna OBSERVACIONES en VEHÍCULOS.'
+      });
+    }
+
+    const rangoObs = hojaVeh.getRange(fila, colObs);
+    const anterior = String(rangoObs.getValue() || '').trim();
+    const textoFecha = fecha ? '[' + fecha + '] ' : '';
+    const nuevoTexto = textoFecha + descripcion;
+    const finalTexto = anterior ? (anterior + '\n' + nuevoTexto) : nuevoTexto;
+
+    rangoObs.setValue(finalTexto);
+
+    return jsonResponse({ ok: true });
+  }
+
+  return jsonResponse({ ok: false, error: 'Acción no válida.' });
+}
+
+// === UTILIDADES ===
+
+function getSheetAsObjects(sheet) {
+  if (!sheet) return [];
+
+  const values = sheet.getDataRange().getValues();
+  if (values.length < 2) return [];
+
+  const headers = values[0].map(function (h) {
+    return String(h).trim();
+  });
+  const rows = values.slice(1);
+
+  return rows
+    .filter(function (row) {
+      return row.some(function (cell) {
+        return cell !== '' && cell !== null;
+      });
+    })
+    .map(function (row) {
+      const obj = {};
+      headers.forEach(function (h, i) {
+        obj[h] = row[i];
+      });
+      return obj;
+    });
+}
+
+function jsonResponse(obj) {
+  return ContentService
+    .createTextOutput(JSON.stringify(obj))
+    .setMimeType(ContentService.MimeType.JSON);
+}
