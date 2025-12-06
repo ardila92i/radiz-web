@@ -328,7 +328,8 @@
     }
     input[type="text"],
     input[type="number"],
-    input[type="email"]{
+    input[type="email"],
+    textarea{
       width:100%;
       padding:10px 12px;
       border-radius:9px;
@@ -337,10 +338,12 @@
       outline:none;
       transition:border-color .15s,box-shadow .15s,background .15s;
       background:#f9fafb;
+      font-family:inherit;
     }
     input[type="text"]:focus,
     input[type="number"]:focus,
-    input[type="email"]:focus{
+    input[type="email"]:focus,
+    textarea:focus{
       border-color:#2563eb;
       box-shadow:0 0 0 1px rgba(37,99,235,.18);
       background:#ffffff;
@@ -643,6 +646,18 @@
       color:#6b7280;
     }
 
+    .modal-msg{
+      font-size:.8rem;
+      margin-top:6px;
+      color:#6b7280;
+    }
+    .modal-msg.error{
+      color:#b91c1c;
+    }
+    .modal-msg.ok{
+      color:#065f46;
+    }
+
     /* Imagen de beneficios Renting */
     .img-beneficios-renting{
       max-width:100%;
@@ -697,11 +712,16 @@
       </button>
       <div class="menu-panel" id="menuPanel">
         <div class="menu-title" id="menuTitle">Opciones</div>
-        <!-- Para renting -->
+        <!-- Para renting (solo IDs tipo R) -->
         <div id="menuRenting" style="display:none;">
           <div class="menu-item" onclick="abrirModal('modalBeneficios')">Beneficios</div>
-          <div class="menu-item" onclick="abrirModal('modalHistorialPagos')">Historial de pagos</div>
-          <div class="menu-item" onclick="abrirModal('modalTaller')">Taller asignado</div>
+          <div class="menu-item" onclick="solicitarGrua()">Solicitar grúa</div>
+          <div class="menu-item" onclick="abrirModal('modalActualizarKm')">Actualizar kilometraje</div>
+          <div class="menu-item">Señales</div>
+          <div class="menu-item">Historial de pagos</div>
+          <div class="menu-item">Historial de mantenimientos</div>
+          <div class="menu-item" onclick="abrirModal('modalSaldoFavor')">Mi saldo a favor</div>
+          <div class="menu-item" onclick="abrirModal('modalIncidente')">Notificar incidente</div>
         </div>
         <!-- Para afiliados -->
         <div id="menuAfiliado" style="display:none;">
@@ -750,7 +770,7 @@
           </div>
           <label for="idContrato">ID</label>
           <div class="row-consulta">
-            <input type="text" id="idContrato" placeholder="Ejemplo: R4523">
+            <input type="text" id="idContrato" placeholder="Ejemplo: R7467">
             <button id="btnConsultar" class="btn-main" onclick="consultar()">Consultar</button>
           </div>
           <div id="status" class="status"></div>
@@ -836,6 +856,59 @@
       <button class="modal-close" type="button" onclick="cerrarModal('modalTaller')">&times;</button>
     </div>
     <p id="modalTallerTexto">Información no disponible.</p>
+  </div>
+</div>
+
+<!-- MODAL ACTUALIZAR KILOMETRAJE -->
+<div class="modal-backdrop" id="modalActualizarKm">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Actualizar kilometraje</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalActualizarKm')">&times;</button>
+    </div>
+    <p>Ingresa el nuevo kilometraje y la placa del vehículo.</p>
+    <label for="kmNuevo">Kilometraje actual</label>
+    <input type="number" id="kmNuevo" min="0" placeholder="Ej: 25340">
+    <label for="kmPlaca">Placa / ID vehículo</label>
+    <input type="text" id="kmPlaca" placeholder="Ej: WRC01H">
+    <p id="kmMsg" class="modal-msg"></p>
+    <div class="modal-actions">
+      <button type="button" onclick="cerrarModal('modalActualizarKm')">Cerrar</button>
+      <button type="button" onclick="enviarActualizacionKm()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL SALDO A FAVOR -->
+<div class="modal-backdrop" id="modalSaldoFavor">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Mi saldo a favor</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalSaldoFavor')">&times;</button>
+    </div>
+    <p>Tienes un saldo a favor por concepto de referidos: <strong>$0.00</strong>.</p>
+  </div>
+</div>
+
+<!-- MODAL NOTIFICAR INCIDENTE -->
+<div class="modal-backdrop" id="modalIncidente">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Notificar incidente</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalIncidente')">&times;</button>
+    </div>
+    <p>Cuéntanos qué sucedió con el vehículo.</p>
+    <label for="incidenteTexto">Descripción del incidente</label>
+    <textarea id="incidenteTexto" rows="4" placeholder="Ej: Describa brevemente lo ocurrido..."></textarea>
+    <label for="incidentePlaca">Placa / ID vehículo</label>
+    <input type="text" id="incidentePlaca" placeholder="Ej: WRC01H">
+    <label for="incidenteFecha">Fecha del incidente</label>
+    <input type="text" id="incidenteFecha" placeholder="Ej: 05/12/2025">
+    <p id="incidenteMsg" class="modal-msg"></p>
+    <div class="modal-actions">
+      <button type="button" onclick="cerrarModal('modalIncidente')">Cerrar</button>
+      <button type="button" onclick="enviarIncidente()">Enviar</button>
+    </div>
   </div>
 </div>
 
@@ -931,6 +1004,8 @@
     status.textContent='';
     resultados.style.display='none';
     fabMenu.style.display='none';
+    menuRenting.style.display='none';
+    menuAfiliado.style.display='none';
     document.getElementById('menuPanel').style.display='none';
 
     if(!id){
@@ -1100,9 +1175,15 @@
         const tallerEjemplo='Taller asignado: '+(mts[0]?.['TALLER ASIGNADO']||'Información no disponible.');
         document.getElementById('modalTallerTexto').textContent=tallerEjemplo;
 
-        menuRenting.style.display='block';
-        menuAfiliado.style.display='none';
-        fabMenu.style.display='block';
+        if(esRentingId){
+          menuRenting.style.display='block';
+          menuAfiliado.style.display='none';
+          fabMenu.style.display='block';
+        }else{
+          menuRenting.style.display='none';
+          menuAfiliado.style.display='none';
+          fabMenu.style.display='none';
+        }
       }
 
       resultados.style.display='grid';
@@ -1267,6 +1348,105 @@
       console.error(e);
       msg.style.color='#b91c1c';
       msg.textContent='No se pudo copiar automáticamente. Selecciona y copia el link manualmente.';
+    }
+  }
+
+  /* ----- Opciones extra menú Renting ----- */
+
+  function solicitarGrua(){
+    const url='https://wa.me/573159406263?text='+
+      encodeURIComponent('Hola, necesito asistencia de grúa para mi vehículo RADIZ.');
+    window.open(url,'_blank');
+  }
+
+  async function enviarActualizacionKm(){
+    const kmInput=document.getElementById('kmNuevo');
+    const placaInput=document.getElementById('kmPlaca');
+    const msg=document.getElementById('kmMsg');
+
+    msg.className='modal-msg';
+    msg.textContent='';
+
+    const kmValor=parseInt(kmInput.value,10);
+    const placa=(placaInput.value||'').trim().toUpperCase();
+
+    if(!placa||isNaN(kmValor)||kmValor<0){
+      msg.classList.add('error');
+      msg.textContent='Debes ingresar un kilometraje válido y la placa.';
+      return;
+    }
+
+    msg.textContent='Enviando actualización...';
+
+    try{
+      const formData=new URLSearchParams();
+      formData.append('accion','actualizar_kilometraje'); // requiere lógica en Apps Script
+      formData.append('placa',placa);
+      formData.append('kilometraje',kmValor);
+
+      const resp=await fetch(API_CALLBACK_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:formData.toString()
+      });
+      const data=await resp.json();
+
+      if(data.ok){
+        msg.classList.add('ok');
+        msg.textContent='Kilometraje actualizado correctamente (prueba: requiere confirmación en el sistema).';
+      }else{
+        msg.classList.add('error');
+        msg.textContent=data.error || 'No se pudo registrar el kilometraje (prueba).';
+      }
+    }catch(e){
+      console.error(e);
+      msg.classList.add('error');
+      msg.textContent='Error al enviar la actualización (prueba).';
+    }
+  }
+
+  async function enviarIncidente(){
+    const detalle=document.getElementById('incidenteTexto').value.trim();
+    const placa=(document.getElementById('incidentePlaca').value||'').trim().toUpperCase();
+    const fecha=(document.getElementById('incidenteFecha').value||'').trim();
+    const msg=document.getElementById('incidenteMsg');
+
+    msg.className='modal-msg';
+    msg.textContent='';
+
+    if(!detalle||!placa||!fecha){
+      msg.classList.add('error');
+      msg.textContent='Debes describir el incidente, la placa y la fecha.';
+      return;
+    }
+
+    msg.textContent='Enviando incidente...';
+
+    try{
+      const formData=new URLSearchParams();
+      formData.append('accion','notificar_incidente'); // requiere lógica en Apps Script
+      formData.append('placa',placa);
+      formData.append('fecha',fecha);
+      formData.append('detalle',detalle);
+
+      const resp=await fetch(API_CALLBACK_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body:formData.toString()
+      });
+      const data=await resp.json();
+
+      if(data.ok){
+        msg.classList.add('ok');
+        msg.textContent='Incidente registrado correctamente (prueba: requiere confirmación en el sistema).';
+      }else{
+        msg.classList.add('error');
+        msg.textContent=data.error || 'No se pudo registrar el incidente (prueba).';
+      }
+    }catch(e){
+      console.error(e);
+      msg.classList.add('error');
+      msg.textContent='Error al enviar el incidente (prueba).';
     }
   }
 
