@@ -739,9 +739,9 @@
             <div class="section-icon section-icon-search"></div>
             <span>Consulta de contrato</span>
           </div>
-          <label for="idContrato">ID CONTRATO / ID AFILIADO</label>
+          <label for="idContrato">ID</label>
           <div class="row-consulta">
-            <input type="text" id="idContrato" placeholder="Ejemplo: R7467 o A5140">
+            <input type="text" id="idContrato" placeholder="Ejemplo: R7467">
             <button id="btnConsultar" class="btn-main" onclick="consultar()">Consultar</button>
           </div>
           <div id="status" class="status"></div>
@@ -807,11 +807,11 @@
       <h3>Solicitar historial de pagos</h3>
       <button class="modal-close" type="button" onclick="cerrarModal('modalHistorialPagos')">&times;</button>
     </div>
-    <p style="margin-bottom:6px;">Ingresa tu correo electrónico y el ID de contrato para enviarte el historial en PDF.</p>
+    <p style="margin-bottom:6px;">Ingresa tu correo electrónico y el ID para enviarte el historial en PDF.</p>
     <label for="correoHistorial">Correo electrónico</label>
     <input type="email" id="correoHistorial" placeholder="ejemplo@correo.com">
-    <label for="idHistorial">ID de contrato / ID afiliado</label>
-    <input type="text" id="idHistorial" placeholder="Ej: R7467 o A5140">
+    <label for="idHistorial">ID</label>
+    <input type="text" id="idHistorial" placeholder="Ej: R7467">
     <p id="historialMsg" style="font-size:.85rem;margin-top:6px;color:#6b7280;"></p>
     <div class="modal-actions">
       <button type="button" onclick="cerrarModal('modalHistorialPagos')">Cerrar</button>
@@ -929,7 +929,7 @@
 
     if(!id){
       status.classList.add('error');
-      status.textContent='Por favor ingresa un ID de contrato o ID de afiliado.';
+      status.textContent='Por favor ingresa un ID.';
       return;
     }
 
@@ -937,8 +937,21 @@
     status.textContent='Consultando información...';
 
     try{
-      const resp=await fetch(API_URL+'?id='+encodeURIComponent(id));
-      const data=await resp.json();
+      let data;
+      // Primer intento estándar
+      let resp=await fetch(API_URL+'?id='+encodeURIComponent(id));
+      data=await resp.json();
+
+      // PRUEBA: si es afiliado (A****) y no lo encontró, intentar con otro parámetro posible
+      if(!data.ok && id.startsWith('A')){
+        try{
+          const respAf=await fetch(API_URL+'?idAfiliado='+encodeURIComponent(id));
+          const dataAf=await respAf.json();
+          if(dataAf.ok){ data=dataAf; }
+        }catch(eAux){
+          console.error('Intento alterno afiliado (prueba) falló',eAux);
+        }
+      }
 
       if(!data.ok){
         status.className='status error';
@@ -1058,7 +1071,7 @@
         fabMenu.style.display='block';
 
       }else{
-        // ----- FLUJO RENTING (tipo R / otros no A) -----
+        // ----- FLUJO RENTING (tipo R / C) -----
         datosAfiliadoActual=null;
 
         const estado=(c['ESTADO']||'').toString().toUpperCase();
@@ -1095,12 +1108,12 @@
             '<p><strong>Tarifas vencidas:</strong> '+tarifasVenc+'</p>';
         }
 
-        // MANTENIMIENTOS RENTING: no. total, placa, taller, último, tipo, gasto total
+        // MANTENIMIENTOS RENTING
         if(mts.length===0){
           cardMantenimientos.innerHTML='<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
           document.getElementById('modalTallerTexto').textContent='Información no disponible.';
         }else{
-          const m = mts[0]; // hoja MANTENIMIENTOS tiene 1 fila por contrato/vehículo
+          const m = mts[0];
           const numTotal = m['REALIZADOS']||m['MTOS REALIZADOS']||mts.length;
           const placa = m['ID VEHÍCULO']||m['ID VEHICULO']||'';
           const taller = m['TALLER ASIGNADO']||'';
@@ -1121,7 +1134,6 @@
             'Taller asignado: '+(taller||'Información no disponible.');
         }
 
-        // MODALES RENTING
         document.getElementById('modalBeneficiosTexto').textContent=beneficiosTexto||'Información no disponible.';
 
         menuRenting.style.display='block';
@@ -1244,7 +1256,7 @@
 
     if(!correo||!idHist){
       msg.style.color='#b91c1c';
-      msg.textContent='Debes ingresar el correo y el ID (contrato o afiliado).';
+      msg.textContent='Debes ingresar el correo y el ID.';
       return;
     }
 
