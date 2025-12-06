@@ -10,9 +10,9 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
 
-  <!-- Manifest e íconos (usamos el logo grande para todo) -->
+  <!-- Manifest e íconos -->
   <link rel="manifest" href="manifest.json">
-  <link rel="icon" type="image/png" sizes="192x192" href="icon-512.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
   <link rel="apple-touch-icon" href="icon-512.png">
 
@@ -390,7 +390,7 @@
       box-shadow:0 16px 32px rgba(249,115,22,.6);
     }
 
-    /* Botón "Descarga la App" sobrio (mismo estilo en iOS y Android) */
+    /* Botón "Descarga la App" sobrio */
     .btn-app{
       padding:8px 18px;
       border-radius:999px;
@@ -485,7 +485,7 @@
       display:none;
     }
 
-    /* Fila de consulta (misma lógica que pagos) */
+    /* Fila de consulta */
     .row-consulta{
       display:flex;
       gap:8px;
@@ -643,6 +643,15 @@
       color:#6b7280;
     }
 
+    /* Imagen de beneficios Renting */
+    .img-beneficios-renting{
+      max-width:100%;
+      height:auto;
+      border-radius:12px;
+      display:block;
+      margin:4px auto;
+    }
+
     @media(max-width:900px){
       .main-grid{
         grid-template-columns:1fr;
@@ -712,7 +721,7 @@
         </div>
         <div class="brand-overlay"></div>
         <div class="brand-copy">
-          <p class="brand-kicker"></p>
+          <p class="brand-kicker">Una marca de Proyecto I45 S.A.S.</p>
           <h2>Vehículos que dignifican</h2>
         </div>
       </div>
@@ -723,7 +732,7 @@
           <div class="welcome-icon"></div>
           <div>
             <p class="welcome-text-title">¡Bienvenido a tu portal Radiz!</p>
-            <p class="welcome-text-sub">Consulta la información de tu contrato y realiza de manera segura.</p>
+            <p class="welcome-text-sub">Consulta tu contrato, revisa tus pagos y realiza pagos en línea de forma segura.</p>
           </div>
         </div>
 
@@ -741,7 +750,7 @@
           </div>
           <label for="idContrato">ID</label>
           <div class="row-consulta">
-            <input type="text" id="idContrato" placeholder="Ejemplo: R4523">
+            <input type="text" id="idContrato" placeholder="Ejemplo: R7467 o A5140">
             <button id="btnConsultar" class="btn-main" onclick="consultar()">Consultar</button>
           </div>
           <div id="status" class="status"></div>
@@ -753,14 +762,14 @@
             <div class="section-icon section-icon-money"></div>
             <span>Realizar pago</span>
           </div>
-          <p>Ingresa el monto a pagar.</p>
+          <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
           <label for="montoPago">Monto a pagar (COP)</label>
           <div class="row-pago">
             <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
             <button type="button" class="btn-main" onclick="crearPagoWompi()">Pagar con Wompi</button>
           </div>
           <p id="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
-          <p id="pagoContratoError">Digita tu código de contrato.</p>
+          <p id="pagoContratoError">Digita tu ID antes de pagar.</p>
         </div>
 
         <!-- Botón Link de afiliado -->
@@ -784,7 +793,7 @@
           <div class="card card-mantenimientos" id="cardMantenimientos"></div>
         </div>
 
-        <footer>Versión interna • RADIZ Vehicular</footer>
+        <footer>Versión interna • RADIZ Suministro Vehicular</footer>
       </div>
     </div>
   </div>
@@ -870,7 +879,7 @@
       <button class="modal-close" type="button" onclick="cerrarModal('modalAfiliado')">&times;</button>
     </div>
     <p>
-      Comparte nuestro link de referidos con tu código de contrato (ejemplo: R7467 o A5140) y gana hasta
+      Comparte nuestro link de referidos con tu ID (ejemplo: R7467) y gana hasta
       $70.000 pesos por cada referido aprobado.
     </p>
     <label for="linkAfiliadoInput">Link del formulario</label>
@@ -892,8 +901,6 @@
   let tipoUsuarioActual=null;
   let datosContratoActual=null;
   let datosAfiliadoActual=null;
-  let resumenAfiliadoVehiculos=0;
-  let resumenAfiliadoMantenimientos=0;
 
   function toggleMenu(){
     const panel=document.getElementById('menuPanel');
@@ -909,8 +916,7 @@
   }
 
   async function consultar(){
-    const idRaw=document.getElementById('idContrato').value.trim();
-    const id=idRaw.toUpperCase();
+    const id=document.getElementById('idContrato').value.trim().toUpperCase();
     const status=document.getElementById('status');
     const btn=document.getElementById('btnConsultar');
     const resultados=document.getElementById('resultados');
@@ -937,25 +943,12 @@
     status.textContent='Consultando información...';
 
     try{
-      let data;
-      // Primer intento estándar
-      let resp=await fetch(API_URL+'?id='+encodeURIComponent(id));
-      data=await resp.json();
-
-      // PRUEBA: si es afiliado (A****) y no lo encontró, intentar con otro parámetro posible
-      if(!data.ok && id.startsWith('A')){
-        try{
-          const respAf=await fetch(API_URL+'?idAfiliado='+encodeURIComponent(id));
-          const dataAf=await respAf.json();
-          if(dataAf.ok){ data=dataAf; }
-        }catch(eAux){
-          console.error('Intento alterno afiliado (prueba) falló',eAux);
-        }
-      }
+      const resp=await fetch(API_URL+'?id='+encodeURIComponent(id));
+      const data=await resp.json();
 
       if(!data.ok){
         status.className='status error';
-        status.textContent=data.error||'No se encontró información para ese contrato.';
+        status.textContent=data.error||'No se encontró información para ese ID.';
         btn.disabled=false;
         return;
       }
@@ -963,62 +956,37 @@
       const c=data.contrato||{};
       datosContratoActual=c;
 
-      const tipoRaw=(c['TIPO USUARIO']||'').toString().toUpperCase();
-      tipoUsuarioActual=tipoRaw;
+      const tipo=(c['TIPO USUARIO']||'').toString().toUpperCase();
+      tipoUsuarioActual=tipo;
 
       const pagos=data.pagos||[];
-      const rawM=data.mantenimientos??data.mantenimiento??data.mtos??data.manten??[];
+      const rawM=data.mantenimientos??data.mantenimiento??[];
       const mts=Array.isArray(rawM)?rawM:(rawM?[rawM]:[]);
       const beneficiosTexto=c['BENEFICIOS']||'Información no disponible';
 
-      // limpiar tarjetas
       cardContrato.innerHTML='';
       cardPagos.innerHTML='';
       cardMantenimientos.innerHTML='';
 
-      const esAfiliado = id.startsWith('A') || tipoRaw.indexOf('AFILIADO')!==-1;
+      const afiliados=data.afiliados||[];
+      const vehiculosAll=data.vehiculos||[];
 
-      if(esAfiliado){
-        // ----- FLUJO AFILIADOS (tipo A) -----
-        const afiliados=data.afiliados||[];
-        const vehiculosAll=data.vehiculos||[];
-
-        const idAfiliado=(c['ID AFILIADO']||id).toString().trim();
+      if(tipo==='AFILIADO'){
+        const idAfiliado=(c['ID AFILIADO']||id).toString().trim().toUpperCase();
 
         const af = afiliados.find(a =>
-          String(a['ID AFILIADO'] || '').trim() === idAfiliado
+          String(a['ID AFILIADO'] || '').trim().toUpperCase() === idAfiliado
         ) || {};
 
         datosAfiliadoActual=af;
 
         const nombreAf = af['NOMBRE'] || c['ID CLIENTE'] || 'Dato no disponible';
-        const fechaAf = af['FECHA AFILIACIÓN'] || af['FECHA AFILIACION'] || c['INICIO'];
+        const fechaAfRaw = af['FECHA AFILIACIÓN'] || af['FECHA AFILIACION'] || '';
+        const fechaAf = formatearFecha(fechaAfRaw);
 
-        // CONTRATO (AFILIADO)
-        cardContrato.innerHTML =
-          '<h2>Afiliado</h2>'+
-          '<p><strong>ID afiliado:</strong> '+idAfiliado+'</p>'+
-          '<p><strong>Nombre:</strong> '+nombreAf+'</p>'+
-          '<p><strong>Inicio de afiliación:</strong> '+formatearFecha(fechaAf)+'</p>'+
-          '<p><strong>Tipo de usuario:</strong> Participación</p>';
+        const numLiq = af['NO LIQUIDACIONES']!==undefined && af['NO LIQUIDACIONES']!=='' ? af['NO LIQUIDACIONES'] : '0';
 
-        // PAGOS (AFILIADO): día de corte, no. liquidaciones, valor liquidado
-        const pagoRelacionado = pagos.find(p=>{
-          const idAf = String(p['ID AFILIADO']||'').trim();
-          const idContr = String(p['ID CONTRATO']||'').trim();
-          return idAf===idAfiliado || idContr===id;
-        }) || null;
-
-        const diasCorte = pagoRelacionado ?
-          (pagoRelacionado['DÍAS DE CORTE']||pagoRelacionado['DIAS DE CORTE']||'Dato no disponible') :
-          'Dato no disponible';
-
-        let numLiqTexto='Dato no disponible';
-        if(af['NO LIQUIDACIONES']!==undefined && af['NO LIQUIDACIONES']!==''){
-          numLiqTexto=af['NO LIQUIDACIONES'];
-        }
-
-        let valorLiqTexto='Dato no disponible';
+        let valorLiqTexto='0';
         if(af['VALOR LIQUIDADO']!==undefined && af['VALOR LIQUIDADO']!==''){
           const bruto=af['VALOR LIQUIDADO'];
           if(typeof bruto==='number'){
@@ -1028,42 +996,48 @@
           }
         }
 
-        cardPagos.innerHTML =
+        cardContrato.innerHTML=
+          '<h2>Contrato</h2>'+
+          '<p><strong>ID afiliado:</strong> '+idAfiliado+'</p>'+
+          '<p><strong>Nombre:</strong> '+nombreAf+'</p>'+
+          '<p><strong>Inicio de afiliación:</strong> '+(fechaAf||'Dato no disponible')+'</p>'+
+          '<p><strong>Tipo de usuario:</strong> Participación</p>';
+
+        const pagoRelacionado=pagos.find(p=>{
+          const idAf = String(p['ID AFILIADO']||'').trim().toUpperCase();
+          const idCt = String(p['ID CONTRATO']||'').trim().toUpperCase();
+          return idAf===idAfiliado || idCt===id;
+        });
+        const diasCorte=pagoRelacionado?(pagoRelacionado['DÍAS DE CORTE']||pagoRelacionado['DIAS DE CORTE']||'Dato no disponible'):'Dato no disponible';
+
+        cardPagos.innerHTML=
           '<h2>Pagos</h2>'+
           '<p><strong>Día de corte:</strong> '+diasCorte+'</p>'+
-          '<p><strong>No. de liquidaciones:</strong> '+numLiqTexto+'</p>'+
+          '<p><strong>No. de liquidaciones:</strong> '+numLiq+'</p>'+
           '<p><strong>Valor liquidado:</strong> '+valorLiqTexto+'</p>';
 
-        // FLOTA (AFILIADO) – reemplaza mantenimientos
-        const vehiculosAfiliado = vehiculosAll.filter(v =>
-          String(v['ID AFILIADO'] || '').trim() === idAfiliado
+        const vehiculosAf = vehiculosAll.filter(v =>
+          String(v['ID AFILIADO']||'').trim().toUpperCase() === idAfiliado
         );
-
-        const cantVeh = vehiculosAfiliado.length;
-        resumenAfiliadoVehiculos=cantVeh;
-        resumenAfiliadoMantenimientos=0;
-
-        const placas = vehiculosAfiliado
+        const cantidadVeh = vehiculosAf.length;
+        const placas = vehiculosAf
           .map(v => v['ID VEHÍCULO'] || v['ID VEHICULO'] || '')
           .filter(Boolean)
-          .join(', ') || 'Sin vehículos asociadas';
+          .join(', ') || 'Sin vehículos asociados';
 
-        cardMantenimientos.innerHTML =
+        cardMantenimientos.innerHTML=
           '<h2>Flota</h2>'+
-          '<p><strong>Cantidad de vehículos:</strong> '+cantVeh+'</p>'+
+          '<p><strong>Cantidad de vehículos:</strong> '+cantidadVeh+'</p>'+
           '<p><strong>Placas asociadas:</strong> '+placas+'</p>'+
           '<p><strong>Ventas:</strong> 0</p>';
 
-        // MODALES AFILIADO
-        document.getElementById('modalFechaPagosTexto').textContent =
+        document.getElementById('modalFechaPagosTexto').textContent=
           'Día de corte de pagos: '+diasCorte;
-
-        document.getElementById('modalVehiculosTexto').textContent =
-          'Cantidad de vehículos: '+cantVeh+'. Placas: '+placas;
-
-        document.getElementById('modalLiquidacionesTexto1').textContent =
-          'Número de liquidaciones: '+numLiqTexto;
-        document.getElementById('modalLiquidacionesTexto2').textContent =
+        document.getElementById('modalVehiculosTexto').textContent=
+          'Número de vehículos: '+cantidadVeh;
+        document.getElementById('modalLiquidacionesTexto1').textContent=
+          'Número de liquidaciones: '+numLiq;
+        document.getElementById('modalLiquidacionesTexto2').textContent=
           'Valor total liquidado: '+valorLiqTexto;
 
         menuRenting.style.display='none';
@@ -1071,16 +1045,13 @@
         fabMenu.style.display='block';
 
       }else{
-        // ----- FLUJO RENTING (tipo R / C) -----
         datosAfiliadoActual=null;
 
         const estado=(c['ESTADO']||'').toString().toUpperCase();
-        const idContratoMostrar=(c['ID CONTRATO']||id).toString();
 
-        // CONTRATO RENTING
         cardContrato.innerHTML=
           '<h2>Contrato</h2>'+
-          '<p><strong>ID contrato:</strong> '+idContratoMostrar+'</p>'+
+          '<p><strong>ID:</strong> '+(c['ID CONTRATO']||'')+'</p>'+
           '<p><strong>Tipo usuario:</strong> '+(c['TIPO USUARIO']||'')+'</p>'+
           '<p><strong>Vehículo:</strong> '+(c['ID VEHÍCULO']||c['ID VEHICULO']||'')+'</p>'+
           '<p><strong>Inicio:</strong> '+formatearFecha(c['INICIO'])+'</p>'+
@@ -1089,52 +1060,45 @@
           '<p><strong>Beneficios:</strong> '+beneficiosTexto+'</p>'+
           '<p><span class="badge '+(estado==='ACTIVO'?'badge-activo':'badge-inactivo')+'">'+(estado||'SIN ESTADO')+'</span></p>';
 
-        // PAGOS RENTING: día de corte, tarifas completadas, vencidas
         if(pagos.length===0){
           cardPagos.innerHTML='<h2>Pagos</h2><p>No hay pagos registrados para este contrato.</p>';
         }else{
-          const pagoContrato = pagos.find(p =>
-            String(p['ID CONTRATO']||'').trim()===idContratoMostrar
-          ) || pagos[0];
-
-          const diaCorte = pagoContrato['DÍAS DE CORTE']||pagoContrato['DIAS DE CORTE']||'Dato no disponible';
-          const tarifasComp = pagoContrato['TARIFAS COMPLETADAS']||'0';
-          const tarifasVenc = pagoContrato['TARIFAS VENCIDAS']||'0';
-
-          cardPagos.innerHTML =
+          const p=pagos[0];
+          cardPagos.innerHTML=
             '<h2>Pagos</h2>'+
-            '<p><strong>Día de corte:</strong> '+diaCorte+'</p>'+
-            '<p><strong>Tarifas completadas:</strong> '+tarifasComp+'</p>'+
-            '<p><strong>Tarifas vencidas:</strong> '+tarifasVenc+'</p>';
+            '<p><strong>Día de corte:</strong> '+(p['DÍAS DE CORTE']||p['DIAS DE CORTE']||'')+'</p>'+
+            '<p><strong>Tarifas completadas:</strong> '+(p['TARIFAS COMPLETADAS']||'0')+'</p>'+
+            '<p><strong>Tarifas vencidas:</strong> '+(p['TARIFAS VENCIDAS']||'0')+'</p>';
         }
 
-        // MANTENIMIENTOS RENTING
         if(mts.length===0){
           cardMantenimientos.innerHTML='<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
-          document.getElementById('modalTallerTexto').textContent='Información no disponible.';
         }else{
-          const m = mts[0];
-          const numTotal = m['REALIZADOS']||m['MTOS REALIZADOS']||mts.length;
-          const placa = m['ID VEHÍCULO']||m['ID VEHICULO']||'';
-          const taller = m['TALLER ASIGNADO']||'';
-          const fechaUlt = m['ÚLTIMO MANTENIMIENTO']||m['ULTIMO MANTENIMIENTO']||m['FECHA ULT. MANTENIMIENTO'];
-          const tipoMto = m['TIPO']||m['TIPO ULT. MANTENIMIENTO']||'';
-          const gastoTotal = m['VALOR GENERAL']||m['VALOR MTOS']||0;
-
-          cardMantenimientos.innerHTML =
+          const totalM=mts.reduce((s,m)=>s+(Number(m['VALOR GENERAL']||m['VALOR MTOS'])||0),0);
+          const m=mts[0];
+          cardMantenimientos.innerHTML=
             '<h2>Mantenimientos</h2>'+
-            '<p><strong>No. total de mantenimientos:</strong> '+(numTotal||'0')+'</p>'+
-            '<p><strong>Placa:</strong> '+placa+'</p>'+
-            '<p><strong>Taller asignado:</strong> '+taller+'</p>'+
-            '<p><strong>Fecha de último mantenimiento:</strong> '+formatearFecha(fechaUlt)+'</p>'+
-            '<p><strong>Tipo de mantenimiento:</strong> '+tipoMto+'</p>'+
-            '<p><strong>Gasto total de mantenimientos:</strong> '+formatearNumero(gastoTotal)+'</p>';
-
-          document.getElementById('modalTallerTexto').textContent =
-            'Taller asignado: '+(taller||'Información no disponible.');
+            '<p><strong>Total mantenimientos:</strong> '+formatearNumero(totalM)+'</p>'+
+            '<p><strong>Placa:</strong> '+(m['ID VEHÍCULO']||m['ID VEHICULO']||'')+'</p>'+
+            '<p><strong>Último mantenimiento:</strong> '+formatearFecha(m['ÚLTIMO MANTENIMIENTO']||m['ULTIMO MANTENIMIENTO']||m['FECHA ULT. MANTENIMIENTO'])+'</p>'+
+            '<p><strong>Tipo de mantenimiento:</strong> '+(m['TIPO']||m['TIPO ULT. MANTENIMIENTO']||'')+'</p>'+
+            '<p><strong>Realizados:</strong> '+(m['REALIZADOS']||m['MTOS REALIZADOS']||'')+'</p>'+
+            '<p><strong>Taller asignado:</strong> '+(m['TALLER ASIGNADO']||'')+'</p>';
         }
 
-        document.getElementById('modalBeneficiosTexto').textContent=beneficiosTexto||'Información no disponible.';
+        const idContratoActual = (c['ID CONTRATO']||'').toString().trim().toUpperCase();
+        const esRentingId = idContratoActual.startsWith('R');
+
+        const modalBeneficios=document.getElementById('modalBeneficiosTexto');
+        if(esRentingId){
+          modalBeneficios.innerHTML=
+            '<img src="beneficios_renting.png" alt="Beneficios Renting Radiz" class="img-beneficios-renting">';
+        }else{
+          modalBeneficios.textContent=beneficiosTexto||'Información no disponible.';
+        }
+
+        const tallerEjemplo='Taller asignado: '+(mts[0]?.['TALLER ASIGNADO']||'Información no disponible.');
+        document.getElementById('modalTallerTexto').textContent=tallerEjemplo;
 
         menuRenting.style.display='block';
         menuAfiliado.style.display='none';
@@ -1179,7 +1143,7 @@
     const errorLabel=document.getElementById('pagoError');
     const contratoError=document.getElementById('pagoContratoError');
     const valor=parseInt(montoInput.value,10);
-    const idContrato=(document.getElementById('idContrato').value||'').trim();
+    const idContrato=(document.getElementById('idContrato').value||'').trim().toUpperCase();
 
     errorLabel.style.display='none';
     contratoError.style.display='none';
@@ -1218,7 +1182,6 @@
       checkout.open(function(result){
         const transaction=result.transaction;
         console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
-        // Registrar siempre la intención de pago para trazabilidad
         registrarPagoEnSheet(reference, valor, idContrato);
       });
     }catch(e){
@@ -1309,7 +1272,6 @@
 
   /* --------- PWA: Service Worker + instalación de App --------- */
 
-  // Registrar service worker
   if('serviceWorker' in navigator){
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js')
@@ -1320,7 +1282,6 @@
 
   let deferredInstallPrompt = null;
 
-  // Capturar el evento beforeinstallprompt (Android/Chrome)
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredInstallPrompt = e;
@@ -1352,19 +1313,16 @@
   }
 
   async function manejarDescargaApp(){
-    // Ya está instalada
     if(estaEnModoApp()){
       alert('La aplicación RADIZ ya está instalada en este dispositivo.');
       return;
     }
 
-    // iOS: sólo instrucciones
     if(esIOS()){
       mostrarInstruccionesIOS();
       return;
     }
 
-    // Android/Chrome con evento de instalación disponible
     if(deferredInstallPrompt){
       try{
         deferredInstallPrompt.prompt();
@@ -1377,7 +1335,6 @@
       return;
     }
 
-    // Android sin evento: explicar cómo instalar desde el menú
     if(esAndroid()){
       alert(
         'Chrome todavía no muestra el cuadro automático de instalación.\n\n' +
@@ -1389,7 +1346,6 @@
       return;
     }
 
-    // Otros navegadores
     alert(
       'Para instalar la app RADIZ en tu dispositivo, usa la opción ' +
       '"Instalar aplicación" o "Añadir a pantalla de inicio" del navegador.'
