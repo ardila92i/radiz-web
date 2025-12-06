@@ -711,11 +711,16 @@
           <div class="menu-item" onclick="abrirModal('modalIncidente')">Notificar incidente</div>
           <div class="menu-item" onclick="abrirModal('modalTaller')">Taller asignado</div>
         </div>
-        <!-- Para afiliados -->
+        <!-- Para afiliados (tipo A) -->
         <div id="menuAfiliado" style="display:none;">
-          <div class="menu-item" onclick="abrirModal('modalFechaPagosAfiliado')">Fecha de pagos</div>
-          <div class="menu-item" onclick="abrirModal('modalVehiculosAfiliado')">Cantidad de vehículos</div>
-          <div class="menu-item" onclick="abrirModal('modalLiquidacionesAfiliado')">Liquidaciones</div>
+          <div class="menu-item">Beneficios</div>
+          <div class="menu-item" onclick="abrirModal('modalHistorialPagos')">Historial de pagos</div>
+          <div class="menu-item">Mapa vehicular</div>
+          <div class="menu-item">Oportunidades</div>
+          <div class="menu-item" onclick="abrirModal('modalMisContratosAfiliado')">Mis contratos</div>
+          <div class="menu-item" onclick="abrirModal('modalActualizarDatosAfiliado')">Actualizar datos</div>
+          <div class="menu-item" onclick="abrirModal('modalMiFlotaAfiliado')">Mi flota</div>
+          <div class="menu-item" onclick="abrirModal('modalInvertirAfiliado')">Invertir</div>
         </div>
       </div>
     </div>
@@ -903,7 +908,7 @@
   </div>
 </div>
 
-<!-- MODALES AFILIADOS -->
+<!-- MODALES AFILIADOS (existentes, se conservan aunque no estén en el nuevo menú) -->
 <div class="modal-backdrop" id="modalFechaPagosAfiliado">
   <div class="modal">
     <div class="modal-header">
@@ -932,6 +937,76 @@
     </div>
     <p id="modalLiquidacionesTexto1">Número de liquidaciones: Dato no disponible.</p>
     <p id="modalLiquidacionesTexto2">Valor total liquidado: Dato no disponible.</p>
+  </div>
+</div>
+
+<!-- NUEVOS MODALES AFILIADOS TIPO A -->
+
+<!-- Mis contratos -->
+<div class="modal-backdrop" id="modalMisContratosAfiliado">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Mis contratos</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalMisContratosAfiliado')">&times;</button>
+    </div>
+    <p>Solicita copia de tus contrato.</p>
+    <label for="correoMisContratos">Correo electrónico</label>
+    <input type="email" id="correoMisContratos" placeholder="ejemplo@correo.com">
+    <label for="idMisContratos">ID</label>
+    <input type="text" id="idMisContratos" placeholder="Ej: A6370">
+    <p id="misContratosMsg" class="status"></p>
+    <div class="modal-actions">
+      <button type="button" onclick="cerrarModal('modalMisContratosAfiliado')">Cerrar</button>
+      <button type="button" onclick="enviarSolicitudMisContratos()">Solicitar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Actualizar datos -->
+<div class="modal-backdrop" id="modalActualizarDatosAfiliado">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Actualizar datos</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalActualizarDatosAfiliado')">&times;</button>
+    </div>
+    <p>Actualiza tus datos de pago y contacto.</p>
+    <label for="cuentaAfiliado">Cuenta bancaria</label>
+    <input type="text" id="cuentaAfiliado" placeholder="Banco, tipo de cuenta y número">
+    <label for="certificadoAfiliado">Certificado bancario (adjúntalo en el correo)</label>
+    <input type="file" id="certificadoAfiliado">
+    <label for="correoAfiliadoDatos">Correo electrónico</label>
+    <input type="email" id="correoAfiliadoDatos" placeholder="ejemplo@correo.com">
+    <label for="celularAfiliado">Número de celular</label>
+    <input type="text" id="celularAfiliado" placeholder="Ej: 3001234567">
+    <label for="idAfiliadoDatos">ID</label>
+    <input type="text" id="idAfiliadoDatos" placeholder="Ej: A6370">
+    <p id="actualizarDatosMsg" class="status"></p>
+    <div class="modal-actions">
+      <button type="button" onclick="cerrarModal('modalActualizarDatosAfiliado')">Cerrar</button>
+      <button type="button" onclick="enviarActualizacionDatosAfiliado()">Enviar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mi flota -->
+<div class="modal-backdrop" id="modalMiFlotaAfiliado">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Mi flota</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalMiFlotaAfiliado')">&times;</button>
+    </div>
+    <p id="miFlotaTexto">Placas asociadas: Dato no disponible.</p>
+  </div>
+</div>
+
+<!-- Invertir -->
+<div class="modal-backdrop" id="modalInvertirAfiliado">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Invertir</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalInvertirAfiliado')">&times;</button>
+    </div>
+    <p>Próximamente verás aquí una imagen con nuestras oportunidades de inversión.</p>
   </div>
 </div>
 
@@ -965,6 +1040,7 @@
   let tipoUsuarioActual=null;
   let datosContratoActual=null;
   let datosAfiliadoActual=null;
+  let placasAfiliadoActual='';
 
   function toggleMenu(){
     const panel=document.getElementById('menuPanel');
@@ -1089,6 +1165,8 @@
           .filter(Boolean)
           .join(', ') || 'Sin vehículos asociados';
 
+        placasAfiliadoActual = placas;
+
         cardMantenimientos.innerHTML=
           '<h2>Flota</h2>'+
           '<p><strong>Cantidad de vehículos:</strong> '+cantidadVeh+'</p>'+
@@ -1104,12 +1182,18 @@
         document.getElementById('modalLiquidacionesTexto2').textContent=
           'Valor total liquidado: '+valorLiqTexto;
 
+        const miFlotaTexto=document.getElementById('miFlotaTexto');
+        if(miFlotaTexto){
+          miFlotaTexto.textContent='Placas asociadas: '+(placas||'Dato no disponible.');
+        }
+
         menuRenting.style.display='none';
         menuAfiliado.style.display='block';
         fabMenu.style.display='block';
 
       }else{
         datosAfiliadoActual=null;
+        placasAfiliadoActual='';
 
         const estado=(c['ESTADO']||'').toString().toUpperCase();
 
@@ -1444,6 +1528,67 @@
       msg.className='status error';
       msg.textContent='Error al enviar el incidente. Intenta de nuevo.';
     }
+  }
+
+  /* --- Nuevas funciones menú Afiliado (tipo A) --- */
+
+  function enviarSolicitudMisContratos(){
+    const correo=document.getElementById('correoMisContratos').value.trim();
+    const id=document.getElementById('idMisContratos').value.trim().toUpperCase();
+    const msg=document.getElementById('misContratosMsg');
+
+    msg.className='status';
+    msg.textContent='';
+
+    if(!correo || !id){
+      msg.classList.add('error');
+      msg.textContent='Debes ingresar el correo electrónico y el ID.';
+      return;
+    }
+
+    const asunto='Solicitud copia de contratos';
+    const cuerpo='Correo del afiliado: '+correo+'\nID: '+id+'\n\nPor favor enviar copia de los contratos asociados.';
+
+    const mailto='mailto:notificacionespi45@gmail.com'
+      +'?subject='+encodeURIComponent(asunto)
+      +'&body='+encodeURIComponent(cuerpo);
+
+    msg.className='status ok';
+    msg.textContent='Abriendo tu gestor de correo para completar la solicitud.';
+    window.location.href=mailto;
+  }
+
+  function enviarActualizacionDatosAfiliado(){
+    const cuenta=document.getElementById('cuentaAfiliado').value.trim();
+    const correo=document.getElementById('correoAfiliadoDatos').value.trim();
+    const celular=document.getElementById('celularAfiliado').value.trim();
+    const id=document.getElementById('idAfiliadoDatos').value.trim().toUpperCase();
+    const msg=document.getElementById('actualizarDatosMsg');
+
+    msg.className='status';
+    msg.textContent='';
+
+    if(!correo || !celular || !id){
+      msg.classList.add('error');
+      msg.textContent='Debes ingresar al menos correo, celular e ID.';
+      return;
+    }
+
+    const asunto='Actualización de datos de afiliado';
+    const cuerpo='Solicitud de actualización de datos:\n\n'
+      +'ID: '+id+'\n'
+      +'Cuenta bancaria: '+(cuenta||'No especificada')+'\n'
+      +'Correo: '+correo+'\n'
+      +'Celular: '+celular+'\n\n'
+      +'Recuerda adjuntar el certificado bancario en este correo.';
+
+    const mailto='mailto:notificacionespi45@gmail.com'
+      +'?subject='+encodeURIComponent(asunto)
+      +'&body='+encodeURIComponent(cuerpo);
+
+    msg.className='status ok';
+    msg.textContent='Abriendo tu gestor de correo. Adjunta el certificado bancario antes de enviar.';
+    window.location.href=mailto;
   }
 
   /* --------- PWA: Service Worker + instalación de App --------- */
