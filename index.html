@@ -1228,11 +1228,25 @@
           cardPagos.innerHTML='<h2>Pagos</h2><p>No hay pagos registrados para este contrato.</p>';
         }else{
           const p=pagos[0];
+          const tarifasCompletadas = p['TARIFAS COMPLETADAS'] || '0';
+          const tarifasVencidas = p['TARIFAS VENCIDAS'] || '0';
+
+          // Cálculo de mora sólo para contratos tipo R (renting) en el front
+          const idContratoPagos = String(c['ID CONTRATO']||'').trim().toUpperCase();
+          const esRentingPagos = idContratoPagos.startsWith('R');
+          const tarifaSemanalNum = Number(c['TARIFA SEMANAL'] || 0);
+          const tarifasVencidasNum = Number(tarifasVencidas || 0);
+          const moraEstim = esRentingPagos ? tarifaSemanalNum * tarifasVencidasNum : 0;
+          const moraHtml = esRentingPagos && moraEstim > 0
+            ? '<p><strong>Mora estimada:</strong> '+formatearNumero(moraEstim)+'</p>'
+            : '';
+
           cardPagos.innerHTML=
             '<h2>Pagos</h2>'+
             '<p><strong>Día de corte:</strong> '+(p['DÍAS DE CORTE']||p['DIAS DE CORTE']||'')+'</p>'+
-            '<p><strong>Tarifas completadas:</strong> '+(p['TARIFAS COMPLETADAS']||'0')+'</p>'+
-            '<p><strong>Tarifas vencidas:</strong> '+(p['TARIFAS VENCIDAS']||'0')+'</p>';
+            '<p><strong>Tarifas completadas:</strong> '+tarifasCompletadas+'</p>'+
+            '<p><strong>Tarifas vencidas:</strong> '+tarifasVencidas+'</p>'+
+            moraHtml;
         }
 
         if(mts.length===0){
