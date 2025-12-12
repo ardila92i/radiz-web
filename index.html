@@ -826,10 +826,12 @@
 <div class="modal-backdrop" id="modalHistorialPagos">
   <div class="modal">
     <div class="modal-header">
-      <h3>Solicitar historial de pagos</h3>
+      <h3>Historial de pagos</h3>
       <button class="modal-close" type="button" onclick="cerrarModal('modalHistorialPagos')">&times;</button>
     </div>
-    <p style="margin-bottom:6px;">Ingresa tu correo electrónico y el ID para enviarnos la solicitud de historial en PDF.</p>
+    <p id="historialIntro" style="margin-bottom:6px;">
+      Ingresa tu correo electrónico y el ID para solicitar tu historial en PDF.
+    </p>
     <label for="correoHistorial">Correo electrónico</label>
     <input type="email" id="correoHistorial" placeholder="ejemplo@correo.com">
     <label for="idHistorial">ID</label>
@@ -837,7 +839,8 @@
     <p id="historialMsg" style="font-size:.85rem;margin-top:6px;color:#6b7280;"></p>
     <div class="modal-actions">
       <button type="button" onclick="cerrarModal('modalHistorialPagos')">Cerrar</button>
-      <button type="button" onclick="enviarSolicitudHistorial()">Enviar</button>
+      <button type="button" id="btnHistorialEnviar" onclick="enviarSolicitudHistorial()">Enviar</button>
+      <button type="button" id="btnHistorialDescargar" style="display:none;" onclick="descargarHistorialPdf()">Descargar PDF</button>
     </div>
   </div>
 </div>
@@ -1050,9 +1053,46 @@
     document.getElementById(id).style.display='flex';
     const menu=document.getElementById('menuPanel');
     if(menu) menu.style.display='none';
+    if(id === 'modalHistorialPagos'){
+      prepararModalHistorial();
+    }
   }
   function cerrarModal(id){
     document.getElementById(id).style.display='none';
+  }
+
+  function prepararModalHistorial(){
+    const correoLabel = document.querySelector('label[for="correoHistorial"]');
+    const correoInput = document.getElementById('correoHistorial');
+    const idInput = document.getElementById('idHistorial');
+    const msg = document.getElementById('historialMsg');
+    const intro = document.getElementById('historialIntro');
+    const btnEnviar = document.getElementById('btnHistorialEnviar');
+    const btnDescargar = document.getElementById('btnHistorialDescargar');
+
+    const idActual = obtenerIdContratoActual();
+    if(idInput && idActual){
+      idInput.value = idActual;
+    }
+
+    if(msg){
+      msg.textContent='';
+      msg.style.color='#6b7280';
+    }
+
+    if(tipoUsuarioActual && tipoUsuarioActual.toUpperCase() === 'AFILIADO'){
+      if(correoLabel) correoLabel.style.display='block';
+      if(correoInput) correoInput.style.display='block';
+      if(btnEnviar) btnEnviar.style.display='inline-flex';
+      if(btnDescargar) btnDescargar.style.display='none';
+      if(intro) intro.textContent='Ingresa tu correo electrónico y el ID para que nuestro equipo te envíe el historial en PDF.';
+    }else{
+      if(correoLabel) correoLabel.style.display='none';
+      if(correoInput) correoInput.style.display='none';
+      if(btnEnviar) btnEnviar.style.display='none';
+      if(btnDescargar) btnDescargar.style.display='inline-flex';
+      if(intro) intro.textContent='Ingresa tu ID de contrato para descargar tu historial de pagos en PDF.';
+    }
   }
 
   async function consultar(){
@@ -1387,7 +1427,7 @@
     }
   }
 
-  /* ----- Solicitar historial (R y A) -> notificación a radiz ----- */
+  /* ----- Solicitar historial (flujo actual por correo, sobre todo Afiliados) ----- */
   async function enviarSolicitudHistorial(){
     const correo=document.getElementById('correoHistorial').value.trim();
     const idHist=document.getElementById('idHistorial').value.trim();
@@ -1425,6 +1465,124 @@
       console.error(e);
       msg.style.color='#b91c1c';
       msg.textContent='Error al enviar la solicitud. Intenta de nuevo.';
+    }
+  }
+
+  /* ----- NUEVO: Descargar historial de pagos en PDF para clientes R ----- */
+  async function descargarHistorialPdf(){
+    const idInput = document.getElementById('idHistorial');
+    const msg = document.getElementById('historialMsg');
+    const id = (idInput.value || '').trim().toUpperCase();
+
+    msg.style.color='#6b7280';
+    msg.textContent='Generando historial...';
+
+    if(!id){
+      msg.style.color='#b91c1c';
+      msg.textContent='Debes ingresar tu ID de contrato.';
+      return;
+    }
+
+    try{
+      const resp = await fetch(API_URL+'?accion=historial_pagos&id='+encodeURIComponent(id));
+      const data = await resp.json();
+
+      if(!data.ok){
+        msg.style.color='#b91c1c';
+        msg.textContent=data.error || 'No se encontró información de pagos para ese ID.';
+        return;
+      }
+
+      const pagos = Array.isArray(data.pagos) ? data.pagos : [];
+      if(pagos.length === 0){
+        msg.style.color='#b91c1c';
+        msg.textContent='No hay pagos registrados en Alegra para este contrato.';
+        return;
+      }
+
+      const placa = data.placa || '';
+
+      const filasHtml = pagos.map(function(p){
+        const fecha = p.fecha || '';
+        const consecutivo = p.consecutivo || '';
+        const cliente = p.cliente || '';
+        const notas = p.notas || '';
+        const pagadas = (p.pagadas !== null && p.pagadas !== undefined) ? p.pagadas : '';
+        const vencidas = (p.vencidas !== null && p.vencidas !== undefined) ? p.vencidas : '';
+        var valorNum = Number(p.valor||0);
+        var valorStr = isNaN(valorNum)
+          ? (p.valor || '')
+          : valorNum.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
+        return '<tr>'+
+          '<td>'+fecha+'</td>'+
+          '<td>'+consecutivo+'</td>'+
+          '<td>'+cliente+'</td>'+
+          '<td style="text-align:right">'+valorStr+'</td>'+
+          '<td>'+notas+'</td>'+
+          '<td style="text-align:center">'+pagadas+'</td>'+
+          '<td style="text-align:center">'+vencidas+'</td>'+
+        '</tr>';
+      }).join('');
+
+      const nuevaVentana = window.open('', '_blank');
+      if(!nuevaVentana){
+        msg.style.color='#b91c1c';
+        msg.textContent='El navegador bloqueó la ventana emergente. Habilítala para descargar el PDF.';
+        return;
+      }
+
+      const html = `
+      <!DOCTYPE html>
+      <html lang="es">
+      <head>
+        <meta charset="UTF-8" />
+        <title>Historial de pagos ${id}</title>
+        <style>
+          body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:24px;color:#111827;}
+          h1{font-size:20px;margin-bottom:4px;}
+          p{font-size:12px;margin:2px 0 10px;}
+          table{width:100%;border-collapse:collapse;font-size:11px;margin-top:10px;}
+          th,td{border:1px solid #d1d5db;padding:4px 6px;}
+          th{background:#eff6ff;text-align:left;}
+        </style>
+      </head>
+      <body>
+        <h1>Historial de pagos</h1>
+        <p><strong>Contrato:</strong> ${id}</p>
+        <p><strong>Vehículo / CC:</strong> ${placa}</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Consecutivo</th>
+              <th>Cliente</th>
+              <th>Valor</th>
+              <th>Notas</th>
+              <th>Pagadas</th>
+              <th>Vencidas</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${filasHtml}
+          </tbody>
+        </table>
+        <script>
+          window.onload = function(){
+            window.print();
+          };
+        <\/script>
+      </body>
+      </html>
+      `;
+      nuevaVentana.document.write(html);
+      nuevaVentana.document.close();
+
+      msg.style.color='#065f46';
+      msg.textContent='Historial generado. Se abrió una ventana de impresión para guardar en PDF.';
+    }catch(e){
+      console.error(e);
+      msg.style.color='#b91c1c';
+      msg.textContent='Error al generar el historial. Intenta de nuevo.';
     }
   }
 
