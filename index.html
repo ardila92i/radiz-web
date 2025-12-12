@@ -777,10 +777,11 @@
           </div>
           <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
           <label for="montoPago">Monto a pagar (COP)</label>
-          <div class="row-pago">
-            <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
-            <button type="button" class="btn-main" onclick="crearPagoWompi()">Pagar con Wompi</button>
-          </div>
+         <div class="row-pago">
+  <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
+  <button type="button" class="btn-main" onclick="crearPagoWompi()">Pagar con Wompi</button>
+  <button type="button" class="btn-main btn-qr" onclick="abrirModal('modalQR')">Ver QR</button>
+</div>
           <p id="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
           <p id="pagoContratoError">Digita tu ID antes de pagar.</p>
         </div>
@@ -885,6 +886,26 @@
     <p>Tienes un saldo a favor por concepto de referidos: <strong>$0.00</strong>.</p>
     <div class="modal-actions">
       <button type="button" onclick="cerrarModal('modalSaldoFavor')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+  <!-- MODAL: PAGO POR QR -->
+<div class="modal-backdrop" id="modalQR">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Pagar con código QR</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalQR')">&times;</button>
+    </div>
+    <p>Escanea este código con la app de tu banco o billetera para realizar el pago:</p>
+    <img src="QRRADIZ-38.png"
+         alt="Código QR de pago RADIZ"
+         style="max-width:100%;height:auto;border-radius:12px;display:block;margin:8px auto;">
+    <p style="font-size:.8rem;color:#6b7280;margin-top:4px;">
+      Recuerda incluir tu ID de contrato en la referencia del pago.
+    </p>
+    <div class="modal-actions">
+      <button type="button" onclick="cerrarModal('modalQR')">Cerrar</button>
     </div>
   </div>
 </div>
