@@ -1,1 +1,380 @@
-Hola inversiones Radiz
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>RADIZ Inversiones</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+
+    body{
+      min-height:100vh;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:radial-gradient(circle at top,#e0f2fe,#0f172a 70%);
+      color:#0f172a;
+      display:flex;
+      align-items:stretch;
+      justify-content:center;
+      padding:32px 16px;
+    }
+
+    .page{
+      width:100%;
+      max-width:1040px;
+      background:#ffffff;
+      border-radius:28px;
+      box-shadow:0 22px 50px rgba(15,23,42,.45);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
+    }
+
+    /* COLUMNA IZQUIERDA: STORYTELLING */
+    .col-left{
+      padding:28px 32px 28px;
+      display:flex;
+      flex-direction:column;
+      gap:20px;
+      background:linear-gradient(135deg,#0f172a,#111827);
+      color:#f9fafb;
+      position:relative;
+    }
+
+    .logo-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+    }
+    .logo-row img{
+      height:40px;
+      object-fit:contain;
+    }
+    .tagline{
+      font-size:.8rem;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color:#bfdbfe;
+      font-weight:600;
+    }
+
+    .hero-title{
+      font-size:1.9rem;
+      line-height:1.25;
+      font-weight:700;
+    }
+    .hero-sub{
+      font-size:.98rem;
+      color:#e5e7eb;
+      max-width:460px;
+    }
+
+    .hero-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:4px;
+    }
+    .btn-primary{
+      padding:10px 22px;
+      border-radius:999px;
+      border:none;
+      background:#22c55e;
+      color:#052e16;
+      font-weight:650;
+      font-size:.95rem;
+      cursor:pointer;
+      box-shadow:0 16px 34px rgba(34,197,94,.45);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 20px 40px rgba(34,197,94,.6);
+    }
+    .btn-ghost{
+      padding:10px 18px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,.6);
+      background:transparent;
+      color:#e5e7eb;
+      font-weight:550;
+      font-size:.9rem;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .btn-ghost span{
+      font-size:1rem;
+      margin-left:6px;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      gap:10px;
+      margin-top:12px;
+    }
+    .chip{
+      border-radius:999px;
+      padding:7px 12px;
+      font-size:.78rem;
+      background:rgba(15,23,42,.75);
+      border:1px solid rgba(148,163,184,.5);
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+    .chip-dot{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:#22c55e;
+    }
+
+    /* COLUMNA DERECHA: VISTA "MIS INVERSIONES" */
+    .col-right{
+      padding:28px 26px 26px;
+      background:#f9fafb;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+    .right-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:10px;
+    }
+    .right-header h2{
+      font-size:1.05rem;
+      letter-spacing:.03em;
+      text-transform:uppercase;
+      color:#4b5563;
+    }
+    .pill-badge{
+      font-size:.75rem;
+      padding:4px 10px;
+      border-radius:999px;
+      background:#e0f2fe;
+      color:#075985;
+      font-weight:600;
+    }
+
+    .summary-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+    }
+    .card{
+      border-radius:16px;
+      background:#ffffff;
+      padding:10px 12px;
+      box-shadow:0 10px 26px rgba(15,23,42,.08);
+      font-size:.8rem;
+    }
+    .card-label{
+      color:#6b7280;
+      margin-bottom:2px;
+    }
+    .card-value{
+      font-size:1.2rem;
+      font-weight:700;
+      color:#111827;
+    }
+    .card-chip{
+      margin-top:4px;
+      font-size:.75rem;
+      color:#16a34a;
+    }
+
+    .actions-title{
+      font-size:.85rem;
+      font-weight:600;
+      color:#6b7280;
+      margin-top:6px;
+      margin-bottom:4px;
+    }
+    .actions-grid{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:8px;
+    }
+    .action-tile{
+      border-radius:14px;
+      background:#111827;
+      color:#f9fafb;
+      padding:10px 10px 12px;
+      font-size:.78rem;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
+      min-height:80px;
+    }
+    .action-tile small{
+      font-size:.7rem;
+      color:#9ca3af;
+      margin-top:4px;
+    }
+
+    .mini-chart{
+      margin-top:10px;
+      border-radius:14px;
+      background:linear-gradient(135deg,#d1fae5,#eff6ff);
+      padding:10px 12px;
+      font-size:.78rem;
+    }
+    .mini-chart h3{
+      font-size:.78rem;
+      margin-bottom:4px;
+      color:#065f46;
+    }
+    .mini-bars{
+      display:flex;
+      gap:4px;
+      margin-top:4px;
+      align-items:flex-end;
+      height:40px;
+    }
+    .mini-bars span{
+      flex:1;
+      border-radius:999px 999px 0 0;
+      background:rgba(34,197,94,.8);
+    }
+    .mini-bars span:nth-child(2){opacity:.75}
+    .mini-bars span:nth-child(3){opacity:.6}
+    .mini-bars span:nth-child(4){opacity:.85}
+
+    .foot-note{
+      margin-top:6px;
+      font-size:.7rem;
+      color:#9ca3af;
+      text-align:right;
+    }
+
+    @media(max-width:880px){
+      .page{
+        grid-template-columns:1fr;
+      }
+      .col-left{
+        padding-bottom:24px;
+      }
+    }
+    @media(max-width:640px){
+      body{
+        padding:20px 10px;
+      }
+      .col-left{
+        padding:22px 18px;
+      }
+      .col-right{
+        padding:18px 16px 18px;
+      }
+      .summary-grid{
+        grid-template-columns:1fr 1fr;
+      }
+      .actions-grid{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <!-- STORYTELLING -->
+    <section class="col-left">
+      <div class="logo-row">
+        <img src="../logoradiz.png" alt="Logo RADIZ">
+        <span class="tagline">Inversiones que se viven</span>
+      </div>
+
+      <div>
+        <h1 class="hero-title">Haz que tus rendimientos trabajen por tu día a día.</h1>
+        <p class="hero-sub">
+          Desde un solo vehículo hasta un portafolio completo. Invierte, deja que nosotros operemos
+          y usa tus rendimientos para la vida real: tanqueo, lavado, compras en comercios aliados y más.
+        </p>
+      </div>
+
+      <div class="hero-actions">
+        <a href="#" class="btn-primary">Crear cuenta</a>
+        <a href="#" class="btn-ghost">
+          Ya tengo usuario
+          <span>↗</span>
+        </a>
+      </div>
+
+      <div class="hero-grid">
+        <div class="chip">
+          <span class="chip-dot"></span>
+          Desde 2026: planes tipo CDT con plazos desde 12 meses.
+        </div>
+        <div class="chip">
+          <span class="chip-dot"></span>
+          Reportes claros: sin letra pequeña ni sorpresas.
+        </div>
+        <div class="chip">
+          <span class="chip-dot"></span>
+          Operación respaldada por la flota y contratos de renting RADIZ.
+        </div>
+      </div>
+    </section>
+
+    <!-- VISTA PREVIA "MIS INVERSIONES" (ESTÁTICA POR AHORA) -->
+    <section class="col-right">
+      <div class="right-header">
+        <h2>Mis inversiones</h2>
+        <span class="pill-badge">Versión demo · 2026</span>
+      </div>
+
+      <div class="summary-grid">
+        <article class="card">
+          <p class="card-label">Capital invertido</p>
+          <p class="card-value">$ 25.000.000</p>
+          <p class="card-chip">+ $ 5.200.000 en rendimientos</p>
+        </article>
+        <article class="card">
+          <p class="card-label">Próximo pago estimado</p>
+          <p class="card-value">$ 1.300.000</p>
+          <p class="card-chip">Corte 15 de cada mes</p>
+        </article>
+      </div>
+
+      <p class="actions-title">Quiero usar mis rendimientos para…</p>
+      <div class="actions-grid">
+        <div class="action-tile">
+          <strong>Tanquear mi vehículo</strong>
+          <small>Usa tus rendimientos para recargar gasolina en estaciones aliadas.</small>
+        </div>
+        <div class="action-tile">
+          <strong>Lavar mi carro o moto</strong>
+          <small>Redime lavadas en puntos aliados sin sacar plata del bolsillo.</small>
+        </div>
+        <div class="action-tile">
+          <strong>Comprar en comercios</strong>
+          <small>Convierte parte de tus rendimientos en saldo para comercios aliados.</small>
+        </div>
+      </div>
+
+      <div class="mini-chart">
+        <h3>Evolución de tus pagos trimestrales</h3>
+        <p>Una vista rápida de cómo han crecido tus rendimientos en el último año.</p>
+        <div class="mini-bars">
+          <span style="height:35px"></span>
+          <span style="height:28px"></span>
+          <span style="height:32px"></span>
+          <span style="height:40px"></span>
+        </div>
+      </div>
+
+      <p class="foot-note">Los valores mostrados son ilustrativos. Una vez inicies sesión verás tus cifras reales.</p>
+    </section>
+  </main>
+</body>
+</html>
