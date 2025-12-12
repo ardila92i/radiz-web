@@ -392,12 +392,11 @@
       box-shadow:0 16px 32px rgba(249,115,22,.6);
     }
 
-    /* Botón "Descarga la App" sobrio */
+    /* Botón "Descarga la App" como texto discreto */
     .btn-app{
-      padding:8px 18px;
-      border-radius:999px;
-      border:1px solid #d1d5db;
-      background:#f9fafb;
+      padding:0;
+      border:none;
+      background:transparent;
       color:#1d4ed8;
       font-size:.9rem;
       font-weight:600;
@@ -410,11 +409,12 @@
       min-width:0;
     }
     .btn-app:hover{
-      background:#e5f0ff;
-      border-color:#bfdbfe;
+      background:transparent;
+      border:none;
       color:#1d4ed8;
       box-shadow:none;
       transform:none;
+      text-decoration:underline;
     }
 
     .status{
@@ -470,6 +470,23 @@
       gap:8px;
       align-items:center;
       flex-wrap:wrap;
+    }
+    /* Fila sólo para los botones de pago */
+    .row-pago-botones{
+      justify-content:space-between;
+    }
+    /* Botones Pagar con Wompi y Ver QR con color más suave */
+    .btn-pago,
+    .btn-qr{
+      flex:1;
+      min-width:0;
+      background:#60a5fa;
+      box-shadow:0 8px 18px rgba(96,165,250,.5);
+    }
+    .btn-pago:hover,
+    .btn-qr:hover{
+      background:#3b82f6;
+      box-shadow:0 10px 22px rgba(59,130,246,.6);
     }
     #montoPago{
       width:220px;
@@ -777,11 +794,15 @@
           </div>
           <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
           <label for="montoPago">Monto a pagar (COP)</label>
-         <div class="row-pago">
-  <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
-  <button type="button" class="btn-main" onclick="crearPagoWompi()">Pagar con Wompi</button>
-  <button type="button" class="btn-main btn-qr" onclick="abrirModal('modalQR')">Ver QR</button>
-</div>
+          <!-- fila solo con el input -->
+          <div class="row-pago">
+            <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
+          </div>
+          <!-- fila de botones lado a lado -->
+          <div class="row-pago row-pago-botones">
+            <button type="button" class="btn-main btn-pago" onclick="crearPagoWompi()">Pagar con Wompi</button>
+            <button type="button" class="btn-main btn-qr" onclick="abrirModal('modalQR')">Ver QR</button>
+          </div>
           <p id="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
           <p id="pagoContratoError">Digita tu ID antes de pagar.</p>
         </div>
@@ -890,7 +911,7 @@
   </div>
 </div>
 
-  <!-- MODAL: PAGO POR QR -->
+<!-- MODAL: PAGO POR QR -->
 <div class="modal-backdrop" id="modalQR">
   <div class="modal">
     <div class="modal-header">
