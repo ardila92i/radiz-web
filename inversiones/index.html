@@ -138,6 +138,45 @@
       background:#22c55e;
     }
 
+    /* OPORTUNIDADES DE INVERSIÓN */
+    .ops-section{
+      margin-top:18px;
+    }
+    .ops-title{
+      font-size:.85rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:#9ca3af;
+      margin-bottom:6px;
+    }
+    .ops-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      gap:10px;
+    }
+    .op-card{
+      background:rgba(15,23,42,.85);
+      border-radius:18px;
+      padding:10px 10px 12px;
+      box-shadow:0 14px 30px rgba(0,0,0,.35);
+      font-size:.78rem;
+    }
+    .op-image{
+      width:100%;
+      height:70px;
+      border-radius:14px;
+      background:linear-gradient(135deg,rgba(59,130,246,.85),rgba(16,185,129,.9));
+      margin-bottom:6px;
+    }
+    .op-card h4{
+      font-size:.9rem;
+      margin-bottom:4px;
+    }
+    .op-card p{
+      font-size:.78rem;
+      color:#e5e7eb;
+    }
+
     /* COLUMNA DERECHA */
     .col-right{
       padding:28px 26px 26px;
@@ -194,6 +233,30 @@
       color:#16a34a;
     }
 
+    .investor-id{
+      font-size:.78rem;
+      color:#6b7280;
+      margin-top:4px;
+      text-align:right;
+      display:none;
+    }
+    .investor-id span{
+      font-weight:600;
+      color:#111827;
+    }
+
+    .summary-grid-secondary{
+      margin-top:6px;
+    }
+    .summary-grid-secondary .card{
+      font-size:.78rem;
+    }
+    .card-value-small{
+      font-size:1rem;
+      font-weight:600;
+      color:#111827;
+    }
+
     .actions-title{
       font-size:.85rem;
       font-weight:600;
@@ -223,6 +286,18 @@
       margin-top:4px;
     }
 
+    .money-actions{
+      margin-top:8px;
+      margin-bottom:6px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+    .money-actions .money-btn{
+      flex:1;
+      justify-content:center;
+    }
+
     .mini-chart{
       margin-top:10px;
       border-radius:14px;
@@ -250,6 +325,79 @@
     .mini-bars span:nth-child(2){opacity:.75}
     .mini-bars span:nth-child(3){opacity:.6}
     .mini-bars span:nth-child(4){opacity:.85}
+
+    .dates-section{
+      margin-top:8px;
+    }
+    .dates-section h3{
+      font-size:.8rem;
+      color:#6b7280;
+      margin-bottom:4px;
+    }
+    .dates-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+      gap:8px;
+    }
+    .date-item{
+      background:#e5e7eb;
+      border-radius:12px;
+      padding:6px 8px;
+    }
+    .date-label{
+      font-size:.7rem;
+      color:#6b7280;
+    }
+    .date-value{
+      font-size:.85rem;
+      font-weight:600;
+      color:#111827;
+    }
+
+    .about-section{
+      margin-top:8px;
+      font-size:.8rem;
+      color:#4b5563;
+    }
+    .about-section h3{
+      font-size:.82rem;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:#6b7280;
+      margin-bottom:4px;
+    }
+
+    .dividends-section{
+      margin-top:10px;
+    }
+    .dividends-section h3{
+      font-size:.8rem;
+      color:#6b7280;
+      margin-bottom:4px;
+    }
+    .dividends-table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:.76rem;
+      background:#ffffff;
+      border-radius:12px;
+      overflow:hidden;
+      box-shadow:0 6px 16px rgba(15,23,42,.08);
+    }
+    .dividends-table th,
+    .dividends-table td{
+      padding:4px 6px;
+      border-bottom:1px solid #e5e7eb;
+    }
+    .dividends-table th{
+      text-align:left;
+      background:#eff6ff;
+      color:#4b5563;
+      font-weight:600;
+    }
+    .dividends-table tr:last-child td{
+      border-bottom:none;
+    }
 
     .foot-note{
       margin-top:6px;
@@ -349,6 +497,71 @@
       margin-top:8px;
     }
 
+    /* MODAL ACCIONES (reinvertir, retirar, puntos) */
+    .action-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.7);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:45;
+    }
+    .action-panel{
+      background:#020617;
+      color:#e5e7eb;
+      border-radius:20px;
+      padding:18px 20px 16px;
+      width:100%;
+      max-width:420px;
+      box-shadow:0 24px 60px rgba(0,0,0,.85);
+      position:relative;
+    }
+    .action-panel h3{
+      font-size:1rem;
+      margin-bottom:6px;
+    }
+    .action-panel p{
+      font-size:.8rem;
+      color:#9ca3af;
+      margin-bottom:8px;
+    }
+    .action-close{
+      position:absolute;
+      top:10px;
+      right:12px;
+      border:none;
+      background:transparent;
+      color:#9ca3af;
+      font-size:1.2rem;
+      cursor:pointer;
+    }
+    .action-panel textarea{
+      width:100%;
+      min-height:70px;
+      border-radius:10px;
+      border:1px solid #4b5563;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:.8rem;
+      padding:8px 10px;
+      resize:vertical;
+      margin-bottom:8px;
+    }
+    .action-panel textarea:focus{
+      outline:none;
+      border-color:#22c55e;
+    }
+    .action-submit{
+      width:100%;
+    }
+    .action-note{
+      font-size:.7rem;
+      text-align:center;
+      color:#6b7280;
+      margin-top:6px;
+    }
+
     @media(max-width:880px){
       .page{
         grid-template-columns:1fr;
@@ -415,9 +628,40 @@
           Operación respaldada por la flota y contratos de renting RADIZ.
         </div>
       </div>
+
+      <!-- Oportunidades de inversión -->
+      <section class="ops-section">
+        <h3 class="ops-title">Oportunidades de inversión</h3>
+        <div class="ops-grid">
+          <article class="op-card">
+            <div class="op-image"></div>
+            <h4>Flota de motos urbana</h4>
+            <p>
+              Participa en un portafolio de motos para última milla con contratos de renting activos,
+              diseñado para generar flujo estable mes a mes.
+            </p>
+          </article>
+          <article class="op-card">
+            <div class="op-image"></div>
+            <h4>Vehículos de carga ligera</h4>
+            <p>
+              Inversión ligada a camionetas y camiones livianos que atienden rutas urbanas y regionales,
+              con respaldo en activos reales.
+            </p>
+          </article>
+          <article class="op-card">
+            <div class="op-image"></div>
+            <h4>Fondo mixto RADIZ</h4>
+            <p>
+              Combina motos, vehículos y oportunidades de logística en un solo producto,
+              diversificando el riesgo sin complicarte la vida.
+            </p>
+          </article>
+        </div>
+      </section>
     </section>
 
-    <!-- VISTA PREVIA "MIS INVERSIONES" -->
+    <!-- VISTA "MIS INVERSIONES" -->
     <section class="col-right">
       <div class="right-header">
         <h2>MIS INVERSIONES</h2>
@@ -426,15 +670,79 @@
 
       <div class="summary-grid">
         <article class="card">
-          <p class="card-label">Capital invertido</p>
-          <p class="card-value">$ 25.000.000</p>
-          <p class="card-chip">+ $ 5.200.000 en rendimientos</p>
+          <p class="card-label">Inversión inicial</p>
+          <p class="card-value" id="statCapital">$ 25.000.000</p>
+          <p class="card-chip" id="statCapitalChip">+ $ 5.200.000 en rendimientos</p>
         </article>
         <article class="card">
           <p class="card-label">Próximo pago estimado</p>
-          <p class="card-value">$ 1.300.000</p>
-          <p class="card-chip">Corte 15 de cada mes</p>
+          <p class="card-value" id="statProximoPago">$ 1.300.000</p>
+          <p class="card-chip" id="statProximoChip">Corte 15 de cada mes</p>
         </article>
+      </div>
+
+      <p class="investor-id" id="investorIdRow">
+        ID de inversión: <span id="investorIdValue"></span>
+      </p>
+
+      <div class="summary-grid summary-grid-secondary">
+        <article class="card">
+          <p class="card-label">TIR (estimada)</p>
+          <p class="card-value-small" id="statTIR">12,5 % anual</p>
+        </article>
+        <article class="card">
+          <p class="card-label">ROI acumulado</p>
+          <p class="card-value-small" id="statROI">20,8 %</p>
+        </article>
+      </div>
+
+      <div class="summary-grid summary-grid-secondary">
+        <article class="card">
+          <p class="card-label">Dividendos acumulados</p>
+          <p class="card-value-small" id="statDividendos">$ 5.200.000</p>
+        </article>
+        <article class="card">
+          <p class="card-label">Equity estimado</p>
+          <p class="card-value-small" id="statEquity">$ 30.200.000</p>
+        </article>
+      </div>
+
+      <section class="dates-section">
+        <h3>Fechas clave</h3>
+        <div class="dates-grid">
+          <div class="date-item">
+            <p class="date-label">Inicio de inversión</p>
+            <p class="date-value" id="fechaInicioInv">01/03/2026</p>
+          </div>
+          <div class="date-item">
+            <p class="date-label">Bloqueo hasta</p>
+            <p class="date-value" id="fechaBloqueoInv">01/03/2027</p>
+          </div>
+          <div class="date-item">
+            <p class="date-label">Próximo retiro de dividendos</p>
+            <p class="date-value" id="fechaDividendosInv">15/04/2026</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="about-section">
+        <h3>¿En qué invertimos tu dinero?</h3>
+        <p id="textoInversion">
+          Este portafolio invierte en contratos de renting de motos y vehículos de última milla,
+          respaldados por activos físicos y por el flujo de operación diaria de RADIZ.
+        </p>
+      </section>
+
+      <div class="money-actions">
+        <button type="button" class="btn-primary money-btn" onclick="abrirAccion('reinvertir')">
+          Reinvertir dividendos
+        </button>
+        <button type="button" class="btn-ghost money-btn" onclick="abrirAccion('retirar')">
+          Retirar dividendos
+        </button>
+        <button type="button" class="btn-ghost money-btn" onclick="abrirAccion('puntos')">
+          Pagar con puntos
+        </button>
       </div>
 
       <p class="actions-title">Quiero usar mis rendimientos para…</p>
@@ -464,7 +772,44 @@
         </div>
       </div>
 
-      <p class="foot-note">Los valores mostrados son ilustrativos. Una vez inicies sesión verás tus cifras reales.</p>
+      <section class="dividends-section">
+        <h3>Detalle de dividendos por mes</h3>
+        <table class="dividends-table">
+          <thead>
+            <tr>
+              <th>Mes</th>
+              <th>Valor</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody id="tablaDividendos">
+            <tr>
+              <td>Enero 2026</td>
+              <td>$ 1.200.000</td>
+              <td>Pagado</td>
+            </tr>
+            <tr>
+              <td>Febrero 2026</td>
+              <td>$ 1.250.000</td>
+              <td>Pagado</td>
+            </tr>
+            <tr>
+              <td>Marzo 2026</td>
+              <td>$ 1.300.000</td>
+              <td>Pagado</td>
+            </tr>
+            <tr>
+              <td>Abril 2026</td>
+              <td>$ 1.450.000</td>
+              <td>Pendiente</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <p class="foot-note" id="demoFootnote">
+        Los valores mostrados son ilustrativos. Una vez inicies sesión verás tus cifras reales.
+      </p>
     </section>
   </main>
 
@@ -506,6 +851,27 @@
     </div>
   </div>
 
+  <!-- MODAL ACCIONES -->
+  <div class="action-overlay" id="actionOverlay">
+    <div class="action-panel">
+      <button type="button" class="action-close" onclick="cerrarAccion()">&times;</button>
+      <h3 id="accionTitulo">Acción</h3>
+      <p id="accionTexto">
+        Confirma que deseas continuar con esta solicitud.
+      </p>
+      <label for="accionComentario" style="font-size:.78rem;margin-bottom:2px;display:block;">
+        Comentarios (opcional)
+      </label>
+      <textarea id="accionComentario" placeholder="Ej: Quiero reinvertir el 100% de mis dividendos de este trimestre."></textarea>
+      <button type="button" class="btn-primary action-submit" onclick="confirmarAccion()">
+        Confirmar solicitud
+      </button>
+      <p class="action-note">
+        Al confirmar se abrirá tu correo con un mensaje listo para enviar al equipo RADIZ.
+      </p>
+    </div>
+  </div>
+
   <script>
     function openAuth(mode){
       const overlay=document.getElementById('authOverlay');
@@ -536,6 +902,116 @@
 
     // Estado inicial: mostrar login como opción por defecto en el modal
     showAuth('login');
+
+    // ----- MODO INVERSOR (cuando viene con ?idInv=XYZ) -----
+    let currentInvestmentId = null;
+
+    function getInvestmentIdFromUrl(){
+      const params=new URLSearchParams(window.location.search);
+      const id=params.get('idInv')||params.get('id')||'';
+      return id.trim()||null;
+    }
+
+    (function initInvestmentView(){
+      const idInv=getInvestmentIdFromUrl();
+      const idRow=document.getElementById('investorIdRow');
+      const idVal=document.getElementById('investorIdValue');
+      const footNote=document.getElementById('demoFootnote');
+
+      if(idInv && idRow && idVal){
+        currentInvestmentId=idInv;
+        idVal.textContent=idInv;
+        idRow.style.display='block';
+
+        if(footNote){
+          footNote.textContent=
+            'Estas cifras son ilustrativas. Próximamente verás aquí el detalle real de tu inversión '+idInv+'.';
+        }
+      }
+    })();
+
+    // ----- ACCIONES: Reinvertir / Retirar / Pagar con puntos -----
+    let accionActual=null;
+
+    function abrirAccion(tipo){
+      accionActual=tipo;
+      const overlay=document.getElementById('actionOverlay');
+      const titulo=document.getElementById('accionTitulo');
+      const texto=document.getElementById('accionTexto');
+      const comentario=document.getElementById('accionComentario');
+
+      if(!overlay || !titulo || !texto || !comentario) return;
+
+      if(tipo==='reinvertir'){
+        titulo.textContent='Reinvertir mis dividendos';
+        texto.textContent='Confirmas que quieres reinvertir tus dividendos disponibles en tu portafolio RADIZ? Nuestro equipo registrará tu solicitud y te confirmará los detalles por correo.';
+      }else if(tipo==='retirar'){
+        titulo.textContent='Retirar dividendos';
+        texto.textContent='Confirmas que quieres solicitar el retiro de tus dividendos disponibles a tu cuenta bancaria registrada? Te enviaremos la confirmación y el detalle del pago a tu correo.';
+      }else if(tipo==='puntos'){
+        titulo.textContent='Pagar con puntos';
+        texto.textContent='Confirmas que quieres usar tus puntos acumulados para pagar gasolina o lavado de vehículo? Nuestro equipo te indicará cómo redimirlos en los puntos aliados.';
+      }else{
+        titulo.textContent='Acción';
+        texto.textContent='Confirma que deseas continuar con esta solicitud.';
+      }
+
+      comentario.value='';
+      overlay.style.display='flex';
+    }
+
+    function cerrarAccion(){
+      const overlay=document.getElementById('actionOverlay');
+      if(overlay){
+        overlay.style.display='none';
+      }
+      accionActual=null;
+    }
+
+    function confirmarAccion(){
+      const comentario=document.getElementById('accionComentario');
+      const idInv=currentInvestmentId || '';
+      let asunto;
+      let cuerpo;
+
+      if(accionActual==='reinvertir'){
+        asunto='Solicitud de reinversión de dividendos';
+        cuerpo=
+          'Hola equipo RADIZ,\n\n'+
+          'Quiero reinvertir mis dividendos disponibles.\n\n'+
+          (idInv ? 'ID de inversión: '+idInv+'\n' : '')+
+          'Comentarios adicionales: '+(comentario.value || 'N/A')+'\n\n'+
+          'Enviado desde el portal de inversiones.';
+      }else if(accionActual==='retirar'){
+        asunto='Solicitud de retiro de dividendos';
+        cuerpo=
+          'Hola equipo RADIZ,\n\n'+
+          'Quiero solicitar el retiro de mis dividendos disponibles a mi cuenta bancaria registrada.\n\n'+
+          (idInv ? 'ID de inversión: '+idInv+'\n' : '')+
+          'Comentarios adicionales: '+(comentario.value || 'N/A')+'\n\n'+
+          'Enviado desde el portal de inversiones.';
+      }else if(accionActual==='puntos'){
+        asunto='Solicitud de pago con puntos';
+        cuerpo=
+          'Hola equipo RADIZ,\n\n'+
+          'Quiero utilizar mis puntos acumulados para pagar gasolina o lavado de vehículo.\n\n'+
+          (idInv ? 'ID de inversión: '+idInv+'\n' : '')+
+          'Comentarios adicionales: '+(comentario.value || 'N/A')+'\n\n'+
+          'Enviado desde el portal de inversiones.';
+      }else{
+        cerrarAccion();
+        return;
+      }
+
+      const correoDestino='notificacionespi45@gmail.com';
+      const mailto=
+        'mailto:'+encodeURIComponent(correoDestino)+
+        '?subject='+encodeURIComponent(asunto)+
+        '&body='+encodeURIComponent(cuerpo);
+
+      window.location.href=mailto;
+      cerrarAccion();
+    }
   </script>
 </body>
 </html>
