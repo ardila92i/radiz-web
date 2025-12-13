@@ -29,7 +29,7 @@
       grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);
     }
 
-    /* COLUMNA IZQUIERDA: STORYTELLING */
+    /* COLUMNA IZQUIERDA */
     .col-left{
       padding:28px 32px 28px;
       display:flex;
@@ -138,7 +138,7 @@
       background:#22c55e;
     }
 
-    /* COLUMNA DERECHA: VISTA "MIS INVERSIONES" */
+    /* COLUMNA DERECHA */
     .col-right{
       padding:28px 26px 26px;
       background:#f9fafb;
@@ -258,6 +258,97 @@
       text-align:right;
     }
 
+    /* MODAL AUTH */
+    .auth-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.65);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:40;
+    }
+    .auth-panel{
+      background:#0b1120;
+      color:#e5e7eb;
+      border-radius:20px;
+      padding:20px 22px 18px;
+      width:100%;
+      max-width:420px;
+      box-shadow:0 22px 50px rgba(15,23,42,.8);
+      position:relative;
+    }
+    .auth-close{
+      position:absolute;
+      top:10px;
+      right:12px;
+      border:none;
+      background:transparent;
+      color:#9ca3af;
+      font-size:1.2rem;
+      cursor:pointer;
+    }
+    .auth-tabs{
+      display:flex;
+      gap:8px;
+      margin-bottom:14px;
+    }
+    .auth-tabs button{
+      flex:1;
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,.6);
+      background:rgba(15,23,42,.9);
+      color:#cbd5f5;
+      font-size:.82rem;
+      cursor:pointer;
+    }
+    .auth-tabs button.active{
+      background:#22c55e;
+      border-color:#22c55e;
+      color:#052e16;
+      font-weight:600;
+    }
+    .auth-panel h3{
+      font-size:1rem;
+      margin-bottom:4px;
+    }
+    .auth-panel p{
+      font-size:.8rem;
+      color:#9ca3af;
+      margin-bottom:10px;
+    }
+    .auth-panel label{
+      display:block;
+      font-size:.78rem;
+      margin-bottom:2px;
+      color:#e5e7eb;
+    }
+    .auth-panel input{
+      width:100%;
+      padding:8px 10px;
+      border-radius:9px;
+      border:1px solid #4b5563;
+      background:#020617;
+      color:#e5e7eb;
+      font-size:.85rem;
+      margin-bottom:8px;
+    }
+    .auth-panel input:focus{
+      outline:none;
+      border-color:#22c55e;
+    }
+    .auth-submit{
+      width:100%;
+      margin-top:4px;
+    }
+    .auth-note{
+      font-size:.72rem;
+      text-align:center;
+      color:#9ca3af;
+      margin-top:8px;
+    }
+
     @media(max-width:880px){
       .page{
         grid-template-columns:1fr;
@@ -303,11 +394,11 @@
       </div>
 
       <div class="hero-actions">
-        <a href="#" class="btn-primary">Crear cuenta</a>
-        <a href="#" class="btn-ghost">
+        <button type="button" class="btn-primary" onclick="openAuth('register')">Crear cuenta</button>
+        <button type="button" class="btn-ghost" onclick="openAuth('login')">
           Ya tengo usuario
           <span>↗</span>
-        </a>
+        </button>
       </div>
 
       <div class="hero-grid">
@@ -326,10 +417,10 @@
       </div>
     </section>
 
-    <!-- VISTA PREVIA "MIS INVERSIONES" (ESTÁTICA POR AHORA) -->
+    <!-- VISTA PREVIA "MIS INVERSIONES" -->
     <section class="col-right">
       <div class="right-header">
-        <h2>Mis inversiones</h2>
+        <h2>MIS INVERSIONES</h2>
         <span class="pill-badge">Versión demo · 2026</span>
       </div>
 
@@ -376,5 +467,75 @@
       <p class="foot-note">Los valores mostrados son ilustrativos. Una vez inicies sesión verás tus cifras reales.</p>
     </section>
   </main>
+
+  <!-- MODAL LOGIN / REGISTRO (AÚN SIN SUPABASE) -->
+  <div class="auth-overlay" id="authOverlay">
+    <div class="auth-panel">
+      <button class="auth-close" type="button" onclick="closeAuth()">&times;</button>
+
+      <div class="auth-tabs">
+        <button type="button" id="tabLogin" onclick="showAuth('login')">Iniciar sesión</button>
+        <button type="button" id="tabRegister" onclick="showAuth('register')">Crear cuenta</button>
+      </div>
+
+      <div id="authLogin">
+        <h3>Inicia sesión</h3>
+        <p>Accede a tu panel de inversiones usando tu correo y contraseña.</p>
+        <label for="loginEmail">Correo electrónico</label>
+        <input id="loginEmail" type="email" placeholder="ejemplo@correo.com">
+        <label for="loginPassword">Contraseña</label>
+        <input id="loginPassword" type="password" placeholder="********">
+        <button type="button" class="btn-primary auth-submit">Entrar</button>
+      </div>
+
+      <div id="authRegister" style="display:none;">
+        <h3>Crea tu cuenta</h3>
+        <p>Regístrate para invertir con RADIZ. En el siguiente paso podrás ver los planes disponibles.</p>
+        <label for="regName">Nombre completo</label>
+        <input id="regName" type="text" placeholder="Nombre y apellidos">
+        <label for="regEmail">Correo electrónico</label>
+        <input id="regEmail" type="email" placeholder="ejemplo@correo.com">
+        <label for="regPassword">Crea una contraseña</label>
+        <input id="regPassword" type="password" placeholder="Mínimo 8 caracteres">
+        <button type="button" class="btn-primary auth-submit">Continuar</button>
+      </div>
+
+      <p class="auth-note">
+        Esta es una versión demo: todavía no guardamos tus datos. El siguiente paso será conectar con Supabase de forma segura.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function openAuth(mode){
+      const overlay=document.getElementById('authOverlay');
+      overlay.style.display='flex';
+      showAuth(mode||'login');
+    }
+    function closeAuth(){
+      document.getElementById('authOverlay').style.display='none';
+    }
+    function showAuth(mode){
+      const loginBox=document.getElementById('authLogin');
+      const regBox=document.getElementById('authRegister');
+      const tabLogin=document.getElementById('tabLogin');
+      const tabRegister=document.getElementById('tabRegister');
+
+      if(mode==='register'){
+        regBox.style.display='block';
+        loginBox.style.display='none';
+        tabRegister.classList.add('active');
+        tabLogin.classList.remove('active');
+      }else{
+        loginBox.style.display='block';
+        regBox.style.display='none';
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+      }
+    }
+
+    // Estado inicial: mostrar login como opción por defecto en el modal
+    showAuth('login');
+  </script>
 </body>
 </html>
