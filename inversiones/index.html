@@ -69,52 +69,6 @@
       max-width:460px;
     }
 
-    .hero-actions{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:4px;
-    }
-    .btn-primary{
-      padding:10px 22px;
-      border-radius:999px;
-      border:none;
-      background:#22c55e;
-      color:#052e16;
-      font-weight:650;
-      font-size:.95rem;
-      cursor:pointer;
-      box-shadow:0 16px 34px rgba(34,197,94,.45);
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      text-decoration:none;
-      white-space:nowrap;
-    }
-    .btn-primary:hover{
-      transform:translateY(-1px);
-      box-shadow:0 20px 40px rgba(34,197,94,.6);
-    }
-    .btn-ghost{
-      padding:10px 18px;
-      border-radius:999px;
-      border:1px solid rgba(148,163,184,.6);
-      background:transparent;
-      color:#e5e7eb;
-      font-weight:550;
-      font-size:.9rem;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      text-decoration:none;
-      white-space:nowrap;
-    }
-    .btn-ghost span{
-      font-size:1rem;
-      margin-left:6px;
-    }
-
     .hero-grid{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
@@ -138,45 +92,6 @@
       background:#22c55e;
     }
 
-    /* OPORTUNIDADES DE INVERSIÓN */
-    .ops-section{
-      margin-top:18px;
-    }
-    .ops-title{
-      font-size:.85rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      color:#9ca3af;
-      margin-bottom:6px;
-    }
-    .ops-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-      gap:10px;
-    }
-    .op-card{
-      background:rgba(15,23,42,.85);
-      border-radius:18px;
-      padding:10px 10px 12px;
-      box-shadow:0 14px 30px rgba(0,0,0,.35);
-      font-size:.78rem;
-    }
-    .op-image{
-      width:100%;
-      height:70px;
-      border-radius:14px;
-      background:linear-gradient(135deg,rgba(59,130,246,.85),rgba(16,185,129,.9));
-      margin-bottom:6px;
-    }
-    .op-card h4{
-      font-size:.9rem;
-      margin-bottom:4px;
-    }
-    .op-card p{
-      font-size:.78rem;
-      color:#e5e7eb;
-    }
-
     /* COLUMNA DERECHA */
     .col-right{
       padding:28px 26px 26px;
@@ -185,6 +100,19 @@
       flex-direction:column;
       gap:16px;
     }
+
+    .about-section{
+      font-size:.8rem;
+      color:#4b5563;
+    }
+    .about-section h3{
+      font-size:.82rem;
+      text-transform:uppercase;
+      letter-spacing:.06em;
+      color:#6b7280;
+      margin-bottom:4px;
+    }
+
     .right-header{
       display:flex;
       justify-content:space-between;
@@ -232,6 +160,11 @@
       font-size:.75rem;
       color:#16a34a;
     }
+    .card-value-small{
+      font-size:1rem;
+      font-weight:600;
+      color:#111827;
+    }
 
     .investor-id{
       font-size:.78rem;
@@ -251,10 +184,82 @@
     .summary-grid-secondary .card{
       font-size:.78rem;
     }
-    .card-value-small{
-      font-size:1rem;
+
+    .dates-section{
+      margin-top:8px;
+    }
+    .dates-section h3{
+      font-size:.8rem;
+      color:#6b7280;
+      margin-bottom:4px;
+    }
+    .dates-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+      gap:8px;
+    }
+    .date-item{
+      background:#e5e7eb;
+      border-radius:12px;
+      padding:6px 8px;
+    }
+    .date-label{
+      font-size:.7rem;
+      color:#6b7280;
+    }
+    .date-value{
+      font-size:.85rem;
       font-weight:600;
       color:#111827;
+    }
+
+    .money-actions{
+      margin-top:10px;
+      margin-bottom:6px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .btn-primary{
+      padding:10px 22px;
+      border-radius:999px;
+      border:none;
+      background:#22c55e;
+      color:#052e16;
+      font-weight:650;
+      font-size:.95rem;
+      cursor:pointer;
+      box-shadow:0 16px 34px rgba(34,197,94,.45);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      white-space:nowrap;
+    }
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 20px 40px rgba(34,197,94,.6);
+    }
+    .btn-ghost{
+      padding:10px 18px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,.6);
+      background:transparent;
+      color:#111827;
+      font-weight:550;
+      font-size:.9rem;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      white-space:nowrap;
+      background:#e5e7eb;
+    }
+    .money-actions .money-btn{
+      flex:1;
+      justify-content:center;
     }
 
     .actions-title{
@@ -286,18 +291,6 @@
       margin-top:4px;
     }
 
-    .money-actions{
-      margin-top:8px;
-      margin-bottom:6px;
-      display:flex;
-      flex-wrap:wrap;
-      gap:8px;
-    }
-    .money-actions .money-btn{
-      flex:1;
-      justify-content:center;
-    }
-
     .mini-chart{
       margin-top:10px;
       border-radius:14px;
@@ -309,62 +302,6 @@
       font-size:.78rem;
       margin-bottom:4px;
       color:#065f46;
-    }
-    .mini-bars{
-      display:flex;
-      gap:4px;
-      margin-top:4px;
-      align-items:flex-end;
-      height:40px;
-    }
-    .mini-bars span{
-      flex:1;
-      border-radius:999px 999px 0 0;
-      background:rgba(34,197,94,.8);
-    }
-    .mini-bars span:nth-child(2){opacity:.75}
-    .mini-bars span:nth-child(3){opacity:.6}
-    .mini-bars span:nth-child(4){opacity:.85}
-
-    .dates-section{
-      margin-top:8px;
-    }
-    .dates-section h3{
-      font-size:.8rem;
-      color:#6b7280;
-      margin-bottom:4px;
-    }
-    .dates-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
-      gap:8px;
-    }
-    .date-item{
-      background:#e5e7eb;
-      border-radius:12px;
-      padding:6px 8px;
-    }
-    .date-label{
-      font-size:.7rem;
-      color:#6b7280;
-    }
-    .date-value{
-      font-size:.85rem;
-      font-weight:600;
-      color:#111827;
-    }
-
-    .about-section{
-      margin-top:8px;
-      font-size:.8rem;
-      color:#4b5563;
-    }
-    .about-section h3{
-      font-size:.82rem;
-      text-transform:uppercase;
-      letter-spacing:.06em;
-      color:#6b7280;
-      margin-bottom:4px;
     }
 
     .dividends-section{
@@ -399,102 +336,51 @@
       border-bottom:none;
     }
 
+    /* OPORTUNIDADES EN PANEL DERECHO (último bloque) */
+    .ops-section{
+      margin-top:14px;
+    }
+    .ops-title{
+      font-size:.85rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:#6b7280;
+      margin-bottom:6px;
+    }
+    .ops-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+      gap:10px;
+    }
+    .op-card{
+      background:#111827;
+      border-radius:18px;
+      padding:10px 10px 12px;
+      box-shadow:0 14px 30px rgba(0,0,0,.35);
+      font-size:.78rem;
+      color:#e5e7eb;
+    }
+    .op-image{
+      width:100%;
+      height:70px;
+      border-radius:14px;
+      background:linear-gradient(135deg,rgba(59,130,246,.85),rgba(16,185,129,.9));
+      margin-bottom:6px;
+    }
+    .op-card h4{
+      font-size:.9rem;
+      margin-bottom:4px;
+    }
+    .op-card p{
+      font-size:.78rem;
+      color:#e5e7eb;
+    }
+
     .foot-note{
       margin-top:6px;
       font-size:.7rem;
       color:#9ca3af;
       text-align:right;
-    }
-
-    /* MODAL AUTH */
-    .auth-overlay{
-      position:fixed;
-      inset:0;
-      background:rgba(15,23,42,.65);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:40;
-    }
-    .auth-panel{
-      background:#0b1120;
-      color:#e5e7eb;
-      border-radius:20px;
-      padding:20px 22px 18px;
-      width:100%;
-      max-width:420px;
-      box-shadow:0 22px 50px rgba(15,23,42,.8);
-      position:relative;
-    }
-    .auth-close{
-      position:absolute;
-      top:10px;
-      right:12px;
-      border:none;
-      background:transparent;
-      color:#9ca3af;
-      font-size:1.2rem;
-      cursor:pointer;
-    }
-    .auth-tabs{
-      display:flex;
-      gap:8px;
-      margin-bottom:14px;
-    }
-    .auth-tabs button{
-      flex:1;
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid rgba(148,163,184,.6);
-      background:rgba(15,23,42,.9);
-      color:#cbd5f5;
-      font-size:.82rem;
-      cursor:pointer;
-    }
-    .auth-tabs button.active{
-      background:#22c55e;
-      border-color:#22c55e;
-      color:#052e16;
-      font-weight:600;
-    }
-    .auth-panel h3{
-      font-size:1rem;
-      margin-bottom:4px;
-    }
-    .auth-panel p{
-      font-size:.8rem;
-      color:#9ca3af;
-      margin-bottom:10px;
-    }
-    .auth-panel label{
-      display:block;
-      font-size:.78rem;
-      margin-bottom:2px;
-      color:#e5e7eb;
-    }
-    .auth-panel input{
-      width:100%;
-      padding:8px 10px;
-      border-radius:9px;
-      border:1px solid #4b5563;
-      background:#020617;
-      color:#e5e7eb;
-      font-size:.85rem;
-      margin-bottom:8px;
-    }
-    .auth-panel input:focus{
-      outline:none;
-      border-color:#22c55e;
-    }
-    .auth-submit{
-      width:100%;
-      margin-top:4px;
-    }
-    .auth-note{
-      font-size:.72rem;
-      text-align:center;
-      color:#9ca3af;
-      margin-top:8px;
     }
 
     /* MODAL ACCIONES (reinvertir, retirar, puntos) */
@@ -586,12 +472,31 @@
       .actions-grid{
         grid-template-columns:1fr;
       }
+      /* Orden en móviles:
+         1) logo/hero (col-left)
+         2) bloque "En qué invertimos tu capital"
+         3) "Mi inversión"
+         4) Detalle de beneficios por mes
+         5) Oportunidades de inversión
+      */
+      .col-right .about-section{order:1;}
+      .col-right .right-header,
+      .col-right .summary-grid,
+      .col-right .summary-grid-secondary,
+      .col-right .dates-section,
+      .col-right .mini-chart,
+      .col-right .money-actions,
+      .col-right .actions-title,
+      .col-right .actions-grid{order:2;}
+      .col-right .dividends-section{order:3;}
+      .col-right .ops-section{order:4;}
+      .col-right .foot-note{order:5;}
     }
   </style>
 </head>
 <body>
   <main class="page">
-    <!-- STORYTELLING -->
+    <!-- COLUMNA IZQUIERDA: LOGO + STORY -->
     <section class="col-left">
       <div class="logo-row">
         <img src="../logoradiz.png" alt="Logo RADIZ">
@@ -604,14 +509,6 @@
           Desde un solo vehículo hasta un portafolio completo. Invierte, deja que nosotros operemos
           y usa tus rendimientos para la vida real: tanqueo, lavado, compras en comercios aliados y más.
         </p>
-      </div>
-
-      <div class="hero-actions">
-        <button type="button" class="btn-primary" onclick="openAuth('register')">Crear cuenta</button>
-        <button type="button" class="btn-ghost" onclick="openAuth('login')">
-          Ya tengo usuario
-          <span>↗</span>
-        </button>
       </div>
 
       <div class="hero-grid">
@@ -628,43 +525,22 @@
           Operación respaldada por la flota y contratos de renting RADIZ.
         </div>
       </div>
-
-      <!-- Oportunidades de inversión -->
-      <section class="ops-section">
-        <h3 class="ops-title">Oportunidades de inversión</h3>
-        <div class="ops-grid">
-          <article class="op-card">
-            <div class="op-image"></div>
-            <h4>Flota de motos urbana</h4>
-            <p>
-              Participa en un portafolio de motos para última milla con contratos de renting activos,
-              diseñado para generar flujo estable mes a mes.
-            </p>
-          </article>
-          <article class="op-card">
-            <div class="op-image"></div>
-            <h4>Vehículos de carga ligera</h4>
-            <p>
-              Inversión ligada a camionetas y camiones livianos que atienden rutas urbanas y regionales,
-              con respaldo en activos reales.
-            </p>
-          </article>
-          <article class="op-card">
-            <div class="op-image"></div>
-            <h4>Fondo mixto RADIZ</h4>
-            <p>
-              Combina motos, vehículos y oportunidades de logística en un solo producto,
-              diversificando el riesgo sin complicarte la vida.
-            </p>
-          </article>
-        </div>
-      </section>
     </section>
 
-    <!-- VISTA "MIS INVERSIONES" -->
+    <!-- COLUMNA DERECHA: PANEL "MI INVERSIÓN" -->
     <section class="col-right">
+      <!-- 1. EN QUÉ INVERTIMOS TU CAPITAL -->
+      <section class="about-section">
+        <h3>¿EN QUÉ INVERTIMOS TU CAPITAL?</h3>
+        <p id="textoInversion">
+          Este portafolio invierte en contratos de renting de motos y vehículos de última milla,
+          respaldados por activos físicos y por el flujo de operación diaria de RADIZ.
+        </p>
+      </section>
+
+      <!-- 2. MI INVERSIÓN -->
       <div class="right-header">
-        <h2>MIS INVERSIONES</h2>
+        <h2>MI INVERSIÓN</h2>
         <span class="pill-badge">Versión demo · 2026</span>
       </div>
 
@@ -725,14 +601,14 @@
         </div>
       </section>
 
-      <section class="about-section">
-        <h3>¿En qué invertimos tu dinero?</h3>
-        <p id="textoInversion">
-          Este portafolio invierte en contratos de renting de motos y vehículos de última milla,
-          respaldados por activos físicos y por el flujo de operación diaria de RADIZ.
-        </p>
-      </section>
+      <!-- Gráfico real (ejemplo estático) -->
+      <div class="mini-chart">
+        <h3>Evolución de tus pagos trimestrales</h3>
+        <p>Ejemplo ilustrativo de cómo podrían crecer tus dividendos por trimestre.</p>
+        <canvas id="chartPagos" width="320" height="90" aria-label="Ejemplo de evolución trimestral" role="img"></canvas>
+      </div>
 
+      <!-- Botones principales -->
       <div class="money-actions">
         <button type="button" class="btn-primary money-btn" onclick="abrirAccion('reinvertir')">
           Reinvertir dividendos
@@ -761,19 +637,9 @@
         </div>
       </div>
 
-      <div class="mini-chart">
-        <h3>Evolución de tus pagos trimestrales</h3>
-        <p>Una vista rápida de cómo han crecido tus rendimientos en el último año.</p>
-        <div class="mini-bars">
-          <span style="height:35px"></span>
-          <span style="height:28px"></span>
-          <span style="height:32px"></span>
-          <span style="height:40px"></span>
-        </div>
-      </div>
-
+      <!-- 3. DETALLE DE BENEFICIOS POR MES -->
       <section class="dividends-section">
-        <h3>Detalle de dividendos por mes</h3>
+        <h3>Detalle de beneficios por mes</h3>
         <table class="dividends-table">
           <thead>
             <tr>
@@ -807,49 +673,42 @@
         </table>
       </section>
 
+      <!-- 4. OPORTUNIDADES DE INVERSIÓN -->
+      <section class="ops-section">
+        <h3 class="ops-title">Oportunidades de inversión</h3>
+        <div class="ops-grid">
+          <article class="op-card">
+            <div class="op-image"></div>
+            <h4>Flota de motos urbana</h4>
+            <p>
+              Participa en un portafolio de motos para última milla con contratos de renting activos,
+              diseñado para generar flujo estable mes a mes.
+            </p>
+          </article>
+          <article class="op-card">
+            <div class="op-image"></div>
+            <h4>Vehículos de carga ligera</h4>
+            <p>
+              Inversión ligada a camionetas y camiones livianos que atienden rutas urbanas y regionales,
+              con respaldo en activos reales.
+            </p>
+          </article>
+          <article class="op-card">
+            <div class="op-image"></div>
+            <h4>Fondo mixto RADIZ</h4>
+            <p>
+              Combina motos, vehículos y oportunidades de logística en un solo producto,
+              diversificando el riesgo sin complicarte la vida.
+            </p>
+          </article>
+        </div>
+      </section>
+
       <p class="foot-note" id="demoFootnote">
         Los valores mostrados son ilustrativos. Una vez inicies sesión verás tus cifras reales.
       </p>
     </section>
   </main>
-
-  <!-- MODAL LOGIN / REGISTRO (AÚN SIN SUPABASE) -->
-  <div class="auth-overlay" id="authOverlay">
-    <div class="auth-panel">
-      <button class="auth-close" type="button" onclick="closeAuth()">&times;</button>
-
-      <div class="auth-tabs">
-        <button type="button" id="tabLogin" onclick="showAuth('login')">Iniciar sesión</button>
-        <button type="button" id="tabRegister" onclick="showAuth('register')">Crear cuenta</button>
-      </div>
-
-      <div id="authLogin">
-        <h3>Inicia sesión</h3>
-        <p>Accede a tu panel de inversiones usando tu correo y contraseña.</p>
-        <label for="loginEmail">Correo electrónico</label>
-        <input id="loginEmail" type="email" placeholder="ejemplo@correo.com">
-        <label for="loginPassword">Contraseña</label>
-        <input id="loginPassword" type="password" placeholder="********">
-        <button type="button" class="btn-primary auth-submit">Entrar</button>
-      </div>
-
-      <div id="authRegister" style="display:none;">
-        <h3>Crea tu cuenta</h3>
-        <p>Regístrate para invertir con RADIZ. En el siguiente paso podrás ver los planes disponibles.</p>
-        <label for="regName">Nombre completo</label>
-        <input id="regName" type="text" placeholder="Nombre y apellidos">
-        <label for="regEmail">Correo electrónico</label>
-        <input id="regEmail" type="email" placeholder="ejemplo@correo.com">
-        <label for="regPassword">Crea una contraseña</label>
-        <input id="regPassword" type="password" placeholder="Mínimo 8 caracteres">
-        <button type="button" class="btn-primary auth-submit">Continuar</button>
-      </div>
-
-      <p class="auth-note">
-        Esta es una versión demo: todavía no guardamos tus datos. El siguiente paso será conectar con Supabase de forma segura.
-      </p>
-    </div>
-  </div>
 
   <!-- MODAL ACCIONES -->
   <div class="action-overlay" id="actionOverlay">
@@ -873,45 +732,13 @@
   </div>
 
   <script>
-    function openAuth(mode){
-      const overlay=document.getElementById('authOverlay');
-      overlay.style.display='flex';
-      showAuth(mode||'login');
-    }
-    function closeAuth(){
-      document.getElementById('authOverlay').style.display='none';
-    }
-    function showAuth(mode){
-      const loginBox=document.getElementById('authLogin');
-      const regBox=document.getElementById('authRegister');
-      const tabLogin=document.getElementById('tabLogin');
-      const tabRegister=document.getElementById('tabRegister');
-
-      if(mode==='register'){
-        regBox.style.display='block';
-        loginBox.style.display='none';
-        tabRegister.classList.add('active');
-        tabLogin.classList.remove('active');
-      }else{
-        loginBox.style.display='block';
-        regBox.style.display='none';
-        tabLogin.classList.add('active');
-        tabRegister.classList.remove('active');
-      }
-    }
-
-    // Estado inicial: mostrar login como opción por defecto en el modal
-    showAuth('login');
-
-    // ----- MODO INVERSOR (cuando viene con ?idInv=XYZ) -----
+    // Lee el ID de inversión desde el query string (?idInv=R123, por ejemplo)
     let currentInvestmentId = null;
-
     function getInvestmentIdFromUrl(){
       const params=new URLSearchParams(window.location.search);
       const id=params.get('idInv')||params.get('id')||'';
       return id.trim()||null;
     }
-
     (function initInvestmentView(){
       const idInv=getInvestmentIdFromUrl();
       const idRow=document.getElementById('investorIdRow');
@@ -930,9 +757,60 @@
       }
     })();
 
-    // ----- ACCIONES: Reinvertir / Retirar / Pagar con puntos -----
-    let accionActual=null;
+    // Gráfico de ejemplo en canvas (datos estáticos por ahora)
+    function drawMiniChart(){
+      const canvas=document.getElementById('chartPagos');
+      if(!canvas || !canvas.getContext) return;
 
+      const ctx=canvas.getContext('2d');
+      const data=[1.2,1.25,1.3,1.45]; // millones por trimestre (ejemplo)
+      const labels=['T1','T2','T3','T4'];
+      const maxVal=Math.max.apply(null,data);
+
+      const width=canvas.width;
+      const height=canvas.height;
+      const paddingLeft=30;
+      const paddingBottom=18;
+      const chartWidth=width-paddingLeft-10;
+      const chartHeight=height-paddingBottom-10;
+
+      ctx.clearRect(0,0,width,height);
+
+      // Ejes
+      ctx.strokeStyle='#9ca3af';
+      ctx.lineWidth=1;
+      ctx.beginPath();
+      ctx.moveTo(paddingLeft,10);
+      ctx.lineTo(paddingLeft,10+chartHeight);
+      ctx.lineTo(paddingLeft+chartWidth,10+chartHeight);
+      ctx.stroke();
+
+      // Barras
+      const barSpace=chartWidth/data.length;
+      const barWidth=barSpace*0.45;
+
+      ctx.fillStyle='#16a34a';
+      data.forEach(function(v,idx){
+        const ratio=v/maxVal;
+        const barHeight=chartHeight*ratio;
+        const x=paddingLeft+barSpace*idx+(barSpace-barWidth)/2;
+        const y=10+chartHeight-barHeight;
+        ctx.beginPath();
+        ctx.roundRect(x,y,barWidth,barHeight,4);
+        ctx.fill();
+
+        // Etiqueta de eje X
+        ctx.fillStyle='#6b7280';
+        ctx.font='10px system-ui';
+        ctx.textAlign='center';
+        ctx.fillText(labels[idx], x+barWidth/2, 10+chartHeight+12);
+        ctx.fillStyle='#16a34a';
+      });
+    }
+    drawMiniChart();
+
+    // Acciones: reinvertir / retirar / pagar con puntos
+    let accionActual=null;
     function abrirAccion(tipo){
       accionActual=tipo;
       const overlay=document.getElementById('actionOverlay');
@@ -959,7 +837,6 @@
       comentario.value='';
       overlay.style.display='flex';
     }
-
     function cerrarAccion(){
       const overlay=document.getElementById('actionOverlay');
       if(overlay){
@@ -967,7 +844,6 @@
       }
       accionActual=null;
     }
-
     function confirmarAccion(){
       const comentario=document.getElementById('accionComentario');
       const idInv=currentInvestmentId || '';
