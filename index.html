@@ -392,7 +392,7 @@
       box-shadow:0 16px 32px rgba(249,115,22,.6);
     }
 
-    /* Botón "Descarga la App" como texto discreto */
+    /* Botón "Descarga la App" / "Ir a inversiones" como texto discreto */
     .btn-app{
       padding:0;
       border:none;
@@ -472,10 +472,10 @@
       flex-wrap:wrap;
     }
     /* Fila sólo para los botones de pago */
-.row-pago-botones{
-  justify-content:space-between;
-  margin-top:10px;   /* <-- agrega esta línea */
-}
+    .row-pago-botones{
+      justify-content:space-between;
+      margin-top:10px;
+    }
     /* Botones Pagar con Wompi y Ver QR con color más suave */
     .btn-pago,
     .btn-qr{
@@ -518,7 +518,7 @@
       width:220px;
     }
 
-    /* Botón Link de afiliado centrado */
+    /* Botones inferiores centrados */
     .affiliate-row{
       margin-top:18px;
       display:flex;
@@ -726,6 +726,8 @@
           <div class="menu-item" onclick="abrirModal('modalHistorialPagos')">Historial de pagos</div>
           <div class="menu-item">Historial de mantenimientos</div>
           <div class="menu-item" onclick="abrirModal('modalSaldoFavor')">Mi saldo a favor</div>
+          <!-- NUEVO: Link de referidos en menú Renting -->
+          <div class="menu-item" onclick="abrirModal('modalAfiliado')">Link de referidos</div>
           <div class="menu-item" onclick="abrirModal('modalIncidente')">Notificar incidente</div>
           <div class="menu-item" onclick="abrirModal('modalTaller')">Taller asignado</div>
         </div>
@@ -767,16 +769,11 @@
           </div>
         </div>
 
-      <header class="portal-header">
-  <div>
-    <h1>PORTAL CLIENTES</h1>
-  </div>
-  <div>
-    <button type="button" class="btn-invest" onclick="window.location.href='inversiones/'">
-      Ir a inversiones
-    </button>
-  </div>
-</header>
+        <header class="portal-header">
+          <div>
+            <h1>PORTAL CLIENTES</h1>
+          </div>
+        </header>
 
         <!-- Consulta de contrato -->
         <div class="card card-consulta">
@@ -784,7 +781,7 @@
             <div class="section-icon section-icon-search"></div>
             <span>Consulta de contrato</span>
           </div>
-          
+
           <label for="idContrato">ID</label>
           <div class="row-consulta">
             <input type="text" id="idContrato" placeholder="Ejemplo: R4523">
@@ -805,7 +802,7 @@
           <div class="row-pago">
             <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
           </div>
-          
+
           <!-- fila de botones lado a lado -->
           <div class="row-pago row-pago-botones">
             <button type="button" class="btn-main btn-pago" onclick="crearPagoWompi()">Pagar con Wompi</button>
@@ -815,10 +812,10 @@
           <p id="pagoContratoError">Digita tu ID antes de pagar.</p>
         </div>
 
-        <!-- Botón Link de afiliado -->
+        <!-- Botón Ir a inversiones (discreto) -->
         <div class="affiliate-row">
-          <button type="button" class="btn-main btn-afiliado" onclick="abrirModal('modalAfiliado')">
-            Link de referidos
+          <button type="button" class="btn-app" onclick="window.location.href='inversiones/'">
+            Ir a inversiones
           </button>
         </div>
 
