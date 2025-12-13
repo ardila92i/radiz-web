@@ -329,7 +329,8 @@
     input[type="text"],
     input[type="number"],
     input[type="email"],
-    input[type="date"]{
+    input[type="date"],
+    input[type="password"]{
       width:100%;
       padding:10px 12px;
       border-radius:9px;
@@ -342,7 +343,8 @@
     input[type="text"]:focus,
     input[type="number"]:focus,
     input[type="email"]:focus,
-    input[type="date"]:focus{
+    input[type="date"]:focus,
+    input[type="password"]:focus{
       border-color:#2563eb;
       box-shadow:0 0 0 1px rgba(37,99,235,.18);
       background:#ffffff;
@@ -392,7 +394,7 @@
       box-shadow:0 16px 32px rgba(249,115,22,.6);
     }
 
-    /* Botón "Descarga la App" / "Ir a inversiones" como texto discreto */
+    /* Botón "Descarga la App" y "Ir a inversiones" como texto discreto */
     .btn-app{
       padding:0;
       border:none;
@@ -518,7 +520,7 @@
       width:220px;
     }
 
-    /* Botones inferiores centrados */
+    /* Botones centrados debajo de tarjetas */
     .affiliate-row{
       margin-top:18px;
       display:flex;
@@ -726,7 +728,6 @@
           <div class="menu-item" onclick="abrirModal('modalHistorialPagos')">Historial de pagos</div>
           <div class="menu-item">Historial de mantenimientos</div>
           <div class="menu-item" onclick="abrirModal('modalSaldoFavor')">Mi saldo a favor</div>
-          <!-- NUEVO: Link de referidos en menú Renting -->
           <div class="menu-item" onclick="abrirModal('modalAfiliado')">Link de referidos</div>
           <div class="menu-item" onclick="abrirModal('modalIncidente')">Notificar incidente</div>
           <div class="menu-item" onclick="abrirModal('modalTaller')">Taller asignado</div>
@@ -781,7 +782,7 @@
             <div class="section-icon section-icon-search"></div>
             <span>Consulta de contrato</span>
           </div>
-
+          
           <label for="idContrato">ID</label>
           <div class="row-consulta">
             <input type="text" id="idContrato" placeholder="Ejemplo: R4523">
@@ -802,7 +803,7 @@
           <div class="row-pago">
             <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
           </div>
-
+          
           <!-- fila de botones lado a lado -->
           <div class="row-pago row-pago-botones">
             <button type="button" class="btn-main btn-pago" onclick="crearPagoWompi()">Pagar con Wompi</button>
@@ -814,7 +815,7 @@
 
         <!-- Botón Ir a inversiones (discreto) -->
         <div class="affiliate-row">
-          <button type="button" class="btn-app" onclick="window.location.href='inversiones/'">
+          <button type="button" class="btn-app" onclick="abrirModal('modalInversiones')">
             Ir a inversiones
           </button>
         </div>
@@ -955,6 +956,31 @@
       <button type="button" onclick="cerrarModal('modalIncidente')">Cerrar</button>
       <button type="button" onclick="enviarIncidente()">Enviar</button>
     </div>
+  </div>
+</div>
+
+<!-- MODAL: INVERSIONES (INICIO DE SESIÓN) -->
+<div class="modal-backdrop" id="modalInversiones">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Inversiones RADIZ</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalInversiones')">&times;</button>
+    </div>
+    <p>Ingresa tu ID de inversiones y tu contraseña para entrar a tu dashboard.</p>
+    <label for="invId">ID de inversiones</label>
+    <input type="text" id="invId" placeholder="Ej: INV0012">
+    <label for="invPassword">Contraseña</label>
+    <input type="password" id="invPassword" placeholder="Tu contraseña">
+    <p id="invLoginMsg" class="status"></p>
+    <div class="modal-actions">
+      <button type="button" onclick="cerrarModal('modalInversiones')">Cerrar</button>
+      <button type="button" onclick="loginInversiones()">Entrar</button>
+    </div>
+    <p style="font-size:.8rem;margin-top:8px;color:#6b7280;">
+      ¿Olvidaste tu contraseña o quieres cambiarla? Escríbenos a
+      <a href="mailto:notificacionespi45@gmail.com">notificacionespi45@gmail.com</a>
+      indicando tu ID de inversiones.
+    </p>
   </div>
 </div>
 
@@ -1938,6 +1964,36 @@
       '"Instalar aplicación" o "Añadir a pantalla de inicio" del navegador.'
     );
   }
+
+  /* --------- Login inversiones (modal) --------- */
+  function loginInversiones(){
+    const idInput = document.getElementById('invId');
+    const passInput = document.getElementById('invPassword');
+    const msg = document.getElementById('invLoginMsg');
+
+    if(!idInput || !passInput || !msg) return;
+
+    msg.className = 'status';
+    msg.textContent = '';
+
+    const id = idInput.value.trim();
+    const pass = passInput.value.trim();
+
+    if(!id || !pass){
+      msg.classList.add('error');
+      msg.textContent = 'Ingresa tu ID de inversiones y tu contraseña.';
+      return;
+    }
+
+    msg.className = 'status';
+    msg.textContent = 'Ingresando...';
+
+    // Versión interna: validación básica en el front
+    setTimeout(function(){
+      window.location.href = 'inversiones/';
+    }, 600);
+  }
 </script>
 </body>
+</html>
 </html>
