@@ -86,16 +86,6 @@
       color:#6b7280;
     }
 
-    .pill-ciudad{
-      border-radius:999px;
-      border:1px solid #d1d5db;
-      padding:7px 14px;
-      font-size:.85rem;
-      background:#f9fafb;
-      color:#111827;
-      cursor:default;
-    }
-
     /* GRID PRINCIPAL */
     .main-grid{
       display:grid;
@@ -148,21 +138,46 @@
       gap:10px;
       align-items:stretch;
       background:#f9fafb;
+      transition:box-shadow .12s,transform .08s,border-color .12s;
+    }
+
+    .turno-card:hover{
+      box-shadow:0 14px 30px rgba(15,23,42,.18);
+      border-color:#d1d5db;
+      transform:translateY(-1px);
     }
 
     .turno-logo-wrapper{
       border-radius:12px;
       overflow:hidden;
-      background:#e5e7eb;
+      background:#1d4ed8; /* azul RADIZ */
       display:flex;
       align-items:center;
       justify-content:center;
+      cursor:pointer;
+      position:relative;
     }
 
     .turno-logo{
       width:100%;
       height:100%;
       object-fit:cover;
+      display:block;
+    }
+
+    .turno-logo-overlay{
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      padding-bottom:8px;
+      background:linear-gradient(to top,rgba(15,23,42,.5),transparent);
+      font-size:.7rem;
+      color:#e5e7eb;
+      font-weight:500;
+      letter-spacing:.03em;
+      text-transform:uppercase;
     }
 
     .turno-content{
@@ -183,14 +198,17 @@
       font-size:.95rem;
       font-weight:700;
       color:#111827;
+      display:flex;
+      align-items:center;
+      gap:6px;
     }
 
     .tag-turno{
       font-size:.75rem;
       padding:2px 8px;
       border-radius:999px;
-      background:#dcfce7;
-      color:#166534;
+      background:#eef2ff;
+      color:#3730a3;
       font-weight:600;
     }
 
@@ -237,6 +255,18 @@
       transform:translateY(-1px);
     }
 
+    .btn-secondary{
+      background:#e5e7eb;
+      color:#111827;
+      box-shadow:none;
+    }
+
+    .btn-secondary:hover{
+      background:#d1d5db;
+      box-shadow:none;
+      transform:translateY(-1px);
+    }
+
     .status{
       font-size:.85rem;
       margin-top:6px;
@@ -245,6 +275,16 @@
     .status.error{color:#b91c1c}
     .status.ok{color:#065f46}
     .status.muted{color:#9ca3af}
+
+    /* Punto verde de disponibilidad */
+    .status-dot{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      background:#22c55e;
+      box-shadow:0 0 0 3px rgba(34,197,94,.25);
+      flex-shrink:0;
+    }
 
     /* Card agenda en azul oscuro */
     .card-agenda{
@@ -289,6 +329,41 @@
     .agenda-detalle{
       font-size:.8rem;
       color:#e5e7eb;
+    }
+
+    .agenda-actions{
+      margin-top:6px;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+    }
+
+    .agenda-switch{
+      border-radius:999px;
+      border:none;
+      padding:3px 10px;
+      font-size:.75rem;
+      cursor:pointer;
+      background:#e5e7eb;
+      color:#111827;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+
+    .agenda-switch.sitio{
+      background:#bbf7d0;
+      color:#166534;
+    }
+
+    .agenda-switch.completado{
+      background:#fee2e2;
+      color:#b91c1c;
+    }
+
+    .agenda-switch[disabled]{
+      opacity:.7;
+      cursor:default;
     }
 
     /* FAB menú (Mi perfil) */
@@ -441,18 +516,6 @@
       flex-wrap:wrap;
     }
 
-    .btn-secondary{
-      background:#e5e7eb;
-      color:#111827;
-      box-shadow:none;
-    }
-
-    .btn-secondary:hover{
-      background:#d1d5db;
-      box-shadow:none;
-      transform:translateY(-1px);
-    }
-
     .check-row{
       display:flex;
       align-items:flex-start;
@@ -464,6 +527,25 @@
     .check-row input[type="checkbox"]{
       margin-top:3px;
       transform:scale(1.1);
+    }
+
+    /* Modal imagen turno */
+    .imagen-turno-contenedor{
+      margin-top:8px;
+      border-radius:14px;
+      background:#0f172a;
+      padding:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:180px;
+    }
+
+    .imagen-turno-placeholder{
+      color:#e5e7eb;
+      font-size:.85rem;
+      text-align:center;
+      padding:8px;
     }
 
     footer{
@@ -514,7 +596,6 @@
       <div class="header-title">
         <h1>Portal Logístico</h1>
         <p class="intro-text">
-          
           Te mostraremos los turnos de mensajería o repartos disponibles en tu ciudad.
         </p>
       </div>
@@ -526,12 +607,7 @@
     <!-- Fila ciudad fija -->
     <div class="toolbar">
       <div class="toolbar-left">
-        Ciudad de operación actual:
-      </div>
-      <div>
-        <button type="button" class="pill-ciudad">
-          Bogotá y alrededores
-        </button>
+        Ciudad de operación: Bogotá y alrededores.
       </div>
     </div>
 
@@ -541,7 +617,7 @@
       <div class="card">
         <h2>Disponibles</h2>
         <p style="font-size:.85rem;color:#6b7280;">
-          Selecciona el turno de tu interes.
+          Selecciona el turno de tu interés.
         </p>
         <div id="turnosEstado" class="status muted">Cargando turnos publicados...</div>
         <div id="turnosList" class="turnos-list"></div>
@@ -583,28 +659,69 @@
       <h3>Confirmar aceptación de turno</h3>
       <button class="modal-close" type="button" onclick="cerrarModal('modalConfirmarTurno')">&times;</button>
     </div>
-    <p>
-      ¿Está seguro de aceptar el turno?
-      Recuerde que es un compromiso laboral legal que cumple con toda la normativa vigente.
-      En caso de incumplimiento se cargará a su cuenta los valores de penalización.
-    </p>
-    <div class="check-row">
-      <input type="checkbox" id="chkTerminos">
-      <label for="chkTerminos">
-        Acepto términos y condiciones del servicio de mensajería.
-      </label>
+
+    <!-- Vista principal de confirmación -->
+    <div id="confirmarTurnoContenido">
+      <p>
+        ¿Está seguro de aceptar el turno?
+        Recuerde que es un compromiso laboral legal que cumple con toda la normativa vigente.
+        En caso de incumplimiento se cargará a su cuenta los valores de penalización.
+      </p>
+      <div class="check-row">
+        <input type="checkbox" id="chkTerminos">
+        <label for="chkTerminos">
+          Acepto términos y condiciones del servicio de mensajería.
+        </label>
+      </div>
+      <p id="confirmarTurnoMsg" class="status"></p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalConfirmarTurno')">
+          Cancelar
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="verTerminosTurno()">
+          Términos y condiciones
+        </button>
+        <button type="button" class="btn btn-primary" onclick="confirmarAceptarTurno()">
+          Confirmar
+        </button>
+      </div>
     </div>
-    <p id="confirmarTurnoMsg" class="status"></p>
-    <div class="modal-actions">
-      <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalConfirmarTurno')">
-        Cancelar
-      </button>
-      <button type="button" class="btn btn-secondary" onclick="verTerminosTurno()">
-        Términos y condiciones
-      </button>
-      <button type="button" class="btn btn-primary" onclick="confirmarAceptarTurno()">
-        Confirmar
-      </button>
+
+    <!-- Vista de términos dentro de la misma ventana -->
+    <div id="terminosContenido" style="display:none;">
+      <p style="font-weight:600;margin-bottom:6px;">Términos y condiciones</p>
+      <p style="font-size:.85rem;color:#4b5563;">
+        Abre el documento en PDF para revisar las condiciones completas de los turnos de mensajería.
+      </p>
+      <p style="font-size:.85rem;">
+        <a href="terminos_y_condiciones_turnos.pdf" target="_blank" style="color:#2563eb;text-decoration:none;">
+          ➜ Ver PDF completo de términos y condiciones
+        </a>
+      </p>
+      <p style="font-size:.8rem;color:#6b7280;margin-top:6px;">
+        Después de leer el documento, vuelve a esta ventana para confirmar la aceptación del turno.
+      </p>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="volverDesdeTerminos()">
+          Volver a la confirmación
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Imagen / fachada del cliente -->
+<div class="modal-backdrop" id="modalImagenTurno">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="imagenTurnoTitulo">Fachada del cliente</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalImagenTurno')">&times;</button>
+    </div>
+    <div class="imagen-turno-contenedor">
+      <img id="imagenTurnoSrc" src="" alt="Fachada" style="max-width:100%;border-radius:12px;display:none;">
+      <div id="imagenTurnoPlaceholder" class="imagen-turno-placeholder">
+        La imagen de la fachada estará disponible próximamente. Por ahora usaremos este espacio para que la reconozcas cuando esté cargada.
+      </div>
     </div>
   </div>
 </div>
@@ -672,6 +789,12 @@
       if(msg){
         msg.className = 'status';
         msg.textContent = '';
+      }
+      const cont = document.getElementById('confirmarTurnoContenido');
+      const term = document.getElementById('terminosContenido');
+      if(cont && term){
+        cont.style.display='block';
+        term.style.display='none';
       }
     }
   }
@@ -815,12 +938,16 @@
         const card = document.createElement('div');
         card.className = 'turno-card';
         card.innerHTML = `
-          <div class="turno-logo-wrapper">
+          <div class="turno-logo-wrapper" onclick="abrirImagenTurno('${logoUrl}','${cliente.replace(/'/g,"&#39;")}')">
             <img src="${logoUrl}" alt="${cliente}" class="turno-logo" onerror="this.style.display='none';">
+            <div class="turno-logo-overlay">Ver fachada</div>
           </div>
           <div class="turno-content">
             <div class="turno-header-line">
-              <div class="turno-titulo">${titulo}</div>
+              <div class="turno-titulo">
+                <span class="status-dot"></span>
+                ${titulo}
+              </div>
               <div class="tag-turno">${ciudad}</div>
             </div>
             <div class="turno-detalle">
@@ -879,12 +1006,60 @@
     }
     const chk = document.getElementById('chkTerminos');
     if(chk) chk.checked = false;
+
+    const cont = document.getElementById('confirmarTurnoContenido');
+    const term = document.getElementById('terminosContenido');
+    if(cont && term){
+      cont.style.display='block';
+      term.style.display='none';
+    }
+
     abrirModal('modalConfirmarTurno');
   }
 
   function verTerminosTurno(){
-    // Debes subir este PDF a tu hosting con este nombre o ajustarlo aquí
+    // Cambia a la vista de términos dentro de la misma ventana
+    const cont = document.getElementById('confirmarTurnoContenido');
+    const term = document.getElementById('terminosContenido');
+    if(cont && term){
+      cont.style.display='none';
+      term.style.display='block';
+    }
+    // Y abre el PDF en otra pestaña para su lectura
     window.open('terminos_y_condiciones_turnos.pdf', '_blank');
+  }
+
+  function volverDesdeTerminos(){
+    const cont = document.getElementById('confirmarTurnoContenido');
+    const term = document.getElementById('terminosContenido');
+    if(cont && term){
+      term.style.display='none';
+      cont.style.display='block';
+    }
+  }
+
+  function abrirImagenTurno(url, cliente){
+    const titulo = document.getElementById('imagenTurnoTitulo');
+    const img = document.getElementById('imagenTurnoSrc');
+    const ph = document.getElementById('imagenTurnoPlaceholder');
+
+    if(titulo){
+      titulo.textContent = 'Fachada de ' + (cliente || 'cliente');
+    }
+
+    if(img && ph){
+      if(url && url !== 'logo_turno_generico.png'){
+        img.src = url;
+        img.style.display = 'block';
+        ph.style.display = 'none';
+      }else{
+        img.src = '';
+        img.style.display = 'none';
+        ph.style.display = 'flex';
+      }
+    }
+
+    abrirModal('modalImagenTurno');
   }
 
   async function confirmarAceptarTurno(){
@@ -997,15 +1172,17 @@
     for(let i=0;i<dias && i<3;i++){
       const d = new Date(base.getTime());
       d.setDate(base.getDate() + i);
-
       const fechaTexto = d.toLocaleDateString('es-CO',{
         weekday:'short',day:'2-digit',month:'short',year:'numeric'
       });
+      const fechaISO = d.toISOString();
+      const idTurnoTexto = t.idTurno || 'TURNO';
+      const idTurnoEsc = idTurnoTexto.replace(/'/g,"&#39;");
 
       html += `
         <div class="agenda-dia">
           <div class="agenda-fecha">${fechaTexto}</div>
-          <div class="agenda-turno">Turno ${t.idTurno || 'TURNO'}</div>
+          <div class="agenda-turno">Turno ${idTurnoTexto}</div>
           <div class="agenda-detalle">
             <strong>Cliente:</strong> ${t.cliente || 'Cruz Verde 116'}
           </div>
@@ -1015,6 +1192,17 @@
           <div class="agenda-detalle">
             <strong>Hora de llegada:</strong> ${formatearHora(t.hora) || '08:00 a.m.'}
           </div>
+          <div class="agenda-detalle">
+            <strong>Representante:</strong> Miguel Orozco
+          </div>
+          <div class="agenda-actions">
+            <button type="button"
+              class="agenda-switch"
+              data-estado="pendiente"
+              onclick="toggleEstadoTurno(this,'${idTurnoEsc}','${fechaISO}')">
+              En sitio
+            </button>
+          </div>
         </div>
       `;
     }
@@ -1022,6 +1210,65 @@
     estado.style.color = '#bbf7d0';
     estado.textContent = 'Tu próximo turno activo:';
     cont.innerHTML = html;
+  }
+
+  async function toggleEstadoTurno(btn, idTurno, fechaISO){
+    if(!btn || !idTurno || !idContratoActual){
+      return;
+    }
+
+    const estadoActual = (btn.dataset.estado || 'pendiente').toLowerCase();
+    let nuevoEstado;
+    if(estadoActual === 'pendiente'){
+      nuevoEstado = 'EN_SITIO';
+    }else if(estadoActual === 'en_sitio'){
+      nuevoEstado = 'COMPLETADO';
+    }else{
+      return;
+    }
+
+    btn.disabled = true;
+
+    try{
+      const formData = new URLSearchParams();
+      formData.append('accion','actualizar_estado_turno_logistico');
+      formData.append('idContrato', idContratoActual);
+      formData.append('idTurno', idTurno);
+      formData.append('fecha', fechaISO);
+      formData.append('estado', nuevoEstado);
+
+      const resp = await fetch(API_URL, {
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body: formData.toString()
+      });
+      const data = await resp.json();
+
+      if(!data.ok){
+        alert(data.error || 'No fue posible actualizar el estado del turno.');
+        btn.disabled = false;
+        return;
+      }
+
+      if(nuevoEstado === 'EN_SITIO'){
+        btn.dataset.estado = 'en_sitio';
+        btn.classList.add('sitio');
+        btn.classList.remove('completado');
+        btn.textContent = 'En sitio';
+        btn.disabled = false;
+      }else if(nuevoEstado === 'COMPLETADO'){
+        btn.dataset.estado = 'completado';
+        btn.classList.add('completado');
+        btn.classList.remove('sitio');
+        btn.textContent = 'Completado';
+        // Lo dejamos deshabilitado para que no se vuelva a cambiar
+        btn.disabled = true;
+      }
+    }catch(e){
+      console.error(e);
+      alert('Error al notificar el estado del turno. Intenta de nuevo.');
+      btn.disabled = false;
+    }
   }
 </script>
 </body>
