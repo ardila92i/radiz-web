@@ -1982,7 +1982,7 @@
   }
 
   /* --------- Login unificado (renting + inversiones) --------- */
-  function loginInversiones(){
+  async function loginInversiones(){
     const idInput = document.getElementById('invId');
     const passInput = document.getElementById('invPassword');
     const msg = document.getElementById('invLoginMsg');
@@ -1992,39 +1992,60 @@
     msg.className = 'status';
     msg.textContent = '';
 
-    const idRaw = idInput.value.trim();
-    const pass = passInput.value.trim();
+    const idRaw = (idInput.value || '').trim();
+    const pass = (passInput.value || '').trim();
 
     if(!idRaw || !pass){
       msg.classList.add('error');
-      msg.textContent = 'Ingresa tu ID de inversiones o renting y tu contraseña.';
+      msg.textContent = 'Ingresa tu ID y tu contraseña.';
       return;
     }
 
     const id = idRaw.toUpperCase();
-    const prefijo = id.charAt(0);
 
     msg.className = 'status';
-    msg.textContent = 'Ingresando...';
+    msg.textContent = 'Verificando credenciales...';
 
-    // Versión interna: en función del prefijo decidimos a dónde enviarlo
-    if(prefijo === 'R'){
-      // Cliente Renting: usamos este mismo portal y precargamos el contrato
-      const inputContrato = document.getElementById('idContrato');
-      if(inputContrato){
-        inputContrato.value = id;
+    try{
+      const formData = new URLSearchParams();
+      formData.append('accion','login_portal');
+      formData.append('id', id);
+      formData.append('password', pass);
+
+      const resp = await fetch(API_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body: formData.toString()
+      });
+      const data = await resp.json();
+
+      if(!data.ok){
+        msg.className = 'status error';
+        msg.textContent = data.error || 'Usuario o contraseña incorrectos.';
+        return;
       }
-      cerrarModal('modalInversiones');
-      setTimeout(function(){
-        consultar();
-      }, 300);
-    }else if(prefijo === 'A'){
-      // Inversionista: lo enviamos al portal de inversiones
-      cerrarModal('modalInversiones');
-      window.location.href = 'inversiones/';
-    }else{
+
+      const tipo = (data.tipo || '').toString().toUpperCase();
+      const idFinal = (data.id || id).toString().toUpperCase();
+
+      if(tipo === 'RENTING'){
+        msg.className = 'status ok';
+        msg.textContent = 'Acceso concedido. Abriendo tu panel...';
+        cerrarModal('modalInversiones');
+        window.location.href = 'https://portal.radizco.com/logistica/?id=' + encodeURIComponent(idFinal);
+      }else if(tipo === 'AFILIADO'){
+        msg.className = 'status ok';
+        msg.textContent = 'Acceso concedido. Abriendo tu portal de inversiones...';
+        cerrarModal('modalInversiones');
+        window.location.href = 'inversiones/?id=' + encodeURIComponent(idFinal);
+      }else{
+        msg.className = 'status error';
+        msg.textContent = 'Tipo de usuario no reconocido para este ID.';
+      }
+    }catch(e){
+      console.error(e);
       msg.className = 'status error';
-      msg.textContent = 'Revisa tu ID. Debe iniciar por R (renting) o A (inversiones).';
+      msg.textContent = 'Error al iniciar sesión. Intenta de nuevo.';
     }
   }
 </script>
