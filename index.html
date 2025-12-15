@@ -394,7 +394,7 @@
       box-shadow:0 16px 32px rgba(249,115,22,.6);
     }
 
-    /* Botón "Descarga la App" y "Ir a inversiones" como texto discreto */
+    /* Botón "Descarga la App" / "Ir a inversiones" / "Iniciar sesión" como texto discreto */
     .btn-app{
       padding:0;
       border:none;
@@ -473,7 +473,7 @@
       align-items:center;
       flex-wrap:wrap;
     }
-    /* Fila sólo para los botones de pago */
+    /* Fila solo para los botones de pago */
     .row-pago-botones{
       justify-content:space-between;
       margin-top:10px;
@@ -719,6 +719,13 @@
       </button>
       <div class="menu-panel" id="menuPanel">
         <div class="menu-title" id="menuTitle">Opciones</div>
+
+        <!-- Menú inicial (antes de consultar contrato / sin sesión cargada) -->
+        <div id="menuInicial">
+          <div class="menu-item" onclick="abrirModal('modalInversiones')">Ir a inversiones</div>
+          <div class="menu-item" onclick="manejarDescargaApp()">Descarga la App</div>
+        </div>
+
         <!-- Para renting (clientes tipo R) -->
         <div id="menuRenting" style="display:none;">
           <div class="menu-item" onclick="abrirModal('modalBeneficios')">Beneficios</div>
@@ -732,6 +739,7 @@
           <div class="menu-item" onclick="abrirModal('modalIncidente')">Notificar incidente</div>
           <div class="menu-item" onclick="abrirModal('modalTaller')">Taller asignado</div>
         </div>
+
         <!-- Para afiliados (clientes tipo A) -->
         <div id="menuAfiliado" style="display:none;">
           <div class="menu-item">Beneficios</div>
@@ -813,17 +821,10 @@
           <p id="pagoContratoError">Digita tu ID antes de pagar.</p>
         </div>
 
-        <!-- Botón Ir a inversiones (discreto) -->
+        <!-- Botón único: Iniciar sesión (renting o inversiones) -->
         <div class="affiliate-row">
           <button type="button" class="btn-app" onclick="abrirModal('modalInversiones')">
-            Ir a inversiones
-          </button>
-        </div>
-
-        <!-- Botón Descarga la App -->
-        <div class="affiliate-row">
-          <button type="button" class="btn-app" onclick="manejarDescargaApp()">
-            Descarga la App
+            Iniciar sesión
           </button>
         </div>
 
@@ -959,16 +960,16 @@
   </div>
 </div>
 
-<!-- MODAL: INVERSIONES (INICIO DE SESIÓN) -->
+<!-- MODAL: INICIAR SESIÓN (para renting e inversiones, mismo diseño anterior de inversiones) -->
 <div class="modal-backdrop" id="modalInversiones">
   <div class="modal">
     <div class="modal-header">
-      <h3>Inversiones RADIZ</h3>
+      <h3>Iniciar sesión</h3>
       <button class="modal-close" type="button" onclick="cerrarModal('modalInversiones')">&times;</button>
     </div>
-    <p>Ingresa tu ID y contraseña de inversionista.</p>
+    <p>Ingresa tu ID (R o A) y contraseña para acceder a tu portal RADIZ.</p>
     <label for="invId">ID</label>
-    <input type="text" id="invId" placeholder="Ej: ARDILA92I">
+    <input type="text" id="invId" placeholder="Ej: R7467 o A0016">
     <label for="invPassword">Contraseña</label>
     <input type="password" id="invPassword" placeholder="Tu contraseña">
     <p id="invLoginMsg" class="status"></p>
@@ -1118,6 +1119,19 @@
   let datosContratoActual=null;
   let datosAfiliadoActual=null;
 
+  // Estado inicial del menú: mostrar menú inicial siempre
+  document.addEventListener('DOMContentLoaded', function(){
+    const fabMenu=document.getElementById('fabMenu');
+    const menuInicial=document.getElementById('menuInicial');
+    const menuRenting=document.getElementById('menuRenting');
+    const menuAfiliado=document.getElementById('menuAfiliado');
+
+    if(fabMenu){ fabMenu.style.display='block'; }
+    if(menuInicial){ menuInicial.style.display='block'; }
+    if(menuRenting){ menuRenting.style.display='none'; }
+    if(menuAfiliado){ menuAfiliado.style.display='none'; }
+  });
+
   function toggleMenu(){
     const panel=document.getElementById('menuPanel');
     panel.style.display=panel.style.display==='block'?'none':'block';
@@ -1179,11 +1193,11 @@
     const fabMenu=document.getElementById('fabMenu');
     const menuRenting=document.getElementById('menuRenting');
     const menuAfiliado=document.getElementById('menuAfiliado');
+    const menuInicial=document.getElementById('menuInicial');
 
     status.className='status';
     status.textContent='';
     resultados.style.display='none';
-    fabMenu.style.display='none';
     document.getElementById('menuPanel').style.display='none';
 
     if(!id){
@@ -1317,6 +1331,7 @@
             ? 'No se encontraron vehículos asociados a tu ID.'
             : 'Tienes '+cantidadVeh+' vehículo(s) afiliado(s): '+placas+'.';
 
+        if(menuInicial) menuInicial.style.display='none';
         menuRenting.style.display='none';
         menuAfiliado.style.display='block';
         fabMenu.style.display='block';
@@ -1391,6 +1406,7 @@
         const tallerEjemplo='Taller asignado: '+(mts[0]?.['TALLER ASIGNADO']||'Información no disponible.');
         document.getElementById('modalTallerTexto').textContent=tallerEjemplo;
 
+        if(menuInicial) menuInicial.style.display='none';
         menuRenting.style.display='block';
         menuAfiliado.style.display='none';
         fabMenu.style.display='block';
@@ -1965,7 +1981,7 @@
     );
   }
 
-  /* --------- Login inversiones (modal) --------- */
+  /* --------- Login unificado (renting + inversiones) --------- */
   function loginInversiones(){
     const idInput = document.getElementById('invId');
     const passInput = document.getElementById('invPassword');
@@ -1976,22 +1992,40 @@
     msg.className = 'status';
     msg.textContent = '';
 
-    const id = idInput.value.trim();
+    const idRaw = idInput.value.trim();
     const pass = passInput.value.trim();
 
-    if(!id || !pass){
+    if(!idRaw || !pass){
       msg.classList.add('error');
-      msg.textContent = 'Ingresa tu ID de inversiones y tu contraseña.';
+      msg.textContent = 'Ingresa tu ID de inversiones o renting y tu contraseña.';
       return;
     }
+
+    const id = idRaw.toUpperCase();
+    const prefijo = id.charAt(0);
 
     msg.className = 'status';
     msg.textContent = 'Ingresando...';
 
-    // Versión interna: validación básica en el front
-    setTimeout(function(){
+    // Versión interna: en función del prefijo decidimos a dónde enviarlo
+    if(prefijo === 'R'){
+      // Cliente Renting: usamos este mismo portal y precargamos el contrato
+      const inputContrato = document.getElementById('idContrato');
+      if(inputContrato){
+        inputContrato.value = id;
+      }
+      cerrarModal('modalInversiones');
+      setTimeout(function(){
+        consultar();
+      }, 300);
+    }else if(prefijo === 'A'){
+      // Inversionista: lo enviamos al portal de inversiones
+      cerrarModal('modalInversiones');
       window.location.href = 'inversiones/';
-    }, 600);
+    }else{
+      msg.className = 'status error';
+      msg.textContent = 'Revisa tu ID. Debe iniciar por R (renting) o A (inversiones).';
+    }
   }
 </script>
 </body>
