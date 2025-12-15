@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <title>RADIZ LOGÍSTICA</title>
+  <title>Portal Logístico RADIZ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <style>
@@ -12,8 +12,8 @@
       margin:0;
       padding:0;
       font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:#0f172a;
-      color:#111827;
+      background:#f5f6f8;
+      color:#0f172a;
     }
 
     .page{
@@ -26,400 +26,456 @@
 
     .container{
       width:100%;
-      max-width:1080px;
-      background:#f5f6f8;
+      max-width:1120px;
+      background:#ffffff;
       border-radius:24px;
-      box-shadow:0 18px 45px rgba(15,23,42,.4);
+      box-shadow:0 18px 45px rgba(15,23,42,.14);
       padding:24px 28px 28px;
       position:relative;
     }
 
-    /* Logo */
-    .logo-top{
+    .header{
       display:flex;
-      align-items:center;
       justify-content:space-between;
+      align-items:center;
       gap:16px;
       margin-bottom:10px;
     }
-    .logo-top img{
-      max-width:210px;
-      max-height:80px;
-      object-fit:contain;
-    }
-    .badge-version{
-      padding:4px 10px;
-      border-radius:999px;
-      font-size:.75rem;
-      font-weight:600;
-      background:#e5e7eb;
-      color:#4b5563;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-    }
 
-    /* Header principal */
-    .header-main{
-      display:flex;
-      flex-wrap:wrap;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:18px;
-      margin-bottom:18px;
-    }
     .header-title h1{
-      margin:0 0 4px;
+      margin:0;
       font-size:1.8rem;
       letter-spacing:.03em;
-      color:#111827;
     }
+
     .header-title p{
-      margin:0;
+      margin:4px 0 0;
       font-size:.9rem;
       color:#4b5563;
     }
 
-    .header-right{
-      display:flex;
-      flex-direction:column;
-      align-items:flex-end;
-      gap:6px;
-      font-size:.85rem;
-    }
-    .pill-contrato{
-      padding:6px 12px;
+    .badge-id{
+      font-size:.8rem;
+      padding:4px 10px;
       border-radius:999px;
-      background:#1e293b;
-      color:#e5e7eb;
-      font-weight:600;
-      font-size:.8rem;
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-    }
-    .pill-contrato span{
-      font-size:.8rem;
-      text-transform:uppercase;
-      opacity:.8;
-    }
-    .tag-ciudad{
-      font-size:.8rem;
-      padding:3px 8px;
-      border-radius:999px;
-      background:#e0f2fe;
+      background:#eff6ff;
       color:#1d4ed8;
-      font-weight:500;
+      font-weight:600;
     }
 
-    /* Layout dos columnas en desktop */
-    .layout{
+    /* Texto principal debajo del título */
+    .intro-text{
+      margin-top:4px;
+      margin-bottom:16px;
+      font-size:.9rem;
+      color:#4b5563;
+    }
+
+    /* Fila ciudad */
+    .toolbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-bottom:18px;
+    }
+
+    .toolbar-left{
+      font-size:.85rem;
+      color:#6b7280;
+    }
+
+    .pill-ciudad{
+      border-radius:999px;
+      border:1px solid #d1d5db;
+      padding:7px 14px;
+      font-size:.85rem;
+      background:#f9fafb;
+      color:#111827;
+      cursor:default;
+    }
+
+    /* GRID PRINCIPAL */
+    .main-grid{
       display:grid;
-      grid-template-columns:minmax(0,1.1fr) minmax(0,1.1fr);
-      gap:20px;
+      grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
+      gap:18px;
+      align-items:flex-start;
     }
 
     .card{
-      position:relative;
       border-radius:18px;
       border:1px solid #e5e7eb;
-      padding:16px 18px;
       background:#ffffff;
+      padding:16px 18px 18px;
       font-size:.9rem;
       transition:border-color .15s,box-shadow .15s,transform .1s,background .15s;
     }
-    .card:hover{
-      border-color:#2563eb;
-      box-shadow:0 16px 34px rgba(37,99,235,.16);
-      background:#f9fbff;
-      transform:translateY(-1px);
-    }
+
     .card h2{
-      margin:0 0 8px;
-      font-size:1.05rem;
+      margin:0 0 6px;
+      font-size:1.1rem;
       font-weight:700;
       color:#111827;
     }
+
     .card p{
       margin:3px 0;
-      color:#111827;
-      font-size:.9rem;
-    }
-
-    .card-small{
-      padding:12px 14px;
-      font-size:.85rem;
-    }
-
-    .subtitle{
-      font-size:.8rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      font-weight:600;
-      color:#6b7280;
-      margin-bottom:4px;
-    }
-
-    /* Bloque "Mi vehículo" */
-    .grid-mini{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-      gap:10px;
-      margin-top:8px;
-    }
-    .stat{
-      padding:8px 10px;
-      border-radius:12px;
-      background:#f3f4f6;
-      font-size:.8rem;
-    }
-    .stat-label{
-      font-size:.75rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      color:#6b7280;
-      margin-bottom:2px;
-    }
-    .stat-value{
-      font-weight:600;
-      color:#111827;
-    }
-
-    /* Filtros turnos */
-    .filters{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      align-items:flex-end;
-      margin-bottom:10px;
-    }
-    .filters-group{
-      display:flex;
-      flex-direction:column;
-      gap:4px;
-    }
-    .filters label{
-      font-size:.8rem;
-      font-weight:600;
       color:#4b5563;
     }
-    select,input[type="date"]{
-      padding:8px 10px;
-      border-radius:999px;
-      border:1px solid #d1d5db;
-      font-size:.85rem;
-      outline:none;
-      background:#f9fafb;
-    }
-    select:focus,input[type="date"]:focus{
+
+    .card:hover{
       border-color:#2563eb;
-      box-shadow:0 0 0 1px rgba(37,99,235,.18);
-      background:#ffffff;
+      box-shadow:0 16px 34px rgba(37,99,235,.12);
+      transform:translateY(-1px);
     }
 
-    /* Lista de turnos */
-    .turnos-header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      margin-bottom:6px;
-    }
-    .turnos-header-title{
-      display:flex;
-      align-items:center;
-      gap:8px;
-    }
-    .dot-live{
-      width:10px;
-      height:10px;
-      border-radius:999px;
-      background:#22c55e;
-      box-shadow:0 0 0 6px rgba(34,197,94,.25);
-    }
-    .turnos-header span{
-      font-weight:600;
-      font-size:.95rem;
-    }
-    .pill-contador{
-      font-size:.8rem;
-      padding:3px 8px;
-      border-radius:999px;
-      background:#e5e7eb;
-      color:#374151;
-    }
-
+    /* Card turnos */
     .turnos-list{
       display:flex;
       flex-direction:column;
       gap:12px;
-      margin-top:6px;
+      margin-top:8px;
     }
 
     .turno-card{
-      border-radius:16px;
+      border-radius:14px;
       border:1px solid #e5e7eb;
-      padding:12px 14px;
-      background:#ffffff;
+      padding:10px 12px 12px;
       display:grid;
-      grid-template-columns:minmax(0,2.3fr) minmax(0,1.3fr);
+      grid-template-columns:96px minmax(0,1fr);
       gap:10px;
-      transition:border-color .15s,box-shadow .15s,transform .1s,background .15s;
-    }
-    .turno-card:hover{
-      border-color:#2563eb;
-      box-shadow:0 16px 32px rgba(37,99,235,.15);
-      background:#f9fbff;
-      transform:translateY(-1px);
+      align-items:stretch;
+      background:#f9fafb;
     }
 
-    .turno-main h3{
-      margin:0 0 2px;
-      font-size:1rem;
+    .turno-logo-wrapper{
+      border-radius:12px;
+      overflow:hidden;
+      background:#e5e7eb;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .turno-logo{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
+
+    .turno-content{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .turno-header-line{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:4px;
+    }
+
+    .turno-titulo{
+      font-size:.95rem;
       font-weight:700;
       color:#111827;
     }
-    .turno-main .empresa{
-      font-size:.85rem;
-      color:#4b5563;
-      margin-bottom:4px;
-    }
-    .chips{
-      display:flex;
-      flex-wrap:wrap;
-      gap:6px;
-      margin-bottom:4px;
+
+    .tag-turno{
       font-size:.75rem;
-    }
-    .chip{
       padding:2px 8px;
       border-radius:999px;
-      background:#e5e7eb;
-      color:#374151;
-      font-weight:500;
-    }
-    .chip-urgente{
-      background:#fee2e2;
-      color:#b91c1c;
-    }
-    .chip-tipo{
-      background:#dbeafe;
-      color:#1d4ed8;
+      background:#dcfce7;
+      color:#166534;
+      font-weight:600;
     }
 
     .turno-detalle{
-      font-size:.8rem;
+      font-size:.85rem;
       color:#4b5563;
     }
 
-    .turno-side{
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      gap:6px;
-      align-items:flex-end;
-      font-size:.85rem;
-    }
-    .monto-principal{
-      font-size:1rem;
-      font-weight:700;
+    .turno-detalle strong{
       color:#111827;
-    }
-    .monto-principal span{
-      font-size:.8rem;
-      font-weight:500;
-      color:#4b5563;
-    }
-    .monto-bono{
-      font-size:.8rem;
-      color:#16a34a;
       font-weight:600;
     }
-    .monto-total{
-      font-size:.8rem;
-      color:#111827;
+
+    .turno-footer{
+      margin-top:6px;
+      display:flex;
+      justify-content:flex-end;
     }
 
-    .status-bar{
-      font-size:.8rem;
-      margin-top:4px;
-      min-height:1.2em;
-      color:#6b7280;
-    }
-    .status-bar.error{color:#b91c1c}
-    .status-bar.ok{color:#065f46}
-
-    /* Botones */
-    button{
-      padding:9px 18px;
+    .btn{
+      padding:8px 16px;
       border-radius:999px;
       border:none;
       font-size:.9rem;
       font-weight:600;
       cursor:pointer;
-      background:#2563eb;
-      color:#fff;
       display:inline-flex;
       align-items:center;
       justify-content:center;
       gap:6px;
-      box-shadow:0 10px 24px rgba(37,99,235,.45);
-      transition:transform .1s,box-shadow .1s,background .1s;
       white-space:nowrap;
+      transition:transform .1s,box-shadow .1s,background .1s,color .1s;
     }
-    button:hover{
+
+    .btn-primary{
+      background:#2563eb;
+      color:#ffffff;
+      box-shadow:0 10px 24px rgba(37,99,235,.4);
+    }
+
+    .btn-primary:hover{
+      background:#1d4ed8;
+      box-shadow:0 12px 30px rgba(37,99,235,.55);
+      transform:translateY(-1px);
+    }
+
+    .status{
+      font-size:.85rem;
+      margin-top:6px;
+      min-height:1.1em;
+    }
+    .status.error{color:#b91c1c}
+    .status.ok{color:#065f46}
+    .status.muted{color:#9ca3af}
+
+    /* Card agenda en azul oscuro */
+    .card-agenda{
+      background:#0f172a;
+      color:#f9fafb;
+      border-color:#1f2937;
+      box-shadow:0 16px 38px rgba(15,23,42,.5);
+    }
+
+    .card-agenda h2{
+      color:#f9fafb;
+    }
+
+    .agenda-dia{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      padding:8px 10px;
+      border-radius:12px;
+      background:rgba(15,23,42,.7);
+      border:1px solid rgba(148,163,184,.35);
+      font-size:.85rem;
+    }
+
+    .agenda-dia + .agenda-dia{
+      margin-top:8px;
+    }
+
+    .agenda-fecha{
+      font-weight:600;
+      font-size:.8rem;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      color:#bfdbfe;
+    }
+
+    .agenda-turno{
+      font-weight:600;
+      font-size:.9rem;
+    }
+
+    .agenda-detalle{
+      font-size:.8rem;
+      color:#e5e7eb;
+    }
+
+    /* FAB menú (Mi perfil) */
+    .fab-menu{
+      position:absolute;
+      top:22px;
+      right:22px;
+      z-index:20;
+    }
+
+    .fab-btn{
+      width:46px;
+      height:46px;
+      border-radius:999px;
+      background:#2563eb;
+      border:none;
+      box-shadow:0 10px 24px rgba(37,99,235,.45);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      transition:transform .12s,box-shadow .12s,background .12s;
+    }
+
+    .fab-btn:hover{
       transform:translateY(-1px);
       background:#1d4ed8;
       box-shadow:0 14px 32px rgba(37,99,235,.55);
     }
-    button:disabled{
-      opacity:.65;
-      cursor:default;
-      box-shadow:none;
-      transform:none;
+
+    .fab-btn span{
+      display:block;
+      width:22px;
+      height:2px;
+      border-radius:999px;
+      background:#fff;
+      position:relative;
     }
 
-    .btn-aceptar{
-      min-width:150px;
+    .fab-btn span::before,
+    .fab-btn span::after{
+      content:"";
+      position:absolute;
+      left:0;
+      width:22px;
+      height:2px;
+      border-radius:999px;
+      background:#fff;
     }
-    .btn-secundario{
+    .fab-btn span::before{top:-6px}
+    .fab-btn span::after{top:6px}
+
+    .menu-panel{
+      position:absolute;
+      top:56px;
+      right:0;
+      background:#ffffff;
+      border-radius:14px;
+      box-shadow:0 12px 30px rgba(15,23,42,.22);
+      padding:8px 0;
+      width:220px;
+      display:none;
+      z-index:25;
+    }
+
+    .menu-title{
+      font-size:.8rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-weight:600;
+      color:#6b7280;
+      padding:6px 14px 4px;
+    }
+
+    .menu-item{
+      padding:7px 14px;
+      font-size:.9rem;
+      cursor:pointer;
+      color:#111827;
+    }
+
+    .menu-item:hover{
+      background:#eff6ff;
+      color:#1d4ed8;
+    }
+
+    /* Modales */
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.45);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:40;
+    }
+
+    .modal{
+      background:#fff;
+      border-radius:18px;
+      max-width:480px;
+      width:90%;
+      padding:18px 20px 18px;
+      box-shadow:0 20px 45px rgba(15,23,42,.4);
+      font-size:.9rem;
+    }
+
+    .modal-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-bottom:8px;
+    }
+
+    .modal-header h3{
+      margin:0;
+      font-size:1.05rem;
+    }
+
+    .modal-close{
+      border:none;
+      background:transparent;
+      font-size:1.3rem;
+      cursor:pointer;
+      color:#6b7280;
+    }
+
+    .modal p{
+      margin:4px 0;
+      color:#111827;
+    }
+
+    .modal label{
+      display:block;
+      margin-top:8px;
+      margin-bottom:3px;
+      font-size:.85rem;
+      color:#374151;
+    }
+
+    .modal .status{
+      margin-top:6px;
+    }
+
+    .modal-actions{
+      margin-top:14px;
+      display:flex;
+      justify-content:flex-end;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .btn-secondary{
       background:#e5e7eb;
       color:#111827;
       box-shadow:none;
     }
-    .btn-secundario:hover{
-      background:#e0e7ff;
+
+    .btn-secondary:hover{
+      background:#d1d5db;
       box-shadow:none;
+      transform:translateY(-1px);
     }
 
-    /* Card derecha: resumen rápido */
-    .list-compact{
-      list-style:none;
-      padding-left:0;
-      margin:6px 0;
+    .check-row{
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+      margin-top:8px;
       font-size:.85rem;
-      color:#4b5563;
     }
-    .list-compact li{
-      margin-bottom:4px;
+
+    .check-row input[type="checkbox"]{
+      margin-top:3px;
+      transform:scale(1.1);
     }
 
     footer{
-      margin-top:14px;
+      margin-top:16px;
       font-size:.75rem;
       color:#9ca3af;
       text-align:center;
     }
 
-    /* Responsivo */
     @media(max-width:900px){
-      .layout{
+      .main-grid{
         grid-template-columns:1fr;
-      }
-      .turno-card{
-        grid-template-columns:1fr;
-      }
-      .header-right{
-        align-items:flex-start;
       }
     }
 
@@ -428,15 +484,13 @@
         padding:20px 16px 22px;
         border-radius:18px;
       }
-      .header-main{
-        flex-direction:column;
-      }
-      .logo-top{
+      .header{
         flex-direction:column;
         align-items:flex-start;
       }
-      .turno-side{
-        align-items:flex-start;
+      .fab-menu{
+        top:18px;
+        right:18px;
       }
     }
   </style>
@@ -444,500 +498,530 @@
 <body>
 <div class="page">
   <div class="container">
-    <!-- Logo + versión -->
-    <div class="logo-top">
-      <img src="../logoradiz.png" alt="Logo RADIZ">
-      <span class="badge-version">Logística · MVP 1</span>
+    <!-- FAB menú: Mi perfil -->
+    <div class="fab-menu">
+      <button class="fab-btn" type="button" onclick="toggleMenu()">
+        <span></span>
+      </button>
+      <div class="menu-panel" id="menuPanel">
+        <div class="menu-title">Portal logístico</div>
+        <div class="menu-item" onclick="abrirModal('modalPerfil')">Mi perfil</div>
+      </div>
     </div>
 
-    <!-- Header -->
-    <div class="header-main">
+    <!-- Encabezado -->
+    <div class="header">
       <div class="header-title">
-        <h1>Panel de turnos</h1>
-        <p>Elige los servicios de mensajería que mejor se ajustan a tu vehículo y a tu ciudad.</p>
+        <h1>Portal Logístico</h1>
+        <p class="intro-text">
+          Te mostraremos los turnos de mensajería o repartos disponibles en tu ciudad.
+        </p>
       </div>
-      <div class="header-right">
-        <div class="pill-contrato">
-          <span>Contrato</span>
-          <strong id="tagContrato">—</strong>
-        </div>
-        <div class="tag-ciudad" id="tagCiudad">Ciudad no definida</div>
+      <div>
+        <span id="badgeContrato" class="badge-id" style="display:none;"></span>
       </div>
     </div>
 
-    <div class="layout">
-      <!-- Columna izquierda: Mi vehículo + turnos disponibles -->
-      <div>
-        <!-- Card: Mi vehículo / resumen rápido -->
-        <section class="card card-small" id="cardVehiculo">
-          <div class="subtitle">Mi vehículo</div>
-          <h2>Resumen de tu contrato</h2>
-          <div class="grid-mini">
-            <div class="stat">
-              <div class="stat-label">Placa / ID</div>
-              <div class="stat-value" id="vehPlaca">—</div>
-            </div>
-            <div class="stat">
-              <div class="stat-label">Tarifa semanal</div>
-              <div class="stat-value" id="vehTarifa">—</div>
-            </div>
-            <div class="stat">
-              <div class="stat-label">Estado</div>
-              <div class="stat-value" id="vehEstado">—</div>
-            </div>
-            <div class="stat">
-              <div class="stat-label">Ciudad base</div>
-              <div class="stat-value" id="vehCiudad">—</div>
-            </div>
-          </div>
-        </section>
-
-        <!-- Card: Turnos disponibles -->
-        <section class="card" style="margin-top:14px;">
-          <div class="turnos-header">
-            <div class="turnos-header-title">
-              <span class="dot-live"></span>
-              <span>Turnos disponibles</span>
-            </div>
-            <span class="pill-contador" id="turnosContador">0 turnos</span>
-          </div>
-
-          <!-- Filtros sencillos -->
-          <div class="filters">
-            <div class="filters-group">
-              <label for="filtroCiudad">Ciudad</label>
-              <select id="filtroCiudad">
-                <option value="">Todas</option>
-                <option value="Bogotá">Bogotá</option>
-                <option value="Chía">Chía</option>
-                <option value="Cajicá">Cajicá</option>
-              </select>
-            </div>
-            <div class="filters-group">
-              <label for="filtroFecha">Fecha</label>
-              <input type="date" id="filtroFecha">
-            </div>
-            <button type="button" class="btn-secundario" onclick="aplicarFiltros()">Filtrar</button>
-          </div>
-
-          <div id="estadoTurnos" class="status-bar"></div>
-
-          <div class="turnos-list" id="listaTurnos">
-            <!-- Aquí se pintan las tarjetas de turnos -->
-          </div>
-        </section>
+    <!-- Fila ciudad fija -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        Ciudad de operación actual:
       </div>
-
-      <!-- Columna derecha: Mi agenda -->
       <div>
-        <section class="card card-small">
-          <div class="subtitle">Mi agenda</div>
-          <h2>Turnos asignados (próximamente)</h2>
-          <p style="font-size:.85rem;color:#4b5563;margin-bottom:6px;">
-            En esta sección verás los turnos que aceptes, con su estado y resumen de recaudo.
-          </p>
-          <ul class="list-compact">
-            <li>• Estado de cada turno (Pendiente, En curso, Finalizado).</li>
-            <li>• Resumen de pagos por empresa.</li>
-            <li>• Historial de servicios realizados.</li>
-          </ul>
-          <p style="font-size:.8rem;color:#6b7280;margin-top:8px;">
-            En la versión MVP sólo activamos la aceptación de turnos.
-            El panel de agenda y recaudos se conectará en la siguiente etapa.
-          </p>
-        </section>
-
-        <section class="card card-small" style="margin-top:14px;">
-          <div class="subtitle">Recomendaciones</div>
-          <h2>Antes de aceptar un turno</h2>
-          <ul class="list-compact">
-            <li>Verifica que la ciudad y horarios se ajusten a tu disponibilidad.</li>
-            <li>Confirma que tu moto cumple los requisitos (cilindraje, baúl, SOAT, revisión).</li>
-            <li>Ten saldo en tu celular para datos y WhatsApp durante todo el servicio.</li>
-          </ul>
-        </section>
+        <button type="button" class="pill-ciudad">
+          Bogotá y alrededores
+        </button>
       </div>
     </div>
 
-    <footer>Versión interna · RADIZ Logística</footer>
+    <!-- GRID PRINCIPAL -->
+    <div class="main-grid">
+      <!-- Turnos -->
+      <div class="card">
+        <h2>Turnos disponibles</h2>
+        <p style="font-size:.85rem;color:#6b7280;">
+          Selecciona un turno activo. Cuando lo aceptes, iniciaremos el proceso de asignación
+          y te confirmaremos por WhatsApp.
+        </p>
+        <div id="turnosEstado" class="status muted">Cargando turnos publicados...</div>
+        <div id="turnosList" class="turnos-list"></div>
+      </div>
+
+      <!-- Mi agenda -->
+      <div class="card card-agenda">
+        <h2>Mi agenda</h2>
+        <p id="agendaEstado" class="status" style="color:#e5e7eb;">
+          Aún no tienes turnos aceptados.
+        </p>
+        <div id="agendaContenido"></div>
+      </div>
+    </div>
+
+    <footer>
+      Versión interna • RADIZ Logística de Mensajería
+    </footer>
+  </div>
+</div>
+
+<!-- MODAL: Mi perfil (resumen de contrato) -->
+<div class="modal-backdrop" id="modalPerfil">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Mi perfil</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalPerfil')">&times;</button>
+    </div>
+    <div id="perfilContenido">
+      <p class="status muted">Cargando información de tu contrato...</p>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Confirmar aceptación de turno -->
+<div class="modal-backdrop" id="modalConfirmarTurno">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Confirmar aceptación de turno</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalConfirmarTurno')">&times;</button>
+    </div>
+    <p>
+      ¿Está seguro de aceptar el turno?
+      Recuerde que es un compromiso laboral legal que cumple con toda la normativa vigente.
+      En caso de incumplimiento se cargará a su cuenta los valores de penalización.
+    </p>
+    <div class="check-row">
+      <input type="checkbox" id="chkTerminos">
+      <label for="chkTerminos">
+        Acepto términos y condiciones del servicio de mensajería.
+      </label>
+    </div>
+    <p id="confirmarTurnoMsg" class="status"></p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalConfirmarTurno')">
+        Cancelar
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="verTerminosTurno()">
+        Términos y condiciones
+      </button>
+      <button type="button" class="btn btn-primary" onclick="confirmarAceptarTurno()">
+        Confirmar
+      </button>
+    </div>
   </div>
 </div>
 
 <script>
   const API_URL = 'https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
-  let idContratoGlobal = null;
-  let turnosData = [];
+
+  let idContratoActual = null;
+  let contratoActual = null;
+  let turnoSeleccionado = null;
+  let ultimaAceptacion = null; // para simular agenda de 3 días
 
   document.addEventListener('DOMContentLoaded', function(){
-    const params = new URLSearchParams(window.location.search);
-    idContratoGlobal = (params.get('id') || '').trim().toUpperCase();
-
-    const tagContrato = document.getElementById('tagContrato');
-    if (idContratoGlobal) {
-      tagContrato.textContent = idContratoGlobal;
-      // Guardamos en localStorage para futuras sesiones
-      try {
-        localStorage.setItem('radiz_contrato_logistica', idContratoGlobal);
-      } catch (e) {}
-    } else {
-      // Intentar recuperar de localStorage
-      try {
-        const saved = localStorage.getItem('radiz_contrato_logistica') || '';
-        if (saved) {
-          idContratoGlobal = saved.toUpperCase();
-          tagContrato.textContent = idContratoGlobal;
-        }
-      } catch (e) {}
+    idContratoActual = obtenerIdContratoDeUrl();
+    if(!idContratoActual){
+      const badge = document.getElementById('badgeContrato');
+      if(badge){
+        badge.style.display='inline-block';
+        badge.textContent='ID no definido';
+      }
+      const perfil = document.getElementById('perfilContenido');
+      if(perfil){
+        perfil.innerHTML = '<p class="status error">No se encontró el ID del contrato en la URL.</p>';
+      }
+    }else{
+      const badge = document.getElementById('badgeContrato');
+      if(badge){
+        badge.style.display='inline-block';
+        badge.textContent='Contrato '+idContratoActual;
+      }
+      cargarContratoYAgenda(idContratoActual);
     }
-
-    if (!idContratoGlobal) {
-      tagContrato.textContent = 'Sin ID';
-      alert('No se encontró el ID de contrato. Regresa al portal principal e inicia sesión de nuevo.');
-    }
-
-    cargarResumenContrato();
-    cargarTurnosPublicados();
+    cargarTurnosDisponibles();
   });
 
-  // --- Resumen de contrato usando el mismo doGet?id= ---
-  async function cargarResumenContrato(){
-    if (!idContratoGlobal) return;
+  function obtenerIdContratoDeUrl(){
+    const params = new URLSearchParams(window.location.search);
+    const id = (params.get('id') || '').trim().toUpperCase();
+    return id || null;
+  }
 
-    const estadoTurnos = document.getElementById('estadoTurnos');
-    try {
-      const resp = await fetch(API_URL + '?id=' + encodeURIComponent(idContratoGlobal));
-      const data = await resp.json();
+  function toggleMenu(){
+    const panel = document.getElementById('menuPanel');
+    if(!panel) return;
+    panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+  }
 
-      if (!data.ok) {
-        return;
-      }
-      const c = data.contrato || {};
-      const vehiculos = data.vehiculos || [];
+  function abrirModal(id){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.style.display='flex';
+    const panel = document.getElementById('menuPanel');
+    if(panel) panel.style.display='none';
+  }
 
-      const placa = (c['ID VEHÍCULO'] || c['ID VEHICULO'] || '');
-      const tarifa = c['TARIFA SEMANAL'] || '';
-      const estado = (c['ESTADO'] || '').toString().toUpperCase() || 'SIN ESTADO';
-
-      // Intentamos ciudad desde hoja VEHÍCULOS o campo CIUDAD
-      let ciudad = c['CIUDAD'] || '';
-      if (!ciudad && vehiculos && vehiculos.length) {
-        const v = vehiculos.find(function(row){
-          return String(row['ID CONTRATO'] || '').toString().trim().toUpperCase() === idContratoGlobal;
-        });
-        if (v) ciudad = v['CIUDAD'] || '';
-      }
-
-      document.getElementById('vehPlaca').textContent = placa || 'No definido';
-      document.getElementById('vehTarifa').textContent = formatearCOP(tarifa);
-      document.getElementById('vehEstado').textContent = estado;
-      document.getElementById('vehCiudad').textContent = ciudad || '—';
-      document.getElementById('tagCiudad').textContent = ciudad || 'Ciudad no definida';
-    } catch (e) {
-      console.error(e);
-      if (estadoTurnos && !estadoTurnos.textContent) {
-        estadoTurnos.className = 'status-bar error';
-        estadoTurnos.textContent = 'No se pudo cargar el resumen del contrato.';
+  function cerrarModal(id){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.style.display='none';
+    if(id === 'modalConfirmarTurno'){
+      turnoSeleccionado = null;
+      const chk = document.getElementById('chkTerminos');
+      if(chk) chk.checked = false;
+      const msg = document.getElementById('confirmarTurnoMsg');
+      if(msg){
+        msg.className = 'status';
+        msg.textContent = '';
       }
     }
   }
 
-  // --- Cargar turnos publicados ---
-  async function cargarTurnosPublicados(){
-    const estadoTurnos = document.getElementById('estadoTurnos');
-    const lista = document.getElementById('listaTurnos');
-    const contador = document.getElementById('turnosContador');
+  function formatearFechaCorta(v){
+    if(!v) return '';
+    const d = new Date(v);
+    if(isNaN(d.getTime())) return v;
+    return d.toLocaleDateString('es-CO',{
+      day:'2-digit',month:'2-digit',year:'numeric'
+    });
+  }
 
-    estadoTurnos.className = 'status-bar';
-    estadoTurnos.textContent = 'Cargando turnos disponibles...';
+  function formatearFechaLarga(v){
+    if(!v) return '';
+    const d = new Date(v);
+    if(isNaN(d.getTime())) return v;
+    return d.toLocaleDateString('es-CO',{
+      weekday:'short',day:'2-digit',month:'short',year:'numeric'
+    });
+  }
+
+  function formatearHora(h){
+    return h || '';
+  }
+
+  function formatearNumeroCOP(n){
+    const num = Number(n);
+    if(isNaN(num)) return n || '';
+    return num.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
+  }
+
+  /* ------- Cargar contrato para "Mi perfil" ------- */
+  async function cargarContratoYAgenda(id){
+    const perfil = document.getElementById('perfilContenido');
+    if(perfil){
+      perfil.innerHTML = '<p class="status muted">Cargando información de tu contrato...</p>';
+    }
+
+    try{
+      const resp = await fetch(API_URL + '?id=' + encodeURIComponent(id));
+      const data = await resp.json();
+
+      if(!data.ok){
+        if(perfil){
+          perfil.innerHTML = '<p class="status error">' + (data.error || 'No se encontró información para este ID.') + '</p>';
+        }
+        return;
+      }
+
+      const c = data.contrato || {};
+      contratoActual = c;
+
+      const placa = c['ID VEHÍCULO'] || c['ID VEHICULO'] || '';
+      const inicio = c['INICIO'] || '';
+      const ciudad = c['CIUDAD'] || '';
+      const estado = (c['ESTADO'] || '').toString().toUpperCase();
+      const tarifa = c['TARIFA SEMANAL'] || '';
+      const km = c['KILOMETRAJE'] || c['KILOMETRAJE ACTUAL'] || '';
+
+      let html = '';
+      html += '<p><strong>ID contrato:</strong> ' + (c['ID CONTRATO'] || '') + '</p>';
+      html += '<p><strong>Placa / vehículo:</strong> ' + placa + '</p>';
+      html += '<p><strong>Inicio:</strong> ' + formatearFechaCorta(inicio) + '</p>';
+      html += '<p><strong>Ciudad:</strong> ' + (ciudad || 'Bogotá y alrededores') + '</p>';
+      if(tarifa){
+        html += '<p><strong>Tarifa semanal:</strong> ' + formatearNumeroCOP(tarifa) + '</p>';
+      }
+      if(km){
+        html += '<p><strong>Kilometraje actual:</strong> ' + km + ' km</p>';
+      }
+      html += '<p><strong>Estado:</strong> ' +
+        (estado ? '<span style="padding:2px 8px;border-radius:999px;background:'+
+          (estado === 'ACTIVO' ? '#dcfce7;color:#166534' : '#fee2e2;color:#b91c1c')+
+          ';">' + estado + '</span>' : 'SIN ESTADO') +
+        '</p>';
+
+      perfil.innerHTML = html;
+    }catch(e){
+      console.error(e);
+      if(perfil){
+        perfil.innerHTML = '<p class="status error">Error al cargar la información del contrato.</p>';
+      }
+    }
+  }
+
+  /* ------- Cargar turnos publicados ------- */
+  async function cargarTurnosDisponibles(){
+    const estado = document.getElementById('turnosEstado');
+    const cont = document.getElementById('turnosList');
+    if(cont) cont.innerHTML = '';
+
+    if(estado){
+      estado.className = 'status muted';
+      estado.textContent = 'Cargando turnos publicados...';
+    }
 
     try{
       const resp = await fetch(API_URL + '?accion=get_turnos_publicados');
       const data = await resp.json();
 
-      if (!data.ok){
-        estadoTurnos.className = 'status-bar error';
-        estadoTurnos.textContent = data.error || 'No se pudieron cargar los turnos.';
+      const turnos = Array.isArray(data.turnos) ? data.turnos : [];
+
+      if(!data.ok || turnos.length === 0){
+        if(estado){
+          estado.className = 'status error';
+          estado.textContent = 'No hay turnos disponibles en este momento.';
+        }
         return;
       }
 
-      turnosData = Array.isArray(data.turnos) ? data.turnos : [];
-      pintarTurnos(turnosData);
-
-      contador.textContent = turnosData.length === 1
-        ? '1 turno disponible'
-        : turnosData.length + ' turnos disponibles';
-
-      if (turnosData.length === 0){
-        estadoTurnos.className = 'status-bar';
-        estadoTurnos.textContent = 'Por ahora no hay turnos publicados. Intenta más tarde.';
-      }else{
-        estadoTurnos.className = 'status-bar ok';
-        estadoTurnos.textContent = 'Elige un turno y confírmalo para continuar.';
+      if(estado){
+        estado.className = 'status ok';
+        estado.textContent = 'Turnos activos encontrados: ' + turnos.length;
       }
+
+      if(!cont) return;
+
+      turnos.forEach(function(t){
+        const idTurno =
+          t.id_turno || t.idTurno || t.ID_TURNO || t['ID TURNO'] || t.codigo || t.codigo_turno || 'TURNO';
+        const cliente =
+          t.cliente || t.CLIENTE || t.punto || t['PUNTO DE ENTREGA'] || 'Cliente sin nombre';
+        const sucursal = t.sucursal || t['SUCURSAL'] || '';
+        const direccion = t.direccion || t.DIRECCION || t['DIRECCIÓN'] || '';
+        const fecha = t.fecha || t.FECHA || '';
+        const hora = t.hora || t.HORA || '';
+        const ciudad = t.ciudad || t.CIUDAD || 'Bogotá';
+        const dias =
+          t.dias || t.DIAS || t.duracion_dias || t.DURACION_DIAS || 3;
+        const pagoEstimado = t.pago || t.PAGO || t.valor || t.VALOR || '';
+
+        const titulo = 'Colabora con ' + cliente + ' ' + idTurno;
+        const detallePunto = sucursal ? (cliente + ' • ' + sucursal) : cliente;
+        const textoDias = dias + ' día' + (Number(dias) === 1 ? '' : 's') + ' consecutivo' + (Number(dias) === 1 ? '' : 's');
+
+        // imagen del comercio (logo o foto)
+        const logoUrl =
+          t.logoUrl || t.logo || t.imagen || t.imagen_url || t['LOGO URL'] || 'logo_turno_generico.png';
+
+        const card = document.createElement('div');
+        card.className = 'turno-card';
+        card.innerHTML = `
+          <div class="turno-logo-wrapper">
+            <img src="${logoUrl}" alt="${cliente}" class="turno-logo" onerror="this.style.display='none';">
+          </div>
+          <div class="turno-content">
+            <div class="turno-header-line">
+              <div class="turno-titulo">${titulo}</div>
+              <div class="tag-turno">${ciudad}</div>
+            </div>
+            <div class="turno-detalle">
+              <strong>Punto:</strong> ${detallePunto}
+            </div>
+            <div class="turno-detalle">
+              <strong>Dirección:</strong> ${direccion || 'Por definir'}
+            </div>
+            <div class="turno-detalle">
+              <strong>Fecha de inicio:</strong> ${formatearFechaCorta(fecha) || 'Por definir'}
+            </div>
+            <div class="turno-detalle">
+              <strong>Duración:</strong> ${textoDias}
+            </div>
+            <div class="turno-detalle">
+              <strong>Horario:</strong> ${formatearHora(hora) || 'Por definir'}
+            </div>
+            ${pagoEstimado ? `
+              <div class="turno-detalle">
+                <strong>Valor estimado:</strong> ${formatearNumeroCOP(pagoEstimado)}
+              </div>` : ``}
+            <div class="turno-footer">
+              <button type="button" class="btn btn-primary"
+                onclick='abrirConfirmacionTurno(${JSON.stringify({
+                  idTurno: idTurno,
+                  cliente: cliente,
+                  sucursal: sucursal,
+                  direccion: direccion,
+                  fecha: fecha,
+                  hora: hora,
+                  ciudad: ciudad,
+                  dias: dias
+                }).replace(/'/g,"&#39;")})'>
+                Aceptar turno
+              </button>
+            </div>
+          </div>
+        `;
+        cont.appendChild(card);
+      });
     }catch(e){
       console.error(e);
-      estadoTurnos.className = 'status-bar error';
-      estadoTurnos.textContent = 'Error al cargar los turnos. Revisa tu conexión e intenta de nuevo.';
+      if(estado){
+        estado.className = 'status error';
+        estado.textContent = 'Error al cargar los turnos publicados.';
+      }
     }
   }
 
-  function pintarTurnos(listaOrigen){
-    const lista = document.getElementById('listaTurnos');
-    lista.innerHTML = '';
+  function abrirConfirmacionTurno(turno){
+    turnoSeleccionado = turno;
+    const msg = document.getElementById('confirmarTurnoMsg');
+    if(msg){
+      msg.className = 'status';
+      msg.textContent = '';
+    }
+    const chk = document.getElementById('chkTerminos');
+    if(chk) chk.checked = false;
+    abrirModal('modalConfirmarTurno');
+  }
 
-    if (!listaOrigen || !listaOrigen.length){
-      lista.innerHTML = '<p style="font-size:.85rem;color:#6b7280;">No hay turnos que coincidan con los filtros seleccionados.</p>';
+  function verTerminosTurno(){
+    // Debes subir este PDF a tu hosting con este nombre o ajustarlo aquí
+    window.open('terminos_y_condiciones_turnos.pdf', '_blank');
+  }
+
+  async function confirmarAceptarTurno(){
+    const msg = document.getElementById('confirmarTurnoMsg');
+    const chk = document.getElementById('chkTerminos');
+
+    if(!turnoSeleccionado){
+      if(msg){
+        msg.className = 'status error';
+        msg.textContent = 'No se encontró el turno seleccionado.';
+      }
       return;
     }
 
-    listaOrigen.forEach(function(t){
-      const idTurno = t.idTurno || '';
-      const empresa = t.empresa || '';
-      const ciudad = t.ciudad || '';
-      const zonificacion = t.zonificacion || '';
-      const tipo = t.tipo || '';
-      const tipoPaqueteria = t.tipoPaqueteria || '';
-      const descripcion = t.descripcion || '';
-      const paradas = t.paradas != null ? t.paradas : '';
-      const fechaISO = t.fecha || '';
-      const inicio = t.inicio || '';
-      const cierre = t.cierre || '';
-      const valorTurno = Number(t.valorTurno || 0);
-      const bonificacion = Number(t.bonificacion || 0);
-      const total = valorTurno + bonificacion;
-      const requisitos = t.requisitos || '';
-
-      const fechaFormateada = formatearFecha(fechaISO);
-
-      const card = document.createElement('article');
-      card.className = 'turno-card';
-
-      const main = document.createElement('div');
-      main.className = 'turno-main';
-
-      const h3 = document.createElement('h3');
-      h3.textContent = 'Turno ' + idTurno;
-      main.appendChild(h3);
-
-      const emp = document.createElement('div');
-      emp.className = 'empresa';
-      emp.textContent = empresa;
-      main.appendChild(emp);
-
-      const chips = document.createElement('div');
-      chips.className = 'chips';
-
-      if (ciudad){
-        const chipCiudad = document.createElement('span');
-        chipCiudad.className = 'chip';
-        chipCiudad.textContent = ciudad + (zonificacion ? ' · ' + zonificacion : '');
-        chips.appendChild(chipCiudad);
+    if(!idContratoActual){
+      if(msg){
+        msg.className = 'status error';
+        msg.textContent = 'No se encontró tu contrato. Vuelve a ingresar desde el portal principal.';
       }
-
-      if (tipoPaqueteria){
-        const chipTipo = document.createElement('span');
-        chipTipo.className = 'chip chip-tipo';
-        chipTipo.textContent = tipoPaqueteria;
-        chips.appendChild(chipTipo);
-      }
-
-      if (tipo){
-        const chipModo = document.createElement('span');
-        chipModo.className = 'chip';
-        chipModo.textContent = tipo;
-        chips.appendChild(chipModo);
-      }
-
-      if (paradas){
-        const chipParadas = document.createElement('span');
-        chipParadas.className = 'chip';
-        chipParadas.textContent = paradas + ' paradas';
-        chips.appendChild(chipParadas);
-      }
-
-      main.appendChild(chips);
-
-      const detalle = document.createElement('div');
-      detalle.className = 'turno-detalle';
-      detalle.textContent =
-        (fechaFormateada ? fechaFormateada + ' · ' : '') +
-        (inicio ? inicio : '') +
-        (cierre ? ' - ' + cierre : '');
-      main.appendChild(detalle);
-
-      if (descripcion){
-        const descP = document.createElement('p');
-        descP.style.marginTop = '4px';
-        descP.style.fontSize = '.85rem';
-        descP.style.color = '#4b5563';
-        descP.textContent = descripcion;
-        main.appendChild(descP);
-      }
-
-      if (requisitos){
-        const reqP = document.createElement('p');
-        reqP.style.marginTop = '4px';
-        reqP.style.fontSize = '.8rem';
-        reqP.style.color = '#6b7280';
-        reqP.textContent = 'Requisitos: ' + requisitos;
-        main.appendChild(reqP);
-      }
-
-      const side = document.createElement('div');
-      side.className = 'turno-side';
-
-      const montos = document.createElement('div');
-      const mPrincipal = document.createElement('div');
-      mPrincipal.className = 'monto-principal';
-      mPrincipal.innerHTML = formatearCOP(valorTurno) + ' <span>turno</span>';
-
-      const mBono = document.createElement('div');
-      mBono.className = 'monto-bono';
-      if (bonificacion > 0){
-        mBono.textContent = '+ ' + formatearCOP(bonificacion) + ' bono';
-      }else{
-        mBono.textContent = 'Sin bonificación';
-        mBono.style.color = '#6b7280';
-      }
-
-      const mTotal = document.createElement('div');
-      mTotal.className = 'monto-total';
-      mTotal.textContent = 'Total estimado: ' + formatearCOP(total);
-
-      montos.appendChild(mPrincipal);
-      montos.appendChild(mBono);
-      montos.appendChild(mTotal);
-      side.appendChild(montos);
-
-      const btnRow = document.createElement('div');
-      btnRow.style.display = 'flex';
-      btnRow.style.flexWrap = 'wrap';
-      btnRow.style.gap = '6px';
-
-      const btnAceptar = document.createElement('button');
-      btnAceptar.type = 'button';
-      btnAceptar.className = 'btn-aceptar';
-      btnAceptar.textContent = 'Aceptar turno';
-      btnAceptar.onclick = function(){
-        aceptarTurno(idTurno, btnAceptar);
-      };
-
-      const btnInfo = document.createElement('button');
-      btnInfo.type = 'button';
-      btnInfo.className = 'btn-secundario';
-      btnInfo.textContent = 'Ver en WhatsApp';
-      btnInfo.onclick = function(){
-        compartirTurnoWhatsapp(idTurno);
-      };
-
-      btnRow.appendChild(btnAceptar);
-      btnRow.appendChild(btnInfo);
-
-      side.appendChild(btnRow);
-
-      card.appendChild(main);
-      card.appendChild(side);
-      lista.appendChild(card);
-    });
-  }
-
-  function aplicarFiltros(){
-    const ciudadSel = document.getElementById('filtroCiudad').value;
-    const fechaSel = document.getElementById('filtroFecha').value;
-
-    const filtrados = turnosData.filter(function(t){
-      let ok = true;
-      if (ciudadSel){
-        ok = ok && (t.ciudad === ciudadSel);
-      }
-      if (fechaSel){
-        const fechaISO = (t.fecha || '').substring(0,10);
-        ok = ok && (fechaISO === fechaSel);
-      }
-      return ok;
-    });
-
-    pintarTurnos(filtrados);
-    const contador = document.getElementById('turnosContador');
-    contador.textContent = filtrados.length === 1
-      ? '1 turno disponible'
-      : filtrados.length + ' turnos disponibles';
-  }
-
-  function formatearCOP(valor){
-    const num = Number(valor);
-    if (isNaN(num)) return '—';
-    return num.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
-  }
-
-  function formatearFecha(fechaISO){
-    if (!fechaISO) return '';
-    try{
-      const d = new Date(fechaISO);
-      if (isNaN(d.getTime())) return fechaISO;
-      return d.toLocaleDateString('es-CO');
-    }catch(e){
-      return fechaISO;
-    }
-  }
-
-  // --- Aceptar turno (usa accion=asignar_turno en Apps Script) ---
-  async function aceptarTurno(idTurno, boton){
-    if (!idContratoGlobal){
-      alert('No encontramos tu contrato. Regresa al portal principal e inicia sesión de nuevo.');
       return;
     }
 
-    const confirmar = confirm('¿Aceptar el turno ' + idTurno + ' con el contrato ' + idContratoGlobal + '?');
-    if (!confirmar) return;
+    if(!chk || !chk.checked){
+      if(msg){
+        msg.className = 'status error';
+        msg.textContent = 'Debes aceptar los términos y condiciones antes de confirmar.';
+      }
+      return;
+    }
 
-    boton.disabled = true;
-    const estadoTurnos = document.getElementById('estadoTurnos');
-    estadoTurnos.className = 'status-bar';
-    estadoTurnos.textContent = 'Registrando tu aceptación...';
+    if(msg){
+      msg.className = 'status muted';
+      msg.textContent = 'Enviando solicitud de turno...';
+    }
 
     try{
       const formData = new URLSearchParams();
-      formData.append('accion','asignar_turno');
-      formData.append('idTurno',idTurno);
-      formData.append('idContrato',idContratoGlobal);
+      formData.append('accion','solicitar_turno');
+      formData.append('idContrato', idContratoActual);
+      formData.append('idTurno', turnoSeleccionado.idTurno || '');
+      formData.append('cliente', turnoSeleccionado.cliente || '');
+      formData.append('direccion', turnoSeleccionado.direccion || '');
+      formData.append('fecha', turnoSeleccionado.fecha || '');
+      formData.append('hora', turnoSeleccionado.hora || '');
+      formData.append('ciudad', turnoSeleccionado.ciudad || '');
+      formData.append('dias', turnoSeleccionado.dias || '');
 
-      const resp = await fetch(API_URL,{
+      const resp = await fetch(API_URL, {
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body:formData.toString()
+        body: formData.toString()
       });
       const data = await resp.json();
 
-      if (data.ok){
-        estadoTurnos.className = 'status-bar ok';
-        estadoTurnos.textContent = 'Turno aceptado correctamente. Pronto verás el detalle en tu agenda.';
-        boton.textContent = 'Turno aceptado';
-      }else{
-        estadoTurnos.className = 'status-bar error';
-        estadoTurnos.textContent = data.error || 'No fue posible registrar la aceptación del turno.';
-        boton.disabled = false;
+      if(!data.ok){
+        if(msg){
+          msg.className = 'status error';
+          msg.textContent = data.error || 'No fue posible registrar la aceptación del turno.';
+        }
+        return;
       }
+
+      if(msg){
+        msg.className = 'status ok';
+        msg.textContent = 'Solicitud enviada. Recibirás la confirmación de asignación por WhatsApp.';
+      }
+
+      // Simular que el turno queda en "Mi agenda" durante los 3 días
+      ultimaAceptacion = {
+        turno: turnoSeleccionado,
+        fechaBase: turnoSeleccionado.fecha || new Date().toISOString()
+      };
+      actualizarAgendaDesdeUltimaAceptacion();
+
+      setTimeout(function(){
+        cerrarModal('modalConfirmarTurno');
+      }, 900);
     }catch(e){
       console.error(e);
-      estadoTurnos.className = 'status-bar error';
-      estadoTurnos.textContent = 'Error de conexión al registrar el turno.';
-      boton.disabled = false;
+      if(msg){
+        msg.className = 'status error';
+        msg.textContent = 'Error al enviar la solicitud. Intenta de nuevo.';
+      }
     }
   }
 
-  // --- Compartir turno por WhatsApp (apoyo operativo) ---
-  function compartirTurnoWhatsapp(idTurno){
-    const turno = (turnosData || []).find(function(t){ return t.idTurno === idTurno; });
-    let texto = 'Hola, quiero más información del turno ' + idTurno;
-    if (turno){
-      const ciudad = turno.ciudad || '';
-      const empresa = turno.empresa || '';
-      const fecha = formatearFecha(turno.fecha || '');
-      texto += ' (' + (empresa || '') + (ciudad ? ', ' + ciudad : '') + (fecha ? ', ' + fecha : '') + ').';
+  function actualizarAgendaDesdeUltimaAceptacion(){
+    const cont = document.getElementById('agendaContenido');
+    const estado = document.getElementById('agendaEstado');
+    if(!cont || !estado){
+      return;
     }
-    const url = 'https://wa.me/573159406263?text=' + encodeURIComponent(texto);
-    window.open(url,'_blank');
+
+    if(!ultimaAceptacion){
+      estado.style.color = '#e5e7eb';
+      estado.textContent = 'Aún no tienes turnos aceptados.';
+      cont.innerHTML = '';
+      return;
+    }
+
+    const t = ultimaAceptacion.turno;
+    const dias = Number(t.dias || 3);
+
+    let base = new Date(ultimaAceptacion.fechaBase);
+    if(isNaN(base.getTime())){
+      base = new Date();
+    }
+
+    let html = '';
+    for(let i=0;i<dias && i<3;i++){
+      const d = new Date(base.getTime());
+      d.setDate(base.getDate() + i);
+
+      const fechaTexto = d.toLocaleDateString('es-CO',{
+        weekday:'short',day:'2-digit',month:'short',year:'numeric'
+      });
+
+      html += `
+        <div class="agenda-dia">
+          <div class="agenda-fecha">${fechaTexto}</div>
+          <div class="agenda-turno">Turno ${t.idTurno || 'TURNO'}</div>
+          <div class="agenda-detalle">
+            <strong>Cliente:</strong> ${t.cliente || 'Cruz Verde 116'}
+          </div>
+          <div class="agenda-detalle">
+            <strong>Dirección:</strong> ${t.direccion || 'Dirección por definir'}
+          </div>
+          <div class="agenda-detalle">
+            <strong>Hora de llegada:</strong> ${formatearHora(t.hora) || '08:00 a.m.'}
+          </div>
+        </div>
+      `;
+    }
+
+    estado.style.color = '#bbf7d0';
+    estado.textContent = 'Tu próximo turno activo:';
+    cont.innerHTML = html;
   }
 </script>
 </body>
