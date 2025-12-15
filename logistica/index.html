@@ -54,6 +54,17 @@
       color:#4b5563;
     }
 
+    .saludo{
+      font-size:.95rem;
+      color:#111827;
+      font-weight:700;
+      margin-bottom:4px;
+      letter-spacing:.01em;
+    }
+    .saludo span{
+      color:#2563eb;
+    }
+
     .badge-id{
       font-size:.8rem;
       padding:4px 10px;
@@ -71,7 +82,7 @@
       color:#4b5563;
     }
 
-    /* Fila ciudad */
+    /* Fila cobertura */
     .toolbar{
       display:flex;
       align-items:center;
@@ -126,145 +137,104 @@
       display:flex;
       flex-direction:column;
       gap:12px;
-      margin-top:8px;
+      margin-top:10px;
     }
 
     .turno-card{
       border-radius:14px;
       border:1px solid #e5e7eb;
-      padding:10px 12px 12px;
+      padding:10px 12px;
       display:grid;
       grid-template-columns:96px minmax(0,1fr);
       gap:10px;
       align-items:stretch;
       background:#f9fafb;
-      transition:box-shadow .12s,transform .08s,border-color .12s;
+      cursor:pointer;
+      transition:transform .1s,box-shadow .12s,border-color .12s;
     }
-
     .turno-card:hover{
-      box-shadow:0 14px 30px rgba(15,23,42,.18);
-      border-color:#d1d5db;
+      border-color:#c7d2fe;
+      box-shadow:0 12px 26px rgba(15,23,42,.08);
       transform:translateY(-1px);
     }
 
     .turno-logo-wrapper{
       border-radius:12px;
       overflow:hidden;
-      background:#1d4ed8; /* azul RADIZ */
+      background:#2563eb; /* placeholder azul RADIZ */
       display:flex;
       align-items:center;
       justify-content:center;
-      cursor:pointer;
-      position:relative;
+      color:#ffffff;
+      font-weight:700;
+      font-size:.78rem;
+      text-align:center;
+      padding:10px;
+      user-select:none;
     }
-
-    .turno-logo{
-      width:100%;
-      height:100%;
-      object-fit:cover;
+    .turno-logo-wrapper small{
       display:block;
-    }
-
-    .turno-logo-overlay{
-      position:absolute;
-      inset:0;
-      display:flex;
-      align-items:flex-end;
-      justify-content:center;
-      padding-bottom:8px;
-      background:linear-gradient(to top,rgba(15,23,42,.5),transparent);
-      font-size:.7rem;
-      color:#e5e7eb;
-      font-weight:500;
-      letter-spacing:.03em;
-      text-transform:uppercase;
+      opacity:.9;
+      font-weight:600;
+      margin-top:4px;
     }
 
     .turno-content{
       display:flex;
       flex-direction:column;
-      gap:4px;
+      gap:6px;
     }
 
     .turno-header-line{
       display:flex;
       justify-content:space-between;
       align-items:center;
+      gap:8px;
       flex-wrap:wrap;
-      gap:4px;
     }
 
     .turno-titulo{
-      font-size:.95rem;
-      font-weight:700;
+      font-size:1rem;
+      font-weight:800;
       color:#111827;
       display:flex;
       align-items:center;
-      gap:6px;
+      gap:8px;
     }
 
-    .tag-turno{
-      font-size:.75rem;
+    .dot-available{
+      width:9px;
+      height:9px;
+      border-radius:999px;
+      background:#22c55e;
+      box-shadow:0 0 0 4px rgba(34,197,94,.16);
+      flex:0 0 auto;
+    }
+
+    .pill-idturno{
+      font-size:.72rem;
       padding:2px 8px;
       border-radius:999px;
-      background:#eef2ff;
-      color:#3730a3;
-      font-weight:600;
+      background:#eff6ff;
+      color:#1d4ed8;
+      font-weight:700;
+      border:1px solid #dbeafe;
     }
 
-    .turno-detalle{
+    .turno-mini{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
       font-size:.85rem;
       color:#4b5563;
     }
+    .turno-mini strong{ color:#111827; font-weight:700; }
 
-    .turno-detalle strong{
-      color:#111827;
-      font-weight:600;
-    }
-
-    .turno-footer{
-      margin-top:6px;
-      display:flex;
-      justify-content:flex-end;
-    }
-
-    .btn{
-      padding:8px 16px;
-      border-radius:999px;
-      border:none;
+    .turno-valor{
+      margin-top:2px;
       font-size:.9rem;
-      font-weight:600;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      white-space:nowrap;
-      transition:transform .1s,box-shadow .1s,background .1s,color .1s;
-    }
-
-    .btn-primary{
-      background:#2563eb;
-      color:#ffffff;
-      box-shadow:0 10px 24px rgba(37,99,235,.4);
-    }
-
-    .btn-primary:hover{
-      background:#1d4ed8;
-      box-shadow:0 12px 30px rgba(37,99,235,.55);
-      transform:translateY(-1px);
-    }
-
-    .btn-secondary{
-      background:#e5e7eb;
       color:#111827;
-      box-shadow:none;
-    }
-
-    .btn-secondary:hover{
-      background:#d1d5db;
-      box-shadow:none;
-      transform:translateY(-1px);
+      font-weight:800;
     }
 
     .status{
@@ -275,16 +245,6 @@
     .status.error{color:#b91c1c}
     .status.ok{color:#065f46}
     .status.muted{color:#9ca3af}
-
-    /* Punto verde de disponibilidad */
-    .status-dot{
-      width:8px;
-      height:8px;
-      border-radius:999px;
-      background:#22c55e;
-      box-shadow:0 0 0 3px rgba(34,197,94,.25);
-      flex-shrink:0;
-    }
 
     /* Card agenda en azul oscuro */
     .card-agenda{
@@ -302,11 +262,12 @@
       display:flex;
       flex-direction:column;
       gap:2px;
-      padding:8px 10px;
+      padding:10px 12px;
       border-radius:12px;
       background:rgba(15,23,42,.7);
       border:1px solid rgba(148,163,184,.35);
       font-size:.85rem;
+      position:relative;
     }
 
     .agenda-dia + .agenda-dia{
@@ -314,56 +275,89 @@
     }
 
     .agenda-fecha{
-      font-weight:600;
-      font-size:.8rem;
+      font-weight:700;
+      font-size:.78rem;
       text-transform:uppercase;
-      letter-spacing:.04em;
+      letter-spacing:.05em;
       color:#bfdbfe;
     }
 
     .agenda-turno{
-      font-weight:600;
-      font-size:.9rem;
+      font-weight:800;
+      font-size:.92rem;
+      margin-top:2px;
     }
 
     .agenda-detalle{
-      font-size:.8rem;
+      font-size:.82rem;
       color:#e5e7eb;
     }
 
-    .agenda-actions{
-      margin-top:6px;
+    .agenda-detalle strong{
+      color:#ffffff;
+      font-weight:700;
+    }
+
+    .agenda-estado-row{
+      margin-top:8px;
       display:flex;
       align-items:center;
-      justify-content:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
     }
 
-    .agenda-switch{
+    .estado-chip{
+      font-size:.72rem;
+      padding:3px 8px;
       border-radius:999px;
-      border:none;
-      padding:3px 10px;
-      font-size:.75rem;
+      font-weight:800;
+      border:1px solid rgba(148,163,184,.35);
+      user-select:none;
+    }
+    .estado-chip.pendiente{ background:rgba(148,163,184,.18); color:#e5e7eb; }
+    .estado-chip.ensitio{ background:rgba(34,197,94,.18); color:#bbf7d0; border-color:rgba(34,197,94,.35); }
+    .estado-chip.completado{ background:rgba(239,68,68,.18); color:#fecaca; border-color:rgba(239,68,68,.35); }
+
+    .mini-switch{
+      width:46px;
+      height:24px;
+      border-radius:999px;
+      border:1px solid rgba(148,163,184,.35);
+      background:rgba(148,163,184,.18);
+      position:relative;
       cursor:pointer;
+      flex:0 0 auto;
+      transition:background .12s,border-color .12s;
+    }
+    .mini-switch .knob{
+      width:20px;
+      height:20px;
+      border-radius:999px;
       background:#e5e7eb;
-      color:#111827;
-      display:inline-flex;
-      align-items:center;
-      gap:4px;
+      position:absolute;
+      top:50%;
+      left:2px;
+      transform:translateY(-50%);
+      transition:left .14s, background .12s;
     }
-
-    .agenda-switch.sitio{
+    .mini-switch.ensitio{
+      background:rgba(34,197,94,.2);
+      border-color:rgba(34,197,94,.45);
+    }
+    .mini-switch.ensitio .knob{
+      left:24px;
       background:#bbf7d0;
-      color:#166534;
     }
-
-    .agenda-switch.completado{
-      background:#fee2e2;
-      color:#b91c1c;
-    }
-
-    .agenda-switch[disabled]{
-      opacity:.7;
+    .mini-switch.completado{
+      background:rgba(239,68,68,.2);
+      border-color:rgba(239,68,68,.45);
       cursor:default;
+      opacity:.92;
+    }
+    .mini-switch.completado .knob{
+      left:24px;
+      background:#fecaca;
     }
 
     /* FAB menú (Mi perfil) */
@@ -433,7 +427,7 @@
       font-size:.8rem;
       text-transform:uppercase;
       letter-spacing:.08em;
-      font-weight:600;
+      font-weight:700;
       color:#6b7280;
       padding:6px 14px 4px;
     }
@@ -464,8 +458,8 @@
     .modal{
       background:#fff;
       border-radius:18px;
-      max-width:480px;
-      width:90%;
+      max-width:520px;
+      width:92%;
       padding:18px 20px 18px;
       box-shadow:0 20px 45px rgba(15,23,42,.4);
       font-size:.9rem;
@@ -476,11 +470,13 @@
       justify-content:space-between;
       align-items:center;
       margin-bottom:8px;
+      gap:10px;
     }
 
     .modal-header h3{
       margin:0;
       font-size:1.05rem;
+      font-weight:800;
     }
 
     .modal-close{
@@ -516,11 +512,57 @@
       flex-wrap:wrap;
     }
 
+    .btn{
+      padding:8px 16px;
+      border-radius:999px;
+      border:none;
+      font-size:.9rem;
+      font-weight:700;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      white-space:nowrap;
+      transition:transform .1s,box-shadow .1s,background .1s,color .1s,opacity .1s;
+    }
+
+    .btn-primary{
+      background:#2563eb;
+      color:#ffffff;
+      box-shadow:0 10px 24px rgba(37,99,235,.4);
+    }
+
+    .btn-primary:hover{
+      background:#1d4ed8;
+      box-shadow:0 12px 30px rgba(37,99,235,.55);
+      transform:translateY(-1px);
+    }
+
+    .btn-primary:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
+    }
+
+    .btn-secondary{
+      background:#e5e7eb;
+      color:#111827;
+      box-shadow:none;
+    }
+
+    .btn-secondary:hover{
+      background:#d1d5db;
+      box-shadow:none;
+      transform:translateY(-1px);
+    }
+
     .check-row{
       display:flex;
       align-items:flex-start;
       gap:8px;
-      margin-top:8px;
+      margin-top:10px;
       font-size:.85rem;
     }
 
@@ -529,23 +571,34 @@
       transform:scale(1.1);
     }
 
-    /* Modal imagen turno */
-    .imagen-turno-contenedor{
-      margin-top:8px;
+    .detalle-img{
+      width:100%;
+      height:160px;
       border-radius:14px;
-      background:#0f172a;
-      padding:8px;
+      background:#2563eb;
       display:flex;
       align-items:center;
       justify-content:center;
-      min-height:180px;
+      color:#ffffff;
+      font-weight:800;
+      margin:10px 0 12px;
+      cursor:pointer;
+      user-select:none;
     }
+    .detalle-img small{opacity:.9;font-weight:700}
 
-    .imagen-turno-placeholder{
-      color:#e5e7eb;
-      font-size:.85rem;
-      text-align:center;
-      padding:8px;
+    .iframe-box{
+      width:100%;
+      height:70vh;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid #e5e7eb;
+      background:#f9fafb;
+    }
+    .iframe-box iframe{
+      width:100%;
+      height:100%;
+      border:0;
     }
 
     footer{
@@ -594,6 +647,7 @@
     <!-- Encabezado -->
     <div class="header">
       <div class="header-title">
+        <div class="saludo">Hola, <span id="nombreMensajero">Mensajero</span></div>
         <h1>Portal Logístico</h1>
         <p class="intro-text">
           Te mostraremos los turnos de mensajería o repartos disponibles en tu ciudad.
@@ -604,10 +658,10 @@
       </div>
     </div>
 
-    <!-- Fila ciudad fija -->
+    <!-- Fila cobertura fija -->
     <div class="toolbar">
       <div class="toolbar-left">
-        Ciudad de operación: Bogotá y alrededores.
+        <strong>Cobertura:</strong> Bogotá
       </div>
     </div>
 
@@ -617,7 +671,7 @@
       <div class="card">
         <h2>Disponibles</h2>
         <p style="font-size:.85rem;color:#6b7280;">
-          Selecciona el turno de tu interés.
+          Toca un turno para ver detalles y confirmar aceptación.
         </p>
         <div id="turnosEstado" class="status muted">Cargando turnos publicados...</div>
         <div id="turnosList" class="turnos-list"></div>
@@ -652,76 +706,101 @@
   </div>
 </div>
 
+<!-- MODAL: Detalle turno -->
+<div class="modal-backdrop" id="modalDetalleTurno">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="detalleTitulo">Detalle del turno</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalDetalleTurno')">&times;</button>
+    </div>
+
+    <div class="detalle-img" onclick="abrirModal('modalImagenTurno')">
+      Fachada del punto<br/>
+      <small>(toca para ampliar)</small>
+    </div>
+
+    <div id="detalleContenido"></div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalDetalleTurno')">
+        Cerrar
+      </button>
+      <button type="button" class="btn btn-primary" onclick="abrirConfirmacionTurnoDesdeDetalle()">
+        Aceptar turno
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Imagen ampliada -->
+<div class="modal-backdrop" id="modalImagenTurno">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Fachada del punto</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalImagenTurno')">&times;</button>
+    </div>
+    <div class="detalle-img" style="height:240px;cursor:default;">
+      Imagen de referencia<br/>
+      <small>(placeholder RADIZ)</small>
+    </div>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalImagenTurno')">Volver</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL: Confirmar aceptación de turno -->
 <div class="modal-backdrop" id="modalConfirmarTurno">
   <div class="modal">
     <div class="modal-header">
       <h3>Confirmar aceptación de turno</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalConfirmarTurno')">&times;</button>
+      <button class="modal-close" type="button" onclick="cerrarConfirmacionTurno()">&times;</button>
     </div>
-
-    <!-- Vista principal de confirmación -->
-    <div id="confirmarTurnoContenido">
-      <p>
-        ¿Está seguro de aceptar el turno?
-        Recuerde que es un compromiso laboral legal que cumple con toda la normativa vigente.
-        En caso de incumplimiento se cargará a su cuenta los valores de penalización.
-      </p>
-      <div class="check-row">
-        <input type="checkbox" id="chkTerminos">
-        <label for="chkTerminos">
-          Acepto términos y condiciones del servicio de mensajería.
-        </label>
-      </div>
-      <p id="confirmarTurnoMsg" class="status"></p>
-      <div class="modal-actions">
-        <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalConfirmarTurno')">
-          Cancelar
-        </button>
-        <button type="button" class="btn btn-secondary" onclick="verTerminosTurno()">
-          Términos y condiciones
-        </button>
-        <button type="button" class="btn btn-primary" onclick="confirmarAceptarTurno()">
-          Confirmar
-        </button>
-      </div>
+    <p>
+      ¿Está seguro de aceptar el turno?
+      Recuerde que es un compromiso laboral legal que cumple con toda la normativa vigente.
+      En caso de incumplimiento se cargará a su cuenta los valores de penalización.
+    </p>
+    <div class="check-row">
+      <input type="checkbox" id="chkTerminos" onchange="actualizarEstadoConfirmar()">
+      <label for="chkTerminos">
+        Acepto términos y condiciones del servicio de mensajería.
+      </label>
     </div>
-
-    <!-- Vista de términos dentro de la misma ventana -->
-    <div id="terminosContenido" style="display:none;">
-      <p style="font-weight:600;margin-bottom:6px;">Términos y condiciones</p>
-      <p style="font-size:.85rem;color:#4b5563;">
-        Abre el documento en PDF para revisar las condiciones completas de los turnos de mensajería.
-      </p>
-      <p style="font-size:.85rem;">
-        <a href="terminos_y_condiciones_turnos.pdf" target="_blank" style="color:#2563eb;text-decoration:none;">
-          ➜ Ver PDF completo de términos y condiciones
-        </a>
-      </p>
-      <p style="font-size:.8rem;color:#6b7280;margin-top:6px;">
-        Después de leer el documento, vuelve a esta ventana para confirmar la aceptación del turno.
-      </p>
-      <div class="modal-actions">
-        <button type="button" class="btn btn-secondary" onclick="volverDesdeTerminos()">
-          Volver a la confirmación
-        </button>
-      </div>
+    <p id="confirmarTurnoMsg" class="status"></p>
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" onclick="cerrarConfirmacionTurno()">
+        Cancelar
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="verTerminosTurno()">
+        Términos y condiciones
+      </button>
+      <button type="button" id="btnConfirmarTurno" class="btn btn-primary" onclick="confirmarAceptarTurno()" disabled>
+        Confirmar
+      </button>
     </div>
   </div>
 </div>
 
-<!-- MODAL: Imagen / fachada del cliente -->
-<div class="modal-backdrop" id="modalImagenTurno">
+<!-- MODAL: Términos y condiciones (con volver) -->
+<div class="modal-backdrop" id="modalTerminosTurno">
   <div class="modal">
     <div class="modal-header">
-      <h3 id="imagenTurnoTitulo">Fachada del cliente</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalImagenTurno')">&times;</button>
+      <h3>Términos y condiciones</h3>
+      <button class="modal-close" type="button" onclick="volverAConfirmacionTurno()">&times;</button>
     </div>
-    <div class="imagen-turno-contenedor">
-      <img id="imagenTurnoSrc" src="" alt="Fachada" style="max-width:100%;border-radius:12px;display:none;">
-      <div id="imagenTurnoPlaceholder" class="imagen-turno-placeholder">
-        La imagen de la fachada estará disponible próximamente. Por ahora usaremos este espacio para que la reconozcas cuando esté cargada.
-      </div>
+
+    <div class="iframe-box">
+      <iframe id="iframeTerminos" src="terminos_y_condiciones_turnos.pdf"></iframe>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn btn-secondary" onclick="volverAConfirmacionTurno()">
+        ← Volver a confirmar
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="window.open('terminos_y_condiciones_turnos.pdf','_blank')">
+        Abrir en nueva pestaña
+      </button>
     </div>
   </div>
 </div>
@@ -731,11 +810,15 @@
 
   let idContratoActual = null;
   let contratoActual = null;
-  let turnoSeleccionado = null;
-  let ultimaAceptacion = null; // para simular agenda de 3 días
+
+  let turnoDetalle = null;        // turno seleccionado en modal detalle
+  let turnoSeleccionado = null;   // turno seleccionado para confirmación
+  let ultimaAceptacion = null;    // para simular agenda
+  let agendaEstados = {};         // estados por día (PENDIENTE / EN_SITIO / COMPLETADO)
 
   document.addEventListener('DOMContentLoaded', function(){
     idContratoActual = obtenerIdContratoDeUrl();
+
     if(!idContratoActual){
       const badge = document.getElementById('badgeContrato');
       if(badge){
@@ -752,8 +835,9 @@
         badge.style.display='inline-block';
         badge.textContent='Contrato '+idContratoActual;
       }
-      cargarContratoYAgenda(idContratoActual);
+      cargarContratoYPerfil(idContratoActual);
     }
+
     cargarTurnosDisponibles();
   });
 
@@ -781,40 +865,38 @@
     const el = document.getElementById(id);
     if(!el) return;
     el.style.display='none';
-    if(id === 'modalConfirmarTurno'){
-      turnoSeleccionado = null;
-      const chk = document.getElementById('chkTerminos');
-      if(chk) chk.checked = false;
-      const msg = document.getElementById('confirmarTurnoMsg');
-      if(msg){
-        msg.className = 'status';
-        msg.textContent = '';
-      }
-      const cont = document.getElementById('confirmarTurnoContenido');
-      const term = document.getElementById('terminosContenido');
-      if(cont && term){
-        cont.style.display='block';
-        term.style.display='none';
-      }
+  }
+
+  /* ---- Confirmación: cerrar con reset (solo cuando el usuario cancela/cierra) ---- */
+  function cerrarConfirmacionTurno(){
+    const el = document.getElementById('modalConfirmarTurno');
+    if(el) el.style.display = 'none';
+
+    turnoSeleccionado = null;
+
+    const chk = document.getElementById('chkTerminos');
+    if(chk) chk.checked = false;
+
+    const msg = document.getElementById('confirmarTurnoMsg');
+    if(msg){
+      msg.className = 'status';
+      msg.textContent = '';
     }
+
+    actualizarEstadoConfirmar();
+  }
+
+  function ocultarModal(id){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.style.display='none';
   }
 
   function formatearFechaCorta(v){
     if(!v) return '';
     const d = new Date(v);
     if(isNaN(d.getTime())) return v;
-    return d.toLocaleDateString('es-CO',{
-      day:'2-digit',month:'2-digit',year:'numeric'
-    });
-  }
-
-  function formatearFechaLarga(v){
-    if(!v) return '';
-    const d = new Date(v);
-    if(isNaN(d.getTime())) return v;
-    return d.toLocaleDateString('es-CO',{
-      weekday:'short',day:'2-digit',month:'short',year:'numeric'
-    });
+    return d.toLocaleDateString('es-CO',{ day:'2-digit',month:'2-digit',year:'numeric' });
   }
 
   function formatearHora(h){
@@ -827,8 +909,14 @@
     return num.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
   }
 
-  /* ------- Cargar contrato para "Mi perfil" ------- */
-  async function cargarContratoYAgenda(id){
+  function primerNombre(nombre){
+    const txt = String(nombre || '').trim();
+    if(!txt) return '';
+    return txt.split(/\s+/)[0];
+  }
+
+  /* ------- Cargar contrato para "Mi perfil" + saludo ------- */
+  async function cargarContratoYPerfil(id){
     const perfil = document.getElementById('perfilContenido');
     if(perfil){
       perfil.innerHTML = '<p class="status muted">Cargando información de tu contrato...</p>';
@@ -848,6 +936,17 @@
       const c = data.contrato || {};
       contratoActual = c;
 
+      // Saludo: primer nombre desde Web Service (contrato)
+      const nombreBruto =
+        c['NOMBRE MENSAJERO'] ||
+        c['MENSAJERO'] ||
+        c['NOMBRE'] ||
+        c['ID CLIENTE'] ||
+        '';
+      const pNom = primerNombre(nombreBruto) || 'Mensajero';
+      const elNom = document.getElementById('nombreMensajero');
+      if(elNom) elNom.textContent = pNom;
+
       const placa = c['ID VEHÍCULO'] || c['ID VEHICULO'] || '';
       const inicio = c['INICIO'] || '';
       const ciudad = c['CIUDAD'] || '';
@@ -859,7 +958,7 @@
       html += '<p><strong>ID contrato:</strong> ' + (c['ID CONTRATO'] || '') + '</p>';
       html += '<p><strong>Placa / vehículo:</strong> ' + placa + '</p>';
       html += '<p><strong>Inicio:</strong> ' + formatearFechaCorta(inicio) + '</p>';
-      html += '<p><strong>Ciudad:</strong> ' + (ciudad || 'Bogotá y alrededores') + '</p>';
+      html += '<p><strong>Ciudad:</strong> ' + (ciudad || 'Bogotá') + '</p>';
       if(tarifa){
         html += '<p><strong>Tarifa semanal:</strong> ' + formatearNumeroCOP(tarifa) + '</p>';
       }
@@ -872,7 +971,8 @@
           ';">' + estado + '</span>' : 'SIN ESTADO') +
         '</p>';
 
-      perfil.innerHTML = html;
+      if(perfil) perfil.innerHTML = html;
+
     }catch(e){
       console.error(e);
       if(perfil){
@@ -881,7 +981,7 @@
     }
   }
 
-  /* ------- Cargar turnos publicados ------- */
+  /* ------- Cargar turnos publicados (lista compacta + modal detalle) ------- */
   async function cargarTurnosDisponibles(){
     const estado = document.getElementById('turnosEstado');
     const cont = document.getElementById('turnosList');
@@ -916,78 +1016,80 @@
       turnos.forEach(function(t){
         const idTurno =
           t.id_turno || t.idTurno || t.ID_TURNO || t['ID TURNO'] || t.codigo || t.codigo_turno || 'TURNO';
+
         const cliente =
-          t.cliente || t.CLIENTE || t.punto || t['PUNTO DE ENTREGA'] || 'Cliente sin nombre';
+          t.empresa || t.cliente || t.CLIENTE || t.punto || t['PUNTO DE ENTREGA'] || 'Cruz Verde';
+
         const sucursal = t.sucursal || t['SUCURSAL'] || '';
         const direccion = t.direccion || t.DIRECCION || t['DIRECCIÓN'] || '';
         const fecha = t.fecha || t.FECHA || '';
-        const hora = t.hora || t.HORA || '';
+        const hora = t.hora || t.HORA || t.inicio || t.INICIO || '';
         const ciudad = t.ciudad || t.CIUDAD || 'Bogotá';
+
         const dias =
           t.dias || t.DIAS || t.duracion_dias || t.DURACION_DIAS || 3;
-        const pagoEstimado = t.pago || t.PAGO || t.valor || t.VALOR || '';
 
-        const titulo = 'Colabora con ' + cliente + ' ' + idTurno;
-        const detallePunto = sucursal ? (cliente + ' • ' + sucursal) : cliente;
-        const textoDias = dias + ' día' + (Number(dias) === 1 ? '' : 's') + ' consecutivo' + (Number(dias) === 1 ? '' : 's');
+        const pagoEstimado =
+          t.valorTurno || t.valor || t.VALOR || t.pago || t.PAGO || '';
 
-        // imagen del comercio (logo o foto)
-        const logoUrl =
-          t.logoUrl || t.logo || t.imagen || t.imagen_url || t['LOGO URL'] || 'logo_turno_generico.png';
+        const correoCliente =
+          t.correoCliente || t.correo || t.email || '';
+
+        const turnoObj = {
+          idTurno: String(idTurno),
+          cliente: String(cliente),
+          sucursal: String(sucursal || ''),
+          direccion: String(direccion || ''),
+          fecha: fecha || '',
+          hora: String(hora || ''),
+          ciudad: String(ciudad || 'Bogotá'),
+          dias: Number(dias || 3),
+          valor: pagoEstimado,
+          correoCliente: String(correoCliente || ''),
+          requisitos: String(t.requisitos || t.REQUISITOS || ''),
+          descripcion: String(t.descripcion || t.DESCRIPCION || t['DESCRIPCIÓN'] || ''),
+          paradas: String(t.paradas || t.PARADAS || ''),
+          zonificacion: String(t.zonificacion || t.ZONIFICACION || t['ZONIFICACIÓN'] || '')
+        };
 
         const card = document.createElement('div');
         card.className = 'turno-card';
+
+        const fechaTxt = formatearFechaCorta(turnoObj.fecha) || 'Por definir';
+        const horaTxt = formatearHora(turnoObj.hora) || 'Por definir';
+
         card.innerHTML = `
-          <div class="turno-logo-wrapper" onclick="abrirImagenTurno('${logoUrl}','${cliente.replace(/'/g,"&#39;")}')">
-            <img src="${logoUrl}" alt="${cliente}" class="turno-logo" onerror="this.style.display='none';">
-            <div class="turno-logo-overlay">Ver fachada</div>
+          <div class="turno-logo-wrapper" title="Toca para ver la fachada">
+            Ver fachada
+            <small>(ampliar)</small>
           </div>
           <div class="turno-content">
             <div class="turno-header-line">
               <div class="turno-titulo">
-                <span class="status-dot"></span>
-                ${titulo}
+                <span class="dot-available"></span>
+                ${turnoObj.cliente}
               </div>
-              <div class="tag-turno">${ciudad}</div>
+              <div class="pill-idturno">${turnoObj.idTurno}</div>
             </div>
-            <div class="turno-detalle">
-              <strong>Punto:</strong> ${detallePunto}
+
+            <div class="turno-mini">
+              <span><strong>Día:</strong> ${fechaTxt}</span>
+              <span><strong>Hora:</strong> ${horaTxt}</span>
             </div>
-            <div class="turno-detalle">
-              <strong>Dirección:</strong> ${direccion || 'Por definir'}
-            </div>
-            <div class="turno-detalle">
-              <strong>Fecha de inicio:</strong> ${formatearFechaCorta(fecha) || 'Por definir'}
-            </div>
-            <div class="turno-detalle">
-              <strong>Duración:</strong> ${textoDias}
-            </div>
-            <div class="turno-detalle">
-              <strong>Horario:</strong> ${formatearHora(hora) || 'Por definir'}
-            </div>
-            ${pagoEstimado ? `
-              <div class="turno-detalle">
-                <strong>Valor estimado:</strong> ${formatearNumeroCOP(pagoEstimado)}
-              </div>` : ``}
-            <div class="turno-footer">
-              <button type="button" class="btn btn-primary"
-                onclick='abrirConfirmacionTurno(${JSON.stringify({
-                  idTurno: idTurno,
-                  cliente: cliente,
-                  sucursal: sucursal,
-                  direccion: direccion,
-                  fecha: fecha,
-                  hora: hora,
-                  ciudad: ciudad,
-                  dias: dias
-                }).replace(/'/g,"&#39;")})'>
-                Aceptar turno
-              </button>
+
+            <div class="turno-valor">
+              ${pagoEstimado ? formatearNumeroCOP(pagoEstimado) : 'Valor por confirmar'}
             </div>
           </div>
         `;
+
+        card.addEventListener('click', function(){
+          abrirDetalleTurno(turnoObj);
+        });
+
         cont.appendChild(card);
       });
+
     }catch(e){
       console.error(e);
       if(estado){
@@ -997,8 +1099,55 @@
     }
   }
 
-  function abrirConfirmacionTurno(turno){
-    turnoSeleccionado = turno;
+  function abrirDetalleTurno(turno){
+    turnoDetalle = turno;
+
+    const titulo = document.getElementById('detalleTitulo');
+    const cont = document.getElementById('detalleContenido');
+
+    if(titulo){
+      titulo.textContent = (turno.cliente || 'Cruz Verde') + ' • ' + (turno.idTurno || 'TURNO');
+    }
+
+    const textoDias = (turno.dias || 3) + ' día' + (Number(turno.dias) === 1 ? '' : 's') +
+      ' consecutivo' + (Number(turno.dias) === 1 ? '' : 's');
+
+    let html = '';
+    if(turno.sucursal){
+      html += `<p><strong>Sucursal:</strong> ${turno.sucursal}</p>`;
+    }
+    html += `<p><strong>Dirección:</strong> ${turno.direccion || 'Por definir'}</p>`;
+    html += `<p><strong>Fecha de inicio:</strong> ${formatearFechaCorta(turno.fecha) || 'Por definir'}</p>`;
+    html += `<p><strong>Duración:</strong> ${textoDias}</p>`;
+    html += `<p><strong>Horario:</strong> ${formatearHora(turno.hora) || 'Por definir'}</p>`;
+    if(turno.valor){
+      html += `<p><strong>Valor estimado:</strong> ${formatearNumeroCOP(turno.valor)}</p>`;
+    }
+    if(turno.zonificacion){
+      html += `<p><strong>Zonificación:</strong> ${turno.zonificacion}</p>`;
+    }
+    if(turno.paradas){
+      html += `<p><strong>Paradas:</strong> ${turno.paradas}</p>`;
+    }
+    if(turno.descripcion){
+      html += `<p><strong>Descripción:</strong> ${turno.descripcion}</p>`;
+    }
+    if(turno.requisitos){
+      html += `<p><strong>Requisitos:</strong> ${turno.requisitos}</p>`;
+    }
+
+    if(cont) cont.innerHTML = html || '<p class="status muted">Información del turno por confirmar.</p>';
+
+    abrirModal('modalDetalleTurno');
+  }
+
+  function abrirConfirmacionTurnoDesdeDetalle(){
+    if(!turnoDetalle) return;
+    turnoSeleccionado = turnoDetalle;
+    abrirConfirmacionTurno();
+  }
+
+  function abrirConfirmacionTurno(){
     const msg = document.getElementById('confirmarTurnoMsg');
     if(msg){
       msg.className = 'status';
@@ -1007,59 +1156,28 @@
     const chk = document.getElementById('chkTerminos');
     if(chk) chk.checked = false;
 
-    const cont = document.getElementById('confirmarTurnoContenido');
-    const term = document.getElementById('terminosContenido');
-    if(cont && term){
-      cont.style.display='block';
-      term.style.display='none';
-    }
+    actualizarEstadoConfirmar();
 
     abrirModal('modalConfirmarTurno');
   }
 
   function verTerminosTurno(){
-    // Cambia a la vista de términos dentro de la misma ventana
-    const cont = document.getElementById('confirmarTurnoContenido');
-    const term = document.getElementById('terminosContenido');
-    if(cont && term){
-      cont.style.display='none';
-      term.style.display='block';
-    }
-    // Y abre el PDF en otra pestaña para su lectura
-    window.open('terminos_y_condiciones_turnos.pdf', '_blank');
+    // Ocultamos confirmación (sin reset) y abrimos modal de términos con volver
+    ocultarModal('modalConfirmarTurno');
+    abrirModal('modalTerminosTurno');
   }
 
-  function volverDesdeTerminos(){
-    const cont = document.getElementById('confirmarTurnoContenido');
-    const term = document.getElementById('terminosContenido');
-    if(cont && term){
-      term.style.display='none';
-      cont.style.display='block';
-    }
+  function volverAConfirmacionTurno(){
+    cerrarModal('modalTerminosTurno');
+    abrirModal('modalConfirmarTurno');
+    actualizarEstadoConfirmar();
   }
 
-  function abrirImagenTurno(url, cliente){
-    const titulo = document.getElementById('imagenTurnoTitulo');
-    const img = document.getElementById('imagenTurnoSrc');
-    const ph = document.getElementById('imagenTurnoPlaceholder');
-
-    if(titulo){
-      titulo.textContent = 'Fachada de ' + (cliente || 'cliente');
-    }
-
-    if(img && ph){
-      if(url && url !== 'logo_turno_generico.png'){
-        img.src = url;
-        img.style.display = 'block';
-        ph.style.display = 'none';
-      }else{
-        img.src = '';
-        img.style.display = 'none';
-        ph.style.display = 'flex';
-      }
-    }
-
-    abrirModal('modalImagenTurno');
+  function actualizarEstadoConfirmar(){
+    const chk = document.getElementById('chkTerminos');
+    const btn = document.getElementById('btnConfirmarTurno');
+    if(!btn) return;
+    btn.disabled = !(chk && chk.checked);
   }
 
   async function confirmarAceptarTurno(){
@@ -1105,7 +1223,8 @@
       formData.append('fecha', turnoSeleccionado.fecha || '');
       formData.append('hora', turnoSeleccionado.hora || '');
       formData.append('ciudad', turnoSeleccionado.ciudad || '');
-      formData.append('dias', turnoSeleccionado.dias || '');
+      formData.append('dias', String(turnoSeleccionado.dias || 3));
+      formData.append('correoCliente', turnoSeleccionado.correoCliente || '');
 
       const resp = await fetch(API_URL, {
         method:'POST',
@@ -1127,16 +1246,19 @@
         msg.textContent = 'Solicitud enviada. Recibirás la confirmación de asignación por WhatsApp.';
       }
 
-      // Simular que el turno queda en "Mi agenda" durante los 3 días
+      // Simular que el turno queda en "Mi agenda" durante los días solicitados (máx 3 en vista)
       ultimaAceptacion = {
         turno: turnoSeleccionado,
         fechaBase: turnoSeleccionado.fecha || new Date().toISOString()
       };
+      agendaEstados = {}; // reset estados
       actualizarAgendaDesdeUltimaAceptacion();
 
       setTimeout(function(){
-        cerrarModal('modalConfirmarTurno');
-      }, 900);
+        cerrarConfirmacionTurno();
+        cerrarModal('modalDetalleTurno');
+      }, 650);
+
     }catch(e){
       console.error(e);
       if(msg){
@@ -1149,9 +1271,7 @@
   function actualizarAgendaDesdeUltimaAceptacion(){
     const cont = document.getElementById('agendaContenido');
     const estado = document.getElementById('agendaEstado');
-    if(!cont || !estado){
-      return;
-    }
+    if(!cont || !estado) return;
 
     if(!ultimaAceptacion){
       estado.style.color = '#e5e7eb';
@@ -1164,27 +1284,37 @@
     const dias = Number(t.dias || 3);
 
     let base = new Date(ultimaAceptacion.fechaBase);
-    if(isNaN(base.getTime())){
-      base = new Date();
-    }
+    if(isNaN(base.getTime())) base = new Date();
 
     let html = '';
-    for(let i=0;i<dias && i<3;i++){
+    const maxVista = Math.min(dias, 3);
+
+    for(let i=0;i<maxVista;i++){
       const d = new Date(base.getTime());
       d.setDate(base.getDate() + i);
+
       const fechaTexto = d.toLocaleDateString('es-CO',{
         weekday:'short',day:'2-digit',month:'short',year:'numeric'
       });
-      const fechaISO = d.toISOString();
-      const idTurnoTexto = t.idTurno || 'TURNO';
-      const idTurnoEsc = idTurnoTexto.replace(/'/g,"&#39;");
+
+      const key = 'DIA_' + i;
+      const st = agendaEstados[key] || 'PENDIENTE';
+
+      const chipClass =
+        st === 'EN_SITIO' ? 'ensitio' :
+        st === 'COMPLETADO' ? 'completado' :
+        'pendiente';
 
       html += `
-        <div class="agenda-dia">
+        <div class="agenda-dia" data-key="${key}">
           <div class="agenda-fecha">${fechaTexto}</div>
-          <div class="agenda-turno">Turno ${idTurnoTexto}</div>
+          <div class="agenda-turno">Turno ${t.idTurno || 'TURNO'}</div>
+
           <div class="agenda-detalle">
-            <strong>Cliente:</strong> ${t.cliente || 'Cruz Verde 116'}
+            <strong>Cliente:</strong> ${t.cliente || 'Cruz Verde'}
+          </div>
+          <div class="agenda-detalle">
+            <strong>Representante:</strong> Miguel Orozco
           </div>
           <div class="agenda-detalle">
             <strong>Dirección:</strong> ${t.direccion || 'Dirección por definir'}
@@ -1192,16 +1322,15 @@
           <div class="agenda-detalle">
             <strong>Hora de llegada:</strong> ${formatearHora(t.hora) || '08:00 a.m.'}
           </div>
-          <div class="agenda-detalle">
-            <strong>Representante:</strong> Miguel Orozco
-          </div>
-          <div class="agenda-actions">
-            <button type="button"
-              class="agenda-switch"
-              data-estado="pendiente"
-              onclick="toggleEstadoTurno(this,'${idTurnoEsc}','${fechaISO}')">
-              En sitio
-            </button>
+
+          <div class="agenda-estado-row">
+            <span class="estado-chip ${chipClass}" id="chip_${key}">
+              ${st === 'EN_SITIO' ? 'EN SITIO' : (st === 'COMPLETADO' ? 'COMPLETADO' : 'PENDIENTE')}
+            </span>
+
+            <div class="mini-switch ${chipClass}" id="sw_${key}" onclick="toggleEstadoAgenda('${key}', '${t.idTurno || ''}')">
+              <div class="knob"></div>
+            </div>
           </div>
         </div>
       `;
@@ -1212,62 +1341,101 @@
     cont.innerHTML = html;
   }
 
-  async function toggleEstadoTurno(btn, idTurno, fechaISO){
-    if(!btn || !idTurno || !idContratoActual){
-      return;
+  async function toggleEstadoAgenda(key, idTurno){
+    if(!ultimaAceptacion || !ultimaAceptacion.turno) return;
+
+    const actual = agendaEstados[key] || 'PENDIENTE';
+    if(actual === 'COMPLETADO') return;
+
+    const siguiente = (actual === 'PENDIENTE') ? 'EN_SITIO' : 'COMPLETADO';
+
+    // UI optimista: bloquea si va a completado
+    const chip = document.getElementById('chip_' + key);
+    const sw = document.getElementById('sw_' + key);
+
+    if(chip){
+      chip.textContent = (siguiente === 'EN_SITIO') ? 'EN SITIO' : 'COMPLETADO';
+      chip.className = 'estado-chip ' + (siguiente === 'EN_SITIO' ? 'ensitio' : 'completado');
+    }
+    if(sw){
+      sw.className = 'mini-switch ' + (siguiente === 'EN_SITIO' ? 'ensitio' : 'completado');
     }
 
-    const estadoActual = (btn.dataset.estado || 'pendiente').toLowerCase();
-    let nuevoEstado;
-    if(estadoActual === 'pendiente'){
-      nuevoEstado = 'EN_SITIO';
-    }else if(estadoActual === 'en_sitio'){
-      nuevoEstado = 'COMPLETADO';
-    }else{
-      return;
-    }
-
-    btn.disabled = true;
-
+    // Notificar backend
     try{
+      const t = ultimaAceptacion.turno;
+
       const formData = new URLSearchParams();
-      formData.append('accion','actualizar_estado_turno_logistico');
-      formData.append('idContrato', idContratoActual);
-      formData.append('idTurno', idTurno);
-      formData.append('fecha', fechaISO);
-      formData.append('estado', nuevoEstado);
+      formData.append('accion','actualizar_estado_turno');
+      formData.append('idContrato', idContratoActual || '');
+      formData.append('idTurno', idTurno || '');
+      formData.append('estado', siguiente); // EN_SITIO / COMPLETADO
+      formData.append('fechaHora', new Date().toISOString());
+
+      // datos informativos para el correo
+      formData.append('cliente', t.cliente || 'Cruz Verde');
+      formData.append('direccion', t.direccion || '');
+      formData.append('fecha', t.fecha || '');
+      formData.append('hora', t.hora || '');
+      formData.append('ciudad', t.ciudad || 'Bogotá');
+      formData.append('dias', String(t.dias || 3));
+      formData.append('correoCliente', t.correoCliente || '');
 
       const resp = await fetch(API_URL, {
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
         body: formData.toString()
       });
-      const data = await resp.json();
 
+      const data = await resp.json();
       if(!data.ok){
-        alert(data.error || 'No fue posible actualizar el estado del turno.');
-        btn.disabled = false;
+        // si falla, revertimos UI al estado anterior
+        agendaEstados[key] = actual;
+
+        if(chip){
+          const cls =
+            actual === 'EN_SITIO' ? 'ensitio' :
+            actual === 'COMPLETADO' ? 'completado' :
+            'pendiente';
+          chip.textContent = (actual === 'EN_SITIO') ? 'EN SITIO' : (actual === 'COMPLETADO' ? 'COMPLETADO' : 'PENDIENTE');
+          chip.className = 'estado-chip ' + cls;
+        }
+        if(sw){
+          const cls =
+            actual === 'EN_SITIO' ? 'ensitio' :
+            actual === 'COMPLETADO' ? 'completado' :
+            'pendiente';
+          sw.className = 'mini-switch ' + cls;
+        }
+        alert(data.error || 'No fue posible actualizar el estado.');
         return;
       }
 
-      if(nuevoEstado === 'EN_SITIO'){
-        btn.dataset.estado = 'en_sitio';
-        btn.classList.add('sitio');
-        btn.classList.remove('completado');
-        btn.textContent = 'En sitio';
-        btn.disabled = false;
-      }else if(nuevoEstado === 'COMPLETADO'){
-        btn.dataset.estado = 'completado';
-        btn.classList.add('completado');
-        btn.classList.remove('sitio');
-        btn.textContent = 'Completado';
-        // Lo dejamos deshabilitado para que no se vuelva a cambiar
-        btn.disabled = true;
-      }
+      // confirma en memoria
+      agendaEstados[key] = siguiente;
+
     }catch(e){
       console.error(e);
-      alert('Error al notificar el estado del turno. Intenta de nuevo.');
-      btn.disabled = false;
+      // revertir UI
+      agendaEstados[key] = actual;
+
+      if(chip){
+        const cls =
+          actual === 'EN_SITIO' ? 'ensitio' :
+          actual === 'COMPLETADO' ? 'completado' :
+          'pendiente';
+        chip.textContent = (actual === 'EN_SITIO') ? 'EN SITIO' : (actual === 'COMPLETADO' ? 'COMPLETADO' : 'PENDIENTE');
+        chip.className = 'estado-chip ' + cls;
+      }
+      if(sw){
+        const cls =
+          actual === 'EN_SITIO' ? 'ensitio' :
+          actual === 'COMPLETADO' ? 'completado' :
+          'pendiente';
+        sw.className = 'mini-switch ' + cls;
+      }
+
+      alert('Error de conexión al actualizar el estado.');
     }
   }
 </script>
