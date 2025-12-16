@@ -2268,9 +2268,13 @@
       });
 
       checkout.open(function(result){
-        const transaction=result.transaction;
-        console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
-        registrarPagoEnSheet(reference, valor, idContrato);
+        const transaction = (result && result.transaction) ? result.transaction : {};
+        const statusWompi = (transaction.status || '').toString().toUpperCase();
+
+        console.log('Transacción Wompi:', transaction && transaction.id, statusWompi);
+
+        // ✅ Corrección: enviar statusWompi al backend
+        registrarPagoEnSheet(reference, valor, idContrato, statusWompi);
       });
     }catch(e){
       console.error('Error generando firma de integridad',e);
@@ -2278,13 +2282,15 @@
     }
   }
 
-  async function registrarPagoEnSheet(reference, valor, idContrato){
+  // ✅ Corrección: recibe y envía statusWompi
+  async function registrarPagoEnSheet(reference, valor, idContrato, statusWompi){
     try{
       const formData=new URLSearchParams();
       formData.append('accion','registrar_pago');
       formData.append('referencia',reference);
       formData.append('monto',valor);
       formData.append('idContrato',idContrato);
+      formData.append('statusWompi', statusWompi || ''); // ✅ nuevo
       formData.append('origen','PORTAL_WEB');
 
       await fetch(API_URL,{
