@@ -8,12 +8,27 @@
   <style>
     *{box-sizing:border-box}
 
+    :root{
+      --radiz-blue:#2563eb;
+      --radiz-blue-2:#1d4ed8;
+      --ink:#0f172a;
+      --muted:#6b7280;
+      --bg:#f5f6f8;
+      --card:#ffffff;
+      --border:#e5e7eb;
+      --shadow:0 18px 45px rgba(15,23,42,.14);
+      --shadow-soft:0 10px 24px rgba(15,23,42,.10);
+      --radius-xl:24px;
+      --radius-lg:18px;
+      --radius-md:14px;
+    }
+
     body{
       margin:0;
       padding:0;
       font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:#f5f6f8;
-      color:#0f172a;
+      background:var(--bg);
+      color:var(--ink);
     }
 
     .page{
@@ -21,430 +36,363 @@
       display:flex;
       align-items:flex-start;
       justify-content:center;
-      padding:32px 16px;
+      padding:20px 14px 86px; /* espacio para barra inferior */
     }
 
     .container{
       width:100%;
-      max-width:1120px;
-      background:#ffffff;
-      border-radius:24px;
-      box-shadow:0 18px 45px rgba(15,23,42,.14);
-      padding:24px 28px 28px;
+      max-width:520px; /* look app */
+      background:var(--card);
+      border-radius:var(--radius-xl);
+      box-shadow:var(--shadow);
+      padding:14px 14px 18px;
       position:relative;
-    }
-
-    .header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:16px;
-      margin-bottom:10px;
-    }
-
-    .header-title h1{
-      margin:0;
-      font-size:1.8rem;
-      letter-spacing:.03em;
-    }
-
-    .header-title p{
-      margin:4px 0 0;
-      font-size:.9rem;
-      color:#4b5563;
-    }
-
-    .saludo{
-      font-size:.95rem;
-      color:#111827;
-      font-weight:700;
-      margin-bottom:4px;
-      letter-spacing:.01em;
-    }
-    .saludo span{
-      color:#2563eb;
-    }
-
-    .badge-id{
-      font-size:.8rem;
-      padding:4px 10px;
-      border-radius:999px;
-      background:#eff6ff;
-      color:#1d4ed8;
-      font-weight:600;
-    }
-
-    /* Texto principal debajo del título */
-    .intro-text{
-      margin-top:4px;
-      margin-bottom:16px;
-      font-size:.9rem;
-      color:#4b5563;
-    }
-
-    /* Fila cobertura */
-    .toolbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      flex-wrap:wrap;
-      gap:12px;
-      margin-bottom:18px;
-    }
-
-    .toolbar-left{
-      font-size:.85rem;
-      color:#6b7280;
-    }
-
-    /* GRID PRINCIPAL */
-    .main-grid{
-      display:grid;
-      grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);
-      gap:18px;
-      align-items:flex-start;
-    }
-
-    .card{
-      border-radius:18px;
-      border:1px solid #e5e7eb;
-      background:#ffffff;
-      padding:16px 18px 18px;
-      font-size:.9rem;
-      transition:border-color .15s,box-shadow .15s,transform .1s,background .15s;
-    }
-
-    .card h2{
-      margin:0 0 6px;
-      font-size:1.1rem;
-      font-weight:700;
-      color:#111827;
-    }
-
-    .card p{
-      margin:3px 0;
-      color:#4b5563;
-    }
-
-    .card:hover{
-      border-color:#2563eb;
-      box-shadow:0 16px 34px rgba(37,99,235,.12);
-      transform:translateY(-1px);
-    }
-
-    /* Card turnos */
-    .turnos-list{
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      margin-top:10px;
-    }
-
-    .turno-card{
-      border-radius:14px;
-      border:1px solid #e5e7eb;
-      padding:10px 12px;
-      display:grid;
-      grid-template-columns:96px minmax(0,1fr);
-      gap:10px;
-      align-items:stretch;
-      background:#f9fafb;
-      cursor:pointer;
-      transition:transform .1s,box-shadow .12s,border-color .12s;
-    }
-    .turno-card:hover{
-      border-color:#c7d2fe;
-      box-shadow:0 12px 26px rgba(15,23,42,.08);
-      transform:translateY(-1px);
-    }
-
-    .turno-logo-wrapper{
-      border-radius:12px;
       overflow:hidden;
-      background:#2563eb; /* placeholder azul RADIZ */
+    }
+
+    /* Top app bar */
+    .topbar{
+      display:grid;
+      grid-template-columns:48px 1fr 48px;
+      align-items:center;
+      gap:8px;
+      padding:6px 6px 10px;
+    }
+
+    .topbar-left{
+      width:42px;height:42px;
+      border-radius:14px;
+      display:flex;align-items:center;justify-content:center;
+      background:transparent;
+    }
+
+    .logo-wrap{
       display:flex;
       align-items:center;
       justify-content:center;
-      color:#ffffff;
-      font-weight:700;
-      font-size:.78rem;
-      text-align:center;
-      padding:10px;
-      user-select:none;
+      gap:8px;
     }
-    .turno-logo-wrapper small{
+
+    .logo{
+      width:34px;
+      height:34px;
+      border-radius:10px;
+      object-fit:contain;
       display:block;
-      opacity:.9;
-      font-weight:600;
-      margin-top:4px;
     }
 
-    .turno-content{
-      display:flex;
-      flex-direction:column;
-      gap:6px;
-    }
-
-    .turno-header-line{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-
-    .turno-titulo{
-      font-size:1rem;
-      font-weight:800;
-      color:#111827;
+    .bell-btn{
+      width:42px;height:42px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:#fff;
       display:flex;
       align-items:center;
-      gap:8px;
+      justify-content:center;
+      cursor:pointer;
+      box-shadow:var(--shadow-soft);
+      transition:transform .12s, box-shadow .12s, border-color .12s;
+      position:relative;
     }
-
-    .dot-available{
+    .bell-btn:hover{
+      transform:translateY(-1px);
+      border-color:#bfdbfe;
+      box-shadow:0 14px 30px rgba(37,99,235,.18);
+    }
+    .bell-dot{
+      position:absolute;
+      top:9px;
+      right:10px;
       width:9px;
       height:9px;
       border-radius:999px;
-      background:#22c55e;
-      box-shadow:0 0 0 4px rgba(34,197,94,.16);
-      flex:0 0 auto;
+      background:#ef4444;
+      border:2px solid #fff;
+      display:none;
     }
 
-    .pill-idturno{
-      font-size:.72rem;
-      padding:2px 8px;
-      border-radius:999px;
-      background:#eff6ff;
-      color:#1d4ed8;
-      font-weight:700;
-      border:1px solid #dbeafe;
+    .hello{
+      margin:6px 8px 10px;
+      font-size:1.05rem;
+      font-weight:750;
+      letter-spacing:.01em;
+    }
+    .subline{
+      margin:0 8px 12px;
+      font-size:.86rem;
+      color:var(--muted);
+      line-height:1.35;
     }
 
-    .turno-mini{
+    /* Views */
+    .view{display:none;}
+    .view.active{display:block;}
+
+    /* Home grid buttons */
+    .home-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+      padding:8px;
+      margin-top:6px;
+    }
+
+    .home-tile{
+      border:1px solid var(--border);
+      border-radius:18px;
+      background:#fff;
+      padding:14px 12px 12px;
+      cursor:pointer;
+      box-shadow:0 12px 26px rgba(15,23,42,.08);
+      transition:transform .12s, box-shadow .12s, border-color .12s;
       display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      font-size:.85rem;
-      color:#4b5563;
+      flex-direction:column;
+      gap:8px;
+      min-height:118px;
+      position:relative;
+      overflow:hidden;
     }
-    .turno-mini strong{ color:#111827; font-weight:700; }
+    .home-tile:hover{
+      transform:translateY(-2px);
+      border-color:#bfdbfe;
+      box-shadow:0 18px 34px rgba(37,99,235,.14);
+    }
 
-    .turno-valor{
-      margin-top:2px;
-      font-size:.9rem;
-      color:#111827;
+    .tile-icon{
+      width:42px;height:42px;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:#eff6ff;
+      color:var(--radiz-blue);
+      transition:transform .2s;
+    }
+    .home-tile:hover .tile-icon{
+      animation:iconPop .35s ease-out;
+    }
+    @keyframes iconPop{
+      0%{transform:scale(1)}
+      55%{transform:scale(1.08)}
+      100%{transform:scale(1)}
+    }
+
+    .tile-title{
+      font-weight:750;
+      font-size:.95rem;
+      margin:0;
+    }
+    .tile-desc{
+      margin:0;
+      font-size:.82rem;
+      color:var(--muted);
+      line-height:1.35;
+    }
+
+    /* Turnos view */
+    .section-title{
+      margin:6px 8px 6px;
+      font-size:1rem;
       font-weight:800;
+    }
+    .coverage{
+      margin:0 8px 10px;
+      font-size:.84rem;
+      color:var(--muted);
+    }
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#f9fafb;
+      color:#111827;
+      font-size:.84rem;
+      font-weight:650;
     }
 
     .status{
       font-size:.85rem;
-      margin-top:6px;
+      margin:8px 8px 0;
       min-height:1.1em;
     }
     .status.error{color:#b91c1c}
     .status.ok{color:#065f46}
     .status.muted{color:#9ca3af}
 
-    /* Card agenda en azul oscuro */
+    .turnos-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin:10px 8px 14px;
+    }
+
+    /* Tarjeta “limpia” */
+    .turno-mini{
+      border:1px solid var(--border);
+      border-radius:16px;
+      background:#fff;
+      padding:10px 10px;
+      display:grid;
+      grid-template-columns:72px 1fr auto;
+      gap:10px;
+      align-items:center;
+      cursor:pointer;
+      box-shadow:0 10px 22px rgba(15,23,42,.08);
+      transition:transform .12s, box-shadow .12s, border-color .12s;
+    }
+    .turno-mini:hover{
+      transform:translateY(-1px);
+      border-color:#bfdbfe;
+      box-shadow:0 16px 30px rgba(37,99,235,.12);
+    }
+
+    .img-placeholder{
+      width:72px;height:56px;
+      border-radius:14px;
+      background:var(--radiz-blue);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      color:#fff;
+      position:relative;
+      overflow:hidden;
+    }
+    .img-placeholder .img-hint{
+      font-size:.72rem;
+      opacity:.95;
+      font-weight:700;
+      letter-spacing:.02em;
+    }
+
+    .turno-info{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+      min-width:0;
+    }
+    .turno-topline{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      min-width:0;
+    }
+    .dot-green{
+      width:10px;height:10px;border-radius:999px;
+      background:#22c55e;
+      box-shadow:0 0 0 3px rgba(34,197,94,.15);
+      flex:0 0 auto;
+    }
+    .turno-empresa{
+      font-weight:850;
+      font-size:.94rem;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .turno-meta{
+      font-size:.82rem;
+      color:var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .turno-pay{
+      font-weight:850;
+      font-size:.9rem;
+      color:#111827;
+      padding-left:8px;
+      white-space:nowrap;
+    }
+
+    /* Agenda (se conserva, dentro de Turnos) */
     .card-agenda{
+      margin:0 8px 10px;
+      border-radius:18px;
       background:#0f172a;
       color:#f9fafb;
-      border-color:#1f2937;
+      border:1px solid #1f2937;
       box-shadow:0 16px 38px rgba(15,23,42,.5);
+      padding:14px 14px 14px;
     }
-
     .card-agenda h2{
+      margin:0 0 4px;
+      font-size:1.02rem;
       color:#f9fafb;
+      font-weight:850;
     }
-
     .agenda-dia{
       display:flex;
       flex-direction:column;
       gap:2px;
-      padding:10px 12px;
+      padding:8px 10px;
       border-radius:12px;
       background:rgba(15,23,42,.7);
       border:1px solid rgba(148,163,184,.35);
       font-size:.85rem;
-      position:relative;
+      margin-top:10px;
     }
-
-    .agenda-dia + .agenda-dia{
-      margin-top:8px;
-    }
-
     .agenda-fecha{
       font-weight:700;
       font-size:.78rem;
       text-transform:uppercase;
-      letter-spacing:.05em;
+      letter-spacing:.04em;
       color:#bfdbfe;
     }
-
     .agenda-turno{
       font-weight:800;
-      font-size:.92rem;
-      margin-top:2px;
+      font-size:.9rem;
     }
-
     .agenda-detalle{
-      font-size:.82rem;
+      font-size:.8rem;
       color:#e5e7eb;
     }
 
-    .agenda-detalle strong{
-      color:#ffffff;
-      font-weight:700;
-    }
-
-    .agenda-estado-row{
-      margin-top:8px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-
-    .estado-chip{
-      font-size:.72rem;
-      padding:3px 8px;
+    /* Buttons */
+    .btn{
+      padding:10px 16px;
       border-radius:999px;
-      font-weight:800;
-      border:1px solid rgba(148,163,184,.35);
-      user-select:none;
-    }
-    .estado-chip.pendiente{ background:rgba(148,163,184,.18); color:#e5e7eb; }
-    .estado-chip.ensitio{ background:rgba(34,197,94,.18); color:#bbf7d0; border-color:rgba(34,197,94,.35); }
-    .estado-chip.completado{ background:rgba(239,68,68,.18); color:#fecaca; border-color:rgba(239,68,68,.35); }
-
-    .mini-switch{
-      width:46px;
-      height:24px;
-      border-radius:999px;
-      border:1px solid rgba(148,163,184,.35);
-      background:rgba(148,163,184,.18);
-      position:relative;
-      cursor:pointer;
-      flex:0 0 auto;
-      transition:background .12s,border-color .12s;
-    }
-    .mini-switch .knob{
-      width:20px;
-      height:20px;
-      border-radius:999px;
-      background:#e5e7eb;
-      position:absolute;
-      top:50%;
-      left:2px;
-      transform:translateY(-50%);
-      transition:left .14s, background .12s;
-    }
-    .mini-switch.ensitio{
-      background:rgba(34,197,94,.2);
-      border-color:rgba(34,197,94,.45);
-    }
-    .mini-switch.ensitio .knob{
-      left:24px;
-      background:#bbf7d0;
-    }
-    .mini-switch.completado{
-      background:rgba(239,68,68,.2);
-      border-color:rgba(239,68,68,.45);
-      cursor:default;
-      opacity:.92;
-    }
-    .mini-switch.completado .knob{
-      left:24px;
-      background:#fecaca;
-    }
-
-    /* FAB menú (Mi perfil) */
-    .fab-menu{
-      position:absolute;
-      top:22px;
-      right:22px;
-      z-index:20;
-    }
-
-    .fab-btn{
-      width:46px;
-      height:46px;
-      border-radius:999px;
-      background:#2563eb;
       border:none;
-      box-shadow:0 10px 24px rgba(37,99,235,.45);
-      display:flex;
+      font-size:.9rem;
+      font-weight:750;
+      cursor:pointer;
+      display:inline-flex;
       align-items:center;
       justify-content:center;
-      cursor:pointer;
-      transition:transform .12s,box-shadow .12s,background .12s;
+      gap:8px;
+      white-space:nowrap;
+      transition:transform .1s,box-shadow .1s,background .1s,color .1s,opacity .1s;
+      user-select:none;
     }
-
-    .fab-btn:hover{
+    .btn-primary{
+      background:var(--radiz-blue);
+      color:#ffffff;
+      box-shadow:0 10px 24px rgba(37,99,235,.4);
+    }
+    .btn-primary:hover{
+      background:var(--radiz-blue-2);
+      box-shadow:0 12px 30px rgba(37,99,235,.55);
       transform:translateY(-1px);
-      background:#1d4ed8;
-      box-shadow:0 14px 32px rgba(37,99,235,.55);
     }
-
-    .fab-btn span{
-      display:block;
-      width:22px;
-      height:2px;
-      border-radius:999px;
-      background:#fff;
-      position:relative;
-    }
-
-    .fab-btn span::before,
-    .fab-btn span::after{
-      content:"";
-      position:absolute;
-      left:0;
-      width:22px;
-      height:2px;
-      border-radius:999px;
-      background:#fff;
-    }
-    .fab-btn span::before{top:-6px}
-    .fab-btn span::after{top:6px}
-
-    .menu-panel{
-      position:absolute;
-      top:56px;
-      right:0;
-      background:#ffffff;
-      border-radius:14px;
-      box-shadow:0 12px 30px rgba(15,23,42,.22);
-      padding:8px 0;
-      width:220px;
-      display:none;
-      z-index:25;
-    }
-
-    .menu-title{
-      font-size:.8rem;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      font-weight:700;
-      color:#6b7280;
-      padding:6px 14px 4px;
-    }
-
-    .menu-item{
-      padding:7px 14px;
-      font-size:.9rem;
-      cursor:pointer;
+    .btn-secondary{
+      background:#e5e7eb;
       color:#111827;
+      box-shadow:none;
+    }
+    .btn-secondary:hover{
+      background:#d1d5db;
+      transform:translateY(-1px);
+    }
+    .btn[disabled]{
+      opacity:.55;
+      cursor:not-allowed;
+      transform:none !important;
+      box-shadow:none !important;
     }
 
-    .menu-item:hover{
-      background:#eff6ff;
-      color:#1d4ed8;
-    }
-
-    /* Modales */
+    /* Modals */
     .modal-backdrop{
       position:fixed;
       inset:0;
@@ -453,18 +401,17 @@
       align-items:center;
       justify-content:center;
       z-index:40;
+      padding:18px;
     }
-
     .modal{
       background:#fff;
       border-radius:18px;
       max-width:520px;
-      width:92%;
-      padding:18px 20px 18px;
+      width:100%;
+      padding:16px 16px 14px;
       box-shadow:0 20px 45px rgba(15,23,42,.4);
       font-size:.9rem;
     }
-
     .modal-header{
       display:flex;
       justify-content:space-between;
@@ -472,338 +419,497 @@
       margin-bottom:8px;
       gap:10px;
     }
-
     .modal-header h3{
       margin:0;
       font-size:1.05rem;
-      font-weight:800;
+      font-weight:850;
     }
-
     .modal-close{
       border:none;
       background:transparent;
-      font-size:1.3rem;
+      font-size:1.35rem;
       cursor:pointer;
       color:#6b7280;
+      line-height:1;
     }
-
-    .modal p{
-      margin:4px 0;
-      color:#111827;
-    }
-
-    .modal label{
-      display:block;
-      margin-top:8px;
-      margin-bottom:3px;
-      font-size:.85rem;
-      color:#374151;
-    }
-
-    .modal .status{
-      margin-top:6px;
-    }
-
+    .modal p{margin:6px 0;color:#111827}
     .modal-actions{
-      margin-top:14px;
+      margin-top:12px;
       display:flex;
       justify-content:flex-end;
       gap:8px;
       flex-wrap:wrap;
     }
-
-    .btn{
-      padding:8px 16px;
-      border-radius:999px;
-      border:none;
-      font-size:.9rem;
-      font-weight:700;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:6px;
-      white-space:nowrap;
-      transition:transform .1s,box-shadow .1s,background .1s,color .1s,opacity .1s;
-    }
-
-    .btn-primary{
-      background:#2563eb;
-      color:#ffffff;
-      box-shadow:0 10px 24px rgba(37,99,235,.4);
-    }
-
-    .btn-primary:hover{
-      background:#1d4ed8;
-      box-shadow:0 12px 30px rgba(37,99,235,.55);
-      transform:translateY(-1px);
-    }
-
-    .btn-primary:disabled{
-      opacity:.55;
-      cursor:not-allowed;
-      transform:none;
-      box-shadow:none;
-    }
-
-    .btn-secondary{
-      background:#e5e7eb;
-      color:#111827;
-      box-shadow:none;
-    }
-
-    .btn-secondary:hover{
-      background:#d1d5db;
-      box-shadow:none;
-      transform:translateY(-1px);
-    }
-
     .check-row{
       display:flex;
       align-items:flex-start;
-      gap:8px;
+      gap:10px;
       margin-top:10px;
-      font-size:.85rem;
+      font-size:.86rem;
+      color:#111827;
     }
-
     .check-row input[type="checkbox"]{
       margin-top:3px;
-      transform:scale(1.1);
+      transform:scale(1.08);
     }
 
-    .detalle-img{
+    /* Terms modal iframe */
+    .terms-frame{
       width:100%;
-      height:160px;
-      border-radius:14px;
-      background:#2563eb;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      color:#ffffff;
-      font-weight:800;
-      margin:10px 0 12px;
-      cursor:pointer;
-      user-select:none;
-    }
-    .detalle-img small{opacity:.9;font-weight:700}
-
-    .iframe-box{
-      width:100%;
-      height:70vh;
+      height:66vh;
+      border:1px solid var(--border);
       border-radius:14px;
       overflow:hidden;
-      border:1px solid #e5e7eb;
-      background:#f9fafb;
     }
-    .iframe-box iframe{
+    .terms-frame iframe{
       width:100%;
       height:100%;
       border:0;
     }
 
+    /* Notifications list */
+    .noti-list{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      margin-top:10px;
+    }
+    .noti-item{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      background:#fff;
+      box-shadow:0 10px 22px rgba(15,23,42,.06);
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .noti-bullet{
+      width:10px;height:10px;border-radius:999px;
+      background:#ef4444;
+      margin-top:6px;
+      flex:0 0 auto;
+    }
+    .noti-bullet.read{background:#d1d5db}
+    .noti-body{min-width:0}
+    .noti-title{
+      margin:0;
+      font-weight:850;
+      font-size:.9rem;
+    }
+    .noti-text{
+      margin:2px 0 0;
+      font-size:.84rem;
+      color:var(--muted);
+      line-height:1.35;
+    }
+    .noti-time{
+      margin:6px 0 0;
+      font-size:.78rem;
+      color:#9ca3af;
+    }
+
+    /* Bottom bar (always visible) */
+    .bottom-bar{
+      position:fixed;
+      left:0;
+      right:0;
+      bottom:0;
+      display:flex;
+      justify-content:center;
+      padding:10px 14px 14px;
+      z-index:30;
+    }
+    .bottom-inner{
+      width:100%;
+      max-width:520px;
+      background:#ffffff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      box-shadow:0 18px 40px rgba(15,23,42,.18);
+      padding:10px 10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+    }
+
+    .nav-btn{
+      width:50%;
+      border:none;
+      background:transparent;
+      padding:10px 10px;
+      border-radius:14px;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      font-weight:850;
+      color:#111827;
+      transition:background .12s, transform .12s;
+    }
+    .nav-btn:hover{
+      background:#eff6ff;
+      transform:translateY(-1px);
+    }
+    .nav-ico{
+      width:22px;height:22px;
+      color:var(--radiz-blue);
+    }
+
+    /* Bottom sheet menu */
+    .sheet-backdrop{
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.45);
+      display:none;
+      z-index:35;
+    }
+    .sheet{
+      position:fixed;
+      left:0; right:0;
+      bottom:-420px;
+      transition:bottom .18s ease-out;
+      z-index:36;
+      display:flex;
+      justify-content:center;
+      padding:0 14px 14px;
+    }
+    .sheet-card{
+      width:100%;
+      max-width:520px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:22px;
+      box-shadow:0 24px 50px rgba(15,23,42,.28);
+      overflow:hidden;
+    }
+    .sheet-handle{
+      width:44px;
+      height:5px;
+      border-radius:999px;
+      background:#e5e7eb;
+      margin:10px auto 6px;
+    }
+    .sheet-title{
+      padding:6px 16px 10px;
+      font-size:.82rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:#6b7280;
+      font-weight:800;
+    }
+    .sheet-item{
+      padding:12px 16px;
+      font-size:.95rem;
+      font-weight:800;
+      cursor:pointer;
+      color:#111827;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-top:1px solid #f3f4f6;
+    }
+    .sheet-item:hover{
+      background:#eff6ff;
+      color:#1d4ed8;
+    }
+
     footer{
-      margin-top:16px;
+      margin-top:10px;
       font-size:.75rem;
       color:#9ca3af;
       text-align:center;
     }
-
-    @media(max-width:900px){
-      .main-grid{
-        grid-template-columns:1fr;
-      }
-    }
-
-    @media(max-width:640px){
-      .container{
-        padding:20px 16px 22px;
-        border-radius:18px;
-      }
-      .header{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-      .fab-menu{
-        top:18px;
-        right:18px;
-      }
-    }
   </style>
 </head>
+
 <body>
-<div class="page">
-  <div class="container">
-    <!-- FAB menú: Mi perfil -->
-    <div class="fab-menu">
-      <button class="fab-btn" type="button" onclick="toggleMenu()">
-        <span></span>
-      </button>
-      <div class="menu-panel" id="menuPanel">
-        <div class="menu-title">Bienvenido</div>
-        <div class="menu-item" onclick="abrirModal('modalPerfil')">Mi perfil</div>
-      </div>
-    </div>
+  <div class="page">
+    <div class="container">
 
-    <!-- Encabezado -->
-    <div class="header">
-      <div class="header-title">
-        <div class="saludo">Hola, <span id="nombreMensajero">Mensajero</span></div>
-        <h1>Bienvenido</h1>
-        <p class="intro-text">
+      <!-- Topbar -->
+      <div class="topbar">
+        <div class="topbar-left"></div>
+
+        <div class="logo-wrap" aria-label="RADIZ">
+          <img src="logoradiz.png" alt="RADIZ" class="logo" />
+        </div>
+
+        <button class="bell-btn" type="button" onclick="abrirNotificaciones()" aria-label="Notificaciones">
+          <!-- Bell SVG -->
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color:#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <span id="bellDot" class="bell-dot"></span>
+        </button>
+      </div>
+
+      <!-- Saludo -->
+      <div class="hello" id="helloText">Hola</div>
+      <div class="subline" id="sublineText">Te mostraremos los turnos de mensajería o repartos disponibles en tu ciudad.</div>
+
+      <!-- ===== VISTA: HOME ===== -->
+      <div class="view active" id="viewHome">
+        <div class="home-grid">
+          <div class="home-tile" onclick="irAVista('turnos')">
+            <div class="tile-icon">
+              <!-- Turnos SVG -->
+              <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M8 6h13"/>
+                <path d="M8 12h13"/>
+                <path d="M8 18h13"/>
+                <path d="M3 6h.01"/>
+                <path d="M3 12h.01"/>
+                <path d="M3 18h.01"/>
+              </svg>
             </div>
-          Te mostraremos los turnos de mensajería o repartos disponibles en tu ciudad.
-        </p>
-      </div>
-      <div>
-        <span id="badgeContrato" class="badge-id" style="display:none;"></span>
-      </div>
-    </div>
+            <p class="tile-title">Turnos</p>
+            <p class="tile-desc">Revisa y solicita turnos disponibles.</p>
+          </div>
 
-    <!-- Fila cobertura fija -->
-    <div class="toolbar">
-      <div class="toolbar-left">
-        <strong>Cobertura:</strong> Bogotá
-      </div>
-    </div>
+          <div class="home-tile" onclick="abrirModal('modalPerfil')">
+            <div class="tile-icon">
+              <!-- Perfil SVG -->
+              <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21a8 8 0 0 0-16 0"/>
+                <circle cx="12" cy="8" r="4"/>
+              </svg>
+            </div>
+            <p class="tile-title">Mi perfil</p>
+            <p class="tile-desc">Datos del contrato y estado actual.</p>
+          </div>
 
-    <!-- GRID PRINCIPAL -->
-    <div class="main-grid">
-      <!-- Turnos -->
-      <div class="card">
-        <h2>Disponibles</h2>
-        <p style="font-size:.85rem;color:#6b7280;">
-        </p>
+          <div class="home-tile" onclick="irAVista('mantenimientos')">
+            <div class="tile-icon">
+              <!-- Mantenimientos SVG -->
+              <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.7 6.3a1 1 0 0 0-1.4 0l-.8.8-1.5-1.5a1 1 0 0 0-1.4 0L7.3 6.9a1 1 0 0 0 0 1.4l1.5 1.5-.8.8a1 1 0 0 0 0 1.4l1.2 1.2a1 1 0 0 0 1.4 0l.8-.8 1.5 1.5a1 1 0 0 0 1.4 0l1.3-1.3a1 1 0 0 0 0-1.4l-1.5-1.5.8-.8a1 1 0 0 0 0-1.4z"/>
+                <path d="M5 19h4"/>
+                <path d="M15 19h4"/>
+              </svg>
+            </div>
+            <p class="tile-title">Mantenimientos</p>
+            <p class="tile-desc">Historial y próximos mantenimientos.</p>
+          </div>
+
+          <div class="home-tile" onclick="irAVista('pagos')">
+            <div class="tile-icon">
+              <!-- Pagos SVG -->
+              <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2"/>
+                <path d="M3 10h18"/>
+                <path d="M7 15h3"/>
+              </svg>
+            </div>
+            <p class="tile-title">Pagos</p>
+            <p class="tile-desc">Pagos realizados y próximos pagos.</p>
+          </div>
+        </div>
+
+        <footer>Versión interna • RADIZ Logística de Mensajería</footer>
+      </div>
+
+      <!-- ===== VISTA: TURNOS ===== -->
+      <div class="view" id="viewTurnos">
+        <div class="section-title">Disponibles</div>
+        <div class="coverage">
+          <span class="pill">Cobertura: Bogotá</span>
+        </div>
+
         <div id="turnosEstado" class="status muted">Cargando turnos publicados...</div>
         <div id="turnosList" class="turnos-list"></div>
+
+        <div class="card-agenda">
+          <h2>Mi agenda</h2>
+          <p id="agendaEstado" class="status" style="color:#e5e7eb;margin:6px 0 0;">
+            Aún no tienes turnos aceptados.
+          </p>
+          <div id="agendaContenido"></div>
+        </div>
+
+        <footer>Versión interna • RADIZ Logística de Mensajería</footer>
       </div>
 
-      <!-- Mi agenda -->
-      <div class="card card-agenda">
-        <h2>Mi agenda</h2>
-        <p id="agendaEstado" class="status" style="color:#e5e7eb;">
-          Aún no tienes turnos aceptados.
-        </p>
-        <div id="agendaContenido"></div>
+      <!-- ===== VISTA: MANTENIMIENTOS (placeholder) ===== -->
+      <div class="view" id="viewMantenimientos">
+        <div class="section-title">Mantenimientos</div>
+        <div class="subline" style="margin:0 8px 12px;">
+          Módulo en construcción (placeholder).
+        </div>
+        <div class="status muted" style="margin:8px;">Próximamente verás el historial y los mantenimientos próximos.</div>
+        <footer>Versión interna • RADIZ Logística de Mensajería</footer>
+      </div>
+
+      <!-- ===== VISTA: PAGOS (placeholder + intento de historial si aplica) ===== -->
+      <div class="view" id="viewPagos">
+        <div class="section-title">Pagos</div>
+        <div class="subline" style="margin:0 8px 12px;">
+          Módulo en construcción (placeholder).
+        </div>
+        <div id="pagosEstado" class="status muted" style="margin:8px;">Cargando información...</div>
+        <div id="pagosContenido" style="margin:8px;"></div>
+        <footer>Versión interna • RADIZ Logística de Mensajería</footer>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Barra inferior fija -->
+  <div class="bottom-bar">
+    <div class="bottom-inner">
+      <button class="nav-btn" type="button" onclick="irAVista('home')">
+        <!-- Home SVG -->
+        <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 11l9-8 9 8"/>
+          <path d="M9 22V12h6v10"/>
+        </svg>
+        Home
+      </button>
+
+      <button class="nav-btn" type="button" onclick="abrirSheetMenu()">
+        <!-- Menu SVG -->
+        <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 6h16"/>
+          <path d="M4 12h16"/>
+          <path d="M4 18h16"/>
+        </svg>
+        Menú
+      </button>
+    </div>
+  </div>
+
+  <!-- Bottom sheet menu -->
+  <div class="sheet-backdrop" id="sheetBackdrop" onclick="cerrarSheetMenu()"></div>
+  <div class="sheet" id="sheetMenu">
+    <div class="sheet-card">
+      <div class="sheet-handle"></div>
+      <div class="sheet-title">Portal logístico</div>
+
+      <div class="sheet-item" onclick="irAVista('turnos');cerrarSheetMenu();">
+        Turnos
+        <span>›</span>
+      </div>
+      <div class="sheet-item" onclick="abrirModal('modalPerfil');cerrarSheetMenu();">
+        Mi perfil
+        <span>›</span>
+      </div>
+      <div class="sheet-item" onclick="irAVista('mantenimientos');cerrarSheetMenu();">
+        Mantenimientos
+        <span>›</span>
+      </div>
+      <div class="sheet-item" onclick="irAVista('pagos');cerrarSheetMenu();">
+        Pagos
+        <span>›</span>
+      </div>
+      <div class="sheet-item" onclick="abrirNotificaciones();cerrarSheetMenu();">
+        Notificaciones
+        <span>›</span>
       </div>
     </div>
-
-    <footer>
-      Versión interna • RADIZ Logística de Mensajería
-    </footer>
   </div>
-</div>
 
-<!-- MODAL: Mi perfil (resumen de contrato) -->
-<div class="modal-backdrop" id="modalPerfil">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Mi perfil</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalPerfil')">&times;</button>
-    </div>
-    <div id="perfilContenido">
-      <p class="status muted">Cargando información de tu contrato...</p>
+  <!-- MODAL: Mi perfil (resumen de contrato) -->
+  <div class="modal-backdrop" id="modalPerfil">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Mi perfil</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalPerfil')">&times;</button>
+      </div>
+      <div id="perfilContenido">
+        <p class="status muted">Cargando información de tu contrato...</p>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- MODAL: Detalle turno -->
-<div class="modal-backdrop" id="modalDetalleTurno">
-  <div class="modal">
-    <div class="modal-header">
-      <h3 id="detalleTitulo">Detalle del turno</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalDetalleTurno')">&times;</button>
-    </div>
+  <!-- MODAL: Detalle del turno (ampliación) -->
+  <div class="modal-backdrop" id="modalDetalleTurno">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="detalleTurnoTitulo">Detalle del turno</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalDetalleTurno')">&times;</button>
+      </div>
 
-    <div class="detalle-img" onclick="abrirModal('modalImagenTurno')">
-      Fachada del punto<br/>
-      <small>(toca para ampliar)</small>
-    </div>
+      <div class="img-placeholder" style="width:100%;height:160px;border-radius:16px;cursor:pointer;" onclick="ampliarImagenTurno()">
+        <div class="img-hint">Tocar para ampliar</div>
+      </div>
 
-    <div id="detalleContenido"></div>
+      <div id="detalleTurnoContenido" style="margin-top:10px;"></div>
 
-    <div class="modal-actions">
-      <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalDetalleTurno')">
-        Cerrar
-      </button>
-      <button type="button" class="btn btn-primary" onclick="abrirConfirmacionTurnoDesdeDetalle()">
-        Aceptar turno
-      </button>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalDetalleTurno')">Cerrar</button>
+        <button type="button" class="btn btn-primary" onclick="aceptarDesdeDetalle()">Aceptar turno</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- MODAL: Imagen ampliada -->
-<div class="modal-backdrop" id="modalImagenTurno">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Fachada del punto</h3>
-      <button class="modal-close" type="button" onclick="cerrarModal('modalImagenTurno')">&times;</button>
-    </div>
-    <div class="detalle-img" style="height:240px;cursor:default;">
-      Imagen de referencia<br/>
-      <small>(placeholder RADIZ)</small>
-    </div>
-    <div class="modal-actions">
-      <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalImagenTurno')">Volver</button>
+  <!-- MODAL: Confirmar aceptación de turno -->
+  <div class="modal-backdrop" id="modalConfirmarTurno">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Confirmar aceptación de turno</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalConfirmarTurno')">&times;</button>
+      </div>
+      <p>
+        ¿Está seguro de aceptar el turno?
+        Recuerde que es un compromiso laboral legal que cumple con toda la normativa vigente.
+        En caso de incumplimiento se cargará a su cuenta los valores de penalización.
+      </p>
+
+      <div class="check-row">
+        <input type="checkbox" id="chkTerminos" onchange="onToggleTerminos()">
+        <label for="chkTerminos">Acepto términos y condiciones del servicio de mensajería.</label>
+      </div>
+
+      <p id="confirmarTurnoMsg" class="status"></p>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalConfirmarTurno')">Cancelar</button>
+        <button type="button" class="btn btn-secondary" onclick="abrirTerminosTurno()">Términos y condiciones</button>
+        <button type="button" class="btn btn-primary" id="btnConfirmarTurno" onclick="confirmarAceptarTurno()" disabled>
+          Confirmar
+        </button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- MODAL: Confirmar aceptación de turno -->
-<div class="modal-backdrop" id="modalConfirmarTurno">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Confirmar aceptación de turno</h3>
-      <button class="modal-close" type="button" onclick="cerrarConfirmacionTurno()">&times;</button>
-    </div>
-    <p>
-      ¿Está seguro de aceptar el turno?
-      Recuerde que es un compromiso laboral legal que cumple con toda la normativa vigente.
-      En caso de incumplimiento se cargará a su cuenta los valores de penalización.
-    </p>
-    <div class="check-row">
-      <input type="checkbox" id="chkTerminos" onchange="actualizarEstadoConfirmar()">
-      <label for="chkTerminos">
-        Acepto términos y condiciones del servicio de mensajería.
-      </label>
-    </div>
-    <p id="confirmarTurnoMsg" class="status"></p>
-    <div class="modal-actions">
-      <button type="button" class="btn btn-secondary" onclick="cerrarConfirmacionTurno()">
-        Cancelar
-      </button>
-      <button type="button" class="btn btn-secondary" onclick="verTerminosTurno()">
-        Términos y condiciones
-      </button>
-      <button type="button" id="btnConfirmarTurno" class="btn btn-primary" onclick="confirmarAceptarTurno()" disabled>
-        Confirmar
-      </button>
+  <!-- MODAL: Términos y condiciones (con botón para volver) -->
+  <div class="modal-backdrop" id="modalTerminosTurno">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Términos y condiciones</h3>
+        <button class="modal-close" type="button" onclick="volverDesdeTerminos()">&times;</button>
+      </div>
+
+      <div class="terms-frame">
+        <iframe id="termsIframe" src="terminos_y_condiciones_turnos.pdf"></iframe>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="volverDesdeTerminos()">Volver</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- MODAL: Términos y condiciones (con volver) -->
-<div class="modal-backdrop" id="modalTerminosTurno">
-  <div class="modal">
-    <div class="modal-header">
-      <h3>Términos y condiciones</h3>
-      <button class="modal-close" type="button" onclick="volverAConfirmacionTurno()">&times;</button>
-    </div>
+  <!-- MODAL: Notificaciones -->
+  <div class="modal-backdrop" id="modalNotificaciones">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Notificaciones</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalNotificaciones')">&times;</button>
+      </div>
 
-    <div class="iframe-box">
-      <iframe id="iframeTerminos" src="terminos_y_condiciones_turnos.pdf"></iframe>
-    </div>
+      <div id="notiEstado" class="status muted">Sin notificaciones.</div>
+      <div id="notiList" class="noti-list"></div>
 
-    <div class="modal-actions">
-      <button type="button" class="btn btn-secondary" onclick="volverAConfirmacionTurno()">
-        ← Volver a confirmar
-      </button>
-      <button type="button" class="btn btn-secondary" onclick="window.open('terminos_y_condiciones_turnos.pdf','_blank')">
-        Abrir en nueva pestaña
-      </button>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalNotificaciones')">Cerrar</button>
+      </div>
     </div>
   </div>
-</div>
 
 <script>
   const API_URL = 'https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
@@ -811,34 +917,25 @@
   let idContratoActual = null;
   let contratoActual = null;
 
-  let turnoDetalle = null;        // turno seleccionado en modal detalle
-  let turnoSeleccionado = null;   // turno seleccionado para confirmación
-  let ultimaAceptacion = null;    // para simular agenda
-  let agendaEstados = {};         // estados por día (PENDIENTE / EN_SITIO / COMPLETADO)
+  let turnoSeleccionado = null;
+  let turnoDetalleActual = null;
+
+  let ultimaAceptacion = null; // agenda simulada
+
+  // Notificaciones (localStorage)
+  let NOTIF_KEY = 'RADIZ_NOTIFS_ANON';
+  let META_KEY  = 'RADIZ_NOTIF_META_ANON';
 
   document.addEventListener('DOMContentLoaded', function(){
     idContratoActual = obtenerIdContratoDeUrl();
-
-    if(!idContratoActual){
-      const badge = document.getElementById('badgeContrato');
-      if(badge){
-        badge.style.display='inline-block';
-        badge.textContent='ID no definido';
-      }
-      const perfil = document.getElementById('perfilContenido');
-      if(perfil){
-        perfil.innerHTML = '<p class="status error">No se encontró el ID del contrato en la URL.</p>';
-      }
-    }else{
-      const badge = document.getElementById('badgeContrato');
-      if(badge){
-        badge.style.display='inline-block';
-        badge.textContent='Contrato '+idContratoActual;
-      }
-      cargarContratoYPerfil(idContratoActual);
+    if (idContratoActual) {
+      NOTIF_KEY = 'RADIZ_NOTIFS_' + idContratoActual;
+      META_KEY  = 'RADIZ_NOTIF_META_' + idContratoActual;
     }
 
+    cargarContratoYSaludo(idContratoActual);
     cargarTurnosDisponibles();
+    actualizarIndicadorNotificaciones();
   });
 
   function obtenerIdContratoDeUrl(){
@@ -847,49 +944,61 @@
     return id || null;
   }
 
-  function toggleMenu(){
-    const panel = document.getElementById('menuPanel');
-    if(!panel) return;
-    panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+  function irAVista(v){
+    const map = {
+      home: 'viewHome',
+      turnos: 'viewTurnos',
+      mantenimientos: 'viewMantenimientos',
+      pagos: 'viewPagos'
+    };
+    Object.values(map).forEach(function(id){
+      const el = document.getElementById(id);
+      if(el) el.classList.remove('active');
+    });
+
+    const target = document.getElementById(map[v] || 'viewHome');
+    if(target) target.classList.add('active');
+
+    // Cargas específicas
+    if(v === 'pagos'){
+      cargarPagos();
+    }
   }
 
   function abrirModal(id){
     const el = document.getElementById(id);
     if(!el) return;
     el.style.display='flex';
-    const panel = document.getElementById('menuPanel');
-    if(panel) panel.style.display='none';
   }
-
   function cerrarModal(id){
     const el = document.getElementById(id);
     if(!el) return;
     el.style.display='none';
-  }
 
-  /* ---- Confirmación: cerrar con reset (solo cuando el usuario cancela/cierra) ---- */
-  function cerrarConfirmacionTurno(){
-    const el = document.getElementById('modalConfirmarTurno');
-    if(el) el.style.display = 'none';
-
-    turnoSeleccionado = null;
-
-    const chk = document.getElementById('chkTerminos');
-    if(chk) chk.checked = false;
-
-    const msg = document.getElementById('confirmarTurnoMsg');
-    if(msg){
-      msg.className = 'status';
-      msg.textContent = '';
+    if(id === 'modalConfirmarTurno'){
+      const msg = document.getElementById('confirmarTurnoMsg');
+      if(msg){ msg.className='status'; msg.textContent=''; }
+      const chk = document.getElementById('chkTerminos');
+      if(chk) chk.checked = false;
+      onToggleTerminos();
+      turnoSeleccionado = null;
     }
-
-    actualizarEstadoConfirmar();
   }
 
-  function ocultarModal(id){
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.style.display='none';
+  /* Bottom sheet */
+  function abrirSheetMenu(){
+    const bd = document.getElementById('sheetBackdrop');
+    const sh = document.getElementById('sheetMenu');
+    if(!bd || !sh) return;
+    bd.style.display = 'block';
+    sh.style.bottom = '14px';
+  }
+  function cerrarSheetMenu(){
+    const bd = document.getElementById('sheetBackdrop');
+    const sh = document.getElementById('sheetMenu');
+    if(!bd || !sh) return;
+    bd.style.display = 'none';
+    sh.style.bottom = '-420px';
   }
 
   function formatearFechaCorta(v){
@@ -898,55 +1007,53 @@
     if(isNaN(d.getTime())) return v;
     return d.toLocaleDateString('es-CO',{ day:'2-digit',month:'2-digit',year:'numeric' });
   }
-
-  function formatearHora(h){
-    return h || '';
-  }
-
+  function formatearHora(h){ return h || ''; }
   function formatearNumeroCOP(n){
     const num = Number(n);
     if(isNaN(num)) return n || '';
     return num.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
   }
-
-  function primerNombre(nombre){
-    const txt = String(nombre || '').trim();
-    if(!txt) return '';
-    return txt.split(/\s+/)[0];
+  function primerNombre(nombreCompleto){
+    const s = String(nombreCompleto || '').trim();
+    if(!s) return '';
+    const partes = s.split(' ').filter(Boolean);
+    return partes[0] || '';
   }
 
-  /* ------- Cargar contrato para "Mi perfil" + saludo ------- */
-  async function cargarContratoYPerfil(id){
+  /* ===== Contrato + saludo ===== */
+  async function cargarContratoYSaludo(id){
+    const hello = document.getElementById('helloText');
     const perfil = document.getElementById('perfilContenido');
-    if(perfil){
-      perfil.innerHTML = '<p class="status muted">Cargando información de tu contrato...</p>';
+
+    if(!id){
+      if(hello) hello.textContent = 'Hola';
+      if(perfil) perfil.innerHTML = '<p class="status error">No se encontró el ID del contrato en la URL.</p>';
+      return;
     }
+
+    if(perfil) perfil.innerHTML = '<p class="status muted">Cargando información de tu contrato...</p>';
 
     try{
       const resp = await fetch(API_URL + '?id=' + encodeURIComponent(id));
       const data = await resp.json();
 
       if(!data.ok){
-        if(perfil){
-          perfil.innerHTML = '<p class="status error">' + (data.error || 'No se encontró información para este ID.') + '</p>';
-        }
+        if(hello) hello.textContent = 'Hola';
+        if(perfil) perfil.innerHTML = '<p class="status error">' + (data.error || 'No se encontró información para este ID.') + '</p>';
         return;
       }
 
       const c = data.contrato || {};
       contratoActual = c;
 
-      // Saludo: primer nombre desde Web Service (contrato)
-      const nombreBruto =
-        c['NOMBRE MENSAJERO'] ||
-        c['MENSAJERO'] ||
-        c['NOMBRE'] ||
-        c['ID CLIENTE'] ||
-        '';
-      const pNom = primerNombre(nombreBruto) || 'Mensajero';
-      const elNom = document.getElementById('nombreMensajero');
-      if(elNom) elNom.textContent = pNom;
+      const nombreRaw = (c['NOMBRE'] || c['ID CLIENTE'] || '').toString();
+      const nombre = primerNombre(nombreRaw);
 
+      if(hello){
+        hello.textContent = nombre ? ('Hola, ' + nombre) : 'Hola';
+      }
+
+      // Perfil
       const placa = c['ID VEHÍCULO'] || c['ID VEHICULO'] || '';
       const inicio = c['INICIO'] || '';
       const ciudad = c['CIUDAD'] || '';
@@ -959,12 +1066,9 @@
       html += '<p><strong>Placa / vehículo:</strong> ' + placa + '</p>';
       html += '<p><strong>Inicio:</strong> ' + formatearFechaCorta(inicio) + '</p>';
       html += '<p><strong>Ciudad:</strong> ' + (ciudad || 'Bogotá') + '</p>';
-      if(tarifa){
-        html += '<p><strong>Tarifa semanal:</strong> ' + formatearNumeroCOP(tarifa) + '</p>';
-      }
-      if(km){
-        html += '<p><strong>Kilometraje actual:</strong> ' + km + ' km</p>';
-      }
+      if(tarifa){ html += '<p><strong>Tarifa semanal:</strong> ' + formatearNumeroCOP(tarifa) + '</p>'; }
+      if(km){ html += '<p><strong>Kilometraje actual:</strong> ' + km + ' km</p>'; }
+
       html += '<p><strong>Estado:</strong> ' +
         (estado ? '<span style="padding:2px 8px;border-radius:999px;background:'+
           (estado === 'ACTIVO' ? '#dcfce7;color:#166534' : '#fee2e2;color:#b91c1c')+
@@ -975,13 +1079,12 @@
 
     }catch(e){
       console.error(e);
-      if(perfil){
-        perfil.innerHTML = '<p class="status error">Error al cargar la información del contrato.</p>';
-      }
+      if(hello) hello.textContent = 'Hola';
+      if(perfil) perfil.innerHTML = '<p class="status error">Error al cargar la información del contrato.</p>';
     }
   }
 
-  /* ------- Cargar turnos publicados (lista compacta + modal detalle) ------- */
+  /* ===== Turnos publicados (tarjeta limpia + modal detalle) ===== */
   async function cargarTurnosDisponibles(){
     const estado = document.getElementById('turnosEstado');
     const cont = document.getElementById('turnosList');
@@ -995,7 +1098,6 @@
     try{
       const resp = await fetch(API_URL + '?accion=get_turnos_publicados');
       const data = await resp.json();
-
       const turnos = Array.isArray(data.turnos) ? data.turnos : [];
 
       if(!data.ok || turnos.length === 0){
@@ -1011,84 +1113,71 @@
         estado.textContent = 'Turnos activos encontrados: ' + turnos.length;
       }
 
-      if(!cont) return;
+      if(cont){
+        turnos.forEach(function(t){
+          const idTurno =
+            t.id_turno || t.idTurno || t.ID_TURNO || t['ID TURNO'] || t.codigo || t.codigo_turno || 'TURNO';
 
-      turnos.forEach(function(t){
-        const idTurno =
-          t.id_turno || t.idTurno || t.ID_TURNO || t['ID TURNO'] || t.codigo || t.codigo_turno || 'TURNO';
+          const empresa =
+            (t.empresa || t.cliente || t.CLIENTE || 'Cruz Verde').toString().trim() || 'Cruz Verde';
 
-        const cliente =
-          t.empresa || t.cliente || t.CLIENTE || t.punto || t['PUNTO DE ENTREGA'] || 'Cruz Verde';
+          const direccion = t.direccion || t.DIRECCION || t['DIRECCIÓN'] || '';
+          const fecha = t.fecha || t.FECHA || '';
+          const hora = t.hora || t.HORA || t.inicio || t.INICIO || '';
+          const ciudad = t.ciudad || t.CIUDAD || 'Bogotá';
+          const dias = t.dias || t.DIAS || t.duracion_dias || t.DURACION_DIAS || 3;
 
-        const sucursal = t.sucursal || t['SUCURSAL'] || '';
-        const direccion = t.direccion || t.DIRECCION || t['DIRECCIÓN'] || '';
-        const fecha = t.fecha || t.FECHA || '';
-        const hora = t.hora || t.HORA || t.inicio || t.INICIO || '';
-        const ciudad = t.ciudad || t.CIUDAD || 'Bogotá';
+          const pagoEstimado = t.valorTurno || t.pago || t.PAGO || t.valor || t.VALOR || '';
 
-        const dias =
-          t.dias || t.DIAS || t.duracion_dias || t.DURACION_DIAS || 3;
+          const fechaTxt = formatearFechaCorta(fecha) || 'Por definir';
+          const pagoTxt = pagoEstimado ? formatearNumeroCOP(pagoEstimado) : 'Por definir';
 
-        const pagoEstimado =
-          t.valorTurno || t.valor || t.VALOR || t.pago || t.PAGO || '';
+          const mini = document.createElement('div');
+          mini.className = 'turno-mini';
+          mini.onclick = function(){
+            abrirDetalleTurno({
+              idTurno: idTurno,
+              empresa: empresa,
+              direccion: direccion,
+              fecha: fecha,
+              hora: hora,
+              ciudad: ciudad,
+              dias: dias,
+              pago: pagoEstimado
+            });
+          };
 
-        const correoCliente =
-          t.correoCliente || t.correo || t.email || '';
-
-        const turnoObj = {
-          idTurno: String(idTurno),
-          cliente: String(cliente),
-          sucursal: String(sucursal || ''),
-          direccion: String(direccion || ''),
-          fecha: fecha || '',
-          hora: String(hora || ''),
-          ciudad: String(ciudad || 'Bogotá'),
-          dias: Number(dias || 3),
-          valor: pagoEstimado,
-          correoCliente: String(correoCliente || ''),
-          requisitos: String(t.requisitos || t.REQUISITOS || ''),
-          descripcion: String(t.descripcion || t.DESCRIPCION || t['DESCRIPCIÓN'] || ''),
-          paradas: String(t.paradas || t.PARADAS || ''),
-          zonificacion: String(t.zonificacion || t.ZONIFICACION || t['ZONIFICACIÓN'] || '')
-        };
-
-        const card = document.createElement('div');
-        card.className = 'turno-card';
-
-        const fechaTxt = formatearFechaCorta(turnoObj.fecha) || 'Por definir';
-        const horaTxt = formatearHora(turnoObj.hora) || 'Por definir';
-
-        card.innerHTML = `
-          <div class="turno-logo-wrapper" title="Toca para ver la fachada">
-            Ver fachada
-            <small>(ampliar)</small>
-          </div>
-          <div class="turno-content">
-            <div class="turno-header-line">
-              <div class="turno-titulo">
-                <span class="dot-available"></span>
-                ${turnoObj.cliente}
+          mini.innerHTML = `
+            <div class="img-placeholder" title="Tocar para ampliar">
+              <div class="img-hint">Ver</div>
+            </div>
+            <div class="turno-info">
+              <div class="turno-topline">
+                <div class="dot-green"></div>
+                <div class="turno-empresa">${escapeHtml(empresa)}</div>
               </div>
-              <div class="pill-idturno">${turnoObj.idTurno}</div>
+              <div class="turno-meta">${fechaTxt} • ${escapeHtml(ciudad)}</div>
             </div>
+            <div class="turno-pay">${pagoTxt}</div>
+          `;
 
-            <div class="turno-mini">
-              <span><strong>Día:</strong> ${fechaTxt}</span>
-              <span><strong>Hora:</strong> ${horaTxt}</span>
-            </div>
-
-            <div class="turno-valor">
-              ${pagoEstimado ? formatearNumeroCOP(pagoEstimado) : 'Valor por confirmar'}
-            </div>
-          </div>
-        `;
-
-        card.addEventListener('click', function(){
-          abrirDetalleTurno(turnoObj);
+          cont.appendChild(mini);
         });
+      }
 
-        cont.appendChild(card);
-      });
+      // Notificación local (MVP) sin spam: solo si cambia la cantidad
+      const meta = getNotifMeta();
+      if(meta.lastTurnosCount !== turnos.length){
+        meta.lastTurnosCount = turnos.length;
+        setNotifMeta(meta);
+
+        addNotificacion({
+          type:'turnos',
+          title:'Turnos disponibles',
+          text:'Hay ' + turnos.length + ' turno(s) activo(s) en Bogotá.',
+          read:false
+        });
+      }
 
     }catch(e){
       console.error(e);
@@ -1100,84 +1189,88 @@
   }
 
   function abrirDetalleTurno(turno){
-    turnoDetalle = turno;
+    turnoDetalleActual = turno;
 
-    const titulo = document.getElementById('detalleTitulo');
-    const cont = document.getElementById('detalleContenido');
+    const title = document.getElementById('detalleTurnoTitulo');
+    const cont = document.getElementById('detalleTurnoContenido');
 
-    if(titulo){
-      titulo.textContent = (turno.cliente || 'Cruz Verde') + ' • ' + (turno.idTurno || 'TURNO');
+    if(title){
+      title.textContent = (turno.empresa || 'Cruz Verde') + ' • ' + (turno.idTurno || 'TURNO');
     }
 
-    const textoDias = (turno.dias || 3) + ' día' + (Number(turno.dias) === 1 ? '' : 's') +
-      ' consecutivo' + (Number(turno.dias) === 1 ? '' : 's');
+    const dias = Number(turno.dias || 3);
+    const textoDias = dias + ' día' + (dias === 1 ? '' : 's') + ' consecutivo' + (dias === 1 ? '' : 's');
 
     let html = '';
-    if(turno.sucursal){
-      html += `<p><strong>Sucursal:</strong> ${turno.sucursal}</p>`;
-    }
-    html += `<p><strong>Dirección:</strong> ${turno.direccion || 'Por definir'}</p>`;
-    html += `<p><strong>Fecha de inicio:</strong> ${formatearFechaCorta(turno.fecha) || 'Por definir'}</p>`;
-    html += `<p><strong>Duración:</strong> ${textoDias}</p>`;
-    html += `<p><strong>Horario:</strong> ${formatearHora(turno.hora) || 'Por definir'}</p>`;
-    if(turno.valor){
-      html += `<p><strong>Valor estimado:</strong> ${formatearNumeroCOP(turno.valor)}</p>`;
-    }
-    if(turno.zonificacion){
-      html += `<p><strong>Zonificación:</strong> ${turno.zonificacion}</p>`;
-    }
-    if(turno.paradas){
-      html += `<p><strong>Paradas:</strong> ${turno.paradas}</p>`;
-    }
-    if(turno.descripcion){
-      html += `<p><strong>Descripción:</strong> ${turno.descripcion}</p>`;
-    }
-    if(turno.requisitos){
-      html += `<p><strong>Requisitos:</strong> ${turno.requisitos}</p>`;
+    html += '<p><strong>Empresa:</strong> ' + escapeHtml(turno.empresa || 'Cruz Verde') + '</p>';
+    html += '<p><strong>Dirección:</strong> ' + escapeHtml(turno.direccion || 'Por definir') + '</p>';
+    html += '<p><strong>Fecha de inicio:</strong> ' + escapeHtml(formatearFechaCorta(turno.fecha) || 'Por definir') + '</p>';
+    html += '<p><strong>Duración:</strong> ' + escapeHtml(textoDias) + '</p>';
+    html += '<p><strong>Hora de llegada:</strong> ' + escapeHtml(formatearHora(turno.hora) || 'Por definir') + '</p>';
+    if(turno.pago){
+      html += '<p><strong>Valor estimado:</strong> ' + escapeHtml(formatearNumeroCOP(turno.pago)) + '</p>';
     }
 
-    if(cont) cont.innerHTML = html || '<p class="status muted">Información del turno por confirmar.</p>';
+    if(cont) cont.innerHTML = html;
 
     abrirModal('modalDetalleTurno');
   }
 
-  function abrirConfirmacionTurnoDesdeDetalle(){
-    if(!turnoDetalle) return;
-    turnoSeleccionado = turnoDetalle;
-    abrirConfirmacionTurno();
+  function ampliarImagenTurno(){
+    // placeholder: se mantiene azul y ampliable sin imagen real
+    addNotificacion({
+      type:'info',
+      title:'Imagen del punto',
+      text:'Vista previa en modo temporal (azul RADIZ).',
+      read:false
+    });
+    actualizarIndicadorNotificaciones();
   }
 
-  function abrirConfirmacionTurno(){
+  function aceptarDesdeDetalle(){
+    if(!turnoDetalleActual) return;
+    cerrarModal('modalDetalleTurno');
+    abrirConfirmacionTurno({
+      idTurno: turnoDetalleActual.idTurno,
+      cliente: turnoDetalleActual.empresa,   // ahora va el nombre de empresa
+      direccion: turnoDetalleActual.direccion,
+      fecha: turnoDetalleActual.fecha,
+      hora: turnoDetalleActual.hora,
+      ciudad: turnoDetalleActual.ciudad,
+      dias: turnoDetalleActual.dias
+    });
+  }
+
+  /* ===== Confirmación + términos ===== */
+  function abrirConfirmacionTurno(turno){
+    turnoSeleccionado = turno;
     const msg = document.getElementById('confirmarTurnoMsg');
-    if(msg){
-      msg.className = 'status';
-      msg.textContent = '';
-    }
+    if(msg){ msg.className='status'; msg.textContent=''; }
+
     const chk = document.getElementById('chkTerminos');
     if(chk) chk.checked = false;
 
-    actualizarEstadoConfirmar();
-
+    onToggleTerminos();
     abrirModal('modalConfirmarTurno');
   }
 
-  function verTerminosTurno(){
-    // Ocultamos confirmación (sin reset) y abrimos modal de términos con volver
-    ocultarModal('modalConfirmarTurno');
-    abrirModal('modalTerminosTurno');
-  }
-
-  function volverAConfirmacionTurno(){
-    cerrarModal('modalTerminosTurno');
-    abrirModal('modalConfirmarTurno');
-    actualizarEstadoConfirmar();
-  }
-
-  function actualizarEstadoConfirmar(){
+  function onToggleTerminos(){
     const chk = document.getElementById('chkTerminos');
     const btn = document.getElementById('btnConfirmarTurno');
     if(!btn) return;
     btn.disabled = !(chk && chk.checked);
+  }
+
+  function abrirTerminosTurno(){
+    // Ir a modal con iframe y opción de volver
+    cerrarModal('modalConfirmarTurno');
+    abrirModal('modalTerminosTurno');
+  }
+
+  function volverDesdeTerminos(){
+    cerrarModal('modalTerminosTurno');
+    // volver a la flotante de confirmación
+    abrirModal('modalConfirmarTurno');
   }
 
   async function confirmarAceptarTurno(){
@@ -1185,46 +1278,31 @@
     const chk = document.getElementById('chkTerminos');
 
     if(!turnoSeleccionado){
-      if(msg){
-        msg.className = 'status error';
-        msg.textContent = 'No se encontró el turno seleccionado.';
-      }
+      if(msg){ msg.className='status error'; msg.textContent='No se encontró el turno seleccionado.'; }
       return;
     }
-
     if(!idContratoActual){
-      if(msg){
-        msg.className = 'status error';
-        msg.textContent = 'No se encontró tu contrato. Vuelve a ingresar desde el portal principal.';
-      }
+      if(msg){ msg.className='status error'; msg.textContent='No se encontró tu contrato. Vuelve a ingresar desde el portal principal.'; }
       return;
     }
-
     if(!chk || !chk.checked){
-      if(msg){
-        msg.className = 'status error';
-        msg.textContent = 'Debes aceptar los términos y condiciones antes de confirmar.';
-      }
+      if(msg){ msg.className='status error'; msg.textContent='Debes aceptar los términos y condiciones antes de confirmar.'; }
       return;
     }
 
-    if(msg){
-      msg.className = 'status muted';
-      msg.textContent = 'Enviando solicitud de turno...';
-    }
+    if(msg){ msg.className='status muted'; msg.textContent='Enviando solicitud de turno...'; }
 
     try{
       const formData = new URLSearchParams();
       formData.append('accion','solicitar_turno');
       formData.append('idContrato', idContratoActual);
       formData.append('idTurno', turnoSeleccionado.idTurno || '');
-      formData.append('cliente', turnoSeleccionado.cliente || '');
+      formData.append('cliente', turnoSeleccionado.cliente || 'Cruz Verde');
       formData.append('direccion', turnoSeleccionado.direccion || '');
       formData.append('fecha', turnoSeleccionado.fecha || '');
       formData.append('hora', turnoSeleccionado.hora || '');
       formData.append('ciudad', turnoSeleccionado.ciudad || '');
-      formData.append('dias', String(turnoSeleccionado.dias || 3));
-      formData.append('correoCliente', turnoSeleccionado.correoCliente || '');
+      formData.append('dias', turnoSeleccionado.dias || '');
 
       const resp = await fetch(API_URL, {
         method:'POST',
@@ -1234,37 +1312,37 @@
       const data = await resp.json();
 
       if(!data.ok){
-        if(msg){
-          msg.className = 'status error';
-          msg.textContent = data.error || 'No fue posible registrar la aceptación del turno.';
-        }
+        if(msg){ msg.className='status error'; msg.textContent = data.error || 'No fue posible registrar la aceptación del turno.'; }
         return;
       }
 
       if(msg){
-        msg.className = 'status ok';
-        msg.textContent = 'Solicitud enviada. Recibirás la confirmación de asignación por WhatsApp.';
+        msg.className='status ok';
+        msg.textContent='Solicitud enviada. Recibirás la confirmación de asignación por WhatsApp.';
       }
 
-      // Simular que el turno queda en "Mi agenda" durante los días solicitados (máx 3 en vista)
+      addNotificacion({
+        type:'turno',
+        title:'Solicitud enviada',
+        text:'Tu solicitud para el turno ' + (turnoSeleccionado.idTurno || '') + ' fue enviada.',
+        read:false
+      });
+
+      // Simular agenda (3 días máx)
       ultimaAceptacion = {
         turno: turnoSeleccionado,
         fechaBase: turnoSeleccionado.fecha || new Date().toISOString()
       };
-      agendaEstados = {}; // reset estados
       actualizarAgendaDesdeUltimaAceptacion();
 
       setTimeout(function(){
-        cerrarConfirmacionTurno();
-        cerrarModal('modalDetalleTurno');
-      }, 650);
+        cerrarModal('modalConfirmarTurno');
+        actualizarIndicadorNotificaciones();
+      }, 900);
 
     }catch(e){
       console.error(e);
-      if(msg){
-        msg.className = 'status error';
-        msg.textContent = 'Error al enviar la solicitud. Intenta de nuevo.';
-      }
+      if(msg){ msg.className='status error'; msg.textContent='Error al enviar la solicitud. Intenta de nuevo.'; }
     }
   }
 
@@ -1287,9 +1365,7 @@
     if(isNaN(base.getTime())) base = new Date();
 
     let html = '';
-    const maxVista = Math.min(dias, 3);
-
-    for(let i=0;i<maxVista;i++){
+    for(let i=0;i<dias && i<3;i++){
       const d = new Date(base.getTime());
       d.setDate(base.getDate() + i);
 
@@ -1297,41 +1373,13 @@
         weekday:'short',day:'2-digit',month:'short',year:'numeric'
       });
 
-      const key = 'DIA_' + i;
-      const st = agendaEstados[key] || 'PENDIENTE';
-
-      const chipClass =
-        st === 'EN_SITIO' ? 'ensitio' :
-        st === 'COMPLETADO' ? 'completado' :
-        'pendiente';
-
       html += `
-        <div class="agenda-dia" data-key="${key}">
+        <div class="agenda-dia">
           <div class="agenda-fecha">${fechaTexto}</div>
-          <div class="agenda-turno">Turno ${t.idTurno || 'TURNO'}</div>
-
-          <div class="agenda-detalle">
-            <strong>Cliente:</strong> ${t.cliente || 'Cruz Verde'}
-          </div>
-          <div class="agenda-detalle">
-            <strong>Representante:</strong> Miguel Orozco
-          </div>
-          <div class="agenda-detalle">
-            <strong>Dirección:</strong> ${t.direccion || 'Dirección por definir'}
-          </div>
-          <div class="agenda-detalle">
-            <strong>Hora de llegada:</strong> ${formatearHora(t.hora) || '08:00 a.m.'}
-          </div>
-
-          <div class="agenda-estado-row">
-            <span class="estado-chip ${chipClass}" id="chip_${key}">
-              ${st === 'EN_SITIO' ? 'EN SITIO' : (st === 'COMPLETADO' ? 'COMPLETADO' : 'PENDIENTE')}
-            </span>
-
-            <div class="mini-switch ${chipClass}" id="sw_${key}" onclick="toggleEstadoAgenda('${key}', '${t.idTurno || ''}')">
-              <div class="knob"></div>
-            </div>
-          </div>
+          <div class="agenda-turno">Turno ${escapeHtml(t.idTurno || 'TURNO')}</div>
+          <div class="agenda-detalle"><strong>Cliente:</strong> ${escapeHtml(t.cliente || 'Cruz Verde')}</div>
+          <div class="agenda-detalle"><strong>Dirección:</strong> ${escapeHtml(t.direccion || 'Dirección por definir')}</div>
+          <div class="agenda-detalle"><strong>Hora de llegada:</strong> ${escapeHtml(formatearHora(t.hora) || '08:00 a.m.')}</div>
         </div>
       `;
     }
@@ -1341,102 +1389,189 @@
     cont.innerHTML = html;
   }
 
-  async function toggleEstadoAgenda(key, idTurno){
-    if(!ultimaAceptacion || !ultimaAceptacion.turno) return;
+  /* ===== Pagos (placeholder + intento si es posible) ===== */
+  async function cargarPagos(){
+    const estado = document.getElementById('pagosEstado');
+    const cont = document.getElementById('pagosContenido');
 
-    const actual = agendaEstados[key] || 'PENDIENTE';
-    if(actual === 'COMPLETADO') return;
-
-    const siguiente = (actual === 'PENDIENTE') ? 'EN_SITIO' : 'COMPLETADO';
-
-    // UI optimista: bloquea si va a completado
-    const chip = document.getElementById('chip_' + key);
-    const sw = document.getElementById('sw_' + key);
-
-    if(chip){
-      chip.textContent = (siguiente === 'EN_SITIO') ? 'EN SITIO' : 'COMPLETADO';
-      chip.className = 'estado-chip ' + (siguiente === 'EN_SITIO' ? 'ensitio' : 'completado');
-    }
-    if(sw){
-      sw.className = 'mini-switch ' + (siguiente === 'EN_SITIO' ? 'ensitio' : 'completado');
+    if(cont) cont.innerHTML = '';
+    if(estado){
+      estado.className = 'status muted';
+      estado.textContent = 'Cargando información...';
     }
 
-    // Notificar backend
+    if(!idContratoActual){
+      if(estado){
+        estado.className = 'status error';
+        estado.textContent = 'No se encontró el ID del contrato.';
+      }
+      return;
+    }
+
+    // Intento de historial (si el backend lo tiene). Si falla, queda placeholder.
     try{
-      const t = ultimaAceptacion.turno;
-
-      const formData = new URLSearchParams();
-      formData.append('accion','actualizar_estado_turno');
-      formData.append('idContrato', idContratoActual || '');
-      formData.append('idTurno', idTurno || '');
-      formData.append('estado', siguiente); // EN_SITIO / COMPLETADO
-      formData.append('fechaHora', new Date().toISOString());
-
-      // datos informativos para el correo
-      formData.append('cliente', t.cliente || 'Cruz Verde');
-      formData.append('direccion', t.direccion || '');
-      formData.append('fecha', t.fecha || '');
-      formData.append('hora', t.hora || '');
-      formData.append('ciudad', t.ciudad || 'Bogotá');
-      formData.append('dias', String(t.dias || 3));
-      formData.append('correoCliente', t.correoCliente || '');
-
-      const resp = await fetch(API_URL, {
-        method:'POST',
-        headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body: formData.toString()
-      });
-
+      const resp = await fetch(API_URL + '?accion=historial_pagos&id=' + encodeURIComponent(idContratoActual));
       const data = await resp.json();
-      if(!data.ok){
-        // si falla, revertimos UI al estado anterior
-        agendaEstados[key] = actual;
 
-        if(chip){
-          const cls =
-            actual === 'EN_SITIO' ? 'ensitio' :
-            actual === 'COMPLETADO' ? 'completado' :
-            'pendiente';
-          chip.textContent = (actual === 'EN_SITIO') ? 'EN SITIO' : (actual === 'COMPLETADO' ? 'COMPLETADO' : 'PENDIENTE');
-          chip.className = 'estado-chip ' + cls;
+      if(!data.ok){
+        if(estado){
+          estado.className = 'status muted';
+          estado.textContent = 'Próximamente verás pagos realizados y próximos pagos.';
         }
-        if(sw){
-          const cls =
-            actual === 'EN_SITIO' ? 'ensitio' :
-            actual === 'COMPLETADO' ? 'completado' :
-            'pendiente';
-          sw.className = 'mini-switch ' + cls;
-        }
-        alert(data.error || 'No fue posible actualizar el estado.');
         return;
       }
 
-      // confirma en memoria
-      agendaEstados[key] = siguiente;
+      const pagos = Array.isArray(data.pagos) ? data.pagos : [];
+      if(pagos.length === 0){
+        if(estado){
+          estado.className = 'status muted';
+          estado.textContent = 'No hay pagos para mostrar (por ahora).';
+        }
+        return;
+      }
+
+      if(estado){
+        estado.className = 'status ok';
+        estado.textContent = 'Pagos encontrados: ' + pagos.length;
+      }
+
+      let html = '';
+      pagos.slice(0,20).forEach(function(p){
+        html += `
+          <div class="noti-item" style="cursor:default;">
+            <div class="noti-bullet read"></div>
+            <div class="noti-body">
+              <p class="noti-title">${escapeHtml(p.consecutivo || 'Pago')}</p>
+              <p class="noti-text">${escapeHtml(p.fecha || '')} • ${escapeHtml(formatearNumeroCOP(p.valor || 0))}</p>
+            </div>
+          </div>
+        `;
+      });
+
+      if(cont) cont.innerHTML = html;
 
     }catch(e){
       console.error(e);
-      // revertir UI
-      agendaEstados[key] = actual;
-
-      if(chip){
-        const cls =
-          actual === 'EN_SITIO' ? 'ensitio' :
-          actual === 'COMPLETADO' ? 'completado' :
-          'pendiente';
-        chip.textContent = (actual === 'EN_SITIO') ? 'EN SITIO' : (actual === 'COMPLETADO' ? 'COMPLETADO' : 'PENDIENTE');
-        chip.className = 'estado-chip ' + cls;
+      if(estado){
+        estado.className = 'status muted';
+        estado.textContent = 'Próximamente verás pagos realizados y próximos pagos.';
       }
-      if(sw){
-        const cls =
-          actual === 'EN_SITIO' ? 'ensitio' :
-          actual === 'COMPLETADO' ? 'completado' :
-          'pendiente';
-        sw.className = 'mini-switch ' + cls;
-      }
-
-      alert('Error de conexión al actualizar el estado.');
     }
+  }
+
+  /* ===== Notificaciones (localStorage) ===== */
+  function getNotificaciones(){
+    try{
+      const raw = localStorage.getItem(NOTIF_KEY);
+      const arr = raw ? JSON.parse(raw) : [];
+      return Array.isArray(arr) ? arr : [];
+    }catch(e){
+      return [];
+    }
+  }
+  function setNotificaciones(arr){
+    try{
+      localStorage.setItem(NOTIF_KEY, JSON.stringify(arr || []));
+    }catch(e){}
+  }
+  function getNotifMeta(){
+    try{
+      const raw = localStorage.getItem(META_KEY);
+      return raw ? JSON.parse(raw) : {};
+    }catch(e){
+      return {};
+    }
+  }
+  function setNotifMeta(obj){
+    try{
+      localStorage.setItem(META_KEY, JSON.stringify(obj || {}));
+    }catch(e){}
+  }
+
+  function addNotificacion(n){
+    const list = getNotificaciones();
+    const item = {
+      id: 'N' + Date.now(),
+      type: n.type || 'info',
+      title: n.title || 'Notificación',
+      text: n.text || '',
+      ts: Date.now(),
+      read: !!n.read
+    };
+    list.unshift(item);
+    setNotificaciones(list.slice(0, 50));
+    actualizarIndicadorNotificaciones();
+  }
+
+  function hayNoLeidas(){
+    return getNotificaciones().some(function(n){ return !n.read; });
+  }
+
+  function actualizarIndicadorNotificaciones(){
+    const dot = document.getElementById('bellDot');
+    if(!dot) return;
+    dot.style.display = hayNoLeidas() ? 'block' : 'none';
+  }
+
+  function abrirNotificaciones(){
+    renderNotificaciones();
+    abrirModal('modalNotificaciones');
+
+    // Al abrir, se considera “leídas”
+    const list = getNotificaciones();
+    const updated = list.map(function(n){ n.read = true; return n; });
+    setNotificaciones(updated);
+    actualizarIndicadorNotificaciones();
+    renderNotificaciones();
+  }
+
+  function renderNotificaciones(){
+    const estado = document.getElementById('notiEstado');
+    const cont = document.getElementById('notiList');
+    if(cont) cont.innerHTML = '';
+
+    const list = getNotificaciones();
+
+    if(list.length === 0){
+      if(estado){
+        estado.className = 'status muted';
+        estado.textContent = 'Sin notificaciones.';
+      }
+      return;
+    }
+
+    if(estado){
+      estado.className = 'status ok';
+      estado.textContent = 'Historial de notificaciones: ' + list.length;
+    }
+
+    if(cont){
+      list.forEach(function(n){
+        const d = new Date(n.ts);
+        const time = isNaN(d.getTime()) ? '' : d.toLocaleString('es-CO',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'});
+        const item = document.createElement('div');
+        item.className = 'noti-item';
+
+        item.innerHTML = `
+          <div class="noti-bullet ${n.read ? 'read' : ''}"></div>
+          <div class="noti-body">
+            <p class="noti-title">${escapeHtml(n.title)}</p>
+            <p class="noti-text">${escapeHtml(n.text)}</p>
+            <p class="noti-time">${escapeHtml(time)}</p>
+          </div>
+        `;
+        cont.appendChild(item);
+      });
+    }
+  }
+
+  function escapeHtml(s){
+    return String(s || '')
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#39;');
   }
 </script>
 </body>
