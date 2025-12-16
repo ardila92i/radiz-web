@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <!-- Iconos / PWA (se conserva mínimo; logo interno pedido es icon-192.png) -->
-  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
 
   <!-- Wompi (para el botón Pagar) -->
   <script src="https://checkout.wompi.co/widget.js" async></script>
@@ -586,18 +586,19 @@
     .sheet{
       position:fixed;
       left:0; right:0;
-      bottom:-520px;
-      transition:bottom .18s ease-out;
+      bottom:0;
+      transition:transform .18s ease-out;
       z-index:36;
       display:flex;
       justify-content:center;
       padding:0 14px 14px;
+      transform:translateY(110%);
+      pointer-events:none;
     }
-    /* ✅ Evita que la barra inferior se interponga con el menú desplegable */
     .sheet.open{
-      bottom:calc(92px + env(safe-area-inset-bottom));
+      transform:translateY(0);
+      pointer-events:auto;
     }
-
     .sheet-card{
       width:100%;
       max-width:520px;
@@ -685,7 +686,7 @@
         <div class="topbar-left"></div>
 
         <div class="logo-wrap" aria-label="RADIZ">
-          <img src="./icon-192.png" alt="RADIZ" class="logo" />
+          <img src="/icon-192.png" alt="RADIZ" class="logo" />
         </div>
 
         <button class="bell-btn" type="button" onclick="abrirNotificaciones()" aria-label="Notificaciones">
@@ -1251,6 +1252,8 @@
     cargarContratoYSaludo(idContratoActual);
     cargarTurnosDisponibles();
     actualizarIndicadorNotificaciones();
+
+    cerrarSheetMenu();
   });
 
   function obtenerIdContratoDeUrl(){
