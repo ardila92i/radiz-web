@@ -22,11 +22,18 @@
   <style>
     *{box-sizing:border-box}
 
+    /* ✅ CORRECCIÓN: pantalla estática (sin scroll / sin “bajar” al diseño anterior) */
+    html, body{
+      height:100%;
+      overflow:hidden;
+      overscroll-behavior:none;
+    }
+
     body{
       margin:0;
       padding:0;
       font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:#f5f6f8;
+      background:#0f172a;
       color:#111827;
     }
 
@@ -40,9 +47,9 @@
       width:100%;
       overflow:hidden;
       display:flex;
-      align-items:stretch;              /* <- ajuste */
-      justify-content:center;           /* <- ajuste */
-      padding:0;                        /* <- ajuste */
+      align-items:center;
+      justify-content:center;
+      padding:24px 16px;
       background:#0f172a;
     }
     .login-bg{
@@ -69,21 +76,16 @@
       z-index:2;
       width:100%;
       max-width:460px;
-      min-height:100vh; /* <- ajuste: pantalla completa */
       display:flex;
       flex-direction:column;
       align-items:center;
       text-align:center;
-      gap:12px;
-      /* <- ajuste: safe areas + control de posiciones */
-      padding:
-        calc(54px + env(safe-area-inset-top))
-        14px
-        calc(72px + env(safe-area-inset-bottom));
+      gap:14px;
+      padding:18px 14px 16px;
     }
     .login-logo{
-      margin-top:0;      /* <- ajuste: más arriba */
-      margin-bottom:6px;
+      margin-top:8px;
+      margin-bottom:2px;
     }
     .login-logo img{
       width:72px;
@@ -95,8 +97,7 @@
       padding:10px;
     }
     .login-welcome{
-      margin:0;                         /* <- ajuste */
-      transform:translateY(-6px);       /* <- ajuste: “un poco más arriba” */
+      margin:6px 0 0;
       font-size:1.55rem;
       line-height:1.15;
       font-weight:800;
@@ -111,19 +112,22 @@
       flex-direction:column;
       align-items:center;
       gap:10px;
-      margin-top:auto;                  /* <- ajuste: baja los campos a la zona correcta */
+      margin-top:10px;
     }
 
-    /* Campos más pequeños (no a todo el ancho del teléfono) */
+    /* ✅ CORRECCIÓN: Campos más angostos (no a todo el ancho del teléfono) */
     .login-input{
-      width:min(360px, 86vw);
-      border:none;
-      outline:none;
+      width:min(310px, 78vw);
+      border:0 !important;
+      outline:0 !important;
+      -webkit-appearance:none;
+      appearance:none;
       border-radius:14px;
       padding:12px 14px;
       font-size:1rem;
       color:#0f172a;
       box-shadow:0 18px 45px rgba(0,0,0,.22);
+      background-clip:padding-box;
     }
     .login-input::placeholder{
       color:rgba(15,23,42,.6);
@@ -144,7 +148,7 @@
     #loginPassword::placeholder{ color:rgba(255,255,255,.85); }
 
     .login-btn{
-      width:min(360px, 86vw);
+      width:min(310px, 78vw);
       border:none;
       border-radius:16px;
       padding:12px 14px;
@@ -163,7 +167,7 @@
     }
 
     .login-msg{
-      width:min(360px, 86vw);
+      width:min(310px, 78vw);
       min-height:1.2em;
       font-size:.92rem;
       color:#ffffff;
@@ -175,10 +179,11 @@
 
     /* =========================
        PORTAL EXISTENTE (se conserva)
+       ✅ CORRECCIÓN: oculto para que no exista “segunda pantalla” al deslizar
        ========================= */
     .page{
+      display:none; /* <-- clave para que no “baje” al diseño anterior */
       min-height:100vh;
-      display:flex;
       align-items:flex-start;
       justify-content:center;
       padding:32px 16px;
@@ -363,12 +368,8 @@
       transform:translateY(-1px);
     }
 
-    .card-consulta{
-      margin-bottom:18px;
-    }
-    .card-pago{
-      margin-bottom:18px;
-    }
+    .card-consulta{ margin-bottom:18px; }
+    .card-pago{ margin-bottom:18px; }
 
     /* Iconos SVG para tarjetas de resultados */
     .card-contrato::before,
@@ -384,20 +385,12 @@
       background-repeat:no-repeat;
       background-position:center;
     }
-    .card-contrato::before{
-      background-image:url('ícono_contrato1.svg');
-    }
-    .card-pagos::before{
-      background-image:url('ícono_pagos.svg');
-    }
-    .card-mantenimientos::before{
-      background-image:url('ícono_mantenimientos.svg');
-    }
+    .card-contrato::before{ background-image:url('ícono_contrato1.svg'); }
+    .card-pagos::before{ background-image:url('ícono_pagos.svg'); }
+    .card-mantenimientos::before{ background-image:url('ícono_mantenimientos.svg'); }
     .card-contrato h2,
     .card-pagos h2,
-    .card-mantenimientos h2{
-      margin-left:40px;
-    }
+    .card-mantenimientos h2{ margin-left:40px; }
     .card-mantenimientos:hover{
       background:#fff7ed;
       border-color:#f97316;
@@ -427,7 +420,6 @@
       background:#eff6ff;
       flex-shrink:0;
     }
-    /* Icono de lupa (consulta) */
     .section-icon-search::before{
       content:"";
       position:absolute;
@@ -450,7 +442,6 @@
       right:6px;
       transform:rotate(45deg);
     }
-    /* Icono $ en líneas (pago) */
     .section-icon-money::before{
       content:"$";
       position:absolute;
@@ -525,7 +516,6 @@
       transform:none;
     }
 
-    /* Botones principales alineados y del mismo tamaño */
     .btn-main{
       min-width:190px;
       justify-content:center;
@@ -540,7 +530,6 @@
       box-shadow:0 16px 32px rgba(249,115,22,.6);
     }
 
-    /* Botón "Descarga la App" / "Ir a inversiones" / "Iniciar sesión" como texto discreto */
     .btn-app{
       padding:0;
       border:none;
@@ -602,7 +591,6 @@
       text-align:center;
     }
 
-    /* Pago Wompi */
     #seccionPago h2{
       font-size:1.05rem;
       margin:0 0 4px;
@@ -619,12 +607,10 @@
       align-items:center;
       flex-wrap:wrap;
     }
-    /* Fila solo para los botones de pago */
     .row-pago-botones{
       justify-content:space-between;
       margin-top:10px;
     }
-    /* Botones Pagar con Wompi y Ver QR con color más suave */
     .btn-pago,
     .btn-qr{
       flex:1;
@@ -637,9 +623,7 @@
       background:#3b82f6;
       box-shadow:0 10px 22px rgba(59,130,246,.6);
     }
-    #montoPago{
-      width:220px;
-    }
+    #montoPago{ width:220px; }
     #pagoError{
       color:#dc2626;
       margin-top:6px;
@@ -653,7 +637,6 @@
       display:none;
     }
 
-    /* Fila de consulta */
     .row-consulta{
       display:flex;
       gap:8px;
@@ -662,18 +645,14 @@
       margin-top:6px;
       margin-bottom:10px;
     }
-    #idContrato{
-      width:220px;
-    }
+    #idContrato{ width:220px; }
 
-    /* Botones centrados debajo de tarjetas */
     .affiliate-row{
       margin-top:18px;
       display:flex;
       justify-content:center;
     }
 
-    /* FAB menú */
     .fab-menu{
       position:absolute;
       top:24px;
@@ -751,7 +730,6 @@
       color:#1d4ed8;
     }
 
-    /* Modales */
     .modal-backdrop{
       position:fixed;
       inset:0;
@@ -802,16 +780,13 @@
       align-items:center;
       margin-top:4px;
     }
-    .link-copy-row input{
-      flex:1;
-    }
+    .link-copy-row input{ flex:1; }
     .copy-msg{
       font-size:.8rem;
       margin-top:6px;
       color:#6b7280;
     }
 
-    /* Imagen de beneficios Renting */
     .img-beneficios-renting{
       max-width:100%;
       height:auto;
@@ -821,12 +796,8 @@
     }
 
     @media(max-width:900px){
-      .main-grid{
-        grid-template-columns:1fr;
-      }
-      .brand-card{
-        min-height:260px;
-      }
+      .main-grid{ grid-template-columns:1fr; }
+      .brand-card{ min-height:260px; }
     }
 
     @media(max-width:640px){
@@ -842,12 +813,8 @@
         top:16px;
         right:16px;
       }
-      #montoPago{
-        width:100%;
-      }
-      #idContrato{
-        width:100%;
-      }
+      #montoPago{ width:100%; }
+      #idContrato{ width:100%; }
     }
   </style>
 </head>
@@ -859,9 +826,9 @@
   <div class="login-overlay"></div>
 
   <div class="login-content">
-    <!-- Logo pequeño (ícono) -->
+    <!-- ✅ CORRECCIÓN: Logo pequeño (ícono) usando icon-512.png -->
     <div class="login-logo">
-      <img src="icon-152.png" alt="RADIZ">
+      <img src="icon-512.png" alt="RADIZ">
     </div>
 
     <h1 class="login-welcome">¡Buenas buenas!</h1>
@@ -877,6 +844,7 @@
 
 <!-- ===============================
      PORTAL EXISTENTE (SE CONSERVA)
+     (queda oculto por CSS para que no haya scroll)
      =============================== -->
 <div class="page">
   <div class="container">
@@ -892,13 +860,11 @@
       <div class="menu-panel" id="menuPanel">
         <div class="menu-title" id="menuTitle">Opciones</div>
 
-        <!-- Menú inicial (antes de consultar contrato / sin sesión cargada) -->
         <div id="menuInicial">
           <div class="menu-item" onclick="abrirModal('modalInversiones')">Ir a inversiones</div>
           <div class="menu-item" onclick="manejarDescargaApp()">Descarga la App</div>
         </div>
 
-        <!-- Para renting (clientes tipo R) -->
         <div id="menuRenting" style="display:none;">
           <div class="menu-item" onclick="abrirModal('modalBeneficios')">Beneficios</div>
           <div class="menu-item" onclick="solicitarGrua()">Solicitar grúa</div>
@@ -912,7 +878,6 @@
           <div class="menu-item" onclick="abrirModal('modalTaller')">Taller asignado</div>
         </div>
 
-        <!-- Para afiliados (clientes tipo A) -->
         <div id="menuAfiliado" style="display:none;">
           <div class="menu-item">Beneficios</div>
           <div class="menu-item" onclick="abrirModal('modalHistorialPagos')">Historial de pagos</div>
@@ -926,9 +891,7 @@
       </div>
     </div>
 
-    <!-- GRID PRINCIPAL -->
     <div class="main-grid">
-      <!-- COLUMNA IZQUIERDA: CARD CORPORATIVA -->
       <div class="brand-card">
         <div class="brand-image">
           <img src="radiz-driver.jpg.jpg" alt="Conductor Radiz frente a vehículos de carga">
@@ -940,7 +903,6 @@
         </div>
       </div>
 
-      <!-- COLUMNA DERECHA: PANEL DEL PORTAL -->
       <div class="panel-main">
         <div class="welcome-banner">
           <div class="welcome-icon"></div>
@@ -956,7 +918,6 @@
           </div>
         </header>
 
-        <!-- Consulta de contrato -->
         <div class="card card-consulta">
           <div class="section-title">
             <div class="section-icon section-icon-search"></div>
@@ -971,7 +932,6 @@
           <div id="status" class="status"></div>
         </div>
 
-        <!-- Realizar pago -->
         <div class="card card-pago" id="seccionPago">
           <div class="section-title">
             <div class="section-icon section-icon-money"></div>
@@ -979,12 +939,10 @@
           </div>
           <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
           <label for="montoPago">Monto a pagar (COP)</label>
-          <!-- fila solo con el input -->
           <div class="row-pago">
             <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
           </div>
 
-          <!-- fila de botones lado a lado -->
           <div class="row-pago row-pago-botones">
             <button type="button" class="btn-main btn-pago" onclick="crearPagoWompi()">Pagar con Wompi</button>
             <button type="button" class="btn-main btn-qr" onclick="abrirModal('modalQR')">Ver QR</button>
@@ -993,14 +951,12 @@
           <p id="pagoContratoError">Digita tu ID antes de pagar.</p>
         </div>
 
-        <!-- Botón único: Iniciar sesión (renting o inversiones) -->
         <div class="affiliate-row">
           <button type="button" class="btn-app" onclick="abrirModal('modalInversiones')">
             Iniciar sesión
           </button>
         </div>
 
-        <!-- Resultados -->
         <div class="grid" id="resultados" style="display:none;">
           <div class="card card-contrato" id="cardContrato"></div>
           <div class="card card-pagos" id="cardPagos"></div>
@@ -1056,7 +1012,6 @@
   </div>
 </div>
 
-<!-- MODAL: ACTUALIZAR KILOMETRAJE -->
 <div class="modal-backdrop" id="modalActualizarKm">
   <div class="modal">
     <div class="modal-header">
@@ -1076,7 +1031,6 @@
   </div>
 </div>
 
-<!-- MODAL: SALDO A FAVOR -->
 <div class="modal-backdrop" id="modalSaldoFavor">
   <div class="modal">
     <div class="modal-header">
@@ -1090,7 +1044,6 @@
   </div>
 </div>
 
-<!-- MODAL: PAGO POR QR -->
 <div class="modal-backdrop" id="modalQR">
   <div class="modal">
     <div class="modal-header">
@@ -1110,7 +1063,6 @@
   </div>
 </div>
 
-<!-- MODAL: NOTIFICAR INCIDENTE -->
 <div class="modal-backdrop" id="modalIncidente">
   <div class="modal">
     <div class="modal-header">
@@ -1132,7 +1084,6 @@
   </div>
 </div>
 
-<!-- MODAL: INICIAR SESIÓN (se conserva) -->
 <div class="modal-backdrop" id="modalInversiones">
   <div class="modal">
     <div class="modal-header">
@@ -1157,7 +1108,6 @@
   </div>
 </div>
 
-<!-- MODALES AFILIADOS EXISTENTES -->
 <div class="modal-backdrop" id="modalFechaPagosAfiliado">
   <div class="modal">
     <div class="modal-header">
@@ -1189,9 +1139,6 @@
   </div>
 </div>
 
-<!-- NUEVOS MODALES AFILIADOS TIPO A -->
-
-<!-- Mis contratos -->
 <div class="modal-backdrop" id="modalMisContratosAfiliado">
   <div class="modal">
     <div class="modal-header">
@@ -1211,7 +1158,6 @@
   </div>
 </div>
 
-<!-- Actualizar datos -->
 <div class="modal-backdrop" id="modalActualizarDatosAfiliado">
   <div class="modal">
     <div class="modal-header">
@@ -1237,7 +1183,6 @@
   </div>
 </div>
 
-<!-- Mi flota -->
 <div class="modal-backdrop" id="modalMiFlotaAfiliado">
   <div class="modal">
     <div class="modal-header">
@@ -1248,7 +1193,6 @@
   </div>
 </div>
 
-<!-- Invertir -->
 <div class="modal-backdrop" id="modalInvertirAfiliado">
   <div class="modal">
     <div class="modal-header">
@@ -1260,7 +1204,6 @@
   </div>
 </div>
 
-<!-- MODAL LINK DE AFILIADO -->
 <div class="modal-backdrop" id="modalAfiliado">
   <div class="modal">
     <div class="modal-header">
@@ -1291,11 +1234,9 @@
   let datosContratoActual=null;
   let datosAfiliadoActual=null;
 
-  // Guardar usuario en el mismo dispositivo (pantalla tipo Lulo)
   const RADIZ_USER_KEY = 'radiz_usuario_guardado';
 
   document.addEventListener('DOMContentLoaded', function(){
-    // Estado inicial del menú: mostrar menú inicial siempre
     const fabMenu=document.getElementById('fabMenu');
     const menuInicial=document.getElementById('menuInicial');
     const menuRenting=document.getElementById('menuRenting');
@@ -1306,7 +1247,6 @@
     if(menuRenting){ menuRenting.style.display='none'; }
     if(menuAfiliado){ menuAfiliado.style.display='none'; }
 
-    // Prefill usuario guardado en login principal
     try{
       const saved = localStorage.getItem(RADIZ_USER_KEY) || '';
       const loginId = document.getElementById('loginId');
@@ -1491,7 +1431,6 @@
         document.getElementById('modalLiquidacionesTexto2').textContent=
           'Valor total liquidado: '+valorLiqTexto;
 
-        // Prefill campos para nuevos modales de tipo A
         const correoAf = af['CORREO ELECTRÓNICO'] || af['CORREO'] || '';
         const cuentaAf = af['CUENTA BANCARIA'] || af['CUENTA_BANCARIA'] || '';
         const celAf = af['CELULAR'] || af['TELÉFONO'] || af['TELEFONO'] || '';
@@ -1543,7 +1482,6 @@
           const tarifasCompletadas = p['TARIFAS COMPLETADAS'] || '0';
           const tarifasVencidas = p['TARIFAS VENCIDAS'] || '0';
 
-          // Cálculo de mora sólo para contratos tipo R (renting) en el front
           const idContratoPagos = String(c['ID CONTRATO']||'').trim().toUpperCase();
           const esRentingPagos = idContratoPagos.startsWith('R');
           const tarifaSemanalNum = Number(c['TARIFA SEMANAL'] || 0);
@@ -1700,7 +1638,6 @@
     }
   }
 
-  /* ----- Solicitar historial (flujo actual por correo, sobre todo Afiliados) ----- */
   async function enviarSolicitudHistorial(){
     const correo=document.getElementById('correoHistorial').value.trim();
     const idHist=document.getElementById('idHistorial').value.trim();
@@ -1741,7 +1678,6 @@
     }
   }
 
-  /* ----- NUEVO: Descargar historial de pagos en PDF para clientes R ----- */
   async function descargarHistorialPdf(){
     const idInput = document.getElementById('idHistorial');
     const msg = document.getElementById('historialMsg');
@@ -1880,8 +1816,6 @@
     }
   }
 
-  /* --- Nuevas funciones de menú Renting --- */
-
   function solicitarGrua(){
     const mensaje='Hola, necesito solicitar grúa para mi vehículo.';
     const url='https://wa.me/573159406263?text='+encodeURIComponent(mensaje);
@@ -1992,8 +1926,6 @@
     }
   }
 
-  /* --- Nuevas funciones para menú tipo A (correo automático a radiz) --- */
-
   async function enviarSolicitudMisContratos(){
     const correo = document.getElementById('misContratosCorreo').value.trim();
     const id = document.getElementById('misContratosId').value.trim().toUpperCase();
@@ -2083,8 +2015,6 @@
     }
   }
 
-  /* --------- PWA: Service Worker + instalación de App --------- */
-
   if('serviceWorker' in navigator){
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js')
@@ -2165,16 +2095,13 @@
     );
   }
 
-  /* --------- Login unificado (renting + inversiones) --------- */
   async function loginInversiones(origen){
     const useLogin = (origen === 'login');
 
-    // Pantalla principal tipo Lulo
     const idLogin = document.getElementById('loginId');
     const passLogin = document.getElementById('loginPassword');
     const msgLogin = document.getElementById('loginMsg');
 
-    // Modal existente (se conserva)
     const idModal = document.getElementById('invId');
     const passModal = document.getElementById('invPassword');
     const msgModal = document.getElementById('invLoginMsg');
@@ -2185,7 +2112,6 @@
 
     if(!idInput || !passInput || !msg) return;
 
-    // Mensaje estilo login principal
     if(useLogin){
       msg.className = 'login-msg';
     }else{
@@ -2204,7 +2130,6 @@
 
     const id = idRaw.toUpperCase();
 
-    // Guardar usuario (mismo teléfono)
     try{
       localStorage.setItem(RADIZ_USER_KEY, id);
     }catch(e){}
