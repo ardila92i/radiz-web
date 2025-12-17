@@ -1414,8 +1414,24 @@
           hello.innerHTML = 'Hola, <span class="hello-name">' + escapeHtml(nombre) + '</span>';
         }else{
           hello.textContent = 'Hola';
-        }
-      }
+
+      function abrirModalPdf(titulo, urlPdf){
+  const modal = document.getElementById('modalPdfViewer');
+  const frame = document.getElementById('pdfFrame');
+  const title = document.getElementById('pdfTitle');
+
+  if(title) title.textContent = titulo || 'Documento';
+  if(frame) frame.src = urlPdf || '';
+  if(modal) modal.style.display = 'flex';
+}
+
+function cerrarModalPdf(){
+  const modal = document.getElementById('modalPdfViewer');
+  const frame = document.getElementById('pdfFrame');
+
+  if(frame) frame.src = 'about:blank';
+  if(modal) modal.style.display = 'none';
+}
 
       // Perfil (se conserva)
       const placa = c['ID VEHÍCULO'] || c['ID VEHICULO'] || '';
