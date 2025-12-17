@@ -40,9 +40,9 @@
       width:100%;
       overflow:hidden;
       display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:24px 16px;
+      align-items:stretch;              /* <- ajuste */
+      justify-content:center;           /* <- ajuste */
+      padding:0;                        /* <- ajuste */
       background:#0f172a;
     }
     .login-bg{
@@ -69,16 +69,21 @@
       z-index:2;
       width:100%;
       max-width:460px;
+      min-height:100vh; /* <- ajuste: pantalla completa */
       display:flex;
       flex-direction:column;
       align-items:center;
       text-align:center;
-      gap:14px;
-      padding:18px 14px 16px;
+      gap:12px;
+      /* <- ajuste: safe areas + control de posiciones */
+      padding:
+        calc(54px + env(safe-area-inset-top))
+        14px
+        calc(72px + env(safe-area-inset-bottom));
     }
     .login-logo{
-      margin-top:8px;
-      margin-bottom:2px;
+      margin-top:0;      /* <- ajuste: más arriba */
+      margin-bottom:6px;
     }
     .login-logo img{
       width:72px;
@@ -90,14 +95,14 @@
       padding:10px;
     }
     .login-welcome{
-      margin:6px 0 0;
+      margin:0;                         /* <- ajuste */
+      transform:translateY(-6px);       /* <- ajuste: “un poco más arriba” */
       font-size:1.55rem;
       line-height:1.15;
       font-weight:800;
       color:#ffffff;
       letter-spacing:.02em;
       text-shadow:0 10px 26px rgba(0,0,0,.35);
-      transform:translateY(-6px); /* (3) un poco más arriba */
     }
 
     .login-form{
@@ -106,7 +111,7 @@
       flex-direction:column;
       align-items:center;
       gap:10px;
-      margin-top:24px; /* (2) campos + botón un poco más abajo */
+      margin-top:auto;                  /* <- ajuste: baja los campos a la zona correcta */
     }
 
     /* Campos más pequeños (no a todo el ancho del teléfono) */
@@ -854,7 +859,7 @@
   <div class="login-overlay"></div>
 
   <div class="login-content">
-    <!-- (1) Logo pequeño (ícono) -->
+    <!-- Logo pequeño (ícono) -->
     <div class="login-logo">
       <img src="icon-152.png" alt="RADIZ">
     </div>
@@ -2220,11 +2225,7 @@
       const data = await resp.json();
 
       if(!data.ok){
-        if(useLogin){
-          msg.className = 'login-msg error';
-        }else{
-          msg.className = 'status error';
-        }
+        msg.className = useLogin ? 'login-msg error' : 'status error';
         msg.textContent = data.error || 'Usuario o contraseña incorrectos.';
         return;
       }
@@ -2233,38 +2234,22 @@
       const idFinal = (data.id || id).toString().toUpperCase();
 
       if(tipo === 'RENTING'){
-        if(useLogin){
-          msg.className = 'login-msg ok';
-        }else{
-          msg.className = 'status ok';
-        }
+        msg.className = useLogin ? 'login-msg ok' : 'status ok';
         msg.textContent = 'Acceso concedido. Abriendo tu panel...';
         if(!useLogin){ cerrarModal('modalInversiones'); }
         window.location.href = 'https://portal.radizco.com/logistica/?id=' + encodeURIComponent(idFinal);
       }else if(tipo === 'AFILIADO'){
-        if(useLogin){
-          msg.className = 'login-msg ok';
-        }else{
-          msg.className = 'status ok';
-        }
+        msg.className = useLogin ? 'login-msg ok' : 'status ok';
         msg.textContent = 'Acceso concedido. Abriendo tu portal de inversiones...';
         if(!useLogin){ cerrarModal('modalInversiones'); }
         window.location.href = 'inversiones/?id=' + encodeURIComponent(idFinal);
       }else{
-        if(useLogin){
-          msg.className = 'login-msg error';
-        }else{
-          msg.className = 'status error';
-        }
+        msg.className = useLogin ? 'login-msg error' : 'status error';
         msg.textContent = 'Tipo de usuario no reconocido para este ID.';
       }
     }catch(e){
       console.error(e);
-      if(useLogin){
-        msg.className = 'login-msg error';
-      }else{
-        msg.className = 'status error';
-      }
+      msg.className = useLogin ? 'login-msg error' : 'status error';
       msg.textContent = 'Error al iniciar sesión. Intenta de nuevo.';
     }
   }
