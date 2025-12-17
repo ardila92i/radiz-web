@@ -969,6 +969,25 @@
     </div>
   </div>
 
+  <!-- VISOR PDF (MODAL) -->
+<div class="modal-backdrop" id="modalPdfViewer">
+  <div class="modal" style="max-width:920px;width:94%;padding:14px 14px 12px;">
+    <div class="modal-header" style="margin-bottom:10px;">
+      <h3 id="pdfTitle" style="margin:0;">Documento</h3>
+      <button class="modal-close" type="button" onclick="cerrarModalPdf()">&times;</button>
+    </div>
+
+    <div style="width:100%;height:min(72vh,720px);border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+      <iframe id="pdfFrame" title="PDF"
+              style="width:100%;height:100%;border:0;background:#fff;"></iframe>
+    </div>
+
+    <div class="modal-actions" style="margin-top:10px;">
+      <button type="button" onclick="cerrarModalPdf()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
   <!-- MODAL: PAGO POR QR (igual al portal principal) -->
   <div class="modal-backdrop" id="modalQR">
     <div class="modal">
