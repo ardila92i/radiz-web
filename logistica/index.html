@@ -2018,66 +2018,40 @@ function cerrarModalPdf(){
     }
   }
 
-  async function descargarHistorialPdf(){
-    const idInput = document.getElementById('idHistorial');
-    const msg = document.getElementById('historialMsg');
-    const id = (idInput.value || '').trim().toUpperCase();
+ async function descargarHistorialPdf(){
+  const idInput = document.getElementById('idHistorial');
+  const msg = document.getElementById('historialMsg');
+  const id = (idInput.value || '').trim().toUpperCase();
 
-    msg.style.color='#6b7280';
-    msg.textContent='Generando historial...';
+  msg.style.color='#6b7280';
+  msg.textContent='Generando PDF...';
 
-    if(!id){
+  if(!id){
+    msg.style.color='#b91c1c';
+    msg.textContent='Debes ingresar tu ID de contrato.';
+    return;
+  }
+
+  try{
+    const resp = await fetch(API_URL + '?accion=historial_pagos_pdf&id=' + encodeURIComponent(id));
+    const data = await resp.json();
+
+    if(!data.ok || !data.url){
       msg.style.color='#b91c1c';
-      msg.textContent='Debes ingresar tu ID de contrato.';
+      msg.textContent = (data && data.error) ? data.error : 'No fue posible generar el PDF.';
       return;
     }
 
-    try{
-      const resp = await fetch(API_URL+'?accion=historial_pagos&id='+encodeURIComponent(id));
-      const data = await resp.json();
+    msg.style.color='#065f46';
+    msg.textContent='Listo. Abriendo PDF...';
 
-      if(!data.ok){
-        msg.style.color='#b91c1c';
-        msg.textContent=data.error || 'No se encontró información de pagos para ese ID.';
-        return;
-      }
+    abrirModalPdf('Historial de pagos ' + id, data.url);
 
-      const pagos = Array.isArray(data.pagos) ? data.pagos : [];
-      if(pagos.length === 0){
-        msg.style.color='#b91c1c';
-        msg.textContent='No hay pagos registrados para este contrato.';
-        return;
-      }
-
-      const placa = data.placa || '';
-
-      const filasHtml = pagos.map(function(p){
-        const fecha = p.fecha || '';
-        const consecutivo = p.consecutivo || '';
-        const cliente = p.cliente || '';
-        const notas = p.notas || '';
-        const pagadas = (p.pagadas !== null && p.pagadas !== undefined) ? p.pagadas : '';
-        const vencidas = (p.vencidas !== null && p.vencidas !== undefined) ? p.vencidas : '';
-        var valorNum = Number(p.valor||0);
-        var valorStr = isNaN(valorNum)
-          ? (p.valor || '')
-          : valorNum.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
-        return '<tr>'+
-          '<td>'+escapeHtml(fecha)+'</td>'+
-          '<td>'+escapeHtml(consecutivo)+'</td>'+
-          '<td>'+escapeHtml(cliente)+'</td>'+
-          '<td style="text-align:right">'+escapeHtml(valorStr)+'</td>'+
-          '<td>'+escapeHtml(notas)+'</td>'+
-          '<td style="text-align:center">'+escapeHtml(pagadas)+'</td>'+
-          '<td style="text-align:center">'+escapeHtml(vencidas)+'</td>'+
-        '</tr>';
-      }).join('');
-
-      const nuevaVentana = window.open('', '_blank');
-      if(!nuevaVentana){
-        msg.style.color='#b91c1c';
-        msg.textContent='El navegador bloqueó la ventana emergente. Habilítala para descargar el PDF.';
-        return;
+  }catch(e){
+    console.error(e);
+    msg.style.color='#b91c1c';
+    msg.textContent='Error al generar el PDF. Intenta de nuevo.';
+  }
       }
 
       const html = `
