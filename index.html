@@ -30,6 +30,147 @@
       color:#111827;
     }
 
+    /* =========================
+       NUEVA PANTALLA PRINCIPAL
+       Estilo tipo Lulo (login)
+       ========================= */
+    .login-screen{
+      position:relative;
+      min-height:100vh;
+      width:100%;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px 16px;
+      background:#0f172a;
+    }
+    .login-bg{
+      position:absolute;
+      inset:0;
+      background-image:url('radiz-driver.jpg.jpg');
+      background-size:cover;
+      background-position:center;
+      transform:scale(1.02);
+      filter:saturate(1.02) contrast(1.02);
+    }
+    .login-overlay{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(
+        180deg,
+        rgba(15,23,42,.35) 0%,
+        rgba(15,23,42,.65) 55%,
+        rgba(15,23,42,.85) 100%
+      );
+    }
+    .login-content{
+      position:relative;
+      z-index:2;
+      width:100%;
+      max-width:460px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+      gap:14px;
+      padding:18px 14px 16px;
+    }
+    .login-logo{
+      margin-top:8px;
+      margin-bottom:2px;
+    }
+    .login-logo img{
+      width:72px;
+      height:72px;
+      object-fit:contain;
+      border-radius:16px;
+      box-shadow:0 16px 40px rgba(0,0,0,.35);
+      background:rgba(255,255,255,.08);
+      padding:10px;
+    }
+    .login-welcome{
+      margin:6px 0 0;
+      font-size:1.55rem;
+      line-height:1.15;
+      font-weight:800;
+      color:#ffffff;
+      letter-spacing:.02em;
+      text-shadow:0 10px 26px rgba(0,0,0,.35);
+      transform:translateY(-6px); /* (3) un poco más arriba */
+    }
+
+    .login-form{
+      width:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:10px;
+      margin-top:24px; /* (2) campos + botón un poco más abajo */
+    }
+
+    /* Campos más pequeños (no a todo el ancho del teléfono) */
+    .login-input{
+      width:min(360px, 86vw);
+      border:none;
+      outline:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-size:1rem;
+      color:#0f172a;
+      box-shadow:0 18px 45px rgba(0,0,0,.22);
+    }
+    .login-input::placeholder{
+      color:rgba(15,23,42,.6);
+    }
+
+    /* Usuario (AZUL) */
+    #loginId{
+      background:rgba(37,99,235,.92);
+      color:#ffffff;
+    }
+    #loginId::placeholder{ color:rgba(255,255,255,.8); }
+
+    /* Contraseña (NARANJA) */
+    #loginPassword{
+      background:rgba(249,115,22,.92);
+      color:#ffffff;
+    }
+    #loginPassword::placeholder{ color:rgba(255,255,255,.85); }
+
+    .login-btn{
+      width:min(360px, 86vw);
+      border:none;
+      border-radius:16px;
+      padding:12px 14px;
+      font-size:1rem;
+      font-weight:800;
+      cursor:pointer;
+      background:rgba(255,255,255,.88);
+      color:#0f172a;
+      box-shadow:0 18px 45px rgba(0,0,0,.25);
+      transition:transform .1s, box-shadow .1s, background .1s;
+    }
+    .login-btn:hover{
+      transform:translateY(-1px);
+      background:#ffffff;
+      box-shadow:0 22px 55px rgba(0,0,0,.28);
+    }
+
+    .login-msg{
+      width:min(360px, 86vw);
+      min-height:1.2em;
+      font-size:.92rem;
+      color:#ffffff;
+      text-shadow:0 10px 26px rgba(0,0,0,.35);
+      opacity:.95;
+    }
+    .login-msg.error{ color:#fecaca; }
+    .login-msg.ok{ color:#bbf7d0; }
+
+    /* =========================
+       PORTAL EXISTENTE (se conserva)
+       ========================= */
     .page{
       min-height:100vh;
       display:flex;
@@ -703,157 +844,35 @@
         width:100%;
       }
     }
-
-    /* =========================================================
-       LOGIN (estilo Lulo) - solo para el modal #modalInversiones
-       ========================================================= */
-    #modalInversiones{
-      background:transparent;
-      padding:0;
-    }
-    #modalInversiones .login-screen{
-      position:fixed;
-      inset:0;
-      width:100%;
-      height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:22px 18px calc(22px + env(safe-area-inset-bottom));
-      overflow:hidden;
-    }
-    #modalInversiones .login-screen::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(to bottom, rgba(15,23,42,.35), rgba(15,23,42,.78)),
-        url('radiz-driver.jpg.jpg');
-      background-size:cover;
-      background-position:center;
-      transform:scale(1.03);
-    }
-    #modalInversiones .login-content{
-      position:relative;
-      width:100%;
-      max-width:420px;
-      text-align:center;
-      color:#fff;
-    }
-    #modalInversiones .login-top{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      position:relative;
-      margin-bottom:14px;
-    }
-    #modalInversiones .login-close{
-      position:absolute;
-      right:0;
-      top:0;
-      width:38px;
-      height:38px;
-      border:none;
-      border-radius:12px;
-      cursor:pointer;
-      background:rgba(255,255,255,.14);
-      color:#fff;
-      font-size:20px;
-      line-height:1;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-    }
-    #modalInversiones .login-logo{
-      display:flex;
-      justify-content:center;
-      margin-top:2px;
-    }
-    #modalInversiones .login-logo img{
-      width:44px;
-      height:44px;
-      object-fit:contain;
-      border-radius:14px;
-      background:rgba(255,255,255,.12);
-      padding:8px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow:0 10px 26px rgba(0,0,0,.28);
-    }
-    #modalInversiones .login-hello{
-      margin:0 0 14px;
-      font-size:26px; /* más pequeño */
-      line-height:1.08;
-      font-weight:800;
-      letter-spacing:-0.02em;
-      text-shadow:0 10px 30px rgba(0,0,0,.45);
-    }
-    #modalInversiones .login-form{
-      margin:0 auto;
-      width:100%;
-      max-width:360px;
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      align-items:center;
-    }
-    #modalInversiones .login-input{
-      width:min(320px, 84vw); /* más pequeño, no ocupa toda la pantalla */
-      padding:12px 12px;
-      border-radius:14px;
-      border:2px solid rgba(255,255,255,.22);
-      background:rgba(255,255,255,.08);
-      color:#fff;
-      outline:none;
-      font-size:15px;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow:0 10px 24px rgba(0,0,0,.18);
-    }
-    #modalInversiones .login-input::placeholder{ color:rgba(255,255,255,.70); }
-    #modalInversiones .login-input.user{ border-color:rgba(37,99,235,.90); }   /* azul */
-    #modalInversiones .login-input.pass{ border-color:rgba(249,115,22,.92); }  /* naranja */
-
-    #modalInversiones .login-btn{
-      width:min(320px, 84vw);
-      padding:12px 16px;
-      border:none;
-      border-radius:14px;
-      background:#2563eb;
-      color:#fff;
-      font-weight:800;
-      font-size:15px;
-      cursor:pointer;
-      box-shadow:0 14px 30px rgba(37,99,235,.42);
-      margin-top:2px;
-    }
-    #modalInversiones .login-btn:hover{
-      transform:translateY(-1px);
-      background:#1d4ed8;
-      box-shadow:0 16px 34px rgba(29,78,216,.5);
-    }
-    #modalInversiones .login-btn:active{ transform:translateY(1px); }
-
-    #modalInversiones #invLoginMsg{
-      width:min(320px, 84vw);
-      margin:2px auto 0;
-      text-align:left;
-      min-height:18px;
-      font-size:13px;
-      color:#fff;
-      text-shadow:0 10px 24px rgba(0,0,0,.35);
-    }
-
-    #modalInversiones .login-foot{
-      width:min(320px, 84vw);
-      margin:10px auto 0;
-      font-size:12px;
-      color:rgba(255,255,255,.78);
-      text-align:center;
-      text-shadow:0 10px 24px rgba(0,0,0,.30);
-    }
   </style>
 </head>
 <body>
+
+<!-- PANTALLA PRINCIPAL TIPO LULO (RADIZ) -->
+<section class="login-screen">
+  <div class="login-bg"></div>
+  <div class="login-overlay"></div>
+
+  <div class="login-content">
+    <!-- (1) Logo pequeño (ícono) -->
+    <div class="login-logo">
+      <img src="icon-152.png" alt="RADIZ">
+    </div>
+
+    <h1 class="login-welcome">¡Buenas buenas!</h1>
+
+    <form class="login-form" onsubmit="event.preventDefault(); loginInversiones('login');">
+      <input class="login-input" type="text" id="loginId" placeholder="Usuario (Ej: R7467)" autocomplete="username">
+      <input class="login-input" type="password" id="loginPassword" placeholder="Contraseña" autocomplete="current-password">
+      <button type="submit" class="login-btn">Entrar</button>
+      <div id="loginMsg" class="login-msg"></div>
+    </form>
+  </div>
+</section>
+
+<!-- ===============================
+     PORTAL EXISTENTE (SE CONSERVA)
+     =============================== -->
 <div class="page">
   <div class="container">
     <div class="logo-top">
@@ -938,7 +957,7 @@
             <div class="section-icon section-icon-search"></div>
             <span>Consulta de contrato</span>
           </div>
-          
+
           <label for="idContrato">ID</label>
           <div class="row-consulta">
             <input type="text" id="idContrato" placeholder="Ejemplo: R4523">
@@ -959,7 +978,7 @@
           <div class="row-pago">
             <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
           </div>
-          
+
           <!-- fila de botones lado a lado -->
           <div class="row-pago row-pago-botones">
             <button type="button" class="btn-main btn-pago" onclick="crearPagoWompi()">Pagar con Wompi</button>
@@ -1108,31 +1127,28 @@
   </div>
 </div>
 
-<!-- MODAL: INICIAR SESIÓN (estilo Lulo - mantiene el mismo flujo loginInversiones) -->
+<!-- MODAL: INICIAR SESIÓN (se conserva) -->
 <div class="modal-backdrop" id="modalInversiones">
-  <div class="login-screen">
-    <div class="login-content">
-      <div class="login-top">
-        <div class="login-logo">
-          <img src="icon-152.png" alt="RADIZ">
-        </div>
-        <button class="login-close" type="button" onclick="cerrarModal('modalInversiones')">&times;</button>
-      </div>
-
-      <h1 class="login-hello">¡Buenas buenas!</h1>
-
-      <div class="login-form">
-        <input type="text" id="invId" class="login-input user" placeholder="Usuario (Ej: R7467 o A0016)" autocomplete="username" autocapitalize="characters">
-        <input type="password" id="invPassword" class="login-input pass" placeholder="Contraseña" autocomplete="current-password">
-        <p id="invLoginMsg" class="status"></p>
-        <button type="button" class="login-btn" onclick="loginInversiones()">Entrar</button>
-
-        <div class="login-foot">
-          ¿Olvidó su contraseña? Escríbanos a
-          <a href="mailto:notificacionespi45@gmail.com" style="color:#bfdbfe;text-decoration:underline;">notificacionespi45@gmail.com</a>
-        </div>
-      </div>
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Iniciar sesión</h3>
+      <button class="modal-close" type="button" onclick="cerrarModal('modalInversiones')">&times;</button>
     </div>
+    <p>Ingrese su ID y contraseña para acceder a su portal.</p>
+    <label for="invId">ID</label>
+    <input type="text" id="invId" placeholder="Ej: R4523">
+    <label for="invPassword">Contraseña</label>
+    <input type="password" id="invPassword" placeholder="Tu contraseña">
+    <p id="invLoginMsg" class="status"></p>
+    <div class="modal-actions">
+      <button type="button" onclick="cerrarModal('modalInversiones')">Cerrar</button>
+      <button type="button" onclick="loginInversiones()">Entrar</button>
+    </div>
+    <p style="font-size:.8rem;margin-top:8px;color:#6b7280;">
+      ¿Olvidó su contraseña? Escríbanos a
+      <a href="mailto:notificacionespi45@gmail.com">notificacionespi45@gmail.com</a>
+      con el asunto "Reasignar contraseña".
+    </p>
   </div>
 </div>
 
@@ -1270,11 +1286,11 @@
   let datosContratoActual=null;
   let datosAfiliadoActual=null;
 
-  // Guardar usuario en el mismo teléfono (solo ID)
-  const LS_RADIZ_USER_KEY = 'RADIZ_SAVED_USER';
+  // Guardar usuario en el mismo dispositivo (pantalla tipo Lulo)
+  const RADIZ_USER_KEY = 'radiz_usuario_guardado';
 
-  // Estado inicial del menú: mostrar menú inicial siempre
   document.addEventListener('DOMContentLoaded', function(){
+    // Estado inicial del menú: mostrar menú inicial siempre
     const fabMenu=document.getElementById('fabMenu');
     const menuInicial=document.getElementById('menuInicial');
     const menuRenting=document.getElementById('menuRenting');
@@ -1285,12 +1301,12 @@
     if(menuRenting){ menuRenting.style.display='none'; }
     if(menuAfiliado){ menuAfiliado.style.display='none'; }
 
-    // Prefill del usuario guardado (modal login)
+    // Prefill usuario guardado en login principal
     try{
-      const saved = localStorage.getItem(LS_RADIZ_USER_KEY);
-      const invId = document.getElementById('invId');
-      if(saved && invId && !invId.value){
-        invId.value = String(saved).toUpperCase();
+      const saved = localStorage.getItem(RADIZ_USER_KEY) || '';
+      const loginId = document.getElementById('loginId');
+      if(loginId && saved){
+        loginId.value = saved;
       }
     }catch(e){}
   });
@@ -1305,19 +1321,6 @@
     if(menu) menu.style.display='none';
     if(id === 'modalHistorialPagos'){
       prepararModalHistorial();
-    }
-    if(id === 'modalInversiones'){
-      try{
-        const saved = localStorage.getItem(LS_RADIZ_USER_KEY);
-        const invId = document.getElementById('invId');
-        const invPass = document.getElementById('invPassword');
-        const msg = document.getElementById('invLoginMsg');
-
-        if(msg){ msg.textContent=''; msg.className='status'; }
-        if(saved && invId && !invId.value){ invId.value = String(saved).toUpperCase(); }
-        if(invPass){ invPass.value=''; }
-        if(invId){ setTimeout(()=>invId.focus(), 60); }
-      }catch(e){}
     }
   }
   function cerrarModal(id){
@@ -2158,14 +2161,31 @@
   }
 
   /* --------- Login unificado (renting + inversiones) --------- */
-  async function loginInversiones(){
-    const idInput = document.getElementById('invId');
-    const passInput = document.getElementById('invPassword');
-    const msg = document.getElementById('invLoginMsg');
+  async function loginInversiones(origen){
+    const useLogin = (origen === 'login');
+
+    // Pantalla principal tipo Lulo
+    const idLogin = document.getElementById('loginId');
+    const passLogin = document.getElementById('loginPassword');
+    const msgLogin = document.getElementById('loginMsg');
+
+    // Modal existente (se conserva)
+    const idModal = document.getElementById('invId');
+    const passModal = document.getElementById('invPassword');
+    const msgModal = document.getElementById('invLoginMsg');
+
+    const idInput = useLogin ? idLogin : idModal;
+    const passInput = useLogin ? passLogin : passModal;
+    const msg = useLogin ? msgLogin : msgModal;
 
     if(!idInput || !passInput || !msg) return;
 
-    msg.className = 'status';
+    // Mensaje estilo login principal
+    if(useLogin){
+      msg.className = 'login-msg';
+    }else{
+      msg.className = 'status';
+    }
     msg.textContent = '';
 
     const idRaw = (idInput.value || '').trim();
@@ -2179,7 +2199,11 @@
 
     const id = idRaw.toUpperCase();
 
-    msg.className = 'status';
+    // Guardar usuario (mismo teléfono)
+    try{
+      localStorage.setItem(RADIZ_USER_KEY, id);
+    }catch(e){}
+
     msg.textContent = 'Verificando credenciales...';
 
     try{
@@ -2196,7 +2220,11 @@
       const data = await resp.json();
 
       if(!data.ok){
-        msg.className = 'status error';
+        if(useLogin){
+          msg.className = 'login-msg error';
+        }else{
+          msg.className = 'status error';
+        }
         msg.textContent = data.error || 'Usuario o contraseña incorrectos.';
         return;
       }
@@ -2204,26 +2232,39 @@
       const tipo = (data.tipo || '').toString().toUpperCase();
       const idFinal = (data.id || id).toString().toUpperCase();
 
-      // Guardar usuario (no guarda contraseña)
-      try{ localStorage.setItem(LS_RADIZ_USER_KEY, idFinal); }catch(e){}
-
       if(tipo === 'RENTING'){
-        msg.className = 'status ok';
+        if(useLogin){
+          msg.className = 'login-msg ok';
+        }else{
+          msg.className = 'status ok';
+        }
         msg.textContent = 'Acceso concedido. Abriendo tu panel...';
-        cerrarModal('modalInversiones');
+        if(!useLogin){ cerrarModal('modalInversiones'); }
         window.location.href = 'https://portal.radizco.com/logistica/?id=' + encodeURIComponent(idFinal);
       }else if(tipo === 'AFILIADO'){
-        msg.className = 'status ok';
+        if(useLogin){
+          msg.className = 'login-msg ok';
+        }else{
+          msg.className = 'status ok';
+        }
         msg.textContent = 'Acceso concedido. Abriendo tu portal de inversiones...';
-        cerrarModal('modalInversiones');
+        if(!useLogin){ cerrarModal('modalInversiones'); }
         window.location.href = 'inversiones/?id=' + encodeURIComponent(idFinal);
       }else{
-        msg.className = 'status error';
+        if(useLogin){
+          msg.className = 'login-msg error';
+        }else{
+          msg.className = 'status error';
+        }
         msg.textContent = 'Tipo de usuario no reconocido para este ID.';
       }
     }catch(e){
       console.error(e);
-      msg.className = 'status error';
+      if(useLogin){
+        msg.className = 'login-msg error';
+      }else{
+        msg.className = 'status error';
+      }
       msg.textContent = 'Error al iniciar sesión. Intenta de nuevo.';
     }
   }
