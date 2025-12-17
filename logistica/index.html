@@ -970,23 +970,23 @@
   </div>
 
   <!-- VISOR PDF (MODAL) -->
-<div class="modal-backdrop" id="modalPdfViewer">
-  <div class="modal" style="max-width:920px;width:94%;padding:14px 14px 12px;">
-    <div class="modal-header" style="margin-bottom:10px;">
-      <h3 id="pdfTitle" style="margin:0;">Documento</h3>
-      <button class="modal-close" type="button" onclick="cerrarModalPdf()">&times;</button>
-    </div>
+  <div class="modal-backdrop" id="modalPdfViewer">
+    <div class="modal" style="max-width:920px;width:94%;padding:14px 14px 12px;">
+      <div class="modal-header" style="margin-bottom:10px;">
+        <h3 id="pdfTitle" style="margin:0;">Documento</h3>
+        <button class="modal-close" type="button" onclick="cerrarModalPdf()">&times;</button>
+      </div>
 
-    <div style="width:100%;height:min(72vh,720px);border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
-      <iframe id="pdfFrame" title="PDF"
-              style="width:100%;height:100%;border:0;background:#fff;"></iframe>
-    </div>
+      <div style="width:100%;height:min(72vh,720px);border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
+        <iframe id="pdfFrame" title="PDF"
+                style="width:100%;height:100%;border:0;background:#fff;"></iframe>
+      </div>
 
-    <div class="modal-actions" style="margin-top:10px;">
-      <button type="button" onclick="cerrarModalPdf()">Cerrar</button>
+      <div class="modal-actions" style="margin-top:10px;">
+        <button type="button" onclick="cerrarModalPdf()">Cerrar</button>
+      </div>
     </div>
   </div>
-</div>
 
   <!-- MODAL: PAGO POR QR (igual al portal principal) -->
   <div class="modal-backdrop" id="modalQR">
@@ -1335,6 +1335,25 @@
     }
   }
 
+  /* ✅ Visor PDF (modal) */
+  function abrirModalPdf(titulo, urlPdf){
+    const modal = document.getElementById('modalPdfViewer');
+    const frame = document.getElementById('pdfFrame');
+    const title = document.getElementById('pdfTitle');
+
+    if(title) title.textContent = titulo || 'Documento';
+    if(frame) frame.src = urlPdf || '';
+    if(modal) modal.style.display = 'flex';
+  }
+
+  function cerrarModalPdf(){
+    const modal = document.getElementById('modalPdfViewer');
+    const frame = document.getElementById('pdfFrame');
+
+    if(frame) frame.src = 'about:blank';
+    if(modal) modal.style.display = 'none';
+  }
+
   /* Bottom sheet */
   function abrirSheetMenu(){
     const bd = document.getElementById('sheetBackdrop');
@@ -1414,24 +1433,8 @@
           hello.innerHTML = 'Hola, <span class="hello-name">' + escapeHtml(nombre) + '</span>';
         }else{
           hello.textContent = 'Hola';
-
-      function abrirModalPdf(titulo, urlPdf){
-  const modal = document.getElementById('modalPdfViewer');
-  const frame = document.getElementById('pdfFrame');
-  const title = document.getElementById('pdfTitle');
-
-  if(title) title.textContent = titulo || 'Documento';
-  if(frame) frame.src = urlPdf || '';
-  if(modal) modal.style.display = 'flex';
-}
-
-function cerrarModalPdf(){
-  const modal = document.getElementById('modalPdfViewer');
-  const frame = document.getElementById('pdfFrame');
-
-  if(frame) frame.src = 'about:blank';
-  if(modal) modal.style.display = 'none';
-}
+        }
+      }
 
       // Perfil (se conserva)
       const placa = c['ID VEHÍCULO'] || c['ID VEHICULO'] || '';
@@ -2018,92 +2021,39 @@ function cerrarModalPdf(){
     }
   }
 
- async function descargarHistorialPdf(){
-  const idInput = document.getElementById('idHistorial');
-  const msg = document.getElementById('historialMsg');
-  const id = (idInput.value || '').trim().toUpperCase();
+  async function descargarHistorialPdf(){
+    const idInput = document.getElementById('idHistorial');
+    const msg = document.getElementById('historialMsg');
+    const id = (idInput.value || '').trim().toUpperCase();
 
-  msg.style.color='#6b7280';
-  msg.textContent='Generando PDF...';
+    msg.style.color='#6b7280';
+    msg.textContent='Generando PDF...';
 
-  if(!id){
-    msg.style.color='#b91c1c';
-    msg.textContent='Debes ingresar tu ID de contrato.';
-    return;
-  }
-
-  try{
-    const resp = await fetch(API_URL + '?accion=historial_pagos_pdf&id=' + encodeURIComponent(id));
-    const data = await resp.json();
-
-    if(!data.ok || !data.url){
+    if(!id){
       msg.style.color='#b91c1c';
-      msg.textContent = (data && data.error) ? data.error : 'No fue posible generar el PDF.';
+      msg.textContent='Debes ingresar tu ID de contrato.';
       return;
     }
 
-    msg.style.color='#065f46';
-    msg.textContent='Listo. Abriendo PDF...';
+    try{
+      const resp = await fetch(API_URL + '?accion=historial_pagos_pdf&id=' + encodeURIComponent(id));
+      const data = await resp.json();
 
-    abrirModalPdf('Historial de pagos ' + id, data.url);
-
-  }catch(e){
-    console.error(e);
-    msg.style.color='#b91c1c';
-    msg.textContent='Error al generar el PDF. Intenta de nuevo.';
-  }
+      if(!data.ok || !data.url){
+        msg.style.color='#b91c1c';
+        msg.textContent = (data && data.error) ? data.error : 'No fue posible generar el PDF.';
+        return;
       }
 
-      const html = `
-      <!DOCTYPE html>
-      <html lang="es">
-      <head>
-        <meta charset="UTF-8" />
-        <title>Historial de pagos ${escapeHtml(id)}</title>
-        <style>
-          body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:24px;color:#111827;}
-          h1{font-size:20px;margin-bottom:4px;}
-          p{font-size:12px;margin:2px 0 10px;}
-          table{width:100%;border-collapse:collapse;font-size:11px;margin-top:10px;}
-          th,td{border:1px solid #d1d5db;padding:4px 6px;}
-          th{background:#eff6ff;text-align:left;}
-        </style>
-      </head>
-      <body>
-        <h1>Historial de pagos</h1>
-        <p><strong>Contrato:</strong> ${escapeHtml(id)}</p>
-        <p><strong>Vehículo / CC:</strong> ${escapeHtml(placa)}</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Fecha</th>
-              <th>Consecutivo</th>
-              <th>Cliente</th>
-              <th>Valor</th>
-              <th>Notas</th>
-              <th>Pagadas</th>
-              <th>Vencidas</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${filasHtml}
-          </tbody>
-        </table>
-        <script>
-          window.onload = function(){ window.print(); };
-        <\/script>
-      </body>
-      </html>
-      `;
-      nuevaVentana.document.write(html);
-      nuevaVentana.document.close();
-
       msg.style.color='#065f46';
-      msg.textContent='Historial generado. Se abrió una ventana de impresión para guardar en PDF.';
+      msg.textContent='Listo. Abriendo PDF...';
+
+      abrirModalPdf('Historial de pagos ' + id, data.url);
+
     }catch(e){
       console.error(e);
       msg.style.color='#b91c1c';
-      msg.textContent='Error al generar el historial. Intenta de nuevo.';
+      msg.textContent='Error al generar el PDF. Intenta de nuevo.';
     }
   }
 
