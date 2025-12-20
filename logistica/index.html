@@ -1650,15 +1650,16 @@
           mini.className = 'turno-mini';
           mini.onclick = function(){
             abrirDetalleTurno({
-              idTurno: idTurno,
-              empresa: empresa,
-              direccion: direccion,
-              fecha: fecha,
-              hora: hora,
-              ciudad: ciudad,
-              dias: dias,
-              pago: pagoEstimado
-            });
+  idTurno: idTurno,
+  empresa: empresa,
+  direccion: direccion,
+  fecha: fecha,
+  hora: hora,
+  ciudad: ciudad,
+  dias: dias,
+  pago: pagoEstimado,
+  logoUrl: logoUrl // ✅ nuevo
+});
           };
 
           mini.innerHTML = `
