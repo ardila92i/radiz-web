@@ -1518,11 +1518,11 @@
         const esRentingId = idContratoActual.startsWith('R');
 
         const modalBeneficios=document.getElementById('modalBeneficiosTexto');
-        if(esRentingId){
-          modalBeneficios.innerHTML=
-            '<img src="beneficios_renting.png" alt="Beneficios Renting Radiz" class="img-beneficios-renting">';
-        }else{
-          modalBeneficios.textContent=beneficiosTexto||'Información no disponible.';
+if(esRentingId){
+  modalBeneficios.innerHTML =
+    '<img src="../beneficios_renting.png" alt="Beneficios Renting Radiz" class="img-beneficios-renting">';
+}else{
+  modalBeneficios.textContent = beneficiosTexto || 'Información no disponible.';
         }
 
         const tallerEjemplo='Taller asignado: '+(mts[0]?.['TALLER ASIGNADO']||'Información no disponible.');
