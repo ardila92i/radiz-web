@@ -1630,9 +1630,10 @@
         turnos.forEach(function(t){
           const idTurno =
             t.id_turno || t.idTurno || t.ID_TURNO || t['ID TURNO'] || t.codigo || t.codigo_turno || 'TURNO';
-
+      
           const empresa =
             (t.empresa || t.cliente || t.CLIENTE || 'Cruz Verde').toString().trim() || 'Cruz Verde';
+          const logoUrl = obtenerLogoPorEmpresa(empresa);
 
           const direccion = t.direccion || t.DIRECCION || t['DIRECCIÓN'] || '';
           const fecha = t.fecha || t.FECHA || '';
