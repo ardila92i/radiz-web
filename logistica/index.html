@@ -1406,6 +1406,14 @@
     const partes = s.split(' ').filter(Boolean);
     return partes[0] || '';
   }
+  function obtenerLogoPorEmpresa(empresa){
+  const key = String(empresa || '').trim().toUpperCase();
+
+  // ✅ EJEMPLO: Cruz Verde
+  if(key === 'CRUZ VERDE') return '/logos/cruz-verde.png';
+
+  return '';
+}
 
   /* ===== Contrato + saludo ===== */
   async function cargarContratoYSaludo(id){
