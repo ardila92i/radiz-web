@@ -1662,9 +1662,12 @@
           };
 
           mini.innerHTML = `
-            <div class="img-placeholder" title="Tocar para ampliar">
-              <div class="img-hint">Ver</div>
-            </div>
+            <div class="img-placeholder ${logoUrl ? 'has-img' : ''}" title="Tocar para ampliar">
+  ${logoUrl
+    ? `<img class="turno-logo" src="${escapeHtml(logoUrl)}" alt="Logo ${escapeHtml(empresa)}">`
+    : `<div class="img-hint">Ver</div>`
+  }
+</div>
             <div class="turno-info">
               <div class="turno-topline">
                 <div class="dot-green"></div>
