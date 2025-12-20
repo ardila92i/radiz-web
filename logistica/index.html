@@ -1584,10 +1584,42 @@
     const esRenting = id.startsWith('R');
 
     if(esRenting){
-      el.innerHTML = '<img src="beneficios_renting.png" alt="Beneficios Renting Radiz" style="max-width:100%;height:auto;border-radius:12px;display:block;margin:6px auto;">';
-    }else{
-      el.textContent = beneficiosTexto || 'Información no disponible.';
+  el.innerHTML = '';
+  const img = document.createElement('img');
+  img.alt = 'Beneficios Renting Radiz';
+  img.style.maxWidth = '100%';
+  img.style.height = 'auto';
+  img.style.borderRadius = '12px';
+  img.style.display = 'block';
+  img.style.margin = '6px auto';
+
+  // ✅ Intentos en orden (misma carpeta, ./, carpeta logistica, raíz)
+  // + cache-bust para evitar que el navegador muestre una versión vieja rota
+  const v = Date.now();
+  const candidates = [
+    `beneficios_renting.png?v=${v}`,
+    `./beneficios_renting.png?v=${v}`,
+    `/logistica/beneficios_renting.png?v=${v}`,
+    `/beneficios_renting.png?v=${v}`
+  ];
+
+  let i = 0;
+  const tryNext = () => {
+    if(i >= candidates.length){
+      // si falla todo, deja el alt visible
+      console.warn('No se pudo cargar beneficios_renting.png. Rutas probadas:', candidates);
+      return;
     }
+    img.src = candidates[i++];
+  };
+
+  img.onerror = () => tryNext();
+  tryNext();
+
+  el.appendChild(img);
+}else{
+  el.textContent = beneficiosTexto || 'Información no disponible.';
+}
   }
 
   function prepararModalTaller(){
