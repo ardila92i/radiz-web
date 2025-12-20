@@ -1409,8 +1409,8 @@
   function obtenerLogoPorEmpresa(empresa){
   const key = String(empresa || '').trim().toUpperCase();
 
-  // ✅ EJEMPLO: Cruz Verde
-  if(key === 'CRUZ VERDE') return '/logos/cruz-verde.png';
+  // ✅ Cruz Verde (archivo real en /logistica/)
+  if(key === 'CRUZ VERDE') return 'logoscruz-verde.png';
 
   return '';
 }
