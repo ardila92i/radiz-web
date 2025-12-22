@@ -410,8 +410,6 @@
       justify-content:center;
       z-index:40;
       padding:18px;
-      #modalPdfViewer{ z-index: 60; }
-
     }
     .modal{
       background:#fff;
@@ -692,6 +690,9 @@
       display:block;
       padding:10px; /* aire para que el logo no quede pegado */
     }
+
+    /* ✅ FIX: que el visor PDF quede SIEMPRE por encima */
+    #modalPdfViewer{ z-index: 60; }
   </style>
 </head>
 
@@ -1358,7 +1359,11 @@
     }
   }
 
-    function abrirModalPdf(titulo, payload){
+  /* ✅ Visor PDF (modal) */
+  function abrirModalPdf(titulo, urlPdf){
+    // ✅ cierra el modal anterior de historial (evita quedar "atrás")
+    try{ cerrarModal('modalHistorialPagos'); }catch(e){}
+
     const modal = document.getElementById('modalPdfViewer');
     const frame = document.getElementById('pdfFrame');
     const title = document.getElementById('pdfTitle');
@@ -1366,32 +1371,35 @@
 
     if(title) title.textContent = titulo || 'Documento';
 
-    let url = '';
-    let html = '';
-
-    if(typeof payload === 'string'){
-      url = payload || '';
-    }else if(payload && typeof payload === 'object'){
-      url = payload.url || '';
-      html = payload.html || '';
-    }
-
-    ultimoPdfUrlAbierto = url || '';
+    ultimoPdfUrlAbierto = urlPdf || '';
     if(btnTab){
       btnTab.style.display = ultimoPdfUrlAbierto ? 'inline-flex' : 'none';
     }
 
-    if(frame){
-      if(html){
-        frame.removeAttribute('src');
-        frame.srcdoc = html;
-      }else{
-        frame.srcdoc = '';
-        frame.src = url || '';
-      }
+    if(frame) frame.src = ultimoPdfUrlAbierto || '';
+    if(modal){
+      modal.style.zIndex = '60';
+      modal.style.display = 'flex';
     }
+  }
 
-    if(modal) modal.style.display = 'flex';
+  function cerrarModalPdf(){
+    const modal = document.getElementById('modalPdfViewer');
+    const frame = document.getElementById('pdfFrame');
+    const btnTab = document.getElementById('btnPdfNuevaPestana');
+
+    if(frame){
+      frame.srcdoc = '';
+      frame.src = 'about:blank';
+    }
+    if(modal) modal.style.display = 'none';
+    if(btnTab) btnTab.style.display = 'none';
+    ultimoPdfUrlAbierto = '';
+  }
+
+  function abrirPdfEnNuevaPestana(){
+    if(!ultimoPdfUrlAbierto) return;
+    window.open(ultimoPdfUrlAbierto, '_blank');
   }
 
   /* Bottom sheet */
@@ -2274,25 +2282,18 @@
 
     try{
       const res = await obtenerHistorialPdfResponse(id);
-
-      // Si fue vista HTML fallback, igualmente abre en flotante (imprimible)
-            const embedUrl = construirUrlEmbedPdf(res);
+      const embedUrl = construirUrlEmbedPdf(res);
 
       msg.style.color='#065f46';
       msg.textContent = (res.kind === 'vista-html')
         ? 'Listo. Abriendo vista (puedes imprimir/guardar como PDF)...'
         : 'Listo. Abriendo PDF...';
 
-      if (/script\.google\.com/i.test(embedUrl)) {
-        cerrarModal('modalHistorialPagos');
-        const w = window.open(embedUrl, '_blank', 'noopener,noreferrer');
-        if (w) w.focus();
-        return;
-      }
-
+      // ✅ cierra el modal del botón y abre el visor PDF arriba (también en smartphone)
       cerrarModal('modalHistorialPagos');
-      abrirModalPdf('Historial de pagos ' + id, embedUrl);
-
+      setTimeout(function(){
+        abrirModalPdf('Historial de pagos ' + id, embedUrl);
+      }, 50);
 
     }catch(e){
       console.error(e);
@@ -2624,4 +2625,3 @@
 </script>
 </body>
 </html>
-```
