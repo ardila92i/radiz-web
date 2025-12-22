@@ -2355,14 +2355,14 @@
     throw new Error(ultimoError);
   }
 
-  // ✅ Descarga/visualización del PDF para usuario tipo R (FACTURAS_ALEGRA -> Apps Script -> Drive -> visor)
+    // ✅ Ahora: abre HISTORIAL en lista dentro del modal (tipo Claro). PDF queda como opción secundaria (Abrir en nueva pestaña)
   async function descargarHistorialPdf(){
     const idInput = document.getElementById('idHistorial');
     const msg = document.getElementById('historialMsg');
     const id = ((idInput && idInput.value) ? idInput.value : '').trim().toUpperCase();
 
     msg.style.color='#6b7280';
-    msg.textContent='Generando PDF...';
+    msg.textContent='Cargando historial...';
 
     if(!id){
       msg.style.color='#b91c1c';
@@ -2371,24 +2371,28 @@
     }
 
     try{
-      const res = await obtenerHistorialPdfResponse(id);
-      const embedUrl = construirUrlEmbedPdf(res);
+      const resp = await fetch(API_URL + '?accion=historial_pagos&id=' + encodeURIComponent(id));
+      const data = await resp.json();
 
+      if(!data || !data.ok){
+        msg.style.color='#b91c1c';
+        msg.textContent = (data && data.error) ? data.error : 'No fue posible cargar el historial.';
+        return;
+      }
+
+      const pagos = Array.isArray(data.pagos) ? data.pagos : [];
       msg.style.color='#065f46';
-      msg.textContent = (res.kind === 'vista-html')
-        ? 'Listo. Abriendo vista (puedes imprimir/guardar como PDF)...'
-        : 'Listo. Abriendo PDF...';
+      msg.textContent = 'Listo. Abriendo historial...';
 
-      // ✅ cierra el modal del botón y abre el visor PDF arriba (también en smartphone)
+      // Cierra el modal del botón, abre el modal visor con lista
       cerrarModal('modalHistorialPagos');
-      setTimeout(function(){
-        abrirModalPdf('Historial de pagos ' + id, embedUrl);
-      }, 50);
+      abrirModalHistorialLista('Historial de pagos ' + id, id, pagos);
 
     }catch(e){
       console.error(e);
       msg.style.color='#b91c1c';
-      msg.textContent = e && e.message ? e.message : 'No fue posible generar el PDF.';
+      msg.textContent='Error al cargar el historial. Intenta de nuevo.';
+    }
     }
   }
 
