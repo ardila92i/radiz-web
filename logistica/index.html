@@ -2116,55 +2116,83 @@
     return { ok:false, error:'Respuesta no válida al generar el PDF.' };
   }
 
- function normalizarRespuestaPdf(data){
-  const ok = !!(data && (data.ok === true || data.ok === 'true'));
-  if(!ok){
-    return { ok:false, error: (data && data.error) ? data.error : 'No fue posible generar el PDF.' };
+  // ✅ Normaliza campos: url / downloadUrl / dataUri
+  function normalizarRespuestaPdf(data){
+    const ok = !!(data && (data.ok === true || data.ok === 'true'));
+    if(!ok){
+      return { ok:false, error: (data && data.error) ? data.error : 'No fue posible generar el PDF.' };
+    }
+
+    const url = data.url || data.downloadUrl || data.pdfUrl || '';
+    if(url){
+      return { ok:true, url:url };
+    }
+
+    const dataUri = data.dataUri || data.dataURI || data.base64 || '';
+    if(typeof dataUri === 'string' && dataUri.startsWith('data:application/pdf')){
+      return { ok:true, url:dataUri };
+    }
+
+    return { ok:false, error:'El servidor respondió OK, pero no entregó la URL del PDF.' };
   }
 
-  // 1) URL directa (casos clásicos)
-  let url = data.url || data.downloadUrl || data.pdfUrl || data.link || '';
-  if(url) return { ok:true, url:url };
+  // ✅ Intenta acciones alternativas si el backend tiene variación de nombre
+  async function obtenerHistorialPdfUrl(id){
+    const acciones = ['historial_pagos_pdf', 'historial-pagos-pdf'];
+    let ultimoError = 'No fue posible generar el PDF.';
 
-  // 2) fileId (muy común cuando el backend crea el PDF en Drive pero no arma la url)
-  const fileId = data.fileId || data.id || data.driveFileId || '';
-  if(fileId){
-    return { ok:true, url:`https://drive.google.com/uc?export=download&id=${fileId}` };
-  }
+    for(const acc of acciones){
+      const url = API_URL + '?accion=' + encodeURIComponent(acc) + '&id=' + encodeURIComponent(id);
 
-  // 3) dataUri (PDF en base64)
-  const dataUri = data.dataUri || data.dataURI || '';
-  if(typeof dataUri === 'string' && dataUri.startsWith('data:application/pdf')){
-    return { ok:true, url:dataUri };
-  }
+      try{
+        const resp = await fetch(url, { method:'GET', redirect:'follow' });
+        const r = await leerRespuestaPdf(resp);
 
-  // 4) URL anidada: data.result.url / data.data.url / etc.
-  const deepUrl = buscarUrlProfunda(data);
-  if(deepUrl) return { ok:true, url: deepUrl };
-
-  return { ok:false, error:'El servidor respondió OK, pero no entregó la URL del PDF.' };
-}
-
-function buscarUrlProfunda(obj){
-  if(!obj || typeof obj !== 'object') return '';
-
-  for(const k of Object.keys(obj)){
-    const v = obj[k];
-
-    if(typeof v === 'string'){
-      const s = v.trim();
-      if(s.startsWith('http://') || s.startsWith('https://') || s.startsWith('data:application/pdf')){
-        return s;
+        if(r && r.ok && r.url){
+          return r.url;
+        }
+        if(r && r.error){
+          ultimoError = r.error;
+        }
+      }catch(e){
+        console.error(e);
+        ultimoError = 'Error al generar el PDF. Intenta de nuevo.';
       }
     }
 
-    if(v && typeof v === 'object'){
-      const found = buscarUrlProfunda(v);
-      if(found) return found;
+    throw new Error(ultimoError);
+  }
+
+  // ✅ Descarga/visualización del PDF para usuario tipo R (pagos en FACTURAS_ALEGRA del WEB SERVICE, generado por backend)
+  async function descargarHistorialPdf(){
+    const idInput = document.getElementById('idHistorial');
+    const msg = document.getElementById('historialMsg');
+    const id = ((idInput && idInput.value) ? idInput.value : '').trim().toUpperCase();
+
+    msg.style.color='#6b7280';
+    msg.textContent='Generando PDF...';
+
+    if(!id){
+      msg.style.color='#b91c1c';
+      msg.textContent='Debes ingresar tu ID de contrato.';
+      return;
+    }
+
+    try{
+      const pdfUrl = await obtenerHistorialPdfUrl(id);
+
+      msg.style.color='#065f46';
+      msg.textContent='Listo. Abriendo PDF...';
+
+      abrirModalPdf('Historial de pagos ' + id, pdfUrl);
+
+    }catch(e){
+      console.error(e);
+      msg.style.color='#b91c1c';
+      msg.textContent = e && e.message ? e.message : 'No fue posible generar el PDF.';
     }
   }
-  return '';
-}
+
   function copiarLinkAfiliado(){
     const input=document.getElementById('linkAfiliadoInput');
     const msg=document.getElementById('linkAfiliadoMsg');
