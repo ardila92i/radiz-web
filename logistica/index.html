@@ -2272,14 +2272,23 @@
       const res = await obtenerHistorialPdfResponse(id);
 
       // Si fue vista HTML fallback, igualmente abre en flotante (imprimible)
-      const embedUrl = construirUrlEmbedPdf(res);
+            const embedUrl = construirUrlEmbedPdf(res);
 
       msg.style.color='#065f46';
       msg.textContent = (res.kind === 'vista-html')
         ? 'Listo. Abriendo vista (puedes imprimir/guardar como PDF)...'
         : 'Listo. Abriendo PDF...';
 
+      if (/script\.google\.com/i.test(embedUrl)) {
+        cerrarModal('modalHistorialPagos');
+        const w = window.open(embedUrl, '_blank', 'noopener,noreferrer');
+        if (w) w.focus();
+        return;
+      }
+
+      cerrarModal('modalHistorialPagos');
       abrirModalPdf('Historial de pagos ' + id, embedUrl);
+
 
     }catch(e){
       console.error(e);
