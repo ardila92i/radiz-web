@@ -206,6 +206,16 @@
       line-height:1.35;
     }
 
+    /* ✅ Espacio inferior HOME para imagen (por ahora fondo azul Radiz) */
+    .home-image-slot{
+      margin:8px;
+      border-radius:18px;
+      height:150px;
+      background:var(--radiz-blue);
+      box-shadow:0 12px 26px rgba(15,23,42,.08);
+      border:1px solid rgba(37,99,235,.18);
+    }
+
     /* Turnos view */
     .section-title{
       margin:6px 8px 6px;
@@ -795,11 +805,14 @@
 
           <div class="home-tile" onclick="irAVista('pagos')">
             <div class="tile-icon">
-              <!-- Pagos SVG -->
+              <!-- ✅ Historial SVG (lista) -->
               <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="5" width="18" height="14" rx="2"/>
-                <path d="M3 10h18"/>
-                <path d="M7 15h3"/>
+                <path d="M9 6h12"/>
+                <path d="M9 12h12"/>
+                <path d="M9 18h12"/>
+                <path d="M5 6h.01"/>
+                <path d="M5 12h.01"/>
+                <path d="M5 18h.01"/>
               </svg>
             </div>
             <p class="tile-title">Historial de pagos</p>
@@ -837,6 +850,9 @@
           </div>
 
         </div>
+
+        <!-- ✅ Espacio inferior listo para imagen -->
+        <div class="home-image-slot" aria-label="Espacio inferior para imagen"></div>
       </div>
 
       <!-- ===== VISTA: TURNOS ===== -->
@@ -920,17 +936,7 @@
         Actualizar kilometraje <span>›</span>
       </div>
 
-      <div class="sheet-item disabled">
-        Señales <span></span>
-      </div>
-
-      <div class="sheet-item" onclick="abrirModal('modalHistorialPagos');cerrarSheetMenu();">
-        Historial de pagos <span>›</span>
-      </div>
-
-      <div class="sheet-item disabled">
-        Historial de mantenimientos <span></span>
-      </div>
+      <!-- ✅ Eliminadas/ocultas del menú: Señales, Historial de pagos, Historial de mantenimientos -->
 
       <div class="sheet-item" onclick="abrirModal('modalSaldoFavor');cerrarSheetMenu();">
         Mi saldo a favor <span>›</span>
@@ -973,7 +979,8 @@
   <div class="modal-backdrop" id="modalContrato">
     <div class="modal">
       <div class="modal-header">
-        <h3>Contrato</h3>
+        <!-- ✅ Quita la primera palabra "Contrato" (queda solo el título de la mini-card) -->
+        <h3 aria-label="Contrato"></h3>
         <button class="modal-close" type="button" onclick="cerrarModal('modalContrato')">&times;</button>
       </div>
       <div id="contratoContenido">
@@ -1003,12 +1010,10 @@
       <p id="pagoError" class="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
       <p id="pagoContratoError" class="pagoError">No se encontró tu ID de contrato.</p>
 
-      <div class="modal-actions" style="justify-content:space-between;">
-        <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalPagar')">Cerrar</button>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
-          <button type="button" class="btn btn-secondary" onclick="abrirModal('modalQR')">Ver QR</button>
-          <button type="button" class="btn btn-primary" onclick="crearPagoWompi()">Pagar con Wompi</button>
-        </div>
+      <!-- ✅ Se elimina el botón "Cerrar" (redundante con la X) -->
+      <div class="modal-actions" style="justify-content:flex-end;">
+        <button type="button" class="btn btn-secondary" onclick="abrirModal('modalQR')">Ver QR</button>
+        <button type="button" class="btn btn-primary" onclick="crearPagoWompi()">Pagar con Wompi</button>
       </div>
     </div>
   </div>
@@ -1067,7 +1072,7 @@
     </div>
   </div>
 
-  <!-- ✅ MODAL: Historial de pagos (ÚNICA funcionalidad modificada) -->
+  <!-- ✅ MODAL: Historial de pagos (se conserva aunque ya no esté en el menú) -->
   <div class="modal-backdrop" id="modalHistorialPagos">
     <div class="modal">
       <div class="modal-header">
@@ -1396,7 +1401,6 @@
 
   /* ✅ Visor PDF (modal) */
   function abrirModalPdf(titulo, urlPdf){
-    // ✅ cierra el modal anterior de historial (evita quedar "atrás")
     try{ cerrarModal('modalHistorialPagos'); }catch(e){}
 
     const modal = document.getElementById('modalPdfViewer');
@@ -1479,7 +1483,6 @@
 
   function obtenerLogoPorEmpresa(empresa){
     const key = String(empresa || '').trim().toUpperCase();
-    // ✅ Cruz Verde (archivo real en /logistica/ o misma carpeta)
     if(key === 'CRUZ VERDE') return 'logoscruz-verde.png';
     return '';
   }
@@ -1487,11 +1490,8 @@
   function normalizarLogoUrl(logo){
     const s = String(logo || '').trim();
     if(!s) return '';
-    // Si viene como URL absoluta, se deja.
     if(/^https?:\/\//i.test(s)) return s;
-    // Si viene con slash, se respeta.
     if(s.startsWith('/')) return s;
-    // Relativo (misma carpeta)
     return s;
   }
 
@@ -1568,7 +1568,7 @@
     }
   }
 
-  /* ===== Modal Contrato (misma info del portal principal, en flotante) ===== */
+  /* ===== Modal Contrato ===== */
   function renderContratoModal(){
     const cont = document.getElementById('contratoContenido');
     if(!cont) return;
@@ -1704,7 +1704,7 @@
     el.textContent = taller ? ('Taller asignado: ' + taller) : 'Información no disponible.';
   }
 
-  /* ===== Turnos publicados (tarjeta limpia + modal detalle) ===== */
+  /* ===== Turnos publicados ===== */
   async function cargarTurnosDisponibles(){
     const estado = document.getElementById('turnosEstado');
     const cont = document.getElementById('turnosList');
@@ -1741,7 +1741,6 @@
           const empresa =
             (t.empresa || t.cliente || t.CLIENTE || 'Cruz Verde').toString().trim() || 'Cruz Verde';
 
-          // ✅ Mejora: usa logoUrl del backend si viene; si no, fallback por empresa.
           const logoPreferido = normalizarLogoUrl(t.logoUrl || t['LOGO URL'] || t['LOGO'] || '');
           const logoFallback = normalizarLogoUrl(obtenerLogoPorEmpresa(empresa));
           const logoUrl = logoPreferido || logoFallback;
@@ -1794,7 +1793,6 @@
         });
       }
 
-      // Notificación local (MVP)
       const meta = getNotifMeta();
       if(meta.lastTurnosCount !== turnos.length){
         meta.lastTurnosCount = turnos.length;
@@ -2088,8 +2086,7 @@
   }
 
   /* =====================================================
-     ✅ HISTORIAL DE PAGOS (MENÚ) — ÚNICA SECCIÓN MODIFICADA
-     Vista lista tipo “Mi Claro” + mantiene PDF
+     HISTORIAL DE PAGOS (MENÚ) — se conserva
      ===================================================== */
 
   function limpiarHistorialListaUI(){
@@ -2143,7 +2140,6 @@
     return pagos;
   }
 
-  /* ===== Historial de pagos modal (UI igual; FIX real: visor Drive embebible + fallback a vista HTML) ===== */
   function prepararModalHistorial(){
     const correoLabel = document.getElementById('correoHistorialLabel');
     const correoInput = document.getElementById('correoHistorial');
@@ -2162,7 +2158,6 @@
       msg.style.color='#6b7280';
     }
 
-    // ✅ asegurar que la lista no quede “pegada” al cambiar de tipo usuario
     limpiarHistorialListaUI();
 
     if(tipoUsuarioActual && tipoUsuarioActual.toUpperCase() === 'AFILIADO'){
@@ -2177,7 +2172,6 @@
       if(btnEnviar) btnEnviar.style.display='none';
       if(btnDescargar) btnDescargar.style.display='inline-flex';
 
-      // ✅ Texto y carga de lista (tipo Mi Claro)
       if(intro) intro.textContent='Aquí podrás visualizar tus últimos pagos (y si lo necesitas, descargar el PDF).';
 
       (async () => {
@@ -2188,7 +2182,6 @@
           if(msg){ msg.textContent=''; }
         }catch(e){
           console.error(e);
-          // Si falla la lista, NO rompemos el PDF: solo mostramos mensaje.
           if(msg){ msg.style.color='#b91c1c'; msg.textContent = (e && e.message) ? e.message : 'No fue posible cargar el historial.'; }
         }
       })();
@@ -2235,33 +2228,27 @@
     }
   }
 
-  // ✅ NUEVA FUNCIÓN: lectura robusta de respuesta (JSON / PDF directo / texto)
   async function leerRespuestaPdf(resp){
     const ct = (resp.headers.get('content-type') || '').toLowerCase();
 
-    // PDF directo
     if(ct.includes('application/pdf')){
       const blob = await resp.blob();
       const url = URL.createObjectURL(blob);
       return { ok:true, url:url, kind:'blob' };
     }
 
-    // JSON
     if(ct.includes('application/json')){
       const data = await resp.json();
       return normalizarRespuestaPdf(data);
     }
 
-    // Texto (por si Apps Script devuelve JSON como texto o HTML)
     const txt = await resp.text();
 
-    // Intentar parsear JSON desde texto
     try{
       const data = JSON.parse(txt);
       return normalizarRespuestaPdf(data);
     }catch(e){}
 
-    // Fallback: si el response terminó en una URL usable
     const finalUrl = resp.url || '';
     if(finalUrl){
       return { ok:true, url: finalUrl, kind:'fallback-url' };
@@ -2270,7 +2257,6 @@
     return { ok:false, error:'Respuesta no válida al generar el PDF.' };
   }
 
-  // ✅ Normaliza campos: url / downloadUrl / dataUri / fileId
   function normalizarRespuestaPdf(data){
     const ok = !!(data && (data.ok === true || data.ok === 'true'));
     if(!ok){
@@ -2293,11 +2279,9 @@
     return { ok:false, error:'El servidor respondió OK, pero no entregó la URL del PDF.' };
   }
 
-  // ✅ Drive embed fix: convierte a /preview para que el iframe sí lo muestre
   function construirUrlEmbedPdf(res){
     if(!res) return '';
 
-    // 1) Si tenemos fileId, lo mejor es /preview
     const fid = String(res.fileId || '').trim();
     if(fid){
       return 'https://drive.google.com/file/d/' + encodeURIComponent(fid) + '/preview';
@@ -2306,14 +2290,11 @@
     const url = String(res.url || '').trim();
     if(!url) return '';
 
-    // 2) Si es data/blob ya sirve
     if(url.startsWith('blob:') || url.startsWith('data:application/pdf')){
       return url;
     }
 
-    // 3) Si es Drive, intentar extraer el id y construir preview
     if(url.includes('drive.google.com')){
-      // a) open?id=XXXX
       try{
         const u = new URL(url);
         const id = u.searchParams.get('id');
@@ -2322,27 +2303,22 @@
         }
       }catch(e){}
 
-      // b) /file/d/XXXX/
       const m = url.match(/\/file\/d\/([^/]+)/i);
       if(m && m[1]){
         return 'https://drive.google.com/file/d/' + encodeURIComponent(m[1]) + '/preview';
       }
 
-      // c) uc?export=download&id=XXXX -> preview
       const m2 = url.match(/[?&]id=([^&]+)/i);
       if(m2 && m2[1]){
         return 'https://drive.google.com/file/d/' + encodeURIComponent(m2[1]) + '/preview';
       }
 
-      // si no pudimos, se deja tal cual
       return url;
     }
 
-    // 4) No Drive: devolver tal cual
     return url;
   }
 
-  // ✅ Intenta acciones alternativas si el backend tiene variación de nombre (PDF primero)
   async function obtenerHistorialPdfResponse(id){
     const acciones = ['historial_pagos_pdf', 'historial-pagos-pdf'];
     let ultimoError = 'No fue posible generar el PDF.';
@@ -2354,7 +2330,7 @@
         const r = await leerRespuestaPdf(resp);
 
         if(r && r.ok){
-          return r; // {ok:true, url/fileId/downloadUrl}
+          return r;
         }
         if(r && r.error){
           ultimoError = r.error;
@@ -2365,7 +2341,6 @@
       }
     }
 
-    // Fallback: vista HTML imprimible (si el PDF falla)
     try{
       const vistaUrl = API_URL + '?accion=' + encodeURIComponent('historial_pagos_vista') + '&id=' + encodeURIComponent(id);
       return { ok:true, url:vistaUrl, kind:'vista-html' };
@@ -2374,7 +2349,6 @@
     throw new Error(ultimoError);
   }
 
-  // ✅ Descarga/visualización del PDF para usuario tipo R (FACTURAS_ALEGRA -> Apps Script -> Drive -> visor)
   async function descargarHistorialPdf(){
     const idInput = document.getElementById('idHistorial');
     const msg = document.getElementById('historialMsg');
@@ -2398,7 +2372,6 @@
         ? 'Listo. Abriendo vista (puedes imprimir/guardar como PDF)...'
         : 'Listo. Abriendo PDF...';
 
-      // ✅ cierra el modal del botón y abre el visor PDF arriba (también en smartphone)
       cerrarModal('modalHistorialPagos');
       setTimeout(function(){
         abrirModalPdf('Historial de pagos ' + id, embedUrl);
@@ -2432,14 +2405,14 @@
     }
   }
 
-  /* ===== Menú: Solicitar grúa (igual al portal principal) ===== */
+  /* ===== Menú: Solicitar grúa ===== */
   function solicitarGrua(){
     const mensaje='Hola, necesito solicitar grúa para mi vehículo.';
     const url='https://wa.me/573159406263?text='+encodeURIComponent(mensaje);
     window.open(url,'_blank');
   }
 
-  /* ===== Kilometraje (igual al portal principal) ===== */
+  /* ===== Kilometraje ===== */
   async function enviarActualizacionKilometraje(){
     const kmInput=document.getElementById('kmValor');
     const idVehInput=document.getElementById('kmIdVehiculo');
@@ -2487,7 +2460,7 @@
     }
   }
 
-  /* ===== Incidente (igual al portal principal) ===== */
+  /* ===== Incidente ===== */
   async function enviarIncidente(){
     const descInput=document.getElementById('incidenteDescripcion');
     const idVehInput=document.getElementById('incidenteIdVehiculo');
@@ -2538,7 +2511,7 @@
     }
   }
 
-  /* ===== Wompi (igual al portal principal) ===== */
+  /* ===== Wompi ===== */
   async function generarIntegritySignature(reference, amountInCents, currency){
     const encoder=new TextEncoder();
     const data=`${reference}${amountInCents}${currency}${WOMPI_INTEGRITY_KEY}`;
@@ -2589,9 +2562,11 @@
       });
 
       checkout.open(function(result){
-        const transaction=result.transaction;
+        const transaction = result && result.transaction ? result.transaction : null;
         console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
-        registrarPagoEnSheet(reference, valor, idContrato);
+
+        // ✅ Trazabilidad: enviamos referencia, monto, contrato + metadata de la transacción
+        registrarPagoEnSheet(reference, valor, idContrato, transaction);
       });
     }catch(e){
       console.error('Error generando firma de integridad',e);
@@ -2599,7 +2574,8 @@
     }
   }
 
-  async function registrarPagoEnSheet(reference, valor, idContrato){
+  // ✅ Enviar info a WEB SERVICE (hoja PORTAL_PAGOS) para trazabilidad
+  async function registrarPagoEnSheet(reference, valor, idContrato, transaction){
     try{
       const formData=new URLSearchParams();
       formData.append('accion','registrar_pago');
@@ -2607,6 +2583,24 @@
       formData.append('monto',valor);
       formData.append('idContrato',idContrato);
       formData.append('origen','PORTAL_WEB');
+
+      // ✅ Campos extra de trazabilidad (si el backend los usa)
+      formData.append('portal', 'LOGISTICA');
+      formData.append('hoja', 'PORTAL_PAGOS');
+
+      if(contratoActual){
+        formData.append('nombre', (contratoActual['NOMBRE'] || contratoActual['ID CLIENTE'] || '').toString());
+        formData.append('tipoUsuario', (contratoActual['TIPO USUARIO'] || '').toString());
+        formData.append('idVehiculo', (contratoActual['ID VEHÍCULO'] || contratoActual['ID VEHICULO'] || '').toString());
+      }
+
+      if(transaction){
+        formData.append('wompiTransactionId', (transaction.id || '').toString());
+        formData.append('wompiStatus', (transaction.status || '').toString());
+        formData.append('wompiPaymentMethod', (transaction.payment_method_type || transaction.payment_method || '').toString());
+      }
+
+      formData.append('clientTs', Date.now().toString());
 
       await fetch(API_URL,{
         method:'POST',
@@ -2730,11 +2724,6 @@
       .replace(/>/g,'&gt;')
       .replace(/"/g,'&quot;')
       .replace(/'/g,'&#39;');
-  }
-</script>
-</body>
-</html>
- .replace(/'/g,'&#39;');
   }
 </script>
 </body>
