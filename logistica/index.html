@@ -693,6 +693,32 @@
 
     /* ✅ FIX: que el visor PDF quede SIEMPRE por encima */
     #modalPdfViewer{ z-index: 60; }
+
+    /* ===========================
+       ✅ HISTORIAL DE PAGOS (MENÚ)
+       Estilo tipo “Mi Claro”
+       =========================== */
+    .hist-row{
+      padding:12px 8px;
+      border-top:1px solid #f3f4f6;
+    }
+    .hist-row:first-child{ border-top:none; }
+    .hist-line{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin:2px 0;
+      font-size:.92rem;
+    }
+    .hist-label{
+      color:#111827;
+      font-weight:800;
+    }
+    .hist-value{
+      color:var(--radiz-blue);
+      font-weight:900;
+    }
   </style>
 </head>
 
@@ -1042,7 +1068,7 @@
     </div>
   </div>
 
-  <!-- MODAL: Historial de pagos (igual al portal principal) -->
+  <!-- ✅ MODAL: Historial de pagos (ÚNICA funcionalidad modificada) -->
   <div class="modal-backdrop" id="modalHistorialPagos">
     <div class="modal">
       <div class="modal-header">
@@ -1061,6 +1087,16 @@
       <input type="text" id="idHistorial" placeholder="Ej: R7467">
 
       <p id="historialMsg" style="font-size:.85rem;margin-top:6px;color:#6b7280;"></p>
+
+      <!-- ✅ NUEVO: Vista lista tipo “Mi Claro” (solo para usuarios tipo R) -->
+      <div id="historialListaWrap" style="display:none;margin-top:10px;">
+        <div style="border:1px solid #e5e7eb;border-radius:14px;background:#fff;padding:10px 12px;">
+          <p style="margin:0 0 8px;color:#6b7280;font-size:.82rem;">
+            Aquí podrás visualizar los últimos <strong>6</strong> pagos realizados en tu cuenta.
+          </p>
+          <div id="historialLista"></div>
+        </div>
+      </div>
 
       <div class="modal-actions">
         <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalHistorialPagos')">Cerrar</button>
@@ -2052,6 +2088,62 @@
     }
   }
 
+  /* =====================================================
+     ✅ HISTORIAL DE PAGOS (MENÚ) — ÚNICA SECCIÓN MODIFICADA
+     Vista lista tipo “Mi Claro” + mantiene PDF
+     ===================================================== */
+
+  function limpiarHistorialListaUI(){
+    const wrap = document.getElementById('historialListaWrap');
+    const list = document.getElementById('historialLista');
+    if(wrap) wrap.style.display = 'none';
+    if(list) list.innerHTML = '';
+  }
+
+  function renderHistorialLista(pagos){
+    const wrap = document.getElementById('historialListaWrap');
+    const list = document.getElementById('historialLista');
+    if(!wrap || !list) return;
+
+    const arr = Array.isArray(pagos) ? pagos.slice(0,6) : [];
+    wrap.style.display = 'block';
+
+    if(arr.length === 0){
+      list.innerHTML = `<div class="hist-row" style="color:#6b7280;font-size:.9rem;">
+        No hay pagos para mostrar.
+      </div>`;
+      return;
+    }
+
+    list.innerHTML = arr.map(p => {
+      const fecha = p.fecha || p.FECHA || p['FECHA'] || '';
+      const valor = p.valor || p.VALOR || p['VALOR'] || 0;
+
+      return `
+        <div class="hist-row">
+          <div class="hist-line">
+            <span class="hist-label">Fecha de Pago:</span>
+            <span class="hist-value">${escapeHtml(formatearFechaCorta(fecha) || fecha || '—')}</span>
+          </div>
+          <div class="hist-line">
+            <span class="hist-label">Valor de pago:</span>
+            <span class="hist-value">${escapeHtml(formatearNumeroCOP(valor) || valor || '—')}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  async function cargarHistorialListaUltimos6(idContrato){
+    const url = API_URL + '?accion=historial_pagos_lista&id=' + encodeURIComponent(idContrato);
+    const resp = await fetch(url);
+    const data = await resp.json();
+
+    if(!data.ok) throw new Error(data.error || 'No fue posible cargar el historial.');
+    const pagos = Array.isArray(data.pagos) ? data.pagos : [];
+    return pagos;
+  }
+
   /* ===== Historial de pagos modal (UI igual; FIX real: visor Drive embebible + fallback a vista HTML) ===== */
   function prepararModalHistorial(){
     const correoLabel = document.getElementById('correoHistorialLabel');
@@ -2071,6 +2163,9 @@
       msg.style.color='#6b7280';
     }
 
+    // ✅ asegurar que la lista no quede “pegada” al cambiar de tipo usuario
+    limpiarHistorialListaUI();
+
     if(tipoUsuarioActual && tipoUsuarioActual.toUpperCase() === 'AFILIADO'){
       if(correoLabel) correoLabel.style.display='block';
       if(correoInput) correoInput.style.display='block';
@@ -2082,7 +2177,22 @@
       if(correoInput) correoInput.style.display='none';
       if(btnEnviar) btnEnviar.style.display='none';
       if(btnDescargar) btnDescargar.style.display='inline-flex';
-      if(intro) intro.textContent='Visualiza y descarga tu historial de pagos.';
+
+      // ✅ Texto y carga de lista (tipo Mi Claro)
+      if(intro) intro.textContent='Aquí podrás visualizar tus últimos pagos (y si lo necesitas, descargar el PDF).';
+
+      (async () => {
+        try{
+          if(msg){ msg.style.color='#6b7280'; msg.textContent='Cargando últimos pagos...'; }
+          const pagos = await cargarHistorialListaUltimos6(idContratoActual);
+          renderHistorialLista(pagos);
+          if(msg){ msg.textContent=''; }
+        }catch(e){
+          console.error(e);
+          // Si falla la lista, NO rompemos el PDF: solo mostramos mensaje.
+          if(msg){ msg.style.color='#b91c1c'; msg.textContent = (e && e.message) ? e.message : 'No fue posible cargar el historial.'; }
+        }
+      })();
     }
   }
 
@@ -2621,6 +2731,11 @@
       .replace(/>/g,'&gt;')
       .replace(/"/g,'&quot;')
       .replace(/'/g,'&#39;');
+  }
+</script>
+</body>
+</html>
+ .replace(/'/g,'&#39;');
   }
 </script>
 </body>
