@@ -1547,9 +1547,9 @@
 
       let html = '';
       html += '<p><strong>ID contrato:</strong> ' + escapeHtml(c['ID CONTRATO'] || '') + '</p>';
-      html += '<p><strong>Placa / vehículo:</strong> ' + escapeHtml(placa) + '</p>';
+      html += '<p><strong>Placa:</strong> ' + escapeHtml(placa) + '</p>';
       html += '<p><strong>Inicio:</strong> ' + escapeHtml(formatearFechaCorta(inicio)) + '</p>';
-      html += '<p><strong>Ciudad:</strong> ' + escapeHtml(ciudad || 'Bogotá') + '</p>';
+      html += '<p><strong>Cobertura:</strong> ' + escapeHtml(ciudad || 'Bogotá') + '</p>';
       if(tarifa){ html += '<p><strong>Tarifa semanal:</strong> ' + escapeHtml(formatearNumeroCOP(tarifa)) + '</p>'; }
       if(km){ html += '<p><strong>Kilometraje actual:</strong> ' + escapeHtml(km) + ' km</p>'; }
 
