@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1407,13 +1408,13 @@
     return partes[0] || '';
   }
   function obtenerLogoPorEmpresa(empresa){
-  const key = String(empresa || '').trim().toUpperCase();
+    const key = String(empresa || '').trim().toUpperCase();
 
-  // ✅ Cruz Verde (archivo real en /logistica/)
-  if(key === 'CRUZ VERDE') return 'logoscruz-verde.png';
+    // ✅ Cruz Verde (archivo real en /logistica/)
+    if(key === 'CRUZ VERDE') return 'logoscruz-verde.png';
 
-  return '';
-}
+    return '';
+  }
 
   /* ===== Contrato + saludo ===== */
   async function cargarContratoYSaludo(id){
@@ -1584,42 +1585,39 @@
     const esRenting = id.startsWith('R');
 
     if(esRenting){
-  el.innerHTML = '';
-  const img = document.createElement('img');
-  img.alt = 'Beneficios Renting Radiz';
-  img.style.maxWidth = '100%';
-  img.style.height = 'auto';
-  img.style.borderRadius = '12px';
-  img.style.display = 'block';
-  img.style.margin = '6px auto';
+      el.innerHTML = '';
+      const img = document.createElement('img');
+      img.alt = 'Beneficios Renting Radiz';
+      img.style.maxWidth = '100%';
+      img.style.height = 'auto';
+      img.style.borderRadius = '12px';
+      img.style.display = 'block';
+      img.style.margin = '6px auto';
 
-  // ✅ Intentos en orden (misma carpeta, ./, carpeta logistica, raíz)
-  // + cache-bust para evitar que el navegador muestre una versión vieja rota
-  const v = Date.now();
-  const candidates = [
-    `beneficios_renting.png?v=${v}`,
-    `./beneficios_renting.png?v=${v}`,
-    `/logistica/beneficios_renting.png?v=${v}`,
-    `/beneficios_renting.png?v=${v}`
-  ];
+      const v = Date.now();
+      const candidates = [
+        `beneficios_renting.png?v=${v}`,
+        `./beneficios_renting.png?v=${v}`,
+        `/logistica/beneficios_renting.png?v=${v}`,
+        `/beneficios_renting.png?v=${v}`
+      ];
 
-  let i = 0;
-  const tryNext = () => {
-    if(i >= candidates.length){
-      // si falla todo, deja el alt visible
-      console.warn('No se pudo cargar beneficios_renting.png. Rutas probadas:', candidates);
-      return;
+      let i = 0;
+      const tryNext = () => {
+        if(i >= candidates.length){
+          console.warn('No se pudo cargar beneficios_renting.png. Rutas probadas:', candidates);
+          return;
+        }
+        img.src = candidates[i++];
+      };
+
+      img.onerror = () => tryNext();
+      tryNext();
+
+      el.appendChild(img);
+    }else{
+      el.textContent = beneficiosTexto || 'Información no disponible.';
     }
-    img.src = candidates[i++];
-  };
-
-  img.onerror = () => tryNext();
-  tryNext();
-
-  el.appendChild(img);
-}else{
-  el.textContent = beneficiosTexto || 'Información no disponible.';
-}
   }
 
   function prepararModalTaller(){
@@ -1662,7 +1660,7 @@
         turnos.forEach(function(t){
           const idTurno =
             t.id_turno || t.idTurno || t.ID_TURNO || t['ID TURNO'] || t.codigo || t.codigo_turno || 'TURNO';
-      
+
           const empresa =
             (t.empresa || t.cliente || t.CLIENTE || 'Cruz Verde').toString().trim() || 'Cruz Verde';
           const logoUrl = obtenerLogoPorEmpresa(empresa);
@@ -1682,25 +1680,25 @@
           mini.className = 'turno-mini';
           mini.onclick = function(){
             abrirDetalleTurno({
-  idTurno: idTurno,
-  empresa: empresa,
-  direccion: direccion,
-  fecha: fecha,
-  hora: hora,
-  ciudad: ciudad,
-  dias: dias,
-  pago: pagoEstimado,
-  logoUrl: logoUrl // ✅ nuevo
-});
+              idTurno: idTurno,
+              empresa: empresa,
+              direccion: direccion,
+              fecha: fecha,
+              hora: hora,
+              ciudad: ciudad,
+              dias: dias,
+              pago: pagoEstimado,
+              logoUrl: logoUrl
+            });
           };
 
           mini.innerHTML = `
             <div class="img-placeholder ${logoUrl ? 'has-img' : ''}" title="Tocar para ampliar">
-  ${logoUrl
-    ? `<img class="turno-logo" src="${escapeHtml(logoUrl)}" alt="Logo ${escapeHtml(empresa)}">`
-    : `<div class="img-hint">Ver</div>`
-  }
-</div>
+              ${logoUrl
+                ? `<img class="turno-logo" src="${escapeHtml(logoUrl)}" alt="Logo ${escapeHtml(empresa)}">`
+                : `<div class="img-hint">Ver</div>`
+              }
+            </div>
             <div class="turno-info">
               <div class="turno-topline">
                 <div class="dot-green"></div>
@@ -1747,20 +1745,20 @@
     if(title){
       title.textContent = (turno.empresa || 'Cruz Verde') + ' • ' + (turno.idTurno || 'TURNO');
     }
-    // ✅ Logo por empresa (ejemplo: Cruz Verde)
-const logoUrl = obtenerLogoPorEmpresa(turno.empresa);
-turno.logoUrl = logoUrl;
 
-const imgBox = document.getElementById('detalleTurnoMedia');
-if(imgBox){
-  if(logoUrl){
-    imgBox.classList.add('has-img');
-    imgBox.innerHTML = `<img class="turno-logo" src="${escapeHtml(logoUrl)}" alt="Logo ${escapeHtml(turno.empresa || '')}">`;
-  }else{
-    imgBox.classList.remove('has-img');
-    imgBox.innerHTML = `<div class="img-hint">Logo</div>`;
-  }
-}
+    const logoUrl = obtenerLogoPorEmpresa(turno.empresa);
+    turno.logoUrl = logoUrl;
+
+    const imgBox = document.getElementById('detalleTurnoMedia');
+    if(imgBox){
+      if(logoUrl){
+        imgBox.classList.add('has-img');
+        imgBox.innerHTML = `<img class="turno-logo" src="${escapeHtml(logoUrl)}" alt="Logo ${escapeHtml(turno.empresa || '')}">`;
+      }else{
+        imgBox.classList.remove('has-img');
+        imgBox.innerHTML = `<div class="img-hint">Logo</div>`;
+      }
+    }
 
     const dias = Number(turno.dias || 3);
     const textoDias = dias + ' día' + (dias === 1 ? '' : 's') + ' consecutivo' + (dias === 1 ? '' : 's');
@@ -1780,22 +1778,12 @@ if(imgBox){
     abrirModal('modalDetalleTurno');
   }
 
-  function ampliarImagenTurno(){
-    addNotificacion({
-      type:'info',
-      title:'Imagen del punto',
-      text:'Vista previa en modo temporal (azul RADIZ).',
-      read:false
-    });
-    actualizarIndicadorNotificaciones();
-  }
-
   function aceptarDesdeDetalle(){
     if(!turnoDetalleActual) return;
     cerrarModal('modalDetalleTurno');
     abrirConfirmacionTurno({
       idTurno: turnoDetalleActual.idTurno,
-      cliente: turnoDetalleActual.empresa,   // ✅ empresa (Cruz Verde / etc.)
+      cliente: turnoDetalleActual.empresa,
       direccion: turnoDetalleActual.direccion,
       fecha: turnoDetalleActual.fecha,
       hora: turnoDetalleActual.hora,
@@ -1889,7 +1877,6 @@ if(imgBox){
         read:false
       });
 
-      // Simular agenda (3 días máx)
       ultimaAceptacion = {
         turno: turnoSeleccionado,
         fechaBase: turnoSeleccionado.fecha || new Date().toISOString()
@@ -2019,7 +2006,7 @@ if(imgBox){
     }
   }
 
-  /* ===== Historial de pagos modal (igual portal principal) ===== */
+  /* ===== Historial de pagos modal (se mantiene la UI; se restaura la descarga PDF robusta) ===== */
   function prepararModalHistorial(){
     const correoLabel = document.getElementById('correoHistorialLabel');
     const correoInput = document.getElementById('correoHistorial');
@@ -2093,10 +2080,94 @@ if(imgBox){
     }
   }
 
+  // ✅ NUEVA FUNCIÓN: lectura robusta de respuesta (JSON / PDF directo / texto)
+  async function leerRespuestaPdf(resp){
+    const ct = (resp.headers.get('content-type') || '').toLowerCase();
+
+    // PDF directo
+    if(ct.includes('application/pdf')){
+      const blob = await resp.blob();
+      const url = URL.createObjectURL(blob);
+      return { ok:true, url:url };
+    }
+
+    // JSON
+    if(ct.includes('application/json')){
+      const data = await resp.json();
+      return normalizarRespuestaPdf(data);
+    }
+
+    // Texto (por si Apps Script devuelve JSON como texto o HTML)
+    const txt = await resp.text();
+
+    // Intentar parsear JSON desde texto
+    try{
+      const data = JSON.parse(txt);
+      return normalizarRespuestaPdf(data);
+    }catch(e){}
+
+    // Si no es JSON, a veces la URL final del response ya es el PDF (redirect seguido)
+    // resp.url suele traer el destino final tras redirect: úsalo como fallback
+    const finalUrl = resp.url || '';
+    if(finalUrl){
+      return { ok:true, url: finalUrl, note:'fallback-url' };
+    }
+
+    return { ok:false, error:'Respuesta no válida al generar el PDF.' };
+  }
+
+  // ✅ Normaliza campos: url / downloadUrl / dataUri
+  function normalizarRespuestaPdf(data){
+    const ok = !!(data && (data.ok === true || data.ok === 'true'));
+    if(!ok){
+      return { ok:false, error: (data && data.error) ? data.error : 'No fue posible generar el PDF.' };
+    }
+
+    const url = data.url || data.downloadUrl || data.pdfUrl || '';
+    if(url){
+      return { ok:true, url:url };
+    }
+
+    const dataUri = data.dataUri || data.dataURI || data.base64 || '';
+    if(typeof dataUri === 'string' && dataUri.startsWith('data:application/pdf')){
+      return { ok:true, url:dataUri };
+    }
+
+    return { ok:false, error:'El servidor respondió OK, pero no entregó la URL del PDF.' };
+  }
+
+  // ✅ Intenta acciones alternativas si el backend tiene variación de nombre
+  async function obtenerHistorialPdfUrl(id){
+    const acciones = ['historial_pagos_pdf', 'historial-pagos-pdf'];
+    let ultimoError = 'No fue posible generar el PDF.';
+
+    for(const acc of acciones){
+      const url = API_URL + '?accion=' + encodeURIComponent(acc) + '&id=' + encodeURIComponent(id);
+
+      try{
+        const resp = await fetch(url, { method:'GET', redirect:'follow' });
+        const r = await leerRespuestaPdf(resp);
+
+        if(r && r.ok && r.url){
+          return r.url;
+        }
+        if(r && r.error){
+          ultimoError = r.error;
+        }
+      }catch(e){
+        console.error(e);
+        ultimoError = 'Error al generar el PDF. Intenta de nuevo.';
+      }
+    }
+
+    throw new Error(ultimoError);
+  }
+
+  // ✅ Descarga/visualización del PDF para usuario tipo R (pagos en FACTURAS_ALEGRA del WEB SERVICE, generado por backend)
   async function descargarHistorialPdf(){
     const idInput = document.getElementById('idHistorial');
     const msg = document.getElementById('historialMsg');
-    const id = (idInput.value || '').trim().toUpperCase();
+    const id = ((idInput && idInput.value) ? idInput.value : '').trim().toUpperCase();
 
     msg.style.color='#6b7280';
     msg.textContent='Generando PDF...';
@@ -2108,24 +2179,17 @@ if(imgBox){
     }
 
     try{
-      const resp = await fetch(API_URL + '?accion=historial_pagos_pdf&id=' + encodeURIComponent(id));
-      const data = await resp.json();
-
-      if(!data.ok || !data.url){
-        msg.style.color='#b91c1c';
-        msg.textContent = (data && data.error) ? data.error : 'No fue posible generar el PDF.';
-        return;
-      }
+      const pdfUrl = await obtenerHistorialPdfUrl(id);
 
       msg.style.color='#065f46';
       msg.textContent='Listo. Abriendo PDF...';
 
-      abrirModalPdf('Historial de pagos ' + id, data.url);
+      abrirModalPdf('Historial de pagos ' + id, pdfUrl);
 
     }catch(e){
       console.error(e);
       msg.style.color='#b91c1c';
-      msg.textContent='Error al generar el PDF. Intenta de nuevo.';
+      msg.textContent = e && e.message ? e.message : 'No fue posible generar el PDF.';
     }
   }
 
@@ -2452,3 +2516,4 @@ if(imgBox){
 </script>
 </body>
 </html>
+```
