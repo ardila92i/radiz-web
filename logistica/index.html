@@ -29,14 +29,10 @@
       --radius-md:14px;
     }
 
-    html, body{height:100%;}
-    body{
-      margin:0;
-      padding:0;
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-      background:var(--bg);
-      color:var(--ink);
-      overflow-x:hidden;
+   html, body{
+  height:100%;
+  overflow:hidden;              /* ✅ bloquea scroll de la página */
+  overscroll-behavior:none;     /* ✅ evita “rebote” */
     }
 
     .page{
