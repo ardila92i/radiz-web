@@ -29,18 +29,25 @@
       --radius-md:14px;
     }
 
-   html, body{
-  height:100%;
-  overflow:hidden;              /* ✅ bloquea scroll de la página */
-  overscroll-behavior:none;     /* ✅ evita “rebote” */
+    /* ✅ FIX: pantalla principal fija (sin “subir/bajar” la página) */
+    html, body{height:100%; overflow:hidden; overscroll-behavior:none;}
+
+    body{
+      margin:0;
+      padding:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      overflow-x:hidden;
     }
 
     .page{
-      min-height:100vh;
+      height:100vh;           /* ✅ antes min-height */
       display:flex;
       align-items:flex-start;
       justify-content:center;
       padding:14px 14px 86px; /* espacio para barra inferior */
+      overflow:hidden;        /* ✅ evita scroll del documento */
     }
 
     /* ✅ Se elimina el “recuadro/tarjeta” contenedora: sin fondo, sin sombra, sin bordes */
@@ -52,7 +59,10 @@
       box-shadow:none;
       padding:0;
       position:relative;
-      overflow:visible;
+      overflow:hidden;     /* ✅ contenedor fijo */
+      height:100%;         /* ✅ para que las vistas ocupen el alto */
+      display:flex;        /* ✅ layout fijo */
+      flex-direction:column;
     }
 
     /* Top app bar */
@@ -62,6 +72,7 @@
       align-items:center;
       gap:8px;
       padding:6px 6px 10px;
+      flex:0 0 auto;
     }
 
     .topbar-left{
@@ -99,6 +110,7 @@
       box-shadow:var(--shadow-soft);
       transition:transform .12s, box-shadow .12s, border-color .12s;
       position:relative;
+      flex:0 0 auto;
     }
     .bell-btn:hover{
       transform:translateY(-1px);
@@ -123,6 +135,7 @@
       font-weight:750;
       letter-spacing:.01em;
       color:var(--ink);
+      flex:0 0 auto;
     }
     /* ✅ Nombre del mensajero en azul Radiz */
     .hello-name{
@@ -135,11 +148,16 @@
       font-size:.86rem;
       color:var(--muted);
       line-height:1.35;
+      flex:0 0 auto;
     }
 
     /* Views */
-    .view{display:none;}
+    .view{display:none; flex:1; overflow:auto; -webkit-overflow-scrolling:touch;}
     .view.active{display:block;}
+
+    /* ✅ HOME fijo (sin scroll) + espacio inferior para imagen */
+    #viewHome{ overflow:hidden; }
+    #viewHome.active{ display:flex; flex-direction:column; }
 
     /* Home grid buttons */
     .home-grid{
@@ -148,6 +166,18 @@
       gap:12px;
       padding:8px;
       margin-top:6px;
+      flex:1 1 auto;
+      overflow:hidden; /* ✅ evita que “bote” */
+    }
+
+    /* ✅ espacio inferior para imagen (por ahora fondo azul Radiz) */
+    .home-banner{
+      flex:0 0 auto;
+      margin:8px;
+      border-radius:18px;
+      background:var(--radiz-blue);
+      height:clamp(110px, 18vh, 150px); /* tamaño “justo” y responsive */
+      box-shadow:0 12px 26px rgba(15,23,42,.08);
     }
 
     .home-tile{
@@ -200,16 +230,6 @@
       font-size:.82rem;
       color:var(--muted);
       line-height:1.35;
-    }
-
-    /* ✅ Espacio inferior HOME para imagen (por ahora fondo azul Radiz) */
-    .home-image-slot{
-      margin:8px;
-      border-radius:18px;
-      height:150px;
-      background:var(--radiz-blue);
-      box-shadow:0 12px 26px rgba(15,23,42,.08);
-      border:1px solid rgba(37,99,235,.18);
     }
 
     /* Turnos view */
@@ -806,9 +826,9 @@
                 <path d="M9 6h12"/>
                 <path d="M9 12h12"/>
                 <path d="M9 18h12"/>
-                <path d="M5 6h.01"/>
-                <path d="M5 12h.01"/>
-                <path d="M5 18h.01"/>
+                <path d="M4 6h.01"/>
+                <path d="M4 12h.01"/>
+                <path d="M4 18h.01"/>
               </svg>
             </div>
             <p class="tile-title">Historial de pagos</p>
@@ -847,8 +867,8 @@
 
         </div>
 
-        <!-- ✅ Espacio inferior listo para imagen -->
-        <div class="home-image-slot" aria-label="Espacio inferior para imagen"></div>
+        <!-- ✅ Espacio inferior para imagen (por ahora en azul Radiz) -->
+        <div class="home-banner" aria-label="Espacio para imagen"></div>
       </div>
 
       <!-- ===== VISTA: TURNOS ===== -->
@@ -932,7 +952,7 @@
         Actualizar kilometraje <span>›</span>
       </div>
 
-      <!-- ✅ Eliminadas/ocultas del menú: Señales, Historial de pagos, Historial de mantenimientos -->
+      <!-- ✅ Eliminado del menú: Señales / Historial de pagos / Historial de mantenimientos -->
 
       <div class="sheet-item" onclick="abrirModal('modalSaldoFavor');cerrarSheetMenu();">
         Mi saldo a favor <span>›</span>
@@ -975,8 +995,8 @@
   <div class="modal-backdrop" id="modalContrato">
     <div class="modal">
       <div class="modal-header">
-        <!-- ✅ Quita la primera palabra "Contrato" (queda solo el título de la mini-card) -->
-        <h3 aria-label="Contrato"></h3>
+        <!-- ✅ quitar “Contrato” repetido (se deja sólo el de la mini-card) -->
+        <h3>&nbsp;</h3>
         <button class="modal-close" type="button" onclick="cerrarModal('modalContrato')">&times;</button>
       </div>
       <div id="contratoContenido">
@@ -1006,10 +1026,12 @@
       <p id="pagoError" class="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
       <p id="pagoContratoError" class="pagoError">No se encontró tu ID de contrato.</p>
 
-      <!-- ✅ Se elimina el botón "Cerrar" (redundante con la X) -->
       <div class="modal-actions" style="justify-content:flex-end;">
-        <button type="button" class="btn btn-secondary" onclick="abrirModal('modalQR')">Ver QR</button>
-        <button type="button" class="btn btn-primary" onclick="crearPagoWompi()">Pagar con Wompi</button>
+        <!-- ✅ Eliminado botón “Cerrar” (redundante con la X) -->
+        <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
+          <button type="button" class="btn btn-secondary" onclick="abrirModal('modalQR')">Ver QR</button>
+          <button type="button" class="btn btn-primary" onclick="crearPagoWompi()">Pagar con Wompi</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1068,7 +1090,7 @@
     </div>
   </div>
 
-  <!-- ✅ MODAL: Historial de pagos (se conserva aunque ya no esté en el menú) -->
+  <!-- ✅ MODAL: Historial de pagos (se conserva aunque ya no esté en menú) -->
   <div class="modal-backdrop" id="modalHistorialPagos">
     <div class="modal">
       <div class="modal-header">
@@ -1564,7 +1586,7 @@
     }
   }
 
-  /* ===== Modal Contrato ===== */
+  /* ===== Modal Contrato (misma info del portal principal, en flotante) ===== */
   function renderContratoModal(){
     const cont = document.getElementById('contratoContenido');
     if(!cont) return;
@@ -1700,7 +1722,7 @@
     el.textContent = taller ? ('Taller asignado: ' + taller) : 'Información no disponible.';
   }
 
-  /* ===== Turnos publicados ===== */
+  /* ===== Turnos publicados (tarjeta limpia + modal detalle) ===== */
   async function cargarTurnosDisponibles(){
     const estado = document.getElementById('turnosEstado');
     const cont = document.getElementById('turnosList');
@@ -2082,7 +2104,7 @@
   }
 
   /* =====================================================
-     HISTORIAL DE PAGOS (MENÚ) — se conserva
+     ✅ HISTORIAL DE PAGOS (MENÚ) — Vista lista + PDF
      ===================================================== */
 
   function limpiarHistorialListaUI(){
@@ -2401,14 +2423,12 @@
     }
   }
 
-  /* ===== Menú: Solicitar grúa ===== */
   function solicitarGrua(){
     const mensaje='Hola, necesito solicitar grúa para mi vehículo.';
     const url='https://wa.me/573159406263?text='+encodeURIComponent(mensaje);
     window.open(url,'_blank');
   }
 
-  /* ===== Kilometraje ===== */
   async function enviarActualizacionKilometraje(){
     const kmInput=document.getElementById('kmValor');
     const idVehInput=document.getElementById('kmIdVehiculo');
@@ -2439,7 +2459,7 @@
       const resp = await fetch(API_URL,{
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body:formData.toString()
+        body: formData.toString()
       });
       const data = await resp.json();
       if(data.ok){
@@ -2456,7 +2476,6 @@
     }
   }
 
-  /* ===== Incidente ===== */
   async function enviarIncidente(){
     const descInput=document.getElementById('incidenteDescripcion');
     const idVehInput=document.getElementById('incidenteIdVehiculo');
@@ -2490,7 +2509,7 @@
       const resp = await fetch(API_URL,{
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body:formData.toString()
+        body: formData.toString()
       });
       const data = await resp.json();
       if(data.ok){
@@ -2507,7 +2526,7 @@
     }
   }
 
-  /* ===== Wompi ===== */
+  /* ===== Wompi (igual al portal principal) ===== */
   async function generarIntegritySignature(reference, amountInCents, currency){
     const encoder=new TextEncoder();
     const data=`${reference}${amountInCents}${currency}${WOMPI_INTEGRITY_KEY}`;
@@ -2558,11 +2577,9 @@
       });
 
       checkout.open(function(result){
-        const transaction = result && result.transaction ? result.transaction : null;
+        const transaction=result.transaction;
         console.log('Transacción Wompi:', transaction && transaction.id, transaction && transaction.status);
-
-        // ✅ Trazabilidad: enviamos referencia, monto, contrato + metadata de la transacción
-        registrarPagoEnSheet(reference, valor, idContrato, transaction);
+        registrarPagoEnSheet(reference, valor, idContrato);
       });
     }catch(e){
       console.error('Error generando firma de integridad',e);
@@ -2570,41 +2587,42 @@
     }
   }
 
-  // ✅ Enviar info a WEB SERVICE (hoja PORTAL_PAGOS) para trazabilidad
-  async function registrarPagoEnSheet(reference, valor, idContrato, transaction){
+  /* ✅ Trazabilidad de pagos hacia WEB SERVICE (PORTAL_PAGOS) */
+  async function registrarPagoEnSheet(reference, valor, idContrato){
+    // Se intenta registrar sin romper flujo (si falla, no bloquea).
     try{
       const formData=new URLSearchParams();
-      formData.append('accion','registrar_pago');
+      formData.append('accion','registrar_pago_portal');   // ✅ endpoint esperado en el “código base”
       formData.append('referencia',reference);
       formData.append('monto',valor);
       formData.append('idContrato',idContrato);
-      formData.append('origen','PORTAL_WEB');
-
-      // ✅ Campos extra de trazabilidad (si el backend los usa)
-      formData.append('portal', 'LOGISTICA');
-      formData.append('hoja', 'PORTAL_PAGOS');
-
-      if(contratoActual){
-        formData.append('nombre', (contratoActual['NOMBRE'] || contratoActual['ID CLIENTE'] || '').toString());
-        formData.append('tipoUsuario', (contratoActual['TIPO USUARIO'] || '').toString());
-        formData.append('idVehiculo', (contratoActual['ID VEHÍCULO'] || contratoActual['ID VEHICULO'] || '').toString());
-      }
-
-      if(transaction){
-        formData.append('wompiTransactionId', (transaction.id || '').toString());
-        formData.append('wompiStatus', (transaction.status || '').toString());
-        formData.append('wompiPaymentMethod', (transaction.payment_method_type || transaction.payment_method || '').toString());
-      }
-
-      formData.append('clientTs', Date.now().toString());
+      formData.append('origen','PORTAL_LOGISTICA');
+      formData.append('sheet','PORTAL_PAGOS');             // ✅ pista para trazabilidad (si el backend lo usa)
 
       await fetch(API_URL,{
         method:'POST',
         headers:{'Content-Type':'application/x-www-form-urlencoded'},
-        body:formData.toString()
+        body: formData.toString()
       });
     }catch(e){
-      console.error('Error registrando pago en hoja',e);
+      console.error('Error registrando pago (portal) en hoja',e);
+    }
+
+    // Fallback a la acción anterior (por compatibilidad)
+    try{
+      const formData2=new URLSearchParams();
+      formData2.append('accion','registrar_pago');
+      formData2.append('referencia',reference);
+      formData2.append('monto',valor);
+      formData2.append('idContrato',idContrato);
+      formData2.append('origen','PORTAL_LOGISTICA');
+      await fetch(API_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/x-www-form-urlencoded'},
+        body: formData2.toString()
+      });
+    }catch(e){
+      console.error('Error registrando pago (fallback) en hoja',e);
     }
   }
 
