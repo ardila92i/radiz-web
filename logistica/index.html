@@ -1,4 +1,3 @@
-```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -30,12 +29,14 @@
       --radius-md:14px;
     }
 
+    html, body{height:100%;}
     body{
       margin:0;
       padding:0;
       font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       background:var(--bg);
       color:var(--ink);
+      overflow-x:hidden;
     }
 
     .page{
@@ -465,10 +466,11 @@
       outline:none;
       background:#f9fafb;
     }
-    input:focus{
+    input:focus, textarea:focus{
       border-color:#2563eb;
       box-shadow:0 0 0 1px rgba(37,99,235,.18);
       background:#ffffff;
+      outline:none;
     }
 
     /* Terms modal iframe */
@@ -675,19 +677,19 @@
       margin-top:6px;
       font-size:.85rem;
     }
-    /* === LOGOS EN TURNOS (solo se añade) === */
-.img-placeholder.has-img{
-  background:#ffffff; /* solo cuando hay logo */
-  border:1px solid rgba(229,231,235,.9);
-}
 
-.turno-logo{
-  width:100%;
-  height:100%;
-  object-fit:contain;
-  display:block;
-  padding:10px; /* aire para que el logo no quede pegado */
-}
+    /* === LOGOS EN TURNOS (solo se añade) === */
+    .img-placeholder.has-img{
+      background:#ffffff; /* solo cuando hay logo */
+      border:1px solid rgba(229,231,235,.9);
+    }
+    .turno-logo{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+      padding:10px; /* aire para que el logo no quede pegado */
+    }
   </style>
 </head>
 
@@ -993,11 +995,13 @@
 
       <div style="width:100%;height:min(72vh,720px);border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
         <iframe id="pdfFrame" title="PDF"
-                style="width:100%;height:100%;border:0;background:#fff;"></iframe>
+                style="width:100%;height:100%;border:0;background:#fff;"
+                referrerpolicy="no-referrer"></iframe>
       </div>
 
-      <div class="modal-actions" style="margin-top:10px;">
-        <button type="button" onclick="cerrarModalPdf()">Cerrar</button>
+      <div class="modal-actions" style="margin-top:10px;justify-content:space-between;">
+        <button type="button" class="btn btn-secondary" onclick="cerrarModalPdf()">Cerrar</button>
+        <button type="button" class="btn btn-secondary" id="btnPdfNuevaPestana" style="display:none;" onclick="abrirPdfEnNuevaPestana()">Abrir en nueva pestaña</button>
       </div>
     </div>
   </div>
@@ -1136,7 +1140,7 @@
       <p></p>
 
       <label for="incidenteDescripcion">Describe lo sucedido</label>
-      <textarea id="incidenteDescripcion" rows="4" style="width:100%;border-radius:10px;border:1px solid #d1d5db;padding:10px 12px;font-family:inherit;font-size:.95rem;"></textarea>
+      <textarea id="incidenteDescripcion" rows="4" style="width:100%;border-radius:10px;border:1px solid #d1d5db;padding:10px 12px;font-family:inherit;font-size:.95rem;background:#f9fafb;"></textarea>
 
       <label for="incidenteIdVehiculo" style="display:block;margin-top:10px;">Placa / ID vehículo</label>
       <input type="text" id="incidenteIdVehiculo" placeholder="Ej: WRC01H">
@@ -1175,9 +1179,9 @@
         <button class="modal-close" type="button" onclick="cerrarModal('modalDetalleTurno')">&times;</button>
       </div>
 
-     <div id="detalleTurnoMedia" class="img-placeholder" style="width:100%;height:160px;border-radius:16px;">
-  <div class="img-hint">Logo</div>
-</div>
+      <div id="detalleTurnoMedia" class="img-placeholder" style="width:100%;height:160px;border-radius:16px;">
+        <div class="img-hint">Logo</div>
+      </div>
 
       <div id="detalleTurnoContenido" style="margin-top:10px;"></div>
 
@@ -1275,6 +1279,9 @@
   let NOTIF_KEY = 'RADIZ_NOTIFS_ANON';
   let META_KEY  = 'RADIZ_NOTIF_META_ANON';
 
+  // PDF helper (para botón "nueva pestaña")
+  let ultimoPdfUrlAbierto = '';
+
   document.addEventListener('DOMContentLoaded', function(){
     idContratoActual = obtenerIdContratoDeUrl();
     if (idContratoActual) {
@@ -1354,18 +1361,33 @@
     const modal = document.getElementById('modalPdfViewer');
     const frame = document.getElementById('pdfFrame');
     const title = document.getElementById('pdfTitle');
+    const btnTab = document.getElementById('btnPdfNuevaPestana');
 
     if(title) title.textContent = titulo || 'Documento';
-    if(frame) frame.src = urlPdf || '';
+
+    ultimoPdfUrlAbierto = urlPdf || '';
+    if(btnTab){
+      btnTab.style.display = ultimoPdfUrlAbierto ? 'inline-flex' : 'none';
+    }
+
+    if(frame) frame.src = ultimoPdfUrlAbierto || '';
     if(modal) modal.style.display = 'flex';
   }
 
   function cerrarModalPdf(){
     const modal = document.getElementById('modalPdfViewer');
     const frame = document.getElementById('pdfFrame');
+    const btnTab = document.getElementById('btnPdfNuevaPestana');
 
     if(frame) frame.src = 'about:blank';
     if(modal) modal.style.display = 'none';
+    if(btnTab) btnTab.style.display = 'none';
+    ultimoPdfUrlAbierto = '';
+  }
+
+  function abrirPdfEnNuevaPestana(){
+    if(!ultimoPdfUrlAbierto) return;
+    window.open(ultimoPdfUrlAbierto, '_blank');
   }
 
   /* Bottom sheet */
@@ -1407,13 +1429,23 @@
     const partes = s.split(' ').filter(Boolean);
     return partes[0] || '';
   }
+
   function obtenerLogoPorEmpresa(empresa){
     const key = String(empresa || '').trim().toUpperCase();
-
-    // ✅ Cruz Verde (archivo real en /logistica/)
+    // ✅ Cruz Verde (archivo real en /logistica/ o misma carpeta)
     if(key === 'CRUZ VERDE') return 'logoscruz-verde.png';
-
     return '';
+  }
+
+  function normalizarLogoUrl(logo){
+    const s = String(logo || '').trim();
+    if(!s) return '';
+    // Si viene como URL absoluta, se deja.
+    if(/^https?:\/\//i.test(s)) return s;
+    // Si viene con slash, se respeta.
+    if(s.startsWith('/')) return s;
+    // Relativo (misma carpeta)
+    return s;
   }
 
   /* ===== Contrato + saludo ===== */
@@ -1492,9 +1524,7 @@
   /* ===== Modal Contrato (misma info del portal principal, en flotante) ===== */
   function renderContratoModal(){
     const cont = document.getElementById('contratoContenido');
-    if(!cont){
-      return;
-    }
+    if(!cont) return;
 
     if(!contratoActual){
       cont.innerHTML = '<p class="status error">No se encontró información del contrato.</p>';
@@ -1663,7 +1693,11 @@
 
           const empresa =
             (t.empresa || t.cliente || t.CLIENTE || 'Cruz Verde').toString().trim() || 'Cruz Verde';
-          const logoUrl = obtenerLogoPorEmpresa(empresa);
+
+          // ✅ Mejora: usa logoUrl del backend si viene; si no, fallback por empresa.
+          const logoPreferido = normalizarLogoUrl(t.logoUrl || t['LOGO URL'] || t['LOGO'] || '');
+          const logoFallback = normalizarLogoUrl(obtenerLogoPorEmpresa(empresa));
+          const logoUrl = logoPreferido || logoFallback;
 
           const direccion = t.direccion || t.DIRECCION || t['DIRECCIÓN'] || '';
           const fecha = t.fecha || t.FECHA || '';
@@ -1746,7 +1780,7 @@
       title.textContent = (turno.empresa || 'Cruz Verde') + ' • ' + (turno.idTurno || 'TURNO');
     }
 
-    const logoUrl = obtenerLogoPorEmpresa(turno.empresa);
+    const logoUrl = normalizarLogoUrl(turno.logoUrl || obtenerLogoPorEmpresa(turno.empresa));
     turno.logoUrl = logoUrl;
 
     const imgBox = document.getElementById('detalleTurnoMedia');
@@ -2006,7 +2040,7 @@
     }
   }
 
-  /* ===== Historial de pagos modal (se mantiene la UI; se restaura la descarga PDF robusta) ===== */
+  /* ===== Historial de pagos modal (UI igual; FIX real: visor Drive embebible + fallback a vista HTML) ===== */
   function prepararModalHistorial(){
     const correoLabel = document.getElementById('correoHistorialLabel');
     const correoInput = document.getElementById('correoHistorial');
@@ -2088,7 +2122,7 @@
     if(ct.includes('application/pdf')){
       const blob = await resp.blob();
       const url = URL.createObjectURL(blob);
-      return { ok:true, url:url };
+      return { ok:true, url:url, kind:'blob' };
     }
 
     // JSON
@@ -2106,50 +2140,100 @@
       return normalizarRespuestaPdf(data);
     }catch(e){}
 
-    // Si no es JSON, a veces la URL final del response ya es el PDF (redirect seguido)
-    // resp.url suele traer el destino final tras redirect: úsalo como fallback
+    // Fallback: si el response terminó en una URL usable
     const finalUrl = resp.url || '';
     if(finalUrl){
-      return { ok:true, url: finalUrl, note:'fallback-url' };
+      return { ok:true, url: finalUrl, kind:'fallback-url' };
     }
 
     return { ok:false, error:'Respuesta no válida al generar el PDF.' };
   }
 
-  // ✅ Normaliza campos: url / downloadUrl / dataUri
+  // ✅ Normaliza campos: url / downloadUrl / dataUri / fileId
   function normalizarRespuestaPdf(data){
     const ok = !!(data && (data.ok === true || data.ok === 'true'));
     if(!ok){
       return { ok:false, error: (data && data.error) ? data.error : 'No fue posible generar el PDF.' };
     }
 
-    const url = data.url || data.downloadUrl || data.pdfUrl || '';
-    if(url){
-      return { ok:true, url:url };
+    const fileId = data.fileId || data.fileID || '';
+    const downloadUrl = data.downloadUrl || data.downloadURL || '';
+    const url = data.url || data.pdfUrl || data.viewUrl || '';
+
+    if(url || fileId || downloadUrl){
+      return { ok:true, url:url, fileId:fileId, downloadUrl:downloadUrl, kind:'json' };
     }
 
     const dataUri = data.dataUri || data.dataURI || data.base64 || '';
     if(typeof dataUri === 'string' && dataUri.startsWith('data:application/pdf')){
-      return { ok:true, url:dataUri };
+      return { ok:true, url:dataUri, kind:'datauri' };
     }
 
     return { ok:false, error:'El servidor respondió OK, pero no entregó la URL del PDF.' };
   }
 
-  // ✅ Intenta acciones alternativas si el backend tiene variación de nombre
-  async function obtenerHistorialPdfUrl(id){
+  // ✅ Drive embed fix: convierte a /preview para que el iframe sí lo muestre
+  function construirUrlEmbedPdf(res){
+    if(!res) return '';
+
+    // 1) Si tenemos fileId, lo mejor es /preview
+    const fid = String(res.fileId || '').trim();
+    if(fid){
+      return 'https://drive.google.com/file/d/' + encodeURIComponent(fid) + '/preview';
+    }
+
+    const url = String(res.url || '').trim();
+    if(!url) return '';
+
+    // 2) Si es data/blob ya sirve
+    if(url.startsWith('blob:') || url.startsWith('data:application/pdf')){
+      return url;
+    }
+
+    // 3) Si es Drive, intentar extraer el id y construir preview
+    if(url.includes('drive.google.com')){
+      // a) open?id=XXXX
+      try{
+        const u = new URL(url);
+        const id = u.searchParams.get('id');
+        if(id){
+          return 'https://drive.google.com/file/d/' + encodeURIComponent(id) + '/preview';
+        }
+      }catch(e){}
+
+      // b) /file/d/XXXX/
+      const m = url.match(/\/file\/d\/([^/]+)/i);
+      if(m && m[1]){
+        return 'https://drive.google.com/file/d/' + encodeURIComponent(m[1]) + '/preview';
+      }
+
+      // c) uc?export=download&id=XXXX -> preview
+      const m2 = url.match(/[?&]id=([^&]+)/i);
+      if(m2 && m2[1]){
+        return 'https://drive.google.com/file/d/' + encodeURIComponent(m2[1]) + '/preview';
+      }
+
+      // si no pudimos, se deja tal cual
+      return url;
+    }
+
+    // 4) No Drive: devolver tal cual
+    return url;
+  }
+
+  // ✅ Intenta acciones alternativas si el backend tiene variación de nombre (PDF primero)
+  async function obtenerHistorialPdfResponse(id){
     const acciones = ['historial_pagos_pdf', 'historial-pagos-pdf'];
     let ultimoError = 'No fue posible generar el PDF.';
 
     for(const acc of acciones){
       const url = API_URL + '?accion=' + encodeURIComponent(acc) + '&id=' + encodeURIComponent(id);
-
       try{
         const resp = await fetch(url, { method:'GET', redirect:'follow' });
         const r = await leerRespuestaPdf(resp);
 
-        if(r && r.ok && r.url){
-          return r.url;
+        if(r && r.ok){
+          return r; // {ok:true, url/fileId/downloadUrl}
         }
         if(r && r.error){
           ultimoError = r.error;
@@ -2160,10 +2244,16 @@
       }
     }
 
+    // Fallback: vista HTML imprimible (si el PDF falla)
+    try{
+      const vistaUrl = API_URL + '?accion=' + encodeURIComponent('historial_pagos_vista') + '&id=' + encodeURIComponent(id);
+      return { ok:true, url:vistaUrl, kind:'vista-html' };
+    }catch(e){}
+
     throw new Error(ultimoError);
   }
 
-  // ✅ Descarga/visualización del PDF para usuario tipo R (pagos en FACTURAS_ALEGRA del WEB SERVICE, generado por backend)
+  // ✅ Descarga/visualización del PDF para usuario tipo R (FACTURAS_ALEGRA -> Apps Script -> Drive -> visor)
   async function descargarHistorialPdf(){
     const idInput = document.getElementById('idHistorial');
     const msg = document.getElementById('historialMsg');
@@ -2179,12 +2269,17 @@
     }
 
     try{
-      const pdfUrl = await obtenerHistorialPdfUrl(id);
+      const res = await obtenerHistorialPdfResponse(id);
+
+      // Si fue vista HTML fallback, igualmente abre en flotante (imprimible)
+      const embedUrl = construirUrlEmbedPdf(res);
 
       msg.style.color='#065f46';
-      msg.textContent='Listo. Abriendo PDF...';
+      msg.textContent = (res.kind === 'vista-html')
+        ? 'Listo. Abriendo vista (puedes imprimir/guardar como PDF)...'
+        : 'Listo. Abriendo PDF...';
 
-      abrirModalPdf('Historial de pagos ' + id, pdfUrl);
+      abrirModalPdf('Historial de pagos ' + id, embedUrl);
 
     }catch(e){
       console.error(e);
