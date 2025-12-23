@@ -170,12 +170,16 @@
       overflow:hidden; /* ✅ evita que “bote” */
     }
 
-    /* ✅ espacio inferior para imagen (por ahora fondo azul Radiz) */
+    /* ✅ espacio inferior para imagen (ahora carga banner-turnos.png) */
     .home-banner{
       flex:0 0 auto;
       margin:8px;
       border-radius:18px;
       background:var(--radiz-blue);
+      background-image:url('banner-turnos.png');
+      background-repeat:no-repeat;
+      background-position:center;
+      background-size:cover;
       height:clamp(110px, 18vh, 150px); /* tamaño “justo” y responsive */
       box-shadow:0 12px 26px rgba(15,23,42,.08);
     }
@@ -867,7 +871,7 @@
 
         </div>
 
-        <!-- ✅ Espacio inferior para imagen (por ahora en azul Radiz) -->
+        <!-- ✅ Espacio inferior para imagen (ahora carga banner-turnos.png) -->
         <div class="home-banner" aria-label="Espacio para imagen"></div>
       </div>
 
