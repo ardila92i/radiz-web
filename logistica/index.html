@@ -2816,7 +2816,52 @@
       return acc + (isNaN(n) ? 0 : n);
     }, 0);
   }
+  
+// ✅ NUEVO: conteos (aceite / pastillas / kit arrastre) sin cambiar estética ni flujo
+function toNumInt_(v){
+  const n = Number(String(v ?? '').replace(/[^\d.-]/g,''));
+  return isNaN(n) ? 0 : Math.round(n);
+}
 
+function matchTipo_(m, needles){
+  const tipo =
+    getByKeys_(m, ['TIPO','TIPO MANTENIMIENTO','MANTENIMIENTO','SERVICIO','DESCRIPCIÓN','DESCRIPCION','DETALLE','NOTAS']) || '';
+  const s = normKey_(tipo);
+  return needles.some(n => s.includes(normKey_(n)));
+}
+
+function getConteosMtos_(arr){
+  let aceite = 0, pastillas = 0, kit = 0;
+
+  (arr || []).forEach(m => {
+    // 1) Si existe columna numérica explícita (se suma)
+    const aNum = toNumInt_(getByKeys_(m, [
+      'CAMBIOS DE ACEITE','CAMBIOS ACEITE','N CAMBIOS ACEITE','N° CAMBIOS ACEITE','ACEITE'
+    ]));
+    const pNum = toNumInt_(getByKeys_(m, [
+      'PASTILLAS','CAMBIO PASTILLAS','PASTILLAS FRENO','PASTILLAS DE FRENO'
+    ]));
+    const kNum = toNumInt_(getByKeys_(m, [
+      'KIT DE ARRASTRE','KIT ARRASTRE','CAMBIO KIT ARRASTRE','TRANSMISIÓN','TRANSMISION'
+    ]));
+
+    // Si vienen como números (en alguna hoja pasa), priorizamos sumar
+    if(aNum || pNum || kNum){
+      aceite += aNum;
+      pastillas += pNum;
+      kit += kNum;
+      return;
+    }
+
+    // 2) Fallback: contar por tipo/descripcion (1 por registro)
+    if(matchTipo_(m, ['ACEITE','CAMBIO ACEITE','CAMBIO DE ACEITE','ACEITE Y FILTRO','FILTRO ACEITE'])) aceite += 1;
+    if(matchTipo_(m, ['PASTILLA','PASTILLAS','PASTILLAS FRENO','FRENO'])) pastillas += 1;
+    if(matchTipo_(m, ['KIT ARRASTRE','ARRASTRE','CADENA','SPROCKET','CORONA','PIÑON','PIÑÓN'])) kit += 1;
+  });
+
+  return { aceite, pastillas, kit };
+}
+  
   function pickUltimoMto_(arr){
     let best = null;
     let bestT = -1;
