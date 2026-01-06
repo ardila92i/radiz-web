@@ -4,16 +4,11 @@
   <meta charset="UTF-8" />
   <title>Portal Logístico RADIZ</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-
-  <!-- Iconos / PWA (se conserva mínimo; logo interno pedido es icon-192.png) -->
   <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
-
-  <!-- Wompi (para el botón Pagar) -->
   <script src="https://checkout.wompi.co/widget.js" async></script>
 
   <style>
     *{box-sizing:border-box}
-
     :root{
       --radiz-blue:#2563eb;
       --radiz-blue-2:#1d4ed8;
@@ -29,9 +24,7 @@
       --radius-md:14px;
     }
 
-       /* ✅ FIX: pantalla principal fija (sin “subir/bajar” la página) */
     html, body{height:100%; overflow:hidden; overscroll-behavior:none;}
-
     body{
       margin:0;
       padding:0;
@@ -42,31 +35,29 @@
     }
 
     .page{
-      height:100vh;            /* fallback */
-      height:100dvh;           /* ✅ Android (barra dinámica) */
+      height:100vh;
+      height:100dvh;
       display:flex;
       align-items:flex-start;
       justify-content:center;
-      padding:14px 14px calc(86px + env(safe-area-inset-bottom)); /* ✅ respeta barra inferior */
-      overflow:hidden;         /* ✅ evita scroll del documento */
+      padding:14px 14px calc(86px + env(safe-area-inset-bottom));
+      overflow:hidden;
     }
 
-    /* ✅ Se elimina el “recuadro/tarjeta” contenedora: sin fondo, sin sombra, sin bordes */
     .container{
       width:100%;
-      max-width:520px; /* look app */
+      max-width:520px;
       background:transparent;
       border-radius:0;
       box-shadow:none;
       padding:0;
       position:relative;
-      overflow:hidden;     /* ✅ contenedor fijo */
-      height:100%;         /* ✅ para que las vistas ocupen el alto */
-      display:flex;        /* ✅ layout fijo */
+      overflow:hidden;
+      height:100%;
+      display:flex;
       flex-direction:column;
     }
 
-    /* Top app bar */
     .topbar{
       display:grid;
       grid-template-columns:48px 1fr 48px;
@@ -90,7 +81,6 @@
       gap:8px;
     }
 
-    /* ✅ Logo: icon-192.png centrado, pequeño */
     .logo{
       width:34px;
       height:34px;
@@ -138,7 +128,6 @@
       color:var(--ink);
       flex:0 0 auto;
     }
-    /* ✅ Nombre del mensajero en azul Radiz */
     .hello-name{
       color:var(--radiz-blue);
       font-weight:850;
@@ -152,15 +141,12 @@
       flex:0 0 auto;
     }
 
-    /* Views */
     .view{display:none; flex:1; overflow:auto; -webkit-overflow-scrolling:touch;}
     .view.active{display:block;}
 
-    /* ✅ HOME fijo (sin scroll) + espacio inferior para imagen */
     #viewHome{ overflow:hidden; }
     #viewHome.active{ display:flex; flex-direction:column; }
 
-    /* Home grid buttons */
     .home-grid{
       display:grid;
       grid-template-columns:1fr 1fr;
@@ -168,27 +154,27 @@
       padding:8px;
       margin-top:6px;
       flex:1 1 auto;
-      overflow:hidden; /* ✅ evita que “bote” */
+      overflow:hidden;
     }
 
-    /* ✅ espacio inferior para imagen (ahora carga banner-turnos.png) */
     .home-banner{
-  flex:0 0 auto;
-  margin:8px;
-  border-radius:18px;
-  overflow:hidden;
-  background:#0b1b5a url('banner-turnos.png') center/cover no-repeat;
-  aspect-ratio: 1040 / 350;   /* Ajusta si tu banner es más alto (16/7 o 16/8) */
-  height:auto;            /* ya no uses clamp aquí */
-  box-shadow:0 12px 26px rgba(15,23,42,.08);
+      flex:0 0 auto;
+      margin:8px;
+      border-radius:18px;
+      overflow:hidden;
+      background:#0b1b5a url('banner-turnos.png') center/cover no-repeat;
+      aspect-ratio: 1040 / 350;
+      height:auto;
+      box-shadow:0 12px 26px rgba(15,23,42,.08);
     }
     @media (max-width: 520px){
-  .home-banner{
-    background-size: 108% auto;      /* ✅ evita recorte en smartphone */
-    background-position: center;
-    aspect-ratio: 1040 / 350;          /* normalmente en móvil se ve mejor un poco más alto */
-  }
-}
+      .home-banner{
+        background-size: 108% auto;
+        background-position: center;
+        aspect-ratio: 1040 / 350;
+      }
+    }
+
     .home-tile{
       border:1px solid var(--border);
       border-radius:18px;
@@ -241,14 +227,12 @@
       line-height:1.35;
     }
 
-    /* Turnos view */
     .section-title{
       margin:6px 8px 6px;
       font-size:1rem;
       font-weight:800;
     }
 
-    /* ✅ Cobertura: Bogotá como texto informativo, no “pill/botón” */
     .coverage{
       margin:0 8px 10px;
       font-size:.84rem;
@@ -272,7 +256,6 @@
       margin:10px 8px 14px;
     }
 
-    /* Tarjeta “limpia” */
     .turno-mini{
       border:1px solid var(--border);
       border-radius:16px;
@@ -350,7 +333,6 @@
       white-space:nowrap;
     }
 
-    /* Agenda (se conserva, dentro de Turnos) */
     .card-agenda{
       margin:0 8px 10px;
       border-radius:18px;
@@ -393,7 +375,6 @@
       color:#e5e7eb;
     }
 
-    /* Buttons */
     .btn{
       padding:10px 16px;
       border-radius:999px;
@@ -435,7 +416,6 @@
       box-shadow:none !important;
     }
 
-    /* Modals */
     .modal-backdrop{
       position:fixed;
       inset:0;
@@ -508,7 +488,6 @@
       outline:none;
     }
 
-    /* Terms modal iframe */
     .terms-frame{
       width:100%;
       height:66vh;
@@ -522,7 +501,6 @@
       border:0;
     }
 
-    /* Notifications list */
     .noti-list{
       display:flex;
       flex-direction:column;
@@ -564,7 +542,7 @@
       color:#9ca3af;
     }
 
-        .bottom-bar{
+    .bottom-bar{
       position:fixed;
       left:0;
       right:0;
@@ -612,7 +590,6 @@
       color:var(--radiz-blue);
     }
 
-    /* Bottom sheet menu */
     .sheet-backdrop{
       position:fixed;
       inset:0;
@@ -685,7 +662,6 @@
       color:#9ca3af;
     }
 
-    /* “Tarjetitas” tipo portal dentro del modal Contrato */
     .mini-card{
       border:1px solid var(--border);
       border-radius:16px;
@@ -712,9 +688,8 @@
       font-size:.85rem;
     }
 
-    /* === LOGOS EN TURNOS (solo se añade) === */
     .img-placeholder.has-img{
-      background:#ffffff; /* solo cuando hay logo */
+      background:#ffffff;
       border:1px solid rgba(229,231,235,.9);
     }
     .turno-logo{
@@ -722,16 +697,11 @@
       height:100%;
       object-fit:contain;
       display:block;
-      padding:10px; /* aire para que el logo no quede pegado */
+      padding:10px;
     }
 
-    /* ✅ FIX: que el visor PDF quede SIEMPRE por encima */
     #modalPdfViewer{ z-index: 60; }
 
-    /* ===========================
-       ✅ HISTORIAL DE PAGOS (MENÚ)
-       Estilo tipo “Mi Claro”
-       =========================== */
     .hist-row{
       padding:12px 8px;
       border-top:1px solid #f3f4f6;
@@ -759,17 +729,12 @@
 <body>
   <div class="page">
     <div class="container">
-
-      <!-- Topbar -->
       <div class="topbar">
         <div class="topbar-left"></div>
-
         <div class="logo-wrap" aria-label="RADIZ">
           <img src="/icon-192.png" alt="RADIZ" class="logo" />
         </div>
-
         <button class="bell-btn" type="button" onclick="abrirNotificaciones()" aria-label="Notificaciones">
-          <!-- Bell SVG -->
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color:#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/>
             <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
@@ -778,17 +743,13 @@
         </button>
       </div>
 
-      <!-- Saludo -->
       <div class="hello" id="helloText">Hola</div>
       <div class="subline" id="sublineText">Bienvenido a tu panel de control general.</div>
 
-      <!-- ===== VISTA: HOME ===== -->
       <div class="view active" id="viewHome">
         <div class="home-grid">
-
           <div class="home-tile" onclick="irAVista('turnos')">
             <div class="tile-icon">
-              <!-- Turnos SVG -->
               <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M8 6h13"/>
                 <path d="M8 12h13"/>
@@ -804,7 +765,6 @@
 
           <div class="home-tile" onclick="abrirModal('modalPerfil')">
             <div class="tile-icon">
-              <!-- Perfil SVG -->
               <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M20 21a8 8 0 0 0-16 0"/>
                 <circle cx="12" cy="8" r="4"/>
@@ -816,7 +776,6 @@
 
           <div class="home-tile" onclick="irAVista('mantenimientos')">
             <div class="tile-icon">
-              <!-- Mantenimientos SVG -->
               <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14.7 6.3a1 1 0 0 0-1.4 0l-.8.8-1.5-1.5a1 1 0 0 0-1.4 0L7.3 6.9a1 1 0 0 0 0 1.4l1.5 1.5-.8.8a1 1 0 0 0 0 1.4l1.2 1.2a1 1 0 0 0 1.4 0l.8-.8 1.5 1.5a1 1 0 0 0 1.4 0l1.3-1.3a1 1 0 0 0 0-1.4l-1.5-1.5.8-.8a1 1 0 0 0 0-1.4z"/>
                 <path d="M5 19h4"/>
@@ -829,7 +788,6 @@
 
           <div class="home-tile" onclick="irAVista('pagos')">
             <div class="tile-icon">
-              <!-- ✅ Historial SVG (lista) -->
               <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M9 6h12"/>
                 <path d="M9 12h12"/>
@@ -843,10 +801,8 @@
             <p class="tile-desc">Consulte sus últimos movimientos</p>
           </div>
 
-          <!-- ✅ Nuevo botón: Contrato -->
           <div class="home-tile" onclick="abrirModal('modalContrato')">
             <div class="tile-icon">
-              <!-- Contrato SVG -->
               <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
                 <path d="M14 2v6h6"/>
@@ -859,10 +815,8 @@
             <p class="tile-desc">Generalidades de su contrato</p>
           </div>
 
-          <!-- ✅ Nuevo botón: Pagar -->
           <div class="home-tile" onclick="abrirModal('modalPagar')">
             <div class="tile-icon">
-              <!-- Pagar SVG -->
               <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="3" y="5" width="18" height="14" rx="2"/>
                 <path d="M3 10h18"/>
@@ -872,62 +826,43 @@
             <p class="tile-title">Pagar</p>
             <p class="tile-desc">Paga con Wompi o escanéa el QR</p>
           </div>
-
         </div>
 
-        <!-- ✅ Espacio inferior para imagen (ahora carga banner-turnos.png) -->
         <div class="home-banner" aria-label="Espacio para imagen"></div>
       </div>
 
-      <!-- ===== VISTA: TURNOS ===== -->
       <div class="view" id="viewTurnos">
         <div class="section-title">Turnos disponibles</div>
         <div class="coverage">Cobertura: Bogotá</div>
-
         <div id="turnosEstado" class="status muted">Cargando turnos publicados...</div>
         <div id="turnosList" class="turnos-list"></div>
 
         <div class="card-agenda">
           <h2>Mi agenda</h2>
-          <p id="agendaEstado" class="status" style="color:#e5e7eb;margin:6px 0 0;">
-            Aún no tienes turnos aceptados.
-          </p>
+          <p id="agendaEstado" class="status" style="color:#e5e7eb;margin:6px 0 0;">Aún no tienes turnos aceptados.</p>
           <div id="agendaContenido"></div>
         </div>
       </div>
 
-            <!-- ===== VISTA: MANTENIMIENTOS ===== -->
       <div class="view" id="viewMantenimientos">
         <div class="section-title">Panel de mantenimientos</div>
-
-        <div id="mtosEstado" class="status muted" style="margin:8px;">
-          Cargando mantenimientos...
-        </div>
-
-        <!-- Resumen (tarjetitas estilo actual) -->
+        <div id="mtosEstado" class="status muted" style="margin:8px;">Cargando mantenimientos...</div>
         <div id="mtosResumen" style="margin:8px;"></div>
-
-        <!-- Lista (usa estilo de notificaciones para no cambiar estética) -->
         <div id="mtosLista" class="noti-list" style="margin:8px;"></div>
       </div>
 
-      <!-- ===== VISTA: PAGOS (placeholder + intento de historial si aplica) ===== -->
       <div class="view" id="viewPagos">
         <div class="section-title">Pagos</div>
-        <div class="subline" style="margin:0 8px 12px;">
-        </div>
+        <div class="subline" style="margin:0 8px 12px;"></div>
         <div id="pagosEstado" class="status muted" style="margin:8px;">Cargando información...</div>
         <div id="pagosContenido" style="margin:8px;"></div>
       </div>
-
     </div>
   </div>
 
-  <!-- Barra inferior fija -->
   <div class="bottom-bar">
     <div class="bottom-inner">
       <button class="nav-btn" type="button" onclick="irAVista('home')">
-        <!-- Home SVG -->
         <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M3 11l9-8 9 8"/>
           <path d="M9 22V12h6v10"/>
@@ -936,7 +871,6 @@
       </button>
 
       <button class="nav-btn" type="button" onclick="abrirSheetMenu()">
-        <!-- Menu SVG -->
         <svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M4 6h16"/>
           <path d="M4 12h16"/>
@@ -947,52 +881,23 @@
     </div>
   </div>
 
-  <!-- Bottom sheet menu (✅ mismo menú del portal principal + cerrar sesión) -->
   <div class="sheet-backdrop" id="sheetBackdrop" onclick="cerrarSheetMenu()"></div>
   <div class="sheet" id="sheetMenu">
     <div class="sheet-card">
       <div class="sheet-handle"></div>
       <div class="sheet-title">Opciones</div>
 
-      <div class="sheet-item" onclick="abrirModal('modalBeneficios');cerrarSheetMenu();">
-        Beneficios <span>›</span>
-      </div>
-
-      <div class="sheet-item" onclick="solicitarGrua();cerrarSheetMenu();">
-        Solicitar grúa <span>›</span>
-      </div>
-
-      <div class="sheet-item" onclick="abrirModal('modalActualizarKm');cerrarSheetMenu();">
-        Actualizar kilometraje <span>›</span>
-      </div>
-
-      <!-- ✅ Eliminado del menú: Señales / Historial de pagos / Historial de mantenimientos -->
-
-      <div class="sheet-item" onclick="abrirModal('modalSaldoFavor');cerrarSheetMenu();">
-        Mi saldo a favor <span>›</span>
-      </div>
-
-      <div class="sheet-item" onclick="abrirModal('modalAfiliado');cerrarSheetMenu();">
-        Link de referidos <span>›</span>
-      </div>
-
-      <div class="sheet-item" onclick="abrirModal('modalIncidente');cerrarSheetMenu();">
-        Notificar incidente <span>›</span>
-      </div>
-
-      <div class="sheet-item" onclick="abrirModal('modalTaller');cerrarSheetMenu();">
-        Taller asignado <span>›</span>
-      </div>
-
-      <div class="sheet-item" onclick="cerrarSesion();">
-        Cerrar sesión <span>›</span>
-      </div>
+      <div class="sheet-item" onclick="abrirModal('modalBeneficios');cerrarSheetMenu();">Beneficios <span>›</span></div>
+      <div class="sheet-item" onclick="solicitarGrua();cerrarSheetMenu();">Solicitar grúa <span>›</span></div>
+      <div class="sheet-item" onclick="abrirModal('modalActualizarKm');cerrarSheetMenu();">Actualizar kilometraje <span>›</span></div>
+      <div class="sheet-item" onclick="abrirModal('modalSaldoFavor');cerrarSheetMenu();">Mi saldo a favor <span>›</span></div>
+      <div class="sheet-item" onclick="abrirModal('modalAfiliado');cerrarSheetMenu();">Link de referidos <span>›</span></div>
+      <div class="sheet-item" onclick="abrirModal('modalIncidente');cerrarSheetMenu();">Notificar incidente <span>›</span></div>
+      <div class="sheet-item" onclick="abrirModal('modalTaller');cerrarSheetMenu();">Taller asignado <span>›</span></div>
+      <div class="sheet-item" onclick="cerrarSesion();">Cerrar sesión <span>›</span></div>
     </div>
   </div>
 
-  <!-- ===================== MODALES ===================== -->
-
-  <!-- MODAL: Mi perfil (se conserva) -->
   <div class="modal-backdrop" id="modalPerfil">
     <div class="modal">
       <div class="modal-header">
@@ -1005,11 +910,9 @@
     </div>
   </div>
 
-  <!-- ✅ MODAL: Contrato (misma info tipo portal principal) -->
   <div class="modal-backdrop" id="modalContrato">
     <div class="modal">
       <div class="modal-header">
-        <!-- ✅ quitar “Contrato” repetido (se deja sólo el de la mini-card) -->
         <h3>&nbsp;</h3>
         <button class="modal-close" type="button" onclick="cerrarModal('modalContrato')">&times;</button>
       </div>
@@ -1022,7 +925,6 @@
     </div>
   </div>
 
-  <!-- ✅ MODAL: Pagar (igual a “Realizar pago” del portal principal) -->
   <div class="modal-backdrop" id="modalPagar">
     <div class="modal">
       <div class="modal-header">
@@ -1030,9 +932,7 @@
         <button class="modal-close" type="button" onclick="cerrarModal('modalPagar')">&times;</button>
       </div>
 
-      <p style="margin-top:0;color:#4b5563;font-size:.9rem;">
-        Ingresa el monto a pagar
-      </p>
+      <p style="margin-top:0;color:#4b5563;font-size:.9rem;">Ingresa el monto a pagar</p>
 
       <label for="montoPago">Valor (COP)</label>
       <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
@@ -1041,7 +941,6 @@
       <p id="pagoContratoError" class="pagoError">No se encontró tu ID de contrato.</p>
 
       <div class="modal-actions" style="justify-content:flex-end;">
-        <!-- ✅ Eliminado botón “Cerrar” (redundante con la X) -->
         <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
           <button type="button" class="btn btn-secondary" onclick="abrirModal('modalQR')">Ver QR</button>
           <button type="button" class="btn btn-primary" onclick="crearPagoWompi()">Pagar con Wompi</button>
@@ -1050,7 +949,6 @@
     </div>
   </div>
 
-  <!-- VISOR PDF (MODAL) -->
   <div class="modal-backdrop" id="modalPdfViewer">
     <div class="modal" style="max-width:920px;width:94%;padding:14px 14px 12px;">
       <div class="modal-header" style="margin-bottom:10px;">
@@ -1059,9 +957,7 @@
       </div>
 
       <div style="width:100%;height:min(72vh,720px);border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
-        <iframe id="pdfFrame" title="PDF"
-                style="width:100%;height:100%;border:0;background:#fff;"
-                referrerpolicy="no-referrer"></iframe>
+        <iframe id="pdfFrame" title="PDF" style="width:100%;height:100%;border:0;background:#fff;" referrerpolicy="no-referrer"></iframe>
       </div>
 
       <div class="modal-actions" style="margin-top:10px;justify-content:space-between;">
@@ -1071,7 +967,6 @@
     </div>
   </div>
 
-  <!-- MODAL: PAGO POR QR (igual al portal principal) -->
   <div class="modal-backdrop" id="modalQR">
     <div class="modal">
       <div class="modal-header">
@@ -1079,18 +974,14 @@
         <button class="modal-close" type="button" onclick="cerrarModal('modalQR')">&times;</button>
       </div>
       <p>Escanea el código con la app de tu banco para realizar el pago:</p>
-      <img src="QRRADIZ-38.png" alt="Código QR de pago RADIZ"
-           style="max-width:100%;height:auto;border-radius:12px;display:block;margin:8px auto;">
-      <p style="font-size:.8rem;color:#6b7280;margin-top:4px;">
-        Incluye tu ID de contrato en la referencia de pago.
-      </p>
+      <img src="QRRADIZ-38.png" alt="Código QR de pago RADIZ" style="max-width:100%;height:auto;border-radius:12px;display:block;margin:8px auto;">
+      <p style="font-size:.8rem;color:#6b7280;margin-top:4px;">Incluye tu ID de contrato en la referencia de pago.</p>
       <div class="modal-actions">
         <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalQR')">Cerrar</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: Beneficios (igual lógica portal principal) -->
   <div class="modal-backdrop" id="modalBeneficios">
     <div class="modal">
       <div class="modal-header">
@@ -1104,7 +995,6 @@
     </div>
   </div>
 
-  <!-- ✅ MODAL: Historial de pagos (se conserva aunque ya no esté en menú) -->
   <div class="modal-backdrop" id="modalHistorialPagos">
     <div class="modal">
       <div class="modal-header">
@@ -1112,9 +1002,7 @@
         <button class="modal-close" type="button" onclick="cerrarModal('modalHistorialPagos')">&times;</button>
       </div>
 
-      <p id="historialIntro" style="margin-bottom:6px;">
-        Ingresa tu correo electrónico y el ID para solicitar tu historial en PDF.
-      </p>
+      <p id="historialIntro" style="margin-bottom:6px;">Ingresa tu correo electrónico y el ID para solicitar tu historial en PDF.</p>
 
       <label for="correoHistorial" id="correoHistorialLabel">Correo electrónico</label>
       <input type="email" id="correoHistorial" placeholder="ejemplo@correo.com">
@@ -1124,12 +1012,9 @@
 
       <p id="historialMsg" style="font-size:.85rem;margin-top:6px;color:#6b7280;"></p>
 
-      <!-- ✅ NUEVO: Vista lista tipo “Mi Claro” (solo para usuarios tipo R) -->
       <div id="historialListaWrap" style="display:none;margin-top:10px;">
         <div style="border:1px solid #e5e7eb;border-radius:14px;background:#fff;padding:10px 12px;">
-          <p style="margin:0 0 8px;color:#6b7280;font-size:.82rem;">
-            Aquí podrás visualizar los últimos <strong>6</strong> pagos realizados en tu cuenta.
-          </p>
+          <p style="margin:0 0 8px;color:#6b7280;font-size:.82rem;">Aquí podrás visualizar los últimos <strong>6</strong> pagos realizados en tu cuenta.</p>
           <div id="historialLista"></div>
         </div>
       </div>
@@ -1142,14 +1027,12 @@
     </div>
   </div>
 
-  <!-- MODAL: Actualizar kilometraje (igual al portal principal) -->
   <div class="modal-backdrop" id="modalActualizarKm">
     <div class="modal">
       <div class="modal-header">
         <h3>Actualizar kilometraje</h3>
         <button class="modal-close" type="button" onclick="cerrarModal('modalActualizarKm')">&times;</button>
       </div>
-      <p></p>
 
       <label for="kmValor">Kilometraje actual</label>
       <input type="number" id="kmValor" placeholder="Ej: 2500">
@@ -1166,7 +1049,6 @@
     </div>
   </div>
 
-  <!-- MODAL: Saldo a favor -->
   <div class="modal-backdrop" id="modalSaldoFavor">
     <div class="modal">
       <div class="modal-header">
@@ -1180,17 +1062,13 @@
     </div>
   </div>
 
-  <!-- MODAL: Link de afiliado -->
   <div class="modal-backdrop" id="modalAfiliado">
     <div class="modal">
       <div class="modal-header">
         <h3>Link de referidos</h3>
         <button class="modal-close" type="button" onclick="cerrarModal('modalAfiliado')">&times;</button>
       </div>
-      <p>
-        Comparte nuestro formulario con tu ID (ejemplo: R4523) y gana hasta
-        $70.000 pesos por cada conductor aprobado.
-      </p>
+      <p>Comparte nuestro formulario con tu ID (ejemplo: R4523) y gana hasta $70.000 pesos por cada conductor aprobado.</p>
 
       <label for="linkAfiliadoInput">Link</label>
       <div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
@@ -1205,14 +1083,12 @@
     </div>
   </div>
 
-  <!-- MODAL: Notificar incidente -->
   <div class="modal-backdrop" id="modalIncidente">
     <div class="modal">
       <div class="modal-header">
         <h3>Notificar incidente</h3>
         <button class="modal-close" type="button" onclick="cerrarModal('modalIncidente')">&times;</button>
       </div>
-      <p></p>
 
       <label for="incidenteDescripcion">Describa lo sucedido en este campo</label>
       <textarea id="incidenteDescripcion" rows="4" style="width:100%;border-radius:10px;border:1px solid #d1d5db;padding:10px 12px;font-family:inherit;font-size:.95rem;background:#f9fafb;"></textarea>
@@ -1232,7 +1108,6 @@
     </div>
   </div>
 
-  <!-- MODAL: Taller asignado -->
   <div class="modal-backdrop" id="modalTaller">
     <div class="modal">
       <div class="modal-header">
@@ -1246,7 +1121,6 @@
     </div>
   </div>
 
-  <!-- MODAL: Detalle del turno (se conserva) -->
   <div class="modal-backdrop" id="modalDetalleTurno">
     <div class="modal">
       <div class="modal-header">
@@ -1267,18 +1141,13 @@
     </div>
   </div>
 
-  <!-- MODAL: Confirmar aceptación de turno (se conserva) -->
   <div class="modal-backdrop" id="modalConfirmarTurno">
     <div class="modal">
       <div class="modal-header">
         <h3>Confirmar aceptación de turno</h3>
         <button class="modal-close" type="button" onclick="cerrarModal('modalConfirmarTurno')">&times;</button>
       </div>
-      <p>
-        ¿Está seguro de aceptar el turno?
-        Recuerde que es un compromiso laboral legal que cumple con toda la normativa vigente.
-        En caso de incumplimiento se cargará a su cuenta los valores de penalización.
-      </p>
+      <p>¿Está seguro de aceptar el turno? Recuerde que es un compromiso laboral legal que cumple con toda la normativa vigente. En caso de incumplimiento se cargará a su cuenta los valores de penalización.</p>
 
       <div style="display:flex;align-items:flex-start;gap:10px;margin-top:10px;font-size:.86rem;color:#111827;">
         <input type="checkbox" id="chkTerminos" onchange="onToggleTerminos()" style="margin-top:3px;transform:scale(1.08);">
@@ -1290,14 +1159,11 @@
       <div class="modal-actions">
         <button type="button" class="btn btn-secondary" onclick="cerrarModal('modalConfirmarTurno')">Cancelar</button>
         <button type="button" class="btn btn-secondary" onclick="abrirTerminosTurno()">Términos y condiciones</button>
-        <button type="button" class="btn btn-primary" id="btnConfirmarTurno" onclick="confirmarAceptarTurno()" disabled>
-          Confirmar
-        </button>
+        <button type="button" class="btn btn-primary" id="btnConfirmarTurno" onclick="confirmarAceptarTurno()" disabled>Confirmar</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL: Términos y condiciones (se conserva) -->
   <div class="modal-backdrop" id="modalTerminosTurno">
     <div class="modal">
       <div class="modal-header">
@@ -1315,7 +1181,6 @@
     </div>
   </div>
 
-  <!-- MODAL: Notificaciones (localStorage, se conserva) -->
   <div class="modal-backdrop" id="modalNotificaciones">
     <div class="modal">
       <div class="modal-header">
@@ -1334,8 +1199,6 @@
 
 <script>
   const API_URL = 'https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
-
-  /* Wompi (mismo set del portal principal que nos compartiste) */
   const WOMPI_PUBLIC_KEY='pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06';
   const WOMPI_INTEGRITY_KEY='prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN';
   const WOMPI_REDIRECT_URL='https://portal.radizco.com/';
@@ -1348,13 +1211,11 @@
 
   let turnoSeleccionado = null;
   let turnoDetalleActual = null;
-  let ultimaAceptacion = null; // agenda simulada
+  let ultimaAceptacion = null;
 
-  // Notificaciones (localStorage)
   let NOTIF_KEY = 'RADIZ_NOTIFS_ANON';
   let META_KEY  = 'RADIZ_NOTIF_META_ANON';
 
-  // PDF helper (para botón "nueva pestaña")
   let ultimoPdfUrlAbierto = '';
 
   document.addEventListener('DOMContentLoaded', function(){
@@ -1367,7 +1228,6 @@
     cargarContratoYSaludo(idContratoActual);
     cargarTurnosDisponibles();
     actualizarIndicadorNotificaciones();
-
     cerrarSheetMenu();
   });
 
@@ -1392,12 +1252,8 @@
     const target = document.getElementById(map[v] || 'viewHome');
     if(target) target.classList.add('active');
 
-        if(v === 'pagos'){
-      cargarPagos();
-    }
-    if(v === 'mantenimientos'){
-      cargarMantenimientos();
-    }
+    if(v === 'pagos') cargarPagos();
+    if(v === 'mantenimientos') cargarMantenimientos();
   }
 
   function abrirModal(id){
@@ -1405,18 +1261,10 @@
     if(!el) return;
     el.style.display='flex';
 
-    if(id === 'modalContrato'){
-      renderContratoModal();
-    }
-    if(id === 'modalHistorialPagos'){
-      prepararModalHistorial();
-    }
-    if(id === 'modalBeneficios'){
-      prepararModalBeneficios();
-    }
-    if(id === 'modalTaller'){
-      prepararModalTaller();
-    }
+    if(id === 'modalContrato') renderContratoModal();
+    if(id === 'modalHistorialPagos') prepararModalHistorial();
+    if(id === 'modalBeneficios') prepararModalBeneficios();
+    if(id === 'modalTaller') prepararModalTaller();
   }
 
   function cerrarModal(id){
@@ -1434,22 +1282,16 @@
     }
   }
 
-  /* ✅ Visor PDF (modal) */
   function abrirModalPdf(titulo, urlPdf){
     try{ cerrarModal('modalHistorialPagos'); }catch(e){}
-
     const modal = document.getElementById('modalPdfViewer');
     const frame = document.getElementById('pdfFrame');
     const title = document.getElementById('pdfTitle');
     const btnTab = document.getElementById('btnPdfNuevaPestana');
 
     if(title) title.textContent = titulo || 'Documento';
-
     ultimoPdfUrlAbierto = urlPdf || '';
-    if(btnTab){
-      btnTab.style.display = ultimoPdfUrlAbierto ? 'inline-flex' : 'none';
-    }
-
+    if(btnTab) btnTab.style.display = ultimoPdfUrlAbierto ? 'inline-flex' : 'none';
     if(frame) frame.src = ultimoPdfUrlAbierto || '';
     if(modal){
       modal.style.zIndex = '60';
@@ -1476,7 +1318,6 @@
     window.open(ultimoPdfUrlAbierto, '_blank');
   }
 
-  /* Bottom sheet */
   function abrirSheetMenu(){
     const bd = document.getElementById('sheetBackdrop');
     const sh = document.getElementById('sheetMenu');
@@ -1530,7 +1371,6 @@
     return s;
   }
 
-  /* ===== Contrato + saludo ===== */
   async function cargarContratoYSaludo(id){
     const hello = document.getElementById('helloText');
     const perfil = document.getElementById('perfilContenido');
@@ -1572,7 +1412,6 @@
         }
       }
 
-      // Perfil (se conserva)
       const placa = c['ID VEHÍCULO'] || c['ID VEHICULO'] || '';
       const inicio = c['INICIO'] || '';
       const ciudad = c['CIUDAD'] || '';
@@ -1587,7 +1426,6 @@
       html += '<p><strong>Cobertura:</strong> ' + escapeHtml(ciudad || 'Bogotá') + '</p>';
       if(tarifa){ html += '<p><strong>Tarifa semanal:</strong> ' + escapeHtml(formatearNumeroCOP(tarifa)) + '</p>'; }
       if(km){ html += '<p><strong>Kilometraje actual:</strong> ' + escapeHtml(km) + ' km</p>'; }
-
       html += '<p><strong>Estado:</strong> ' +
         (estado ? '<span style="padding:2px 8px;border-radius:999px;background:'+
           (estado === 'ACTIVO' ? '#dcfce7;color:#166534' : '#fee2e2;color:#b91c1c')+
@@ -1603,7 +1441,6 @@
     }
   }
 
-  /* ===== Modal Contrato (misma info del portal principal, en flotante) ===== */
   function renderContratoModal(){
     const cont = document.getElementById('contratoContenido');
     if(!cont) return;
@@ -1621,7 +1458,6 @@
     const esRenting = id.startsWith('R');
 
     let html = '';
-
     html += '<div class="mini-card">';
     html += '<h4>Contrato</h4>';
     html += '<p><strong>ID:</strong> ' + escapeHtml(id) + '</p>';
@@ -1716,16 +1552,12 @@
 
       let i = 0;
       const tryNext = () => {
-        if(i >= candidates.length){
-          console.warn('No se pudo cargar beneficios_renting.png. Rutas probadas:', candidates);
-          return;
-        }
+        if(i >= candidates.length) return;
         img.src = candidates[i++];
       };
 
       img.onerror = () => tryNext();
       tryNext();
-
       el.appendChild(img);
     }else{
       el.textContent = beneficiosTexto || 'Información no disponible.';
@@ -1739,7 +1571,6 @@
     el.textContent = taller ? ('Taller asignado: ' + taller) : 'Información no disponible.';
   }
 
-  /* ===== Turnos publicados (tarjeta limpia + modal detalle) ===== */
   async function cargarTurnosDisponibles(){
     const estado = document.getElementById('turnosEstado');
     const cont = document.getElementById('turnosList');
@@ -1770,11 +1601,8 @@
 
       if(cont){
         turnos.forEach(function(t){
-          const idTurno =
-            t.id_turno || t.idTurno || t.ID_TURNO || t['ID TURNO'] || t.codigo || t.codigo_turno || 'TURNO';
-
-          const empresa =
-            (t.empresa || t.cliente || t.CLIENTE || 'Cruz Verde').toString().trim() || 'Cruz Verde';
+          const idTurno = t.id_turno || t.idTurno || t.ID_TURNO || t['ID TURNO'] || t.codigo || t.codigo_turno || 'TURNO';
+          const empresa = (t.empresa || t.cliente || t.CLIENTE || 'Cruz Verde').toString().trim() || 'Cruz Verde';
 
           const logoPreferido = normalizarLogoUrl(t.logoUrl || t['LOGO URL'] || t['LOGO'] || '');
           const logoFallback = normalizarLogoUrl(obtenerLogoPorEmpresa(empresa));
@@ -1785,7 +1613,6 @@
           const hora = t.hora || t.HORA || t.inicio || t.INICIO || '';
           const ciudad = t.ciudad || t.CIUDAD || 'Bogotá';
           const dias = t.dias || t.DIAS || t.duracion_dias || t.DURACION_DIAS || 3;
-
           const pagoEstimado = t.valorTurno || t.pago || t.PAGO || t.valor || t.VALOR || '';
 
           const fechaTxt = formatearFechaCorta(fecha) || 'Por definir';
@@ -1809,10 +1636,7 @@
 
           mini.innerHTML = `
             <div class="img-placeholder ${logoUrl ? 'has-img' : ''}" title="Tocar para ampliar">
-              ${logoUrl
-                ? `<img class="turno-logo" src="${escapeHtml(logoUrl)}" alt="Logo ${escapeHtml(empresa)}">`
-                : `<div class="img-hint">Ver</div>`
-              }
+              ${logoUrl ? `<img class="turno-logo" src="${escapeHtml(logoUrl)}" alt="Logo ${escapeHtml(empresa)}">` : `<div class="img-hint">Ver</div>`}
             </div>
             <div class="turno-info">
               <div class="turno-topline">
@@ -1856,9 +1680,7 @@
     const title = document.getElementById('detalleTurnoTitulo');
     const cont = document.getElementById('detalleTurnoContenido');
 
-    if(title){
-      title.textContent = (turno.empresa || 'Cruz Verde') + ' • ' + (turno.idTurno || 'TURNO');
-    }
+    if(title) title.textContent = (turno.empresa || 'Cruz Verde') + ' • ' + (turno.idTurno || 'TURNO');
 
     const logoUrl = normalizarLogoUrl(turno.logoUrl || obtenerLogoPorEmpresa(turno.empresa));
     turno.logoUrl = logoUrl;
@@ -1883,12 +1705,9 @@
     html += '<p><strong>Fecha de inicio:</strong> ' + escapeHtml(formatearFechaCorta(turno.fecha) || 'Por definir') + '</p>';
     html += '<p><strong>Duración:</strong> ' + escapeHtml(textoDias) + '</p>';
     html += '<p><strong>Hora de llegada:</strong> ' + escapeHtml(formatearHora(turno.hora) || 'Por definir') + '</p>';
-    if(turno.pago){
-      html += '<p><strong>Valor estimado:</strong> ' + escapeHtml(formatearNumeroCOP(turno.pago)) + '</p>';
-    }
+    if(turno.pago) html += '<p><strong>Valor estimado:</strong> ' + escapeHtml(formatearNumeroCOP(turno.pago)) + '</p>';
 
     if(cont) cont.innerHTML = html;
-
     abrirModal('modalDetalleTurno');
   }
 
@@ -1906,15 +1725,12 @@
     });
   }
 
-  /* ===== Confirmación + términos ===== */
   function abrirConfirmacionTurno(turno){
     turnoSeleccionado = turno;
     const msg = document.getElementById('confirmarTurnoMsg');
     if(msg){ msg.className='status'; msg.textContent=''; }
-
     const chk = document.getElementById('chkTerminos');
     if(chk) chk.checked = false;
-
     onToggleTerminos();
     abrirModal('modalConfirmarTurno');
   }
@@ -1991,10 +1807,7 @@
         read:false
       });
 
-      ultimaAceptacion = {
-        turno: turnoSeleccionado,
-        fechaBase: turnoSeleccionado.fecha || new Date().toISOString()
-      };
+      ultimaAceptacion = { turno: turnoSeleccionado, fechaBase: turnoSeleccionado.fecha || new Date().toISOString() };
       actualizarAgendaDesdeUltimaAceptacion();
 
       setTimeout(function(){
@@ -2031,9 +1844,7 @@
       const d = new Date(base.getTime());
       d.setDate(base.getDate() + i);
 
-      const fechaTexto = d.toLocaleDateString('es-CO',{
-        weekday:'short',day:'2-digit',month:'short',year:'numeric'
-      });
+      const fechaTexto = d.toLocaleDateString('es-CO',{ weekday:'short',day:'2-digit',month:'short',year:'numeric' });
 
       html += `
         <div class="agenda-dia">
@@ -2051,7 +1862,6 @@
     cont.innerHTML = html;
   }
 
-  /* ===== Pagos (placeholder + intento si es posible) ===== */
   async function cargarPagos(){
     const estado = document.getElementById('pagosEstado');
     const cont = document.getElementById('pagosContenido');
@@ -2120,10 +1930,6 @@
     }
   }
 
-  /* =====================================================
-     ✅ HISTORIAL DE PAGOS (MENÚ) — Vista lista + PDF
-     ===================================================== */
-
   function limpiarHistorialListaUI(){
     const wrap = document.getElementById('historialListaWrap');
     const list = document.getElementById('historialLista');
@@ -2140,9 +1946,7 @@
     wrap.style.display = 'block';
 
     if(arr.length === 0){
-      list.innerHTML = `<div class="hist-row" style="color:#6b7280;font-size:.9rem;">
-        No hay pagos para mostrar.
-      </div>`;
+      list.innerHTML = `<div class="hist-row" style="color:#6b7280;font-size:.9rem;">No hay pagos para mostrar.</div>`;
       return;
     }
 
@@ -2169,7 +1973,6 @@
     const url = API_URL + '?accion=historial_pagos_lista&id=' + encodeURIComponent(idContrato);
     const resp = await fetch(url);
     const data = await resp.json();
-
     if(!data.ok) throw new Error(data.error || 'No fue posible cargar el historial.');
     const pagos = Array.isArray(data.pagos) ? data.pagos : [];
     return pagos;
@@ -2184,15 +1987,8 @@
     const btnEnviar = document.getElementById('btnHistorialEnviar');
     const btnDescargar = document.getElementById('btnHistorialDescargar');
 
-    if(idInput && idContratoActual){
-      idInput.value = idContratoActual;
-    }
-
-    if(msg){
-      msg.textContent='';
-      msg.style.color='#6b7280';
-    }
-
+    if(idInput && idContratoActual) idInput.value = idContratoActual;
+    if(msg){ msg.textContent=''; msg.style.color='#6b7280'; }
     limpiarHistorialListaUI();
 
     if(tipoUsuarioActual && tipoUsuarioActual.toUpperCase() === 'AFILIADO'){
@@ -2206,7 +2002,6 @@
       if(correoInput) correoInput.style.display='none';
       if(btnEnviar) btnEnviar.style.display='none';
       if(btnDescargar) btnDescargar.style.display='inline-flex';
-
       if(intro) intro.textContent='Aquí podrás visualizar tus últimos pagos (y si lo necesitas, descargar el PDF).';
 
       (async () => {
@@ -2278,75 +2073,54 @@
     }
 
     const txt = await resp.text();
-
     try{
       const data = JSON.parse(txt);
       return normalizarRespuestaPdf(data);
     }catch(e){}
 
     const finalUrl = resp.url || '';
-    if(finalUrl){
-      return { ok:true, url: finalUrl, kind:'fallback-url' };
-    }
-
+    if(finalUrl) return { ok:true, url: finalUrl, kind:'fallback-url' };
     return { ok:false, error:'Respuesta no válida al generar el PDF.' };
   }
 
   function normalizarRespuestaPdf(data){
     const ok = !!(data && (data.ok === true || data.ok === 'true'));
-    if(!ok){
-      return { ok:false, error: (data && data.error) ? data.error : 'No fue posible generar el PDF.' };
-    }
+    if(!ok) return { ok:false, error: (data && data.error) ? data.error : 'No fue posible generar el PDF.' };
 
     const fileId = data.fileId || data.fileID || '';
     const downloadUrl = data.downloadUrl || data.downloadURL || '';
     const url = data.url || data.pdfUrl || data.viewUrl || '';
 
-    if(url || fileId || downloadUrl){
-      return { ok:true, url:url, fileId:fileId, downloadUrl:downloadUrl, kind:'json' };
-    }
+    if(url || fileId || downloadUrl) return { ok:true, url:url, fileId:fileId, downloadUrl:downloadUrl, kind:'json' };
 
     const dataUri = data.dataUri || data.dataURI || data.base64 || '';
-    if(typeof dataUri === 'string' && dataUri.startsWith('data:application/pdf')){
-      return { ok:true, url:dataUri, kind:'datauri' };
-    }
+    if(typeof dataUri === 'string' && dataUri.startsWith('data:application/pdf')) return { ok:true, url:dataUri, kind:'datauri' };
 
     return { ok:false, error:'El servidor respondió OK, pero no entregó la URL del PDF.' };
   }
 
   function construirUrlEmbedPdf(res){
     if(!res) return '';
-
     const fid = String(res.fileId || '').trim();
-    if(fid){
-      return 'https://drive.google.com/file/d/' + encodeURIComponent(fid) + '/preview';
-    }
+    if(fid) return 'https://drive.google.com/file/d/' + encodeURIComponent(fid) + '/preview';
 
     const url = String(res.url || '').trim();
     if(!url) return '';
 
-    if(url.startsWith('blob:') || url.startsWith('data:application/pdf')){
-      return url;
-    }
+    if(url.startsWith('blob:') || url.startsWith('data:application/pdf')) return url;
 
     if(url.includes('drive.google.com')){
       try{
         const u = new URL(url);
         const id = u.searchParams.get('id');
-        if(id){
-          return 'https://drive.google.com/file/d/' + encodeURIComponent(id) + '/preview';
-        }
+        if(id) return 'https://drive.google.com/file/d/' + encodeURIComponent(id) + '/preview';
       }catch(e){}
 
       const m = url.match(/\/file\/d\/([^/]+)/i);
-      if(m && m[1]){
-        return 'https://drive.google.com/file/d/' + encodeURIComponent(m[1]) + '/preview';
-      }
+      if(m && m[1]) return 'https://drive.google.com/file/d/' + encodeURIComponent(m[1]) + '/preview';
 
       const m2 = url.match(/[?&]id=([^&]+)/i);
-      if(m2 && m2[1]){
-        return 'https://drive.google.com/file/d/' + encodeURIComponent(m2[1]) + '/preview';
-      }
+      if(m2 && m2[1]) return 'https://drive.google.com/file/d/' + encodeURIComponent(m2[1]) + '/preview';
 
       return url;
     }
@@ -2363,25 +2137,16 @@
       try{
         const resp = await fetch(url, { method:'GET', redirect:'follow' });
         const r = await leerRespuestaPdf(resp);
-
-        if(r && r.ok){
-          return r;
-        }
-        if(r && r.error){
-          ultimoError = r.error;
-        }
+        if(r && r.ok) return r;
+        if(r && r.error) ultimoError = r.error;
       }catch(e){
         console.error(e);
         ultimoError = 'Error al generar el PDF. Intenta de nuevo.';
       }
     }
 
-    try{
-      const vistaUrl = API_URL + '?accion=' + encodeURIComponent('historial_pagos_vista') + '&id=' + encodeURIComponent(id);
-      return { ok:true, url:vistaUrl, kind:'vista-html' };
-    }catch(e){}
-
-    throw new Error(ultimoError);
+    const vistaUrl = API_URL + '?accion=' + encodeURIComponent('historial_pagos_vista') + '&id=' + encodeURIComponent(id);
+    return { ok:true, url:vistaUrl, kind:'vista-html' };
   }
 
   async function descargarHistorialPdf(){
@@ -2403,9 +2168,7 @@
       const embedUrl = construirUrlEmbedPdf(res);
 
       msg.style.color='#065f46';
-      msg.textContent = (res.kind === 'vista-html')
-        ? 'Listo. Abriendo vista (puedes imprimir/guardar como PDF)...'
-        : 'Listo. Abriendo PDF...';
+      msg.textContent = (res.kind === 'vista-html') ? 'Listo. Abriendo vista (puedes imprimir/guardar como PDF)...' : 'Listo. Abriendo PDF...';
 
       cerrarModal('modalHistorialPagos');
       setTimeout(function(){
@@ -2543,7 +2306,6 @@
     }
   }
 
-  /* ===== Wompi (igual al portal principal) ===== */
   async function generarIntegritySignature(reference, amountInCents, currency){
     const encoder=new TextEncoder();
     const data=`${reference}${amountInCents}${currency}${WOMPI_INTEGRITY_KEY}`;
@@ -2604,17 +2366,15 @@
     }
   }
 
-  /* ✅ Trazabilidad de pagos hacia WEB SERVICE (PORTAL_PAGOS) */
   async function registrarPagoEnSheet(reference, valor, idContrato){
-    // Se intenta registrar sin romper flujo (si falla, no bloquea).
     try{
       const formData=new URLSearchParams();
-      formData.append('accion','registrar_pago_portal');   // ✅ endpoint esperado en el “código base”
+      formData.append('accion','registrar_pago_portal');
       formData.append('referencia',reference);
       formData.append('monto',valor);
       formData.append('idContrato',idContrato);
       formData.append('origen','PORTAL_LOGISTICA');
-      formData.append('sheet','PORTAL_PAGOS');             // ✅ pista para trazabilidad (si el backend lo usa)
+      formData.append('sheet','PORTAL_PAGOS');
 
       await fetch(API_URL,{
         method:'POST',
@@ -2625,7 +2385,6 @@
       console.error('Error registrando pago (portal) en hoja',e);
     }
 
-    // Fallback a la acción anterior (por compatibilidad)
     try{
       const formData2=new URLSearchParams();
       formData2.append('accion','registrar_pago');
@@ -2643,7 +2402,6 @@
     }
   }
 
-  /* ===== Notificaciones (localStorage) ===== */
   function getNotificaciones(){
     try{
       const raw = localStorage.getItem(NOTIF_KEY);
@@ -2756,26 +2514,20 @@
       .replace(/"/g,'&quot;')
       .replace(/'/g,'&#39;');
   }
-  /* =====================================================
-     ✅ MANTENIMIENTOS — Resumen + lista (sin cambiar estética)
-     Usa mantenimientosCache que ya llega desde doGet
-     ===================================================== */
 
   function normKey_(s){
     return String(s || '')
       .toUpperCase()
-      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')  // quitar tildes
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
       .replace(/\s+/g,' ')
       .trim();
   }
 
   function getByKeys_(obj, keys){
     if(!obj) return '';
-    // 1) intento directo
     for(const k of keys){
       if(Object.prototype.hasOwnProperty.call(obj, k)) return obj[k];
     }
-    // 2) intento normalizado (por variaciones de tildes/espacios)
     const target = keys.map(k => normKey_(k));
     for(const realKey in obj){
       const rk = normKey_(realKey);
@@ -2791,11 +2543,9 @@
     const s = String(v).trim();
     if(!s) return null;
 
-    // ISO o similar
     const d1 = new Date(s);
     if(!isNaN(d1.getTime())) return d1;
 
-    // dd/mm/yyyy
     const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
     if(m){
       const dd = parseInt(m[1],10);
@@ -2810,71 +2560,66 @@
 
   function sumValorMtos_(arr){
     return (arr || []).reduce((acc, m) => {
-      const v =
-        getByKeys_(m, ['VALOR GENERAL','VALOR MTOS','VALOR','COSTO','COSTO GENERAL']);
+      const v = getByKeys_(m, ['VALOR GENERAL','VALOR MTOS','VALOR','COSTO','COSTO GENERAL']);
       const n = Number(v || 0);
       return acc + (isNaN(n) ? 0 : n);
     }, 0);
   }
-  
-// ✅ NUEVO: conteos (aceite / pastillas / kit arrastre) sin cambiar estética ni flujo
-function toNumInt_(v){
-  const n = Number(String(v ?? '').replace(/[^\d.-]/g,''));
-  return isNaN(n) ? 0 : Math.round(n);
-}
 
-function matchTipo_(m, needles){
-  const tipo =
-    getByKeys_(m, ['TIPO','TIPO MANTENIMIENTO','MANTENIMIENTO','SERVICIO','DESCRIPCIÓN','DESCRIPCION','DETALLE','NOTAS']) || '';
-  const s = normKey_(tipo);
-  return needles.some(n => s.includes(normKey_(n)));
-}
+  function toNumInt_(v){
+    const n = Number(String(v ?? '').replace(/[^\d.-]/g,''));
+    return isNaN(n) ? 0 : Math.round(n);
+  }
 
-function getConteosMtos_(arr){
-  let aceite = 0, pastillas = 0, kit = 0;
+  function matchTipo_(m, needles){
+    const tipo = getByKeys_(m, ['TIPO','TIPO MANTENIMIENTO','MANTENIMIENTO','SERVICIO','DESCRIPCIÓN','DESCRIPCION','DETALLE','NOTAS']) || '';
+    const s = normKey_(tipo);
+    return needles.some(n => s.includes(normKey_(n)));
+  }
 
-  (arr || []).forEach(m => {
-    // 1) Si existe columna numérica explícita (se suma)
-    const aNum = toNumInt_(getByKeys_(m, [
-  'CAMBIOS DE ACEITE',
-  'CAMBIOS DE ACEITE','CAMBIO DE ACEITE',
-  'CAMBIOS ACEITE',
-  'N CAMBIOS ACEITE','N° CAMBIOS ACEITE',
-  'ACEITE',
-  'aceites','cambiosAceite' // por si el backend manda keys normalizadas
-]));
+  function getConteosMtos_(arr){
+    let aceite = 0, pastillas = 0, kit = 0;
 
-const kNum = toNumInt_(getByKeys_(m, [
-  'KIT DE ARRASTRE',
-  'KIT DE ARRASTRE','KIT ARRASTRE',
-  'CAMBIO KIT ARRASTRE',
-  'TRANSMISIÓN','TRANSMISION',
-  'kitArrastre' // por si el backend manda key normalizada
-]));
+    (arr || []).forEach(m => {
+      const aNum = toNumInt_(getByKeys_(m, [
+        'CAMBIOS DE ACEITE','CAMBIO DE ACEITE','CAMBIOS ACEITE',
+        'N CAMBIOS ACEITE','N° CAMBIOS ACEITE','ACEITE','ACEITES',
+        'aceites','cambiosAceite'
+      ]));
 
-    // Si vienen como números (en alguna hoja pasa), priorizamos sumar
-    if(aNum || pNum || kNum){
-      aceite += aNum;
-      pastillas += pNum;
-      kit += kNum;
-      return;
-    }
+      const pNum = toNumInt_(getByKeys_(m, [
+        'PASTILLAS','PASTILLA','PASTILLAS DE FRENO','PASTILLAS FRENO',
+        'CAMBIO PASTILLAS','CAMBIOS PASTILLAS',
+        'pastillas','cambiosPastillas'
+      ]));
 
-    // 2) Fallback: contar por tipo/descripcion (1 por registro)
-    if(matchTipo_(m, ['ACEITES','ACEITE','CAMBIOS DE ACEITE','CAMBIO DE ACEITE','ACEITE Y FILTRO','FILTRO ACEITE'])) aceite += 1;
-if(matchTipo_(m, ['KIT DE ARRASTRE','KITS ARRASTRE','KIT DE ARRASTRE','ARRASTRE','CADENA','SPROCKET','CORONA','PIÑON','PIÑÓN'])) kit += 1;
-  });
+      const kNum = toNumInt_(getByKeys_(m, [
+        'KIT DE ARRASTRE','KIT ARRASTRE','KITS DE ARRASTRE',
+        'CAMBIO KIT ARRASTRE','TRANSMISIÓN','TRANSMISION',
+        'kitArrastre'
+      ]));
 
-  return { aceite, pastillas, kit };
-}
-  
+      if(aNum || pNum || kNum){
+        aceite += aNum;
+        pastillas += pNum;
+        kit += kNum;
+        return;
+      }
+
+      if(matchTipo_(m, ['ACEITES','ACEITE','CAMBIO ACEITE','CAMBIO DE ACEITE','ACEITE Y FILTRO','FILTRO ACEITE'])) aceite += 1;
+      if(matchTipo_(m, ['PASTILLAS','PASTILLA','PASTILLAS DE FRENO','FRENOS','FRENO DELANTERO','FRENO TRASERO'])) pastillas += 1;
+      if(matchTipo_(m, ['KIT DE ARRASTRE','KIT ARRASTRE','ARRASTRE','CADENA','SPROCKET','CORONA','PIÑON','PIÑÓN','TRANSMISION','TRANSMISIÓN'])) kit += 1;
+    });
+
+    return { aceite, pastillas, kit };
+  }
+
   function pickUltimoMto_(arr){
     let best = null;
     let bestT = -1;
 
     (arr || []).forEach(m => {
-      const f =
-        getByKeys_(m, ['FECHA','FECHA MANTENIMIENTO','F. MANTENIMIENTO','FECHA ULT. MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO']);
+      const f = getByKeys_(m, ['FECHA','FECHA MANTENIMIENTO','F. MANTENIMIENTO','FECHA ULT. MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO']);
       const d = parseDateLoose_(f);
       const t = d ? d.getTime() : -1;
       if(t > bestT){
@@ -2887,14 +2632,12 @@ if(matchTipo_(m, ['KIT DE ARRASTRE','KITS ARRASTRE','KIT DE ARRASTRE','ARRASTRE'
   }
 
   function pickProximoMto_(arr){
-    // Si existe campo de “próximo”, elegimos el más cercano a futuro.
     const now = Date.now();
     let best = null;
     let bestT = Infinity;
 
     (arr || []).forEach(m => {
-      const f =
-        getByKeys_(m, ['PRÓXIMO MANTENIMIENTO','PROXIMO MANTENIMIENTO','FECHA PROX','FECHA PRÓXIMA','PROXIMA FECHA','PRÓXIMA FECHA']);
+      const f = getByKeys_(m, ['PRÓXIMO MANTENIMIENTO','PROXIMO MANTENIMIENTO','FECHA PROX','FECHA PRÓXIMA','PROXIMA FECHA','PRÓXIMA FECHA']);
       const d = parseDateLoose_(f);
       const t = d ? d.getTime() : Infinity;
       if(t >= now && t < bestT){
@@ -2914,111 +2657,111 @@ if(matchTipo_(m, ['KIT DE ARRASTRE','KITS ARRASTRE','KIT DE ARRASTRE','ARRASTRE'
     if(resumen) resumen.innerHTML = '';
     if(lista) lista.innerHTML = '';
 
-    if(!idContratoActual){
+    try{
+      if(!idContratoActual){
+        if(estado){
+          estado.className = 'status error';
+          estado.textContent = 'No se encontró el ID del contrato.';
+        }
+        return;
+      }
+
+      const a = Array.isArray(arr) ? arr : [];
+      if(a.length === 0){
+        if(estado){
+          estado.className = 'status muted';
+          estado.textContent = 'No hay mantenimientos registrados para este contrato (por ahora).';
+        }
+        return;
+      }
+
+      if(estado){
+        estado.className = 'status ok';
+        estado.textContent = 'Mantenimientos encontrados: ' + a.length;
+      }
+
+      const total = sumValorMtos_(a);
+      const ultimo = pickUltimoMto_(a);
+      const proximo = pickProximoMto_(a);
+      const conteos = getConteosMtos_(a);
+
+      const placa = (contratoActual && (contratoActual['ID VEHÍCULO'] || contratoActual['ID VEHICULO'])) || '';
+
+      const ultimoFecha = getByKeys_(ultimo, ['FECHA','FECHA MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO','FECHA ULT. MANTENIMIENTO']) || '';
+      const ultimoTipo = getByKeys_(ultimo, ['TIPO','TIPO MANTENIMIENTO','TIPO ULT. MANTENIMIENTO','MANTENIMIENTO','SERVICIO','DESCRIPCIÓN','DESCRIPCION']) || '';
+      const ultimoKm = getByKeys_(ultimo, ['KILOMETRAJE','KM','KMS','KILOMETRAJE ACTUAL']) || '';
+      const ultimoTaller = getByKeys_(ultimo, ['TALLER','TALLER ASIGNADO','PROVEEDOR']) || '';
+
+      const proxFecha = proximo ? (getByKeys_(proximo, ['PRÓXIMO MANTENIMIENTO','PROXIMO MANTENIMIENTO','FECHA PROX','FECHA PRÓXIMA','PRÓXIMA FECHA','PROXIMA FECHA']) || '') : '';
+
+      if(resumen){
+        let html = '';
+        html += '<div class="mini-card">';
+        html += '<h4>Resumen</h4>';
+        if(placa) html += '<p><strong>Placa:</strong> ' + escapeHtml(placa) + '</p>';
+        html += '<p><strong>Total mantenimientos:</strong> ' + escapeHtml(formatearNumeroCOP(total)) + '</p>';
+        html += '<p><strong>Cambios de aceite:</strong> ' + escapeHtml(String(conteos.aceite || 0)) + '</p>';
+        html += '<p><strong>Pastillas:</strong> ' + escapeHtml(String(conteos.pastillas || 0)) + '</p>';
+        html += '<p><strong>Kit de arrastre:</strong> ' + escapeHtml(String(conteos.kit || 0)) + '</p>';
+        if(ultimoFecha) html += '<p><strong>Último mantenimiento:</strong> ' + escapeHtml(formatearFechaCorta(ultimoFecha) || ultimoFecha) + '</p>';
+        if(ultimoTipo) html += '<p><strong>Tipo:</strong> ' + escapeHtml(ultimoTipo) + '</p>';
+        if(ultimoKm) html += '<p><strong>Kilometraje:</strong> ' + escapeHtml(ultimoKm) + ' km</p>';
+        if(ultimoTaller) html += '<p><strong>Taller:</strong> ' + escapeHtml(ultimoTaller) + '</p>';
+        if(proxFecha) html += '<p><strong>Próximo mantenimiento:</strong> ' + escapeHtml(formatearFechaCorta(proxFecha) || proxFecha) + '</p>';
+        html += '</div>';
+        resumen.innerHTML = html;
+      }
+
+      const sorted = a.slice().sort((x,y) => {
+        const dx = parseDateLoose_(getByKeys_(x,['FECHA','FECHA MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO'])) || new Date(0);
+        const dy = parseDateLoose_(getByKeys_(y,['FECHA','FECHA MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO'])) || new Date(0);
+        return dy.getTime() - dx.getTime();
+      });
+
+      const top = sorted.slice(0, 50);
+
+      if(lista){
+        top.forEach((m) => {
+          const f = getByKeys_(m, ['FECHA','FECHA MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO']) || '';
+          const tipo = getByKeys_(m, ['TIPO','TIPO MANTENIMIENTO','MANTENIMIENTO','SERVICIO','DESCRIPCIÓN','DESCRIPCION']) || 'Mantenimiento';
+          const valor = getByKeys_(m, ['VALOR GENERAL','VALOR MTOS','VALOR','COSTO','COSTO GENERAL']) || '';
+          const taller = getByKeys_(m, ['TALLER','TALLER ASIGNADO','PROVEEDOR']) || '';
+
+          const card = document.createElement('div');
+          card.className = 'noti-item';
+          card.style.cursor = 'default';
+
+          const fechaTxt = formatearFechaCorta(f) || f || 'Fecha por definir';
+          const valorTxt = valor !== '' ? formatearNumeroCOP(valor) : '';
+          const extra = [valorTxt, taller].filter(Boolean).join(' • ');
+
+          card.innerHTML = `
+            <div class="noti-bullet read"></div>
+            <div class="noti-body">
+              <p class="noti-title">${escapeHtml(tipo)}</p>
+              <p class="noti-text">${escapeHtml(fechaTxt)}${extra ? ' • ' + escapeHtml(extra) : ''}</p>
+            </div>
+          `;
+
+          lista.appendChild(card);
+        });
+      }
+    }catch(e){
+      console.error(e);
       if(estado){
         estado.className = 'status error';
-        estado.textContent = 'No se encontró el ID del contrato.';
+        estado.textContent = 'No fue posible cargar el panel de mantenimientos.';
       }
-      return;
-    }
-
-    const a = Array.isArray(arr) ? arr : [];
-    if(a.length === 0){
-      if(estado){
-        estado.className = 'status muted';
-        estado.textContent = 'No hay mantenimientos registrados para este contrato (por ahora).';
-      }
-      return;
-    }
-
-    if(estado){
-      estado.className = 'status ok';
-      estado.textContent = 'Mantenimientos encontrados: ' + a.length;
-    }
-
-    const total = sumValorMtos_(a);
-    const ultimo = pickUltimoMto_(a);
-    const proximo = pickProximoMto_(a);
-    const conteos = getConteosMtos_(a);
-
-    const placa = (contratoActual && (contratoActual['ID VEHÍCULO'] || contratoActual['ID VEHICULO'])) || '';
-
-    const ultimoFecha =
-      getByKeys_(ultimo, ['FECHA','FECHA MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO','FECHA ULT. MANTENIMIENTO']) || '';
-    const ultimoTipo =
-      getByKeys_(ultimo, ['TIPO','TIPO MANTENIMIENTO','TIPO ULT. MANTENIMIENTO','MANTENIMIENTO']) || '';
-    const ultimoKm =
-      getByKeys_(ultimo, ['KILOMETRAJE','KM','KMS','KILOMETRAJE ACTUAL']) || '';
-    const ultimoTaller =
-      getByKeys_(ultimo, ['TALLER','TALLER ASIGNADO','PROVEEDOR']) || '';
-
-    const proxFecha =
-      proximo ? (getByKeys_(proximo, ['PRÓXIMO MANTENIMIENTO','PROXIMO MANTENIMIENTO','FECHA PROX','FECHA PRÓXIMA','PRÓXIMA FECHA','PROXIMA FECHA']) || '') : '';
-
-    if(resumen){
-      let html = '';
-      html += '<div class="mini-card">';
-      html += '<h4>Resumen</h4>';
-      if(placa) html += '<p><strong>Placa:</strong> ' + escapeHtml(placa) + '</p>';
-      html += '<p><strong>Total mantenimientos:</strong> ' + escapeHtml(formatearNumeroCOP(total)) + '</p>';
-      html += '<p><strong>Cambios de aceite:</strong> ' + escapeHtml(String(conteos.aceite || 0)) + '</p>';
-      html += '<p><strong>Pastillas:</strong> ' + escapeHtml(String(conteos.pastillas || 0)) + '</p>';
-      html += '<p><strong>Kit de arrastre:</strong> ' + escapeHtml(String(conteos.kit || 0)) + '</p>';
-      if(ultimoFecha) html += '<p><strong>Último mantenimiento:</strong> ' + escapeHtml(formatearFechaCorta(ultimoFecha) || ultimoFecha) + '</p>';
-      if(ultimoTipo) html += '<p><strong>Tipo:</strong> ' + escapeHtml(ultimoTipo) + '</p>';
-      if(ultimoKm) html += '<p><strong>Kilometraje:</strong> ' + escapeHtml(ultimoKm) + ' km</p>';
-      if(ultimoTaller) html += '<p><strong>Taller:</strong> ' + escapeHtml(ultimoTaller) + '</p>';
-      if(proxFecha) html += '<p><strong>Próximo mantenimiento:</strong> ' + escapeHtml(formatearFechaCorta(proxFecha) || proxFecha) + '</p>';
-      html += '</div>';
-      resumen.innerHTML = html;
-    }
-
-    // Lista (últimos 10) — usa estilo notificaciones
-    const sorted = a.slice().sort((x,y) => {
-      const dx = parseDateLoose_(getByKeys_(x,['FECHA','FECHA MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO'])) || new Date(0);
-      const dy = parseDateLoose_(getByKeys_(y,['FECHA','FECHA MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO'])) || new Date(0);
-      return dy.getTime() - dx.getTime();
-    });
-
-    const top = sorted.slice(0, 10);
-
-    if(lista){
-      top.forEach((m, idx) => {
-        const f = getByKeys_(m, ['FECHA','FECHA MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO']) || '';
-        const tipo = getByKeys_(m, ['TIPO','TIPO MANTENIMIENTO','MANTENIMIENTO']) || 'Mantenimiento';
-        const valor = getByKeys_(m, ['VALOR GENERAL','VALOR MTOS','VALOR','COSTO']) || '';
-        const taller = getByKeys_(m, ['TALLER','TALLER ASIGNADO','PROVEEDOR']) || '';
-
-        const card = document.createElement('div');
-        card.className = 'noti-item';
-        card.style.cursor = 'default';
-
-        card.innerHTML = `
-          <div class="noti-bullet read"></div>
-          <div class="noti-body">
-            <p class="noti-title">${escapeHtml(tipo)}</p>
-            <p class="noti-text">
-              ${escapeHtml(formatearFechaCorta(f) || f || 'Fecha por definir')}
-              ${valor ? ' • ' + escapeHtml(formatearNumeroCOP(valor)) : ''}
-              ${taller ? ' • ' + escapeHtml(taller) : ''}
-            </p>
-          </div>
-        `;
-
-        lista.appendChild(card);
-      });
     }
   }
 
   function cargarMantenimientos(){
-    // Sin llamadas nuevas: usamos el cache que ya llega en doGet
     const estado = document.getElementById('mtosEstado');
     if(estado){
       estado.className = 'status muted';
       estado.textContent = 'Cargando mantenimientos...';
     }
 
-    // Si todavía no ha cargado contrato, intentamos refrescar una vez
     if(!contratoActual && idContratoActual){
       cargarContratoYSaludo(idContratoActual).then(() => {
         renderMantenimientosUI_(mantenimientosCache);
