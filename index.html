@@ -1499,19 +1499,38 @@
             moraHtml;
         }
 
-        if(mts.length===0){
-          cardMantenimientos.innerHTML='<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
-        }else{
-          const totalM=mts.reduce((s,m)=>s+(Number(m['VALOR GENERAL']||m['VALOR MTOS'])||0),0);
-          const m=mts[0];
-          cardMantenimientos.innerHTML=
-            '<h2>Mantenimientos</h2>'+
-            '<p><strong>Total mantenimientos:</strong> '+formatearNumero(totalM)+'</p>'+
-            '<p><strong>Placa:</strong> '+(m['ID VEHÍCULO']||m['ID VEHICULO']||'')+'</p>'+
-            '<p><strong>Último mantenimiento:</strong> '+formatearFecha(m['ÚLTIMO MANTENIMIENTO']||m['ULTIMO MANTENIMIENTO']||m['FECHA ULT. MANTENIMIENTO'])+'</p>'+
-            '<p><strong>Tipo de mantenimiento:</strong> '+(m['TIPO']||m['TIPO ULT. MANTENIMIENTO']||'')+'</p>'+
-            '<p><strong>Realizados:</strong> '+(m['REALIZADOS']||m['MTOS REALIZADOS']||'')+'</p>'+
-            '<p><strong>Taller asignado:</strong> '+(m['TALLER ASIGNADO']||'')+'</p>';
+       if(mts.length===0){
+  cardMantenimientos.innerHTML='<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
+}else{
+  const totalM = mts.reduce((s,mm)=> {
+    const val = mm['VALOR GENERAL'] ?? mm['VALOR MTOS'] ?? mm['VALOR'] ?? mm['VALOR MTO'];
+    return s + aNumeroCO(val);
+  }, 0);
+
+  const m = mts[0];
+
+  const cambiosAceite = aNumeroCO(
+    m['Cambios de aceite'] ?? m['CAMBIOS DE ACEITE'] ?? m['CAMBIOS_ACEITE'] ?? m['ACEITE']
+  );
+  const pastillas = aNumeroCO(
+    m['Pastillas'] ?? m['PASTILLAS']
+  );
+  const kitArrastre = aNumeroCO(
+    m['Kit de arrastre'] ?? m['KIT DE ARRASTRE'] ?? m['KIT_ARRASTRE']
+  );
+
+  cardMantenimientos.innerHTML=
+    '<h2>Mantenimientos</h2>'+
+    '<p><strong>Total mantenimientos:</strong> '+formatearNumero(totalM)+'</p>'+
+    '<p><strong>Placa:</strong> '+(m['ID VEHÍCULO']||m['ID VEHICULO']||'')+'</p>'+
+    '<p><strong>Cambios de aceite:</strong> '+cambiosAceite+'</p>'+
+    '<p><strong>Pastillas:</strong> '+pastillas+'</p>'+
+    '<p><strong>Kit de arrastre:</strong> '+kitArrastre+'</p>'+
+    '<p><strong>Último mantenimiento:</strong> '+formatearFecha(m['ÚLTIMO MANTENIMIENTO']||m['ULTIMO MANTENIMIENTO']||m['FECHA ULT. MANTENIMIENTO'])+'</p>'+
+    '<p><strong>Tipo de mantenimiento:</strong> '+(m['TIPO']||m['TIPO ULT. MANTENIMIENTO']||'')+'</p>'+
+    '<p><strong>Realizados:</strong> '+(m['REALIZADOS']||m['MTOS REALIZADOS']||'')+'</p>'+
+    '<p><strong>Taller asignado:</strong> '+(m['TALLER ASIGNADO']||'')+'</p>';
+}
         }
 
         const idContratoActual = (c['ID CONTRATO']||'').toString().trim().toUpperCase();
