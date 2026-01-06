@@ -2836,14 +2836,21 @@ function getConteosMtos_(arr){
   (arr || []).forEach(m => {
     // 1) Si existe columna numérica explícita (se suma)
     const aNum = toNumInt_(getByKeys_(m, [
-      'CAMBIOS DE ACEITE','CAMBIOS ACEITE','N CAMBIOS ACEITE','N° CAMBIOS ACEITE','ACEITE'
-    ]));
-    const pNum = toNumInt_(getByKeys_(m, [
-      'PASTILLAS','CAMBIO PASTILLAS','PASTILLAS FRENO','PASTILLAS DE FRENO'
-    ]));
-    const kNum = toNumInt_(getByKeys_(m, [
-      'KIT DE ARRASTRE','KIT ARRASTRE','CAMBIO KIT ARRASTRE','TRANSMISIÓN','TRANSMISION'
-    ]));
+  'CAMBIOS DE ACEITE',
+  'CAMBIOS DE ACEITE','CAMBIO DE ACEITE',
+  'CAMBIOS ACEITE',
+  'N CAMBIOS ACEITE','N° CAMBIOS ACEITE',
+  'ACEITE',
+  'aceites','cambiosAceite' // por si el backend manda keys normalizadas
+]));
+
+const kNum = toNumInt_(getByKeys_(m, [
+  'KIT DE ARRASTRE',
+  'KIT DE ARRASTRE','KIT ARRASTRE',
+  'CAMBIO KIT ARRASTRE',
+  'TRANSMISIÓN','TRANSMISION',
+  'kitArrastre' // por si el backend manda key normalizada
+]));
 
     // Si vienen como números (en alguna hoja pasa), priorizamos sumar
     if(aNum || pNum || kNum){
@@ -2854,9 +2861,8 @@ function getConteosMtos_(arr){
     }
 
     // 2) Fallback: contar por tipo/descripcion (1 por registro)
-    if(matchTipo_(m, ['ACEITE','CAMBIO ACEITE','CAMBIO DE ACEITE','ACEITE Y FILTRO','FILTRO ACEITE'])) aceite += 1;
-    if(matchTipo_(m, ['PASTILLA','PASTILLAS','PASTILLAS FRENO','FRENO'])) pastillas += 1;
-    if(matchTipo_(m, ['KIT ARRASTRE','ARRASTRE','CADENA','SPROCKET','CORONA','PIÑON','PIÑÓN'])) kit += 1;
+    if(matchTipo_(m, ['ACEITES','ACEITE','CAMBIOS DE ACEITE','CAMBIO DE ACEITE','ACEITE Y FILTRO','FILTRO ACEITE'])) aceite += 1;
+if(matchTipo_(m, ['KIT DE ARRASTRE','KITS ARRASTRE','KIT DE ARRASTRE','ARRASTRE','CADENA','SPROCKET','CORONA','PIÑON','PIÑÓN'])) kit += 1;
   });
 
   return { aceite, pastillas, kit };
