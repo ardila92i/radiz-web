@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Portal Logístico RADIZ</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 
   <!-- Iconos / PWA (se conserva mínimo; logo interno pedido es icon-192.png) -->
   <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
@@ -29,7 +29,7 @@
       --radius-md:14px;
     }
 
-    /* ✅ FIX: pantalla principal fija (sin “subir/bajar” la página) */
+       /* ✅ FIX: pantalla principal fija (sin “subir/bajar” la página) */
     html, body{height:100%; overflow:hidden; overscroll-behavior:none;}
 
     body{
@@ -42,12 +42,13 @@
     }
 
     .page{
-      height:100vh;           /* ✅ antes min-height */
+      height:100vh;            /* fallback */
+      height:100dvh;           /* ✅ Android (barra dinámica) */
       display:flex;
       align-items:flex-start;
       justify-content:center;
-      padding:14px 14px 86px; /* espacio para barra inferior */
-      overflow:hidden;        /* ✅ evita scroll del documento */
+      padding:14px 14px calc(86px + env(safe-area-inset-bottom)); /* ✅ respeta barra inferior */
+      overflow:hidden;         /* ✅ evita scroll del documento */
     }
 
     /* ✅ Se elimina el “recuadro/tarjeta” contenedora: sin fondo, sin sombra, sin bordes */
