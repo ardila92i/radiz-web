@@ -2756,6 +2756,225 @@
       .replace(/"/g,'&quot;')
       .replace(/'/g,'&#39;');
   }
+  /* =====================================================
+     ✅ MANTENIMIENTOS — Resumen + lista (sin cambiar estética)
+     Usa mantenimientosCache que ya llega desde doGet
+     ===================================================== */
+
+  function normKey_(s){
+    return String(s || '')
+      .toUpperCase()
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')  // quitar tildes
+      .replace(/\s+/g,' ')
+      .trim();
+  }
+
+  function getByKeys_(obj, keys){
+    if(!obj) return '';
+    // 1) intento directo
+    for(const k of keys){
+      if(Object.prototype.hasOwnProperty.call(obj, k)) return obj[k];
+    }
+    // 2) intento normalizado (por variaciones de tildes/espacios)
+    const target = keys.map(k => normKey_(k));
+    for(const realKey in obj){
+      const rk = normKey_(realKey);
+      const idx = target.indexOf(rk);
+      if(idx !== -1) return obj[realKey];
+    }
+    return '';
+  }
+
+  function parseDateLoose_(v){
+    if(!v) return null;
+    if(v instanceof Date && !isNaN(v.getTime())) return v;
+    const s = String(v).trim();
+    if(!s) return null;
+
+    // ISO o similar
+    const d1 = new Date(s);
+    if(!isNaN(d1.getTime())) return d1;
+
+    // dd/mm/yyyy
+    const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+    if(m){
+      const dd = parseInt(m[1],10);
+      const mm = parseInt(m[2],10) - 1;
+      let yy = parseInt(m[3],10);
+      if(yy < 100) yy += 2000;
+      const d2 = new Date(yy, mm, dd);
+      if(!isNaN(d2.getTime())) return d2;
+    }
+    return null;
+  }
+
+  function sumValorMtos_(arr){
+    return (arr || []).reduce((acc, m) => {
+      const v =
+        getByKeys_(m, ['VALOR GENERAL','VALOR MTOS','VALOR','COSTO','COSTO GENERAL']);
+      const n = Number(v || 0);
+      return acc + (isNaN(n) ? 0 : n);
+    }, 0);
+  }
+
+  function pickUltimoMto_(arr){
+    let best = null;
+    let bestT = -1;
+
+    (arr || []).forEach(m => {
+      const f =
+        getByKeys_(m, ['FECHA','FECHA MANTENIMIENTO','F. MANTENIMIENTO','FECHA ULT. MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO']);
+      const d = parseDateLoose_(f);
+      const t = d ? d.getTime() : -1;
+      if(t > bestT){
+        bestT = t;
+        best = m;
+      }
+    });
+
+    return best;
+  }
+
+  function pickProximoMto_(arr){
+    // Si existe campo de “próximo”, elegimos el más cercano a futuro.
+    const now = Date.now();
+    let best = null;
+    let bestT = Infinity;
+
+    (arr || []).forEach(m => {
+      const f =
+        getByKeys_(m, ['PRÓXIMO MANTENIMIENTO','PROXIMO MANTENIMIENTO','FECHA PROX','FECHA PRÓXIMA','PROXIMA FECHA','PRÓXIMA FECHA']);
+      const d = parseDateLoose_(f);
+      const t = d ? d.getTime() : Infinity;
+      if(t >= now && t < bestT){
+        bestT = t;
+        best = m;
+      }
+    });
+
+    return best;
+  }
+
+  function renderMantenimientosUI_(arr){
+    const estado = document.getElementById('mtosEstado');
+    const resumen = document.getElementById('mtosResumen');
+    const lista = document.getElementById('mtosLista');
+
+    if(resumen) resumen.innerHTML = '';
+    if(lista) lista.innerHTML = '';
+
+    if(!idContratoActual){
+      if(estado){
+        estado.className = 'status error';
+        estado.textContent = 'No se encontró el ID del contrato.';
+      }
+      return;
+    }
+
+    const a = Array.isArray(arr) ? arr : [];
+    if(a.length === 0){
+      if(estado){
+        estado.className = 'status muted';
+        estado.textContent = 'No hay mantenimientos registrados para este contrato (por ahora).';
+      }
+      return;
+    }
+
+    if(estado){
+      estado.className = 'status ok';
+      estado.textContent = 'Mantenimientos encontrados: ' + a.length;
+    }
+
+    const total = sumValorMtos_(a);
+    const ultimo = pickUltimoMto_(a);
+    const proximo = pickProximoMto_(a);
+
+    const placa = (contratoActual && (contratoActual['ID VEHÍCULO'] || contratoActual['ID VEHICULO'])) || '';
+
+    const ultimoFecha =
+      getByKeys_(ultimo, ['FECHA','FECHA MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO','FECHA ULT. MANTENIMIENTO']) || '';
+    const ultimoTipo =
+      getByKeys_(ultimo, ['TIPO','TIPO MANTENIMIENTO','TIPO ULT. MANTENIMIENTO','MANTENIMIENTO']) || '';
+    const ultimoKm =
+      getByKeys_(ultimo, ['KILOMETRAJE','KM','KMS','KILOMETRAJE ACTUAL']) || '';
+    const ultimoTaller =
+      getByKeys_(ultimo, ['TALLER','TALLER ASIGNADO','PROVEEDOR']) || '';
+
+    const proxFecha =
+      proximo ? (getByKeys_(proximo, ['PRÓXIMO MANTENIMIENTO','PROXIMO MANTENIMIENTO','FECHA PROX','FECHA PRÓXIMA','PRÓXIMA FECHA','PROXIMA FECHA']) || '') : '';
+
+    if(resumen){
+      let html = '';
+      html += '<div class="mini-card">';
+      html += '<h4>Resumen</h4>';
+      if(placa) html += '<p><strong>Placa:</strong> ' + escapeHtml(placa) + '</p>';
+      html += '<p><strong>Total mantenimientos:</strong> ' + escapeHtml(formatearNumeroCOP(total)) + '</p>';
+      if(ultimoFecha) html += '<p><strong>Último mantenimiento:</strong> ' + escapeHtml(formatearFechaCorta(ultimoFecha) || ultimoFecha) + '</p>';
+      if(ultimoTipo) html += '<p><strong>Tipo:</strong> ' + escapeHtml(ultimoTipo) + '</p>';
+      if(ultimoKm) html += '<p><strong>Kilometraje:</strong> ' + escapeHtml(ultimoKm) + ' km</p>';
+      if(ultimoTaller) html += '<p><strong>Taller:</strong> ' + escapeHtml(ultimoTaller) + '</p>';
+      if(proxFecha) html += '<p><strong>Próximo mantenimiento:</strong> ' + escapeHtml(formatearFechaCorta(proxFecha) || proxFecha) + '</p>';
+      html += '</div>';
+      resumen.innerHTML = html;
+    }
+
+    // Lista (últimos 10) — usa estilo notificaciones
+    const sorted = a.slice().sort((x,y) => {
+      const dx = parseDateLoose_(getByKeys_(x,['FECHA','FECHA MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO'])) || new Date(0);
+      const dy = parseDateLoose_(getByKeys_(y,['FECHA','FECHA MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO'])) || new Date(0);
+      return dy.getTime() - dx.getTime();
+    });
+
+    const top = sorted.slice(0, 10);
+
+    if(lista){
+      top.forEach((m, idx) => {
+        const f = getByKeys_(m, ['FECHA','FECHA MANTENIMIENTO','ÚLTIMO MANTENIMIENTO','ULTIMO MANTENIMIENTO']) || '';
+        const tipo = getByKeys_(m, ['TIPO','TIPO MANTENIMIENTO','MANTENIMIENTO']) || 'Mantenimiento';
+        const valor = getByKeys_(m, ['VALOR GENERAL','VALOR MTOS','VALOR','COSTO']) || '';
+        const taller = getByKeys_(m, ['TALLER','TALLER ASIGNADO','PROVEEDOR']) || '';
+
+        const card = document.createElement('div');
+        card.className = 'noti-item';
+        card.style.cursor = 'default';
+
+        card.innerHTML = `
+          <div class="noti-bullet read"></div>
+          <div class="noti-body">
+            <p class="noti-title">${escapeHtml(tipo)}</p>
+            <p class="noti-text">
+              ${escapeHtml(formatearFechaCorta(f) || f || 'Fecha por definir')}
+              ${valor ? ' • ' + escapeHtml(formatearNumeroCOP(valor)) : ''}
+              ${taller ? ' • ' + escapeHtml(taller) : ''}
+            </p>
+          </div>
+        `;
+
+        lista.appendChild(card);
+      });
+    }
+  }
+
+  function cargarMantenimientos(){
+    // Sin llamadas nuevas: usamos el cache que ya llega en doGet
+    const estado = document.getElementById('mtosEstado');
+    if(estado){
+      estado.className = 'status muted';
+      estado.textContent = 'Cargando mantenimientos...';
+    }
+
+    // Si todavía no ha cargado contrato, intentamos refrescar una vez
+    if(!contratoActual && idContratoActual){
+      cargarContratoYSaludo(idContratoActual).then(() => {
+        renderMantenimientosUI_(mantenimientosCache);
+      }).catch(() => {
+        renderMantenimientosUI_(mantenimientosCache);
+      });
+      return;
+    }
+
+    renderMantenimientosUI_(mantenimientosCache);
+  }
 </script>
 </body>
 </html>
