@@ -2933,6 +2933,7 @@ function getConteosMtos_(arr){
     const total = sumValorMtos_(a);
     const ultimo = pickUltimoMto_(a);
     const proximo = pickProximoMto_(a);
+    const conteos = getConteosMtos_(a);
 
     const placa = (contratoActual && (contratoActual['ID VEHÍCULO'] || contratoActual['ID VEHICULO'])) || '';
 
