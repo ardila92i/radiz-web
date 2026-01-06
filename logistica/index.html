@@ -564,15 +564,14 @@
       color:#9ca3af;
     }
 
-    /* Bottom bar (always visible) */
-    .bottom-bar{
+        .bottom-bar{
       position:fixed;
       left:0;
       right:0;
       bottom:0;
       display:flex;
       justify-content:center;
-      padding:10px 14px 14px;
+      padding:10px 14px calc(14px + env(safe-area-inset-bottom));
       z-index:30;
     }
     .bottom-inner{
