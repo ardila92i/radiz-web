@@ -2955,6 +2955,9 @@ function getConteosMtos_(arr){
       html += '<h4>Resumen</h4>';
       if(placa) html += '<p><strong>Placa:</strong> ' + escapeHtml(placa) + '</p>';
       html += '<p><strong>Total mantenimientos:</strong> ' + escapeHtml(formatearNumeroCOP(total)) + '</p>';
+      html += '<p><strong>Cambios de aceite:</strong> ' + escapeHtml(String(conteos.aceite || 0)) + '</p>';
+      html += '<p><strong>Pastillas:</strong> ' + escapeHtml(String(conteos.pastillas || 0)) + '</p>';
+      html += '<p><strong>Kit de arrastre:</strong> ' + escapeHtml(String(conteos.kit || 0)) + '</p>';
       if(ultimoFecha) html += '<p><strong>Último mantenimiento:</strong> ' + escapeHtml(formatearFechaCorta(ultimoFecha) || ultimoFecha) + '</p>';
       if(ultimoTipo) html += '<p><strong>Tipo:</strong> ' + escapeHtml(ultimoTipo) + '</p>';
       if(ultimoKm) html += '<p><strong>Kilometraje:</strong> ' + escapeHtml(ultimoKm) + ' km</p>';
