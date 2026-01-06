@@ -1580,12 +1580,96 @@
     return num.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
   }
 
-  function formatearFecha(v){
-    if(!v)return'';
-    const d=new Date(v);
-    if(isNaN(d.getTime()))return v;
-    return d.toLocaleDateString('es-CO');
+ function parseFechaFlexible(v){
+  if(!v) return null;
+
+  if(v instanceof Date && !isNaN(v.getTime())) return v;
+
+  let s = String(v).trim();
+  if(!s) return null;
+
+  // dd/mm/yyyy o dd-mm-yyyy o dd.mm.yyyy
+  const m = s.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})(?:\s|$)/);
+  if(m){
+    const dd = Number(m[1]);
+    const mm = Number(m[2]) - 1;
+    let yy = Number(m[3]);
+    if(yy < 100) yy += 2000;
+    const d = new Date(yy, mm, dd);
+    if(!isNaN(d.getTime())) return d;
   }
+
+  const d2 = new Date(s);
+  if(!isNaN(d2.getTime())) return d2;
+
+  return null;
+}
+
+function formatearFecha(v){
+  const d = parseFechaFlexible(v);
+  if(!d) return v ? String(v) : '';
+  return d.toLocaleDateString('es-CO');
+}
+
+function obtenerFechaMto(reg){
+  return parseFechaFlexible(
+    reg?.['FECHA REALIZADO'] ??
+    reg?.['FECHA REALIZADA'] ??
+    reg?.['FECHA'] ??
+    reg?.['FECHA MTO'] ??
+    reg?.['FECHA MANTENIMIENTO'] ??
+    reg?.['ÚLTIMO MANTENIMIENTO'] ??
+    reg?.['ULTIMO MANTENIMIENTO'] ??
+    reg?.['FECHA ULT. MANTENIMIENTO'] ??
+    reg?.['FECHA ULT MANTENIMIENTO'] ??
+    ''
+  );
+}
+
+function estadoRealizado(reg){
+  const raw = (reg?.['ESTADO'] ?? reg?.['REALIZADO'] ?? reg?.['STATUS'] ?? '').toString().trim().toUpperCase();
+  if(!raw) return null;
+  if(['SI','SÍ','OK','REALIZADO','REALIZADA','HECHO','COMPLETADO','COMPLETADA','FINALIZADO','FINALIZADA'].includes(raw)) return true;
+  if(['NO','PENDIENTE','PROGRAMADO','POR DEFINIR','AGENDADO','PREVENTIVO'].includes(raw)) return false;
+  return null;
+}
+
+function obtenerUltimoMtoReal(mts){
+  if(!Array.isArray(mts) || mts.length===0) return null;
+
+  const lista = mts
+    .map(r => ({ r, d: obtenerFechaMto(r), done: estadoRealizado(r) }))
+    .filter(x => x.d);
+
+  if(lista.length===0) return mts[0];
+
+  const hechos = lista.filter(x => x.done === true);
+  const base = (hechos.length > 0 ? hechos : lista);
+
+  base.sort((a,b) => b.d - a.d);
+  return base[0].r;
+}
+
+function sumarPrimerCampoNumerico(r, keys){
+  for(const k of keys){
+    const v = r?.[k];
+    if(v !== undefined && v !== null && String(v).trim() !== '') return aNumeroCO(v);
+  }
+  return 0;
+}
+
+function sumarCampoEnTodos(mts, keys){
+  return (mts || []).reduce((acc, r) => acc + sumarPrimerCampoNumerico(r, keys), 0);
+}
+
+function contarPorTipoTexto(mts, palabras){
+  const P = palabras.map(x => String(x).toUpperCase());
+  return (mts || []).reduce((acc, r) => {
+    const t = (r?.['TIPO'] ?? r?.['TIPO MANTENIMIENTO'] ?? r?.['TIPO ULT. MANTENIMIENTO'] ?? r?.['MANTENIMIENTO'] ?? r?.['DESCRIPCIÓN'] ?? r?.['DESCRIPCION'] ?? '').toString().toUpperCase();
+    if(!t) return acc;
+    return P.some(p => t.includes(p)) ? acc + 1 : acc;
+  }, 0);
+}
 
   async function generarIntegritySignature(reference, amountInCents, currency){
     const encoder=new TextEncoder();
