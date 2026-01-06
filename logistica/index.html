@@ -1392,8 +1392,11 @@
     const target = document.getElementById(map[v] || 'viewHome');
     if(target) target.classList.add('active');
 
-    if(v === 'pagos'){
+        if(v === 'pagos'){
       cargarPagos();
+    }
+    if(v === 'mantenimientos'){
+      cargarMantenimientos();
     }
   }
 
