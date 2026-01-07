@@ -491,11 +491,11 @@ async function consultar(){
 
         let kitRaw=null;
         for(const mm of (mtsList||[])){
-          const v=mm?.['KIT DE ARRASTRE']??mm?.['Kit de arrastre']??mm?.['KIT ARR']??mm?.kitArrastre??mm?.kit_arrastre;
+          const v=mm?.['KIT DE ARRASTRE']??mm?.['Kit de arrastre']??mm?.['KIT ARR']??mm?.kitdearrastre??mm?.kit_arrastre;
           if(v!==undefined&&v!==null&&String(v).trim()!==''){kitRaw=v;break;}
         }
-        if(kitRaw===null||kitRaw===undefined||String(kitRaw).trim()==='') kitRaw=resumenMtos.kitArrastre??resumenMtos.kit_arrastre??(data.resumenMantenimientos||{}).kit_arrastre??(data.resumenMantenimientos||{}).kitArrastre??0;
-        const kitArrastre=aNumeroCO(kitRaw);
+        if(kitRaw===null||kitRaw===undefined||String(kitRaw).trim()==='') kitRaw=resumenMtos.kitdearrastre??resumenMtos.kit_dearrastre??(data.resumenMantenimientos||{}).kit_arrastre??(data.resumenMantenimientos||{}).kitArrastre??0;
+        const kitdearrastre=aNumeroCO(kitRaw);
 
         const ultimo=formatearFecha(resumenMtos.ultimoMantenimiento||mtsList[0]?.fecha||mtsList[0]?.['ÚLTIMO MANTENIMIENTO']||mtsList[0]?.['ULTIMO MANTENIMIENTO']||mtsList[0]?.['FECHA ULT. MANTENIMIENTO']||'');
         const tipoM=resumenMtos.tipo||mtsList[0]?.tipo||mtsList[0]?.['TIPO']||mtsList[0]?.['TIPO ULT. MANTENIMIENTO']||'';
