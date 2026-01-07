@@ -480,10 +480,8 @@ async function consultar(){
         const totalVal=(resumenMtos.totalMantenimientos!==undefined)?Number(resumenMtos.totalMantenimientos||0):mtsList.reduce((s,mm)=>s+aNumeroCO(mm?.valor??mm?.['VALOR GENERAL']??mm?.['VALOR MTOS']??mm?.['VALOR']??mm?.['VALOR MTO']),0);
         const cambiosAceite=(resumenMtos.cambiosAceite!==undefined)?aNumeroCO(resumenMtos.cambiosAceite):aNumeroCO((data.resumenMantenimientos||{}).aceites);
         const pastillas=(resumenMtos.pastillas!==undefined)?aNumeroCO(resumenMtos.pastillas):aNumeroCO((data.resumenMantenimientos||{}).pastillas);
-
-        const kitRaw=(resumenMtos.kitArrastre??resumenMtos.kit_de_arrastre??resumenMtos['Kit de arrastre']??resumenMtos['KIT DE ARRASTRE']??resumenMtos['Kit de Arrastre']??(data.resumenMantenimientos||{}).kit_arrastre??(data.resumenMantenimientos||{}).kitArrastre??(data.resumenMantenimientos||{})['Kit de arrastre']??(data.resumenMantenimientos||{})['KIT DE ARRASTRE']??mtsList[0]?.kitArrastre??mtsList[0]?.kit_de_arrastre??mtsList[0]?.['Kit de arrastre']??mtsList[0]?.['KIT DE ARRASTRE']);
-        const kitArrastre=aNumeroCO(kitRaw);
-
+        const rm=(data.resumenMantenimientos||{});
+        const kitArrastre=aNumeroCO(resumenMtos.kitArrastre??resumenMtos.kitsArrastre??resumenMtos.KitArrastre??resumenMtos.KitsArrastre??resumenMtos.kit_de_arrastre??resumenMtos.kits_de_arrastre??resumenMtos['Kit de arrastre']??resumenMtos['KIT DE ARRASTRE']??rm.kitArrastre??rm.kitsArrastre??rm.KitArrastre??rm.KitsArrastre??rm.kit_arrastre??rm.kits_arrastre??mtsList[0]?.kitArrastre??mtsList[0]?.kitsArrastre??mtsList[0]?.KitArrastre??mtsList[0]?.KitsArrastre??mtsList[0]?.kit_de_arrastre??mtsList[0]?.kits_de_arrastre??mtsList[0]?.['Kit de arrastre']??mtsList[0]?.['KIT DE ARRASTRE']);
         const ultimo=formatearFecha(resumenMtos.ultimoMantenimiento||mtsList[0]?.fecha||mtsList[0]?.['ÚLTIMO MANTENIMIENTO']||mtsList[0]?.['ULTIMO MANTENIMIENTO']||mtsList[0]?.['FECHA ULT. MANTENIMIENTO']||'');
         const tipoM=resumenMtos.tipo||mtsList[0]?.tipo||mtsList[0]?.['TIPO']||mtsList[0]?.['TIPO ULT. MANTENIMIENTO']||'';
         const taller=resumenMtos.taller||mtsList[0]?.taller||mtsList[0]?.['TALLER ASIGNADO']||'';
