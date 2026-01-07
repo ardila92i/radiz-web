@@ -104,6 +104,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
 .link-copy-row input{flex:1}
 .copy-msg{font-size:.8rem;margin-top:6px;color:#6b7280}
 .img-beneficios-renting{max-width:100%;height:auto;border-radius:12px;display:block;margin:4px auto}
+.small-note{font-size:.78rem;color:#6b7280;margin-top:6px}
 @media(max-width:900px){.main-grid{grid-template-columns:1fr}.brand-card{min-height:260px}}
 @media(max-width:640px){.container{padding:22px 18px 24px;border-radius:18px}.portal-header{flex-direction:column;align-items:flex-start}.fab-menu{top:16px;right:16px}#montoPago,#idContrato{width:100%}}
 </style>
@@ -255,8 +256,11 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
   <textarea id="incidenteDescripcion" rows="4"></textarea>
   <label for="incidenteIdVehiculo">Placa / ID vehículo</label><input type="text" id="incidenteIdVehiculo" placeholder="Ej: WRC01H">
   <label for="incidenteFecha">Fecha del incidente</label><input type="date" id="incidenteFecha">
+  <label for="incidenteFotos">Evidencia fotográfica (máx. 3)</label>
+  <input type="file" id="incidenteFotos" accept="image/*" multiple>
+  <div id="incidenteFotosHint" class="small-note">Puedes seleccionar hasta 3 imágenes.</div>
   <p id="incidenteMsg" class="status"></p>
-  <div class="modal-actions"><button type="button" onclick="cerrarModal('modalIncidente')">Cerrar</button><button type="button" onclick="enviarIncidente()">Enviar</button></div>
+  <div class="modal-actions"><button type="button" onclick="cerrarModal('modalIncidente')">Cerrar</button><button type="button" id="btnIncidenteEnviar" onclick="enviarIncidente()">Enviar</button></div>
 </div></div>
 
 <div class="modal-backdrop" id="modalInversiones"><div class="modal">
@@ -318,6 +322,8 @@ let __modalOpenCount=0;
 const __touchBlocker=(e)=>{e.preventDefault();};
 const __wheelBlocker=(e)=>{if(e&&e.ctrlKey)return;e.preventDefault();};
 
+const INC_MAX_FOTOS=3,INC_MAX_LADO=1280,INC_JPEG_Q=.75;
+
 const el=(id)=>document.getElementById(id);
 
 document.addEventListener('touchmove',__touchBlocker,{passive:false});
@@ -330,6 +336,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(ren) ren.style.display='none';
   if(afi) afi.style.display='none';
   try{const saved=localStorage.getItem(RADIZ_USER_KEY)||'';const i=el('loginId');if(i&&saved)i.value=saved;}catch(e){}
+  const f=el('incidenteFotos');if(f) f.addEventListener('change',()=>{const h=el('incidenteFotosHint');if(!h)return;const n=(f.files&&f.files.length)?f.files.length:0;if(n>INC_MAX_FOTOS){h.textContent='Máximo '+INC_MAX_FOTOS+' imágenes. Ajusta tu selección.';}else if(n>0){h.textContent=n+' imagen(es) seleccionada(s).';}else{h.textContent='Puedes seleccionar hasta 3 imágenes.';}});
 });
 
 function toggleMenu(){const p=el('menuPanel');if(p)p.style.display=(p.style.display==='block'?'none':'block');}
@@ -712,29 +719,65 @@ async function enviarActualizacionKilometraje(){
   }
 }
 
+function __readAsDataURL(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=()=>rej(r.error||new Error('No se pudo leer'));r.readAsDataURL(file);});}
+function __loadImg(src){return new Promise((res,rej)=>{const img=new Image();img.onload=()=>res(img);img.onerror=()=>rej(new Error('Imagen inválida'));img.src=src;});}
+async function __toJpegDataURL(file){
+  const raw=await __readAsDataURL(file);
+  const img=await __loadImg(raw);
+  const w=img.naturalWidth||img.width||0,h=img.naturalHeight||img.height||0;
+  if(!w||!h) return raw;
+  const s=Math.min(1,INC_MAX_LADO/Math.max(w,h));
+  const nw=Math.max(1,Math.round(w*s)),nh=Math.max(1,Math.round(h*s));
+  const c=document.createElement('canvas');c.width=nw;c.height=nh;
+  const ctx=c.getContext('2d',{alpha:false});ctx.drawImage(img,0,0,nw,nh);
+  return c.toDataURL('image/jpeg',INC_JPEG_Q);
+}
+async function __prepEvidencias(files){
+  const arr=Array.from(files||[]).slice(0,INC_MAX_FOTOS);
+  const out=[];
+  for(let i=0;i<arr.length;i++){
+    const f=arr[i];
+    try{
+      const d=await __toJpegDataURL(f);
+      out.push({name:(f.name||('evidencia_'+(i+1)+'.jpg')),data:String(d).split(',')[1]||''});
+    }catch(e){}
+  }
+  return out;
+}
+
 async function enviarIncidente(){
-  const descInput=el('incidenteDescripcion'),idVehInput=el('incidenteIdVehiculo'),fechaInput=el('incidenteFecha'),msg=el('incidenteMsg');
+  const descInput=el('incidenteDescripcion'),idVehInput=el('incidenteIdVehiculo'),fechaInput=el('incidenteFecha'),fotosInput=el('incidenteFotos'),msg=el('incidenteMsg');
+  const btn=el('btnIncidenteEnviar');
   msg.className='status';msg.textContent='';
   const descripcion=(descInput.value||'').trim();
   const idVeh=(idVehInput.value||'').trim().toUpperCase();
-  const fecha=fechaInput.value;
-  const idContrato=obtenerIdContratoActual();
-  if(!idContrato||!descripcion){msg.classList.add('error');msg.textContent='Debes ingresar la descripción y tener un contrato cargado.';return;}
+  const fecha=fechaInput.value||'';
+  const files=(fotosInput&&fotosInput.files)?fotosInput.files:null;
+  if(!descripcion||!idVeh){msg.classList.add('error');msg.textContent='Debes ingresar la descripción y la placa.';return;}
+  const nFiles=files&&files.length?files.length:0;
+  if(nFiles>INC_MAX_FOTOS){msg.classList.add('error');msg.textContent='Máximo '+INC_MAX_FOTOS+' imágenes.';return;}
+  if(btn) btn.disabled=true;
   msg.textContent='Enviando incidente...';
   try{
-    const formData=new URLSearchParams();
-    formData.append('accion','notificar_incidente');
-    formData.append('descripcion',descripcion);
-    formData.append('idVehiculo',idVeh);
-    formData.append('idContrato',idContrato);
-    formData.append('fecha',fecha);
-    const resp=await fetch(API_CALLBACK_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData.toString()});
+    const evidencias=await __prepEvidencias(files||[]);
+    const payload={accion:'notificar_incidente',descripcion,idVehiculo:idVeh,fecha,evidencias};
+    const resp=await fetch(API_CALLBACK_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
     const data=await resp.json();
-    if(data.ok){msg.className='status ok';msg.textContent='Incidente registrado correctamente.';}
-    else{msg.className='status error';msg.textContent=data.error||'No fue posible registrar el incidente.';}
+    if(data.ok){
+      msg.className='status ok';msg.textContent='Incidente registrado correctamente.';
+      if(descInput) descInput.value='';
+      if(idVehInput) idVehInput.value='';
+      if(fechaInput) fechaInput.value='';
+      if(fotosInput) fotosInput.value='';
+      const h=el('incidenteFotosHint');if(h) h.textContent='Puedes seleccionar hasta 3 imágenes.';
+    }else{
+      msg.className='status error';msg.textContent=data.error||'No fue posible registrar el incidente.';
+    }
   }catch(e){
     console.error(e);
     msg.className='status error';msg.textContent='Error al enviar el incidente. Intenta de nuevo.';
+  }finally{
+    if(btn) btn.disabled=false;
   }
 }
 
