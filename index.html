@@ -1,861 +1,1031 @@
-<!DOCTYPE html><html lang="es"><head>
-<meta charset="UTF-8"/><title></title><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<meta name="theme-color" content="#0f172a"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="icon" type="image/png" sizes="512x512" href="icon-512.png"><link rel="apple-touch-icon" href="icon-512.png">
-<script src="https://checkout.wompi.co/widget.js" async></script>
-<style>
-*{box-sizing:border-box}html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;position:fixed;inset:0;touch-action:none}body{margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0f172a;color:#111827}
-body.modal-lock{overflow:hidden;touch-action:none}
-.login-screen{position:relative;height:100dvh;min-height:100vh;width:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:24px 16px;background:#0f172a}
-.login-bg{position:absolute;inset:0;background-image:url('radiz-driver.jpg.jpg');background-size:cover;background-position:center;transform:scale(1.02);filter:saturate(1.02) contrast(1.02)}
-.login-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,.35) 0%,rgba(15,23,42,.65) 55%,rgba(15,23,42,.85) 100%)}
-.login-content{position:relative;z-index:2;width:100%;max-width:460px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:18px 14px 16px}
-.login-logo{margin-top:-10px;margin-bottom:0;display:flex;justify-content:center}
-.login-logo img{width:72px;height:72px;object-fit:contain;border-radius:18px;overflow:hidden}
-.login-content .login-welcome{margin:-6px 0 0;font-size:1.55rem;line-height:1.15;font-weight:800;color:#fff;letter-spacing:.02em;text-shadow:0 10px 26px rgba(0,0,0,.35)}
-.login-form{width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:clamp(160px,28vh,320px)}
-.login-input{width:min(310px,78vw);border:0!important;outline:0!important;-webkit-appearance:none;appearance:none;border-radius:14px;padding:12px 14px;font-size:1rem;color:#0f172a;box-shadow:0 18px 45px rgba(0,0,0,.22);background-clip:padding-box}
-.login-input::placeholder{color:rgba(15,23,42,.6)}#loginId{background:rgba(37,99,235,.92);color:#fff}#loginId::placeholder{color:rgba(255,255,255,.8)}#loginPassword{background:rgba(249,115,22,.92);color:#fff}#loginPassword::placeholder{color:rgba(255,255,255,.85)}
-.login-btn{width:min(310px,78vw);border:none;border-radius:16px;padding:12px 14px;font-size:1rem;font-weight:800;cursor:pointer;background:rgba(255,255,255,.88);color:#0f172a;box-shadow:0 18px 45px rgba(0,0,0,.25);transition:transform .1s,box-shadow .1s,background .1s}
-.login-btn:hover{transform:translateY(-1px);background:#fff;box-shadow:0 22px 55px rgba(0,0,0,.28)}
-.login-msg{width:min(310px,78vw);min-height:1.2em;font-size:.92rem;color:#fff;text-shadow:0 10px 26px rgba(0,0,0,.35);opacity:.95}.login-msg.error{color:#fecaca}.login-msg.ok{color:#bbf7d0}
-.page{display:none;height:100dvh;min-height:100vh;overflow:hidden;align-items:flex-start;justify-content:center;padding:32px 16px}
-.container{position:relative;width:100%;max-width:960px;background:#fff;border-radius:24px;box-shadow:0 18px 45px rgba(15,23,42,.14);padding:28px 32px 32px;overflow:visible}
-.logo-top{text-align:center;margin-bottom:12px}.logo-top img{max-width:260px;max-height:120px;object-fit:contain}
-.main-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1.15fr);gap:24px;margin-top:8px}
-.brand-card{position:relative;border-radius:22px;overflow:hidden;background:#0f172a;min-height:380px;box-shadow:0 18px 40px rgba(15,23,42,.32);color:#f9fafb}
-.brand-image{position:absolute;inset:0}.brand-image img{width:100%;height:100%;object-fit:cover}
-.brand-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,.15) 10%,rgba(15,23,42,.78) 80%)}
-.brand-copy{position:absolute;left:18px;right:18px;bottom:18px}
-.brand-kicker{margin:0 0 4px;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:#bfdbfe;font-weight:600}
-.brand-copy h2{margin:0;font-size:1.45rem;line-height:1.25;font-weight:700}
-.panel-main{display:flex;flex-direction:column}
-.welcome-banner{display:flex;align-items:flex-start;gap:10px;background:#e0f2fe;border-radius:16px;padding:10px 14px;margin-bottom:18px;border:1px solid #bfdbfe}
-.welcome-icon{position:relative;width:32px;height:32px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#2563eb;color:transparent;flex-shrink:0}
-.welcome-icon::before{content:"";position:absolute;width:3px;height:10px;border-radius:999px;background:#fff;top:11px;left:50%;transform:translateX(-50%)}
-.welcome-icon::after{content:"";position:absolute;width:3px;height:3px;border-radius:999px;background:#fff;top:7px;left:50%;transform:translateX(-50%)}
-.welcome-text-title{font-size:.95rem;font-weight:600;margin:0 0 2px;color:#0f172a}
-.welcome-text-sub{margin:0;font-size:.85rem;color:#4b5563}
-.portal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px}
-h1{margin:0 0 4px;font-size:1.9rem;letter-spacing:.03em}
-.card{position:relative;border-radius:18px;border:1px solid #e5e7eb;padding:16px 18px;background:#fff;font-size:.9rem;transition:border-color .15s,box-shadow .15s,transform .1s,background .15s}
-.card h2{margin:0 0 8px;font-size:1.05rem;font-weight:700;color:#111827}
-.card p{margin:3px 0;color:#111827;font-size:.9rem}
-.card p strong{font-weight:600}
-.card:hover{border-color:#2563eb;box-shadow:0 16px 34px rgba(37,99,235,.18);background:#f9fbff;transform:translateY(-1px)}
-.card-consulta,.card-pago{margin-bottom:18px}
-.card-contrato::before,.card-pagos::before,.card-mantenimientos::before{content:"";position:absolute;top:18px;left:18px;width:26px;height:26px;background-size:contain;background-repeat:no-repeat;background-position:center}
-.card-contrato::before{background-image:url('ícono_contrato1.svg')}
-.card-pagos::before{background-image:url('ícono_pagos.svg')}
-.card-mantenimientos::before{background-image:url('ícono_mantenimientos.svg')}
-.card-contrato h2,.card-pagos h2,.card-mantenimientos h2{margin-left:40px}
-.card-mantenimientos:hover{background:#fff7ed;border-color:#f97316;box-shadow:0 18px 38px rgba(249,115,22,.22)}
-.section-title{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.section-title span{font-size:1.05rem;font-weight:700;color:#111827}
-.section-icon{position:relative;width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#eff6ff;flex-shrink:0}
-.section-icon-search::before{content:"";position:absolute;width:13px;height:13px;border-radius:999px;border:2px solid #2563eb;top:6px;left:7px;box-sizing:border-box}
-.section-icon-search::after{content:"";position:absolute;width:8px;height:2px;border-radius:999px;background:#2563eb;bottom:7px;right:6px;transform:rotate(45deg)}
-.section-icon-money::before{content:"$";position:absolute;font-size:16px;font-weight:700;color:#2563eb}
-label{font-size:.9rem;font-weight:600;color:#374151}
-input[type="text"],input[type="number"],input[type="email"],input[type="date"],input[type="password"],textarea{width:100%;padding:10px 12px;border-radius:9px;border:1px solid #d1d5db;font-size:.95rem;outline:none;transition:border-color .15s,box-shadow .15s,background .15s;background:#f9fafb;font-family:inherit}
-input[type="text"]:focus,input[type="number"]:focus,input[type="email"]:focus,input[type="date"]:focus,input[type="password"]:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,235,.18);background:#fff}
-button{padding:11px 22px;border-radius:999px;border:none;font-size:.95rem;font-weight:600;cursor:pointer;background:#2563eb;color:#fff;display:inline-flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 12px 26px rgba(37,99,235,.45);transition:transform .1s,box-shadow .1s,background .1s;white-space:nowrap}
-button:hover{transform:translateY(-1px);background:#1d4ed8;box-shadow:0 16px 32px rgba(37,99,235,.55)}
-button:disabled{opacity:.65;cursor:default;box-shadow:none;transform:none}
-.btn-main{min-width:190px;justify-content:center}
-.btn-afiliado{background:#f97316;box-shadow:0 12px 26px rgba(249,115,22,.45)}
-.btn-afiliado:hover{background:#ea580c;box-shadow:0 16px 32px rgba(249,115,22,.6)}
-.btn-app{padding:0;border:none;background:transparent;color:#1d4ed8;font-size:.9rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;box-shadow:none;white-space:nowrap;min-width:0}
-.btn-app:hover{background:transparent;border:none;color:#1d4ed8;box-shadow:none;transform:none;text-decoration:underline}
-.status{font-size:.9rem;margin-top:4px;min-height:1.2em}.status.error{color:#b91c1c}.status.ok{color:#065f46}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:6px;margin-bottom:18px}
-.badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:600;text-transform:uppercase}
-.badge-activo{background:#dcfce7;color:#166534}.badge-inactivo{background:#fee2e2;color:#b91c1c}
-footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
-#seccionPago h2{font-size:1.05rem;margin:0 0 4px;color:#111827}
-#seccionPago p{font-size:.9rem;color:#4b5563;margin:4px 0 10px}
-#seccionPago .row-pago{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.row-pago-botones{justify-content:space-between;margin-top:10px}
-.btn-pago,.btn-qr{flex:1;min-width:0;background:#60a5fa;box-shadow:0 8px 18px rgba(96,165,250,.5)}
-.btn-pago:hover,.btn-qr:hover{background:#3b82f6;box-shadow:0 10px 22px rgba(59,130,246,.6)}
-#montoPago,#idContrato{width:220px}
-#pagoError,#pagoContratoError{color:#dc2626;margin-top:6px;font-size:.85rem;display:none}
-#pagoContratoError{margin-top:4px}
-.row-consulta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px;margin-bottom:10px}
-.affiliate-row{margin-top:18px;display:flex;justify-content:center}
-.fab-menu{position:absolute;top:24px;right:24px;z-index:20;display:none}
-.fab-btn{width:54px;height:54px;border-radius:999px;background:#2563eb;border:none;box-shadow:0 10px 24px rgba(37,99,235,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s,box-shadow .12s,background .12s}
-.fab-btn:hover{transform:translateY(-1px);background:#1d4ed8;box-shadow:0 14px 32px rgba(37,99,235,.55)}
-.fab-btn span{display:block;width:22px;height:2px;border-radius:999px;background:#fff;position:relative}
-.fab-btn span::before,.fab-btn span::after{content:"";position:absolute;left:0;width:22px;height:2px;border-radius:999px;background:#fff}
-.fab-btn span::before{top:-6px}.fab-btn span::after{top:6px}
-.menu-panel{position:absolute;top:86px;right:28px;background:#fff;border-radius:14px;box-shadow:0 12px 30px rgba(15,23,42,.22);padding:8px 0;width:260px;display:none;z-index:25}
-.menu-title{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:#6b7280;padding:6px 14px 4px}
-.menu-item{padding:7px 14px;font-size:.9rem;cursor:pointer;color:#111827}
-.menu-item:hover{background:#eff6ff;color:#1d4ed8}
-.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:40;overflow:hidden}
-.modal{background:#fff;border-radius:18px;max-width:480px;width:90%;padding:18px 20px;box-shadow:0 20px 45px rgba(15,23,42,.4);font-size:.9rem;max-height:calc(100dvh - 40px);overflow:hidden}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.modal-header h3{margin:0;font-size:1.05rem}
-.modal-close{border:none;background:transparent;font-size:1.3rem;cursor:pointer;color:#6b7280;box-shadow:none;padding:0 6px}
-.modal p{margin:4px 0;color:#111827}
-.modal-actions{margin-top:14px;display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
-.link-copy-row{display:flex;gap:8px;align-items:center;margin-top:4px}
-.link-copy-row input{flex:1}
-.copy-msg{font-size:.8rem;margin-top:6px;color:#6b7280}
-.img-beneficios-renting{max-width:100%;height:auto;border-radius:12px;display:block;margin:4px auto}
-@media(max-width:900px){.main-grid{grid-template-columns:1fr}.brand-card{min-height:260px}}
-@media(max-width:640px){.container{padding:22px 18px 24px;border-radius:18px}.portal-header{flex-direction:column;align-items:flex-start}.fab-menu{top:16px;right:16px}#montoPago,#idContrato{width:100%}}
-</style>
-</head><body>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <title></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
 
-<section class="login-screen">
-  <div class="login-bg"></div><div class="login-overlay"></div>
-  <div class="login-content">
-    <div class="login-logo"><img src="icon-512.png" alt="RADIZ"></div>
-    <h1 class="login-welcome">¡Buenas buenas!</h1>
-    <form class="login-form" onsubmit="event.preventDefault();loginInversiones('login');">
-      <input class="login-input" type="text" id="loginId" placeholder="Usuario (Ej: R4523)" autocomplete="username">
-      <input class="login-input" type="password" id="loginPassword" placeholder="Contraseña" autocomplete="current-password">
-      <button type="submit" class="login-btn">Entrar</button>
-      <div id="loginMsg" class="login-msg"></div>
-    </form>
-  </div>
-</section>
+  <meta name="theme-color" content="#0f172a">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
 
-<div class="page">
-  <div class="container">
-    <div class="logo-top"><img src="logoradiz.png" alt="Logo RADIZ" id="logo-radiz"></div>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+  <link rel="apple-touch-icon" href="icon-512.png">
 
-    <div class="fab-menu" id="fabMenu">
-      <button class="fab-btn" type="button" onclick="toggleMenu()"><span></span></button>
-      <div class="menu-panel" id="menuPanel">
-        <div class="menu-title" id="menuTitle">Opciones</div>
-        <div id="menuInicial">
-          <div class="menu-item" onclick="abrirModal('modalInversiones')">Ir a inversiones</div>
-          <div class="menu-item" onclick="manejarDescargaApp()">Descarga la App</div>
-        </div>
-        <div id="menuRenting" style="display:none;">
-          <div class="menu-item" onclick="abrirModal('modalBeneficios')">Beneficios</div>
-          <div class="menu-item" onclick="solicitarGrua()">Solicitar grúa</div>
-          <div class="menu-item" onclick="abrirModal('modalActualizarKm')">Actualizar kilometraje</div>
-          <div class="menu-item">Señales</div>
-          <div class="menu-item" onclick="abrirModal('modalHistorialPagos')">Historial de pagos</div>
-          <div class="menu-item">Historial de mantenimientos</div>
-          <div class="menu-item" onclick="abrirModal('modalSaldoFavor')">Mi saldo a favor</div>
-          <div class="menu-item" onclick="abrirModal('modalAfiliado')">Link de referidos</div>
-          <div class="menu-item" onclick="abrirModal('modalIncidente')">Notificar incidente</div>
-          <div class="menu-item" onclick="abrirModal('modalTaller')">Taller asignado</div>
-        </div>
-        <div id="menuAfiliado" style="display:none;">
-          <div class="menu-item">Beneficios</div>
-          <div class="menu-item" onclick="abrirModal('modalHistorialPagos')">Historial de pagos</div>
-          <div class="menu-item">Mapa vehicular</div>
-          <div class="menu-item">Oportunidades</div>
-          <div class="menu-item" onclick="abrirModal('modalMisContratosAfiliado')">Mis contratos</div>
-          <div class="menu-item" onclick="abrirModal('modalActualizarDatosAfiliado')">Actualizar datos</div>
-          <div class="menu-item" onclick="abrirModal('modalMiFlotaAfiliado')">Mi flota</div>
-          <div class="menu-item" onclick="abrirModal('modalInvertirAfiliado')">Invertir</div>
-        </div>
-      </div>
-    </div>
+  <script src="https://checkout.wompi.co/widget.js" async></script>
 
-    <div class="main-grid">
-      <div class="brand-card">
-        <div class="brand-image"><img src="radiz-driver.jpg.jpg" alt="Conductor Radiz frente a vehículos de carga"></div>
-        <div class="brand-overlay"></div>
-        <div class="brand-copy"><p class="brand-kicker">Una marca de Proyecto I45 S.A.S.</p><h2>Vehículos que dignifican</h2></div>
-      </div>
+  <style>
+    *{box-sizing:border-box}
+    html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;position:fixed;inset:0;touch-action:none}
+    body{margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0f172a;color:#111827}
+    body.modal-lock{overflow:hidden;touch-action:none}
 
-      <div class="panel-main">
-        <div class="welcome-banner"><div class="welcome-icon"></div><div><p class="welcome-text-title">¡Bienvenido a Radiz Vehicular!</p><p class="welcome-text-sub">Consulte su contrato, realice pagos y descargue su historial.</p></div></div>
-        <header class="portal-header"><div><h1></h1></div></header>
+    .login-screen{position:relative;height:100dvh;min-height:100vh;width:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:24px 16px;background:#0f172a}
+    .login-bg{position:absolute;inset:0;background-image:url('radiz-driver.jpg.jpg');background-size:cover;background-position:center;transform:scale(1.02);filter:saturate(1.02) contrast(1.02)}
+    .login-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,.35) 0%,rgba(15,23,42,.65) 55%,rgba(15,23,42,.85) 100%)}
+    .login-content{position:relative;z-index:2;width:100%;max-width:460px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:18px 14px 16px}
+    .login-logo{margin-top:-10px;margin-bottom:0;display:flex;justify-content:center}
+    .login-logo img{width:72px;height:72px;object-fit:contain;border-radius:18px;overflow:hidden}
+    .login-content .login-welcome{margin:-6px 0 0;font-size:1.55rem;line-height:1.15;font-weight:800;color:#fff;letter-spacing:.02em;text-shadow:0 10px 26px rgba(0,0,0,.35)}
+    .login-form{width:100%;display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:clamp(160px,28vh,320px)}
+    .login-input{width:min(310px,78vw);border:0!important;outline:0!important;-webkit-appearance:none;appearance:none;border-radius:14px;padding:12px 14px;font-size:1rem;color:#0f172a;box-shadow:0 18px 45px rgba(0,0,0,.22);background-clip:padding-box}
+    .login-input::placeholder{color:rgba(15,23,42,.6)}
+    #loginId{background:rgba(37,99,235,.92);color:#fff}
+    #loginId::placeholder{color:rgba(255,255,255,.8)}
+    #loginPassword{background:rgba(249,115,22,.92);color:#fff}
+    #loginPassword::placeholder{color:rgba(255,255,255,.85)}
+    .login-btn{width:min(310px,78vw);border:none;border-radius:16px;padding:12px 14px;font-size:1rem;font-weight:800;cursor:pointer;background:rgba(255,255,255,.88);color:#0f172a;box-shadow:0 18px 45px rgba(0,0,0,.25);transition:transform .1s,box-shadow .1s,background .1s}
+    .login-btn:hover{transform:translateY(-1px);background:#fff;box-shadow:0 22px 55px rgba(0,0,0,.28)}
+    .login-msg{width:min(310px,78vw);min-height:1.2em;font-size:.92rem;color:#fff;text-shadow:0 10px 26px rgba(0,0,0,.35);opacity:.95}
+    .login-msg.error{color:#fecaca}
+    .login-msg.ok{color:#bbf7d0}
 
-        <div class="card card-consulta">
-          <div class="section-title"><div class="section-icon section-icon-search"></div><span>Consulta de contrato</span></div>
-          <label for="idContrato">ID</label>
-          <div class="row-consulta">
-            <input type="text" id="idContrato" placeholder="Ejemplo: R4523">
-            <button id="btnConsultar" class="btn-main" onclick="consultar()">Consultar</button>
-          </div>
-          <div id="status" class="status"></div>
-        </div>
+    .page{display:none;height:100dvh;min-height:100vh;overflow:hidden;align-items:flex-start;justify-content:center;padding:32px 16px}
+    .container{position:relative;width:100%;max-width:960px;background:#fff;border-radius:24px;box-shadow:0 18px 45px rgba(15,23,42,.14);padding:28px 32px 32px;overflow:visible}
 
-        <div class="card card-pago" id="seccionPago">
-          <div class="section-title"><div class="section-icon section-icon-money"></div><span>Realizar pago</span></div>
-          <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
-          <label for="montoPago">Monto a pagar (COP)</label>
-          <div class="row-pago"><input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000"></div>
-          <div class="row-pago row-pago-botones">
-            <button type="button" class="btn-main btn-pago" onclick="crearPagoWompi()">Pagar con Wompi</button>
-            <button type="button" class="btn-main btn-qr" onclick="abrirModal('modalQR')">Ver QR</button>
-          </div>
-          <p id="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
-          <p id="pagoContratoError">Digita tu ID antes de pagar.</p>
-        </div>
+    .logo-top{text-align:center;margin-bottom:12px}
+    .logo-top img{max-width:260px;max-height:120px;object-fit:contain}
 
-        <div class="affiliate-row"><button type="button" class="btn-app" onclick="abrirModal('modalInversiones')">Iniciar sesión</button></div>
+    .main-grid{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1.15fr);gap:24px;margin-top:8px}
 
-        <div class="grid" id="resultados" style="display:none;">
-          <div class="card card-contrato" id="cardContrato"></div>
-          <div class="card card-pagos" id="cardPagos"></div>
-          <div class="card card-mantenimientos" id="cardMantenimientos"></div>
-        </div>
+    .brand-card{position:relative;border-radius:22px;overflow:hidden;background:#0f172a;min-height:380px;box-shadow:0 18px 40px rgba(15,23,42,.32);color:#f9fafb}
+    .brand-image{position:absolute;inset:0}
+    .brand-image img{width:100%;height:100%;object-fit:cover}
+    .brand-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,.15) 10%,rgba(15,23,42,.78) 80%)}
+    .brand-copy{position:absolute;left:18px;right:18px;bottom:18px}
+    .brand-kicker{margin:0 0 4px;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:#bfdbfe;font-weight:600}
+    .brand-copy h2{margin:0;font-size:1.45rem;line-height:1.25;font-weight:700}
 
-        <footer>Versión interna • RADIZ Suministro Vehicular</footer>
-      </div>
-    </div>
-  </div>
-</div>
+    .panel-main{display:flex;flex-direction:column}
+    .welcome-banner{display:flex;align-items:flex-start;gap:10px;background:#e0f2fe;border-radius:16px;padding:10px 14px;margin-bottom:18px;border:1px solid #bfdbfe}
+    .welcome-icon{position:relative;width:32px;height:32px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#2563eb;color:transparent;flex-shrink:0}
+    .welcome-icon::before{content:"";position:absolute;width:3px;height:10px;border-radius:999px;background:#fff;top:11px;left:50%;transform:translateX(-50%)}
+    .welcome-icon::after{content:"";position:absolute;width:3px;height:3px;border-radius:999px;background:#fff;top:7px;left:50%;transform:translateX(-50%)}
+    .welcome-text-title{font-size:.95rem;font-weight:600;margin:0 0 2px;color:#0f172a}
+    .welcome-text-sub{margin:0;font-size:.85rem;color:#4b5563}
 
-<div class="modal-backdrop" id="modalBeneficios"><div class="modal"><div class="modal-header"><h3>Beneficios del plan</h3><button class="modal-close" type="button" onclick="cerrarModal('modalBeneficios')">&times;</button></div><p id="modalBeneficiosTexto">Información no disponible.</p></div></div>
+    .portal-header{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:12px}
+    h1{margin:0 0 4px;font-size:1.9rem;letter-spacing:.03em}
 
-<div class="modal-backdrop" id="modalHistorialPagos"><div class="modal">
-  <div class="modal-header"><h3>Historial de pagos</h3><button class="modal-close" type="button" onclick="cerrarModal('modalHistorialPagos')">&times;</button></div>
-  <p id="historialIntro" style="margin-bottom:6px;">Ingresa tu correo electrónico y el ID para solicitar tu historial en PDF.</p>
-  <label for="correoHistorial">Correo electrónico</label><input type="email" id="correoHistorial" placeholder="ejemplo@correo.com">
-  <label for="idHistorial">ID</label><input type="text" id="idHistorial" placeholder="Ej: R4523">
-  <p id="historialMsg" style="font-size:.85rem;margin-top:6px;color:#6b7280;"></p>
-  <div class="modal-actions">
-    <button type="button" onclick="cerrarModal('modalHistorialPagos')">Cerrar</button>
-    <button type="button" id="btnHistorialEnviar" onclick="enviarSolicitudHistorial()">Enviar</button>
-    <button type="button" id="btnHistorialDescargar" style="display:none;" onclick="descargarHistorialPdf()">Descargar PDF</button>
-  </div>
-</div></div>
+    .card{position:relative;border-radius:18px;border:1px solid #e5e7eb;padding:16px 18px;background:#fff;font-size:.9rem;transition:border-color .15s,box-shadow .15s,transform .1s,background .15s}
+    .card h2{margin:0 0 8px;font-size:1.05rem;font-weight:700;color:#111827}
+    .card p{margin:3px 0;color:#111827;font-size:.9rem}
+    .card p strong{font-weight:600}
+    .card:hover{border-color:#2563eb;box-shadow:0 16px 34px rgba(37,99,235,.18);background:#f9fbff;transform:translateY(-1px)}
+    .card-consulta,.card-pago{margin-bottom:18px}
 
-<div class="modal-backdrop" id="modalTaller"><div class="modal"><div class="modal-header"><h3>Taller asignado</h3><button class="modal-close" type="button" onclick="cerrarModal('modalTaller')">&times;</button></div><p id="modalTallerTexto">Información no disponible.</p></div></div>
+    .card-contrato::before,.card-pagos::before,.card-mantenimientos::before{content:"";position:absolute;top:18px;left:18px;width:26px;height:26px;background-size:contain;background-repeat:no-repeat;background-position:center}
+    .card-contrato::before{background-image:url('ícono_contrato1.svg')}
+    .card-pagos::before{background-image:url('ícono_pagos.svg')}
+    .card-mantenimientos::before{background-image:url('ícono_mantenimientos.svg')}
+    .card-contrato h2,.card-pagos h2,.card-mantenimientos h2{margin-left:40px}
 
-<div class="modal-backdrop" id="modalActualizarKm"><div class="modal">
-  <div class="modal-header"><h3>Actualizar kilometraje</h3><button class="modal-close" type="button" onclick="cerrarModal('modalActualizarKm')">&times;</button></div>
-  <p>Ingresa el nuevo kilometraje y la placa del vehículo.</p>
-  <label for="kmValor">Kilometraje actual</label><input type="number" id="kmValor" placeholder="Ej: 2500">
-  <label for="kmIdVehiculo">Placa / ID vehículo</label><input type="text" id="kmIdVehiculo" placeholder="Ej: WRG02H">
-  <p id="kmMsg" class="status"></p>
-  <div class="modal-actions"><button type="button" onclick="cerrarModal('modalActualizarKm')">Cerrar</button><button type="button" onclick="enviarActualizacionKilometraje()">Enviar</button></div>
-</div></div>
+    .card-mantenimientos:hover{background:#fff7ed;border-color:#f97316;box-shadow:0 18px 38px rgba(249,115,22,.22)}
 
-<div class="modal-backdrop" id="modalSaldoFavor"><div class="modal">
-  <div class="modal-header"><h3>Mi saldo a favor</h3><button class="modal-close" type="button" onclick="cerrarModal('modalSaldoFavor')">&times;</button></div>
-  <p>Tienes un saldo a favor por concepto de referidos: <strong>$0.00</strong>.</p>
-  <div class="modal-actions"><button type="button" onclick="cerrarModal('modalSaldoFavor')">Cerrar</button></div>
-</div></div>
+    .section-title{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+    .section-title span{font-size:1.05rem;font-weight:700;color:#111827}
+    .section-icon{position:relative;width:28px;height:28px;border-radius:999px;display:flex;align-items:center;justify-content:center;background:#eff6ff;flex-shrink:0}
+    .section-icon-search::before{content:"";position:absolute;width:13px;height:13px;border-radius:999px;border:2px solid #2563eb;top:6px;left:7px;box-sizing:border-box}
+    .section-icon-search::after{content:"";position:absolute;width:8px;height:2px;border-radius:999px;background:#2563eb;bottom:7px;right:6px;transform:rotate(45deg)}
+    .section-icon-money::before{content:"$";position:absolute;font-size:16px;font-weight:700;color:#2563eb}
 
-<div class="modal-backdrop" id="modalQR"><div class="modal">
-  <div class="modal-header"><h3>Pagar con código QR</h3><button class="modal-close" type="button" onclick="cerrarModal('modalQR')">&times;</button></div>
-  <p>Escanea este código con la app de tu banco o billetera para realizar el pago:</p>
-  <img src="QRRADIZ-38.png" alt="Código QR de pago RADIZ" style="max-width:100%;height:auto;border-radius:12px;display:block;margin:8px auto;">
-  <p style="font-size:.8rem;color:#6b7280;margin-top:4px;">Recuerda incluir tu ID de contrato en la referencia del pago.</p>
-  <div class="modal-actions"><button type="button" onclick="cerrarModal('modalQR')">Cerrar</button></div>
-</div></div>
-
-<div class="modal-backdrop" id="modalIncidente"><div class="modal">
-  <div class="modal-header"><h3>Notificar incidente</h3><button class="modal-close" type="button" onclick="cerrarModal('modalIncidente')">&times;</button></div>
-  <p>Cuéntanos qué sucedió con el vehículo.</p>
-  <label for="incidenteDescripcion">Descripción del incidente</label>
-  <textarea id="incidenteDescripcion" rows="4"></textarea>
-  <label for="incidenteIdVehiculo">Placa / ID vehículo</label><input type="text" id="incidenteIdVehiculo" placeholder="Ej: WRC01H">
-  <label for="incidenteFecha">Fecha del incidente</label><input type="date" id="incidenteFecha">
-  <p id="incidenteMsg" class="status"></p>
-  <div class="modal-actions"><button type="button" onclick="cerrarModal('modalIncidente')">Cerrar</button><button type="button" onclick="enviarIncidente()">Enviar</button></div>
-</div></div>
-
-<div class="modal-backdrop" id="modalInversiones"><div class="modal">
-  <div class="modal-header"><h3>Iniciar sesión</h3><button class="modal-close" type="button" onclick="cerrarModal('modalInversiones')">&times;</button></div>
-  <p>Ingrese su ID y contraseña para acceder a su portal.</p>
-  <label for="invId">ID</label><input type="text" id="invId" placeholder="Ej: R4523">
-  <label for="invPassword">Contraseña</label><input type="password" id="invPassword" placeholder="Tu contraseña">
-  <p id="invLoginMsg" class="status"></p>
-  <div class="modal-actions"><button type="button" onclick="cerrarModal('modalInversiones')">Cerrar</button><button type="button" onclick="loginInversiones()">Entrar</button></div>
-  <p style="font-size:.8rem;margin-top:8px;color:#6b7280;">¿Olvidó su contraseña? Escríbanos a <a href="mailto:notificacionespi45@gmail.com">notificacionespi45@gmail.com</a> con el asunto "Reasignar contraseña".</p>
-</div></div>
-
-<div class="modal-backdrop" id="modalFechaPagosAfiliado"><div class="modal"><div class="modal-header"><h3>Fecha de pagos al afiliado</h3><button class="modal-close" type="button" onclick="cerrarModal('modalFechaPagosAfiliado')">&times;</button></div><p id="modalFechaPagosTexto">Dato no disponible.</p></div></div>
-<div class="modal-backdrop" id="modalVehiculosAfiliado"><div class="modal"><div class="modal-header"><h3>Cantidad de vehículos afiliados</h3><button class="modal-close" type="button" onclick="cerrarModal('modalVehiculosAfiliado')">&times;</button></div><p id="modalVehiculosTexto">Número de vehículos: Dato no disponible.</p></div></div>
-<div class="modal-backdrop" id="modalLiquidacionesAfiliado"><div class="modal"><div class="modal-header"><h3>Resumen de liquidaciones</h3><button class="modal-close" type="button" onclick="cerrarModal('modalLiquidacionesAfiliado')">&times;</button></div><p id="modalLiquidacionesTexto1">Número de liquidaciones: Dato no disponible.</p><p id="modalLiquidacionesTexto2">Valor total liquidado: Dato no disponible.</p></div></div>
-
-<div class="modal-backdrop" id="modalMisContratosAfiliado"><div class="modal">
-  <div class="modal-header"><h3>Mis contratos</h3><button class="modal-close" type="button" onclick="cerrarModal('modalMisContratosAfiliado')">&times;</button></div>
-  <p>Solicita copia de tus contratos.</p>
-  <label for="misContratosCorreo">Correo electrónico</label><input type="email" id="misContratosCorreo" placeholder="ejemplo@correo.com">
-  <label for="misContratosId">ID</label><input type="text" id="misContratosId" placeholder="Ej: A0016">
-  <p id="misContratosMsg" class="status"></p>
-  <div class="modal-actions"><button type="button" onclick="cerrarModal('modalMisContratosAfiliado')">Cerrar</button><button type="button" onclick="enviarSolicitudMisContratos()">Solicitar</button></div>
-</div></div>
-
-<div class="modal-backdrop" id="modalActualizarDatosAfiliado"><div class="modal">
-  <div class="modal-header"><h3>Actualizar datos</h3><button class="modal-close" type="button" onclick="cerrarModal('modalActualizarDatosAfiliado')">&times;</button></div>
-  <p>Actualiza tus datos de pago y contacto.</p>
-  <label for="actualizarCuenta">Cuenta bancaria</label><input type="text" id="actualizarCuenta" placeholder="Ej: 1234567890">
-  <label for="actualizarCertificado">Certificado bancario (adjúntalo al responder el correo de confirmación)</label><input type="file" id="actualizarCertificado">
-  <label for="actualizarCorreo">Correo electrónico</label><input type="email" id="actualizarCorreo" placeholder="ejemplo@correo.com">
-  <label for="actualizarCelular">Número de celular</label><input type="text" id="actualizarCelular" placeholder="Ej: 3001234567">
-  <label for="actualizarId">ID</label><input type="text" id="actualizarId" placeholder="Ej: A0016">
-  <p id="actualizarDatosMsg" class="status"></p>
-  <div class="modal-actions"><button type="button" onclick="cerrarModal('modalActualizarDatosAfiliado')">Cerrar</button><button type="button" onclick="enviarActualizacionDatosAfiliado()">Enviar</button></div>
-</div></div>
-
-<div class="modal-backdrop" id="modalMiFlotaAfiliado"><div class="modal"><div class="modal-header"><h3>Mi flota</h3><button class="modal-close" type="button" onclick="cerrarModal('modalMiFlotaAfiliado')">&times;</button></div><p id="miFlotaTexto">Información no disponible.</p></div></div>
-<div class="modal-backdrop" id="modalInvertirAfiliado"><div class="modal"><div class="modal-header"><h3>Invertir</h3><button class="modal-close" type="button" onclick="cerrarModal('modalInvertirAfiliado')">&times;</button></div><p>Pronto podrás conocer nuevas oportunidades de inversión con Radiz.</p><img src="invertir_afiliado.png" alt="Oportunidades de inversión Radiz" style="max-width:100%;border-radius:12px;margin-top:8px;"></div></div>
-
-<div class="modal-backdrop" id="modalAfiliado"><div class="modal">
-  <div class="modal-header"><h3>Link de afiliado</h3><button class="modal-close" type="button" onclick="cerrarModal('modalAfiliado')">&times;</button></div>
-  <p>Comparte nuestro link de referidos con tu ID (ejemplo: R4523) y gana hasta $70.000 pesos por cada referido aprobado.</p>
-  <label for="linkAfiliadoInput">Link del formulario</label>
-  <div class="link-copy-row"><input id="linkAfiliadoInput" type="text" readonly value="https://forms.gle/Lv1Rkp9qWQigUS4g8"><button type="button" onclick="copiarLinkAfiliado()">Copiar</button></div>
-  <p id="linkAfiliadoMsg" class="copy-msg"></p>
-</div></div>
-
-<script>
-const API_URL='https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
-const WOMPI_PUBLIC_KEY='pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06';
-const WOMPI_INTEGRITY_KEY='prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN';
-const WOMPI_REDIRECT_URL='https://portal.radizco.com/';
-const API_CALLBACK_URL=API_URL;
-
-let tipoUsuarioActual=null,datosContratoActual=null,datosAfiliadoActual=null;
-const RADIZ_USER_KEY='radiz_usuario_guardado';
-let __modalOpenCount=0;
-const __touchBlocker=(e)=>{e.preventDefault();};
-const __wheelBlocker=(e)=>{if(e&&e.ctrlKey)return;e.preventDefault();};
-
-const el=(id)=>document.getElementById(id);
-
-document.addEventListener('touchmove',__touchBlocker,{passive:false});
-document.addEventListener('wheel',__wheelBlocker,{passive:false});
-
-document.addEventListener('DOMContentLoaded',()=>{
-  const fab=el('fabMenu'),ini=el('menuInicial'),ren=el('menuRenting'),afi=el('menuAfiliado');
-  if(fab) fab.style.display='block';
-  if(ini) ini.style.display='block';
-  if(ren) ren.style.display='none';
-  if(afi) afi.style.display='none';
-  try{const saved=localStorage.getItem(RADIZ_USER_KEY)||'';const i=el('loginId');if(i&&saved)i.value=saved;}catch(e){}
-});
-
-function toggleMenu(){const p=el('menuPanel');if(p)p.style.display=(p.style.display==='block'?'none':'block');}
-
-function __lockBody(){
-  if(__modalOpenCount===0){
-    document.body.classList.add('modal-lock');
-    document.addEventListener('touchmove',__touchBlocker,{passive:false});
-    document.addEventListener('wheel',__wheelBlocker,{passive:false});
-  }
-  __modalOpenCount++;
-}
-function __unlockBody(){
-  __modalOpenCount=Math.max(0,__modalOpenCount-1);
-  if(__modalOpenCount===0){
-    document.body.classList.remove('modal-lock');
-    document.removeEventListener('touchmove',__touchBlocker,{passive:false});
-    document.removeEventListener('wheel',__wheelBlocker,{passive:false});
-  }
-}
-
-function abrirModal(id){
-  if(id==='modalHistorialPagos') prepararModalHistorial();
-  const m=el(id); if(!m) return;
-  __lockBody();
-  m.style.display='flex';
-  const menu=el('menuPanel'); if(menu) menu.style.display='none';
-}
-function cerrarModal(id){
-  const m=el(id); if(!m) return;
-  m.style.display='none';
-  __unlockBody();
-}
-
-function prepararModalHistorial(){
-  const correoLabel=document.querySelector('label[for="correoHistorial"]');
-  const correoInput=el('correoHistorial');
-  const idInput=el('idHistorial');
-  const msg=el('historialMsg');
-  const intro=el('historialIntro');
-  const btnEnviar=el('btnHistorialEnviar');
-  const btnDescargar=el('btnHistorialDescargar');
-  const idActual=obtenerIdContratoActual();
-  if(idInput&&idActual) idInput.value=idActual;
-  if(msg){msg.textContent='';msg.style.color='#6b7280';}
-  if(tipoUsuarioActual&&tipoUsuarioActual.toUpperCase()==='AFILIADO'){
-    if(correoLabel) correoLabel.style.display='block';
-    if(correoInput) correoInput.style.display='block';
-    if(btnEnviar) btnEnviar.style.display='inline-flex';
-    if(btnDescargar) btnDescargar.style.display='none';
-    if(intro) intro.textContent='Ingresa tu correo electrónico y el ID para que nuestro equipo te envíe el historial en PDF.';
-  }else{
-    if(correoLabel) correoLabel.style.display='none';
-    if(correoInput) correoInput.style.display='none';
-    if(btnEnviar) btnEnviar.style.display='none';
-    if(btnDescargar) btnDescargar.style.display='inline-flex';
-    if(intro) intro.textContent='Ingresa tu ID de contrato para descargar tu historial de pagos en PDF.';
-  }
-}
-
-async function consultar(){
-  const id=(el('idContrato').value||'').trim().toUpperCase();
-  const status=el('status'),btn=el('btnConsultar'),res=el('resultados');
-  const cContrato=el('cardContrato'),cPagos=el('cardPagos'),cMtos=el('cardMantenimientos');
-  const fab=el('fabMenu'),mRen=el('menuRenting'),mAfi=el('menuAfiliado'),mIni=el('menuInicial');
-  status.className='status';status.textContent='';res.style.display='none';
-  const panelMenu=el('menuPanel'); if(panelMenu) panelMenu.style.display='none';
-  if(!id){status.classList.add('error');status.textContent='Por favor ingresa un ID.';return;}
-  btn.disabled=true;status.textContent='Consultando información...';
-  try{
-    const resp=await fetch(API_URL+'?id='+encodeURIComponent(id));
-    const data=await resp.json();
-    if(!data.ok){status.className='status error';status.textContent=data.error||'No se encontró información para ese ID.';return;}
-    const c=data.contrato||{};datosContratoActual=c;
-    const tipo=(c['TIPO USUARIO']||'').toString().toUpperCase();tipoUsuarioActual=tipo;
-    const pagos=data.pagos||[];
-    const mtsList=Array.isArray(data.mantenimientos)?data.mantenimientos:(data.mantenimientos?[data.mantenimientos]:[]);
-    const resumenMtos=data.mantenimientosResumen||{};
-    const beneficiosTexto=c['BENEFICIOS']||'Información no disponible';
-    cContrato.innerHTML='';cPagos.innerHTML='';cMtos.innerHTML='';
-    const afiliados=data.afiliados||[],vehiculosAll=data.vehiculos||[];
-
-    if(tipo==='AFILIADO'){
-      const idAfiliado=(c['ID AFILIADO']||id).toString().trim().toUpperCase();
-      const af=afiliados.find(a=>String(a['ID AFILIADO']||'').trim().toUpperCase()===idAfiliado)||{};
-      datosAfiliadoActual=af;
-      const nombreAf=af['NOMBRE']||c['ID CLIENTE']||'Dato no disponible';
-      const fechaAf=formatearFecha(af['FECHA AFILIACIÓN']||af['FECHA AFILIACION']||'');
-      const numLiq=(af['NO LIQUIDACIONES']!==undefined&&af['NO LIQUIDACIONES']!=='')?af['NO LIQUIDACIONES']:'0';
-      let valorLiqTexto='0';
-      if(af['VALOR LIQUIDADO']!==undefined&&af['VALOR LIQUIDADO']!==''){
-        const bruto=af['VALOR LIQUIDADO'];
-        valorLiqTexto=(typeof bruto==='number')?formatearNumero(bruto):String(bruto);
-      }
-      cContrato.innerHTML='<h2>Contrato</h2><p><strong>ID afiliado:</strong> '+idAfiliado+'</p><p><strong>Nombre:</strong> '+nombreAf+'</p><p><strong>Inicio de afiliación:</strong> '+(fechaAf||'Dato no disponible')+'</p><p><strong>Tipo de usuario:</strong> Participación</p>';
-      const pagoRelacionado=pagos.find(p=>{const idAf=String(p['ID AFILIADO']||'').trim().toUpperCase();const idCt=String(p['ID CONTRATO']||'').trim().toUpperCase();return idAf===idAfiliado||idCt===id;});
-      const diasCorte=pagoRelacionado?(pagoRelacionado['DÍAS DE CORTE']||pagoRelacionado['DIAS DE CORTE']||'Dato no disponible'):'Dato no disponible';
-      cPagos.innerHTML='<h2>Pagos</h2><p><strong>Día de corte:</strong> '+diasCorte+'</p><p><strong>No. de liquidaciones:</strong> '+numLiq+'</p><p><strong>Valor liquidado:</strong> '+valorLiqTexto+'</p>';
-      const vehiculosAf=vehiculosAll.filter(v=>String(v['ID AFILIADO']||'').trim().toUpperCase()===idAfiliado);
-      const cantidadVeh=vehiculosAf.length;
-      const placas=vehiculosAf.map(v=>v['ID VEHÍCULO']||v['ID VEHICULO']||'').filter(Boolean).join(', ')||'Sin vehículos asociados';
-      cMtos.innerHTML='<h2>Flota</h2><p><strong>Cantidad de vehículos:</strong> '+cantidadVeh+'</p><p><strong>Placas asociadas:</strong> '+placas+'</p><p><strong>Ventas:</strong> 0</p>';
-
-      const elFecha=el('modalFechaPagosTexto'),elVeh=el('modalVehiculosTexto'),elL1=el('modalLiquidacionesTexto1'),elL2=el('modalLiquidacionesTexto2');
-      if(elFecha) elFecha.textContent='Día de corte de pagos: '+diasCorte;
-      if(elVeh) elVeh.textContent='Número de vehículos: '+cantidadVeh;
-      if(elL1) elL1.textContent='Número de liquidaciones: '+numLiq;
-      if(elL2) elL2.textContent='Valor total liquidado: '+valorLiqTexto;
-
-      const correoAf=af['CORREO ELECTRÓNICO']||af['CORREO']||'';
-      const cuentaAf=af['CUENTA BANCARIA']||af['CUENTA_BANCARIA']||'';
-      const celAf=af['CELULAR']||af['TELÉFONO']||af['TELEFONO']||'';
-      const misCorreo=el('misContratosCorreo'),misId=el('misContratosId'),actCuenta=el('actualizarCuenta'),actCorreo=el('actualizarCorreo'),actCel=el('actualizarCelular'),actId=el('actualizarId'),flotaTexto=el('miFlotaTexto');
-      if(misCorreo) misCorreo.value=correoAf||'';
-      if(misId) misId.value=idAfiliado;
-      if(actCuenta) actCuenta.value=cuentaAf||'';
-      if(actCorreo) actCorreo.value=correoAf||'';
-      if(actCel) actCel.value=celAf||'';
-      if(actId) actId.value=idAfiliado;
-      if(flotaTexto) flotaTexto.textContent=cantidadVeh===0?'No se encontraron vehículos asociados a tu ID.':'Tienes '+cantidadVeh+' vehículo(s) afiliado(s): '+placas+'.';
-
-      if(mIni) mIni.style.display='none';
-      if(mRen) mRen.style.display='none';
-      if(mAfi) mAfi.style.display='block';
-      if(fab) fab.style.display='block';
-    }else{
-      datosAfiliadoActual=null;
-      const estado=(c['ESTADO']||'').toString().toUpperCase();
-      cContrato.innerHTML='<h2>Contrato</h2><p><strong>ID:</strong> '+(c['ID CONTRATO']||'')+'</p><p><strong>Tipo usuario:</strong> '+(c['TIPO USUARIO']||'')+'</p><p><strong>Vehículo:</strong> '+(c['ID VEHÍCULO']||c['ID VEHICULO']||'')+'</p><p><strong>Inicio:</strong> '+formatearFecha(c['INICIO'])+'</p><p><strong>Fin:</strong> '+formatearFecha(c['FIN'])+'</p><p><strong>Tarifa semanal:</strong> '+formatearNumero(c['TARIFA SEMANAL'])+'</p><p><strong>Beneficios:</strong> '+beneficiosTexto+'</p><p><span class="badge '+(estado==='ACTIVO'?'badge-activo':'badge-inactivo')+'">'+(estado||'SIN ESTADO')+'</span></p>';
-
-      if(pagos.length===0){cPagos.innerHTML='<h2>Pagos</h2><p>No hay pagos registrados para este contrato.</p>';}
-      else{
-        const p=pagos[0];
-        const tarifasCompletadas=p['TARIFAS COMPLETADAS']||'0';
-        const tarifasVencidas=p['TARIFAS VENCIDAS']||'0';
-        const idContratoPagos=String(c['ID CONTRATO']||'').trim().toUpperCase();
-        const esRentingPagos=idContratoPagos.startsWith('R');
-        const moraEstim=esRentingPagos?(Number(c['TARIFA SEMANAL']||0)*Number(tarifasVencidas||0)):0;
-        const moraHtml=(esRentingPagos&&moraEstim>0)?'<p><strong>Mora estimada:</strong> '+formatearNumero(moraEstim)+'</p>':'';
-        cPagos.innerHTML='<h2>Pagos</h2><p><strong>Día de corte:</strong> '+(p['DÍAS DE CORTE']||p['DIAS DE CORTE']||'')+'</p><p><strong>Tarifas completadas:</strong> '+tarifasCompletadas+'</p><p><strong>Tarifas vencidas:</strong> '+tarifasVencidas+'</p>'+moraHtml;
-      }
-
-      const tieneResumen=!!(resumenMtos&&Object.keys(resumenMtos).length);
-      if((!mtsList||mtsList.length===0)&&!tieneResumen){
-        cMtos.innerHTML='<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
-      }else{
-        const placa=resumenMtos.placa||mtsList[0]?.placa||mtsList[0]?.['ID VEHÍCULO']||mtsList[0]?.['ID VEHICULO']||'';
-        const totalVal=(resumenMtos.totalMantenimientos!==undefined)?Number(resumenMtos.totalMantenimientos||0):mtsList.reduce((s,mm)=>s+aNumeroCO(mm?.valor??mm?.['VALOR GENERAL']??mm?.['VALOR MTOS']??mm?.['VALOR']??mm?.['VALOR MTO']),0);
-        const cambiosAceite=(resumenMtos.cambiosAceite!==undefined)?aNumeroCO(resumenMtos.cambiosAceite):aNumeroCO((data.resumenMantenimientos||{}).aceites);
-        const pastillas=(resumenMtos.pastillas!==undefined)?aNumeroCO(resumenMtos.pastillas):aNumeroCO((data.resumenMantenimientos||{}).pastillas);
-        const kitArrastre=(resumenMtos.kitArrastre!==undefined)?aNumeroCO(resumenMtos.kitArrastre):aNumeroCO((data.resumenMantenimientos||{}).kit_arrastre|| (data.resumenMantenimientos||{}).kitArrastre);
-        const ultimo=formatearFecha(resumenMtos.ultimoMantenimiento||mtsList[0]?.fecha||mtsList[0]?.['ÚLTIMO MANTENIMIENTO']||mtsList[0]?.['ULTIMO MANTENIMIENTO']||mtsList[0]?.['FECHA ULT. MANTENIMIENTO']||'');
-        const tipoM=resumenMtos.tipo||mtsList[0]?.tipo||mtsList[0]?.['TIPO']||mtsList[0]?.['TIPO ULT. MANTENIMIENTO']||'';
-        const taller=resumenMtos.taller||mtsList[0]?.taller||mtsList[0]?.['TALLER ASIGNADO']||'';
-        cMtos.innerHTML='<h2>Mantenimientos</h2><p><strong>Total mantenimientos:</strong> '+formatearNumero(totalVal)+'</p><p><strong>Placa:</strong> '+(placa||'')+'</p><p><strong>Cambios de aceite:</strong> '+cambiosAceite+'</p><p><strong>Pastillas:</strong> '+pastillas+'</p><p><strong>Kit de arrastre:</strong> '+kitArrastre+'</p><p><strong>Último mantenimiento:</strong> '+(ultimo||'')+'</p><p><strong>Tipo de mantenimiento:</strong> '+(tipoM||'')+'</p><p><strong>Realizados:</strong> '+(mtsList[0]?.['REALIZADOS']||mtsList[0]?.['MTOS REALIZADOS']||'')+'</p><p><strong>Taller asignado:</strong> '+(taller||'')+'</p>';
-      }
-
-      const idContratoActual=(c['ID CONTRATO']||'').toString().trim().toUpperCase();
-      const esRentingId=idContratoActual.startsWith('R');
-      const b=el('modalBeneficiosTexto');
-      if(b){
-        if(esRentingId) b.innerHTML='<img src="../beneficios_renting.png" alt="Beneficios Renting Radiz" class="img-beneficios-renting">';
-        else b.textContent=beneficiosTexto||'Información no disponible.';
-      }
-      const modalT=el('modalTallerTexto');
-      const tallerTxt='Taller asignado: '+(resumenMtos.taller||mtsList[0]?.taller||mtsList[0]?.['TALLER ASIGNADO']||'Información no disponible.');
-      if(modalT) modalT.textContent=tallerTxt;
-
-      if(mIni) mIni.style.display='none';
-      if(mRen) mRen.style.display='block';
-      if(mAfi) mAfi.style.display='none';
-      if(fab) fab.style.display='block';
+    label{font-size:.9rem;font-weight:600;color:#374151}
+    input[type="text"],input[type="number"],input[type="email"],input[type="date"],input[type="password"],textarea{
+      width:100%;padding:10px 12px;border-radius:9px;border:1px solid #d1d5db;font-size:.95rem;outline:none;
+      transition:border-color .15s,box-shadow .15s,background .15s;background:#f9fafb;font-family:inherit
+    }
+    input[type="text"]:focus,input[type="number"]:focus,input[type="email"]:focus,input[type="date"]:focus,input[type="password"]:focus,textarea:focus{
+      border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,235,.18);background:#fff
     }
 
-    res.style.display='grid';
-    status.className='status ok';
-    status.textContent='Información cargada correctamente.';
-  }catch(e){
-    console.error(e);
-    status.className='status error';
-    status.textContent='Error al consultar la información. Intenta de nuevo.';
-  }finally{
-    btn.disabled=false;
-  }
-}
+    button{
+      padding:11px 22px;border-radius:999px;border:none;font-size:.95rem;font-weight:600;cursor:pointer;background:#2563eb;color:#fff;
+      display:inline-flex;align-items:center;justify-content:center;gap:6px;box-shadow:0 12px 26px rgba(37,99,235,.45);
+      transition:transform .1s,box-shadow .1s,background .1s;white-space:nowrap
+    }
+    button:hover{transform:translateY(-1px);background:#1d4ed8;box-shadow:0 16px 32px rgba(37,99,235,.55)}
+    button:disabled{opacity:.65;cursor:default;box-shadow:none;transform:none}
 
-function aNumeroCO(v){
-  if(v===null||v===undefined) return 0;
-  if(typeof v==='number') return isNaN(v)?0:v;
-  let s=String(v).trim(); if(!s) return 0;
-  s=s.replace(/[^\d.,-]/g,'');
-  if(/^\d{1,3}(\.\d{3})+$/.test(s)) s=s.replace(/\./g,'');
-  else if(s.includes('.')&&s.includes(',')) s=s.replace(/\./g,'').replace(/,/g,'.');
-  else if(s.includes(',')&&!s.includes('.')){
-    const parts=s.split(',');
-    s=(parts.length===2&&parts[1].length===3)?(parts[0]+parts[1]):(parts[0]+'.'+parts[1]);
-  }
-  const n=parseFloat(s); return isNaN(n)?0:n;
-}
-function formatearNumero(n){
-  const num=Number(n); if(isNaN(num)) return n||'';
-  return num.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
-}
-function parseFechaFlexible(v){
-  if(!v) return null;
-  if(v instanceof Date && !isNaN(v.getTime())) return v;
-  let s=String(v).trim(); if(!s) return null;
-  const m=s.match(/^(\d{1,2})[\/\-\.](\d{1,2})[\/\-\.](\d{2,4})(?:\s|$)/);
-  if(m){
-    const dd=Number(m[1]),mm=Number(m[2])-1;let yy=Number(m[3]);if(yy<100) yy+=2000;
-    const d=new Date(yy,mm,dd); if(!isNaN(d.getTime())) return d;
-  }
-  const d2=new Date(s); if(!isNaN(d2.getTime())) return d2;
-  return null;
-}
-function formatearFecha(v){
-  const d=parseFechaFlexible(v); if(!d) return v?String(v):'';
-  return d.toLocaleDateString('es-CO');
-}
+    .btn-main{min-width:190px;justify-content:center}
+    .btn-afiliado{background:#f97316;box-shadow:0 12px 26px rgba(249,115,22,.45)}
+    .btn-afiliado:hover{background:#ea580c;box-shadow:0 16px 32px rgba(249,115,22,.6)}
 
-function obtenerIdContratoActual(){
-  if(datosContratoActual&&datosContratoActual['ID CONTRATO']) return String(datosContratoActual['ID CONTRATO']).trim().toUpperCase();
-  return (el('idContrato').value||'').trim().toUpperCase();
-}
+    .btn-app{padding:0;border:none;background:transparent;color:#1d4ed8;font-size:.9rem;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;box-shadow:none;white-space:nowrap;min-width:0}
+    .btn-app:hover{background:transparent;border:none;color:#1d4ed8;box-shadow:none;transform:none;text-decoration:underline}
 
-async function __ensureWompiLoaded(){
-  if(typeof WidgetCheckout!=='undefined') return true;
-  if(window.__wompiLoading) return window.__wompiLoading;
-  window.__wompiLoading=new Promise((resolve,reject)=>{
-    const s=document.createElement('script');
-    s.src='https://checkout.wompi.co/widget.js';
-    s.async=true;
-    s.onload=()=>resolve(true);
-    s.onerror=()=>reject(new Error('Wompi no cargó'));
-    document.head.appendChild(s);
-  });
-  return window.__wompiLoading;
-}
+    .status{font-size:.9rem;margin-top:4px;min-height:1.2em}
+    .status.error{color:#b91c1c}
+    .status.ok{color:#065f46}
 
-async function generarIntegritySignature(reference,amountInCents,currency){
-  if(!(window.crypto&&crypto.subtle)) throw new Error('Crypto no disponible');
-  const encoder=new TextEncoder();
-  const raw=`${reference}${amountInCents}${currency}${WOMPI_INTEGRITY_KEY}`;
-  const hashBuffer=await crypto.subtle.digest('SHA-256',encoder.encode(raw));
-  const hashArray=Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b=>b.toString(16).padStart(2,'0')).join('');
-}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:6px;margin-bottom:18px}
 
-async function crearPagoWompi(){
-  const montoInput=el('montoPago'),errorLabel=el('pagoError'),contratoError=el('pagoContratoError');
-  const valor=parseInt(montoInput.value,10);
-  const idContrato=(el('idContrato').value||'').trim().toUpperCase();
-  errorLabel.style.display='none';contratoError.style.display='none';
-  if(!idContrato){contratoError.style.display='block';return;}
-  if(!valor||valor<170000){errorLabel.style.display='block';return;}
-  try{await __ensureWompiLoaded();}catch(e){alert('No se pudo cargar el checkout de Wompi. Por favor recarga la página.');return;}
-  if(typeof WidgetCheckout==='undefined'){alert('No se pudo cargar el checkout de Wompi. Por favor recarga la página.');return;}
-  const amountInCents=valor*100;
-  const reference='PAGO_'+idContrato+'_'+Date.now();
-  const currency='COP';
-  try{
-    const integritySignature=await generarIntegritySignature(reference,amountInCents,currency);
-    const checkout=new WidgetCheckout({currency,amountInCents,reference,publicKey:WOMPI_PUBLIC_KEY,signature:{integrity:integritySignature},redirectUrl:WOMPI_REDIRECT_URL});
-    checkout.open(function(result){
-      const t=result&&result.transaction?result.transaction:null;
-      const status=t&&t.status?t.status:'';
-      registrarPagoEnSheet(reference,valor,idContrato,status);
+    .badge{display:inline-block;padding:2px 8px;border-radius:999px;font-size:.75rem;font-weight:600;text-transform:uppercase}
+    .badge-activo{background:#dcfce7;color:#166534}
+    .badge-inactivo{background:#fee2e2;color:#b91c1c}
+
+    footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
+
+    #seccionPago h2{font-size:1.05rem;margin:0 0 4px;color:#111827}
+    #seccionPago p{font-size:.9rem;color:#4b5563;margin:4px 0 10px}
+    #seccionPago .row-pago{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .row-pago-botones{justify-content:space-between;margin-top:10px}
+    .btn-pago,.btn-qr{flex:1;min-width:0;background:#60a5fa;box-shadow:0 8px 18px rgba(96,165,250,.5)}
+    .btn-pago:hover,.btn-qr:hover{background:#3b82f6;box-shadow:0 10px 22px rgba(59,130,246,.6)}
+    #montoPago,#idContrato{width:220px}
+    #pagoError,#pagoContratoError{color:#dc2626;margin-top:6px;font-size:.85rem;display:none}
+    #pagoContratoError{margin-top:4px}
+
+    .row-consulta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px;margin-bottom:10px}
+    .affiliate-row{margin-top:18px;display:flex;justify-content:center}
+
+    .fab-menu{position:absolute;top:24px;right:24px;z-index:20;display:none}
+    .fab-btn{width:54px;height:54px;border-radius:999px;background:#2563eb;border:none;box-shadow:0 10px 24px rgba(37,99,235,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s,box-shadow .12s,background .12s}
+    .fab-btn:hover{transform:translateY(-1px);background:#1d4ed8;box-shadow:0 14px 32px rgba(37,99,235,.55)}
+    .fab-btn span{display:block;width:22px;height:2px;border-radius:999px;background:#fff;position:relative}
+    .fab-btn span::before,.fab-btn span::after{content:"";position:absolute;left:0;width:22px;height:2px;border-radius:999px;background:#fff}
+    .fab-btn span::before{top:-6px}
+    .fab-btn span::after{top:6px}
+
+    .menu-panel{position:absolute;top:86px;right:28px;background:#fff;border-radius:14px;box-shadow:0 12px 30px rgba(15,23,42,.22);padding:8px 0;width:260px;display:none;z-index:25}
+    .menu-title{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:#6b7280;padding:6px 14px 4px}
+    .menu-item{padding:7px 14px;font-size:.9rem;cursor:pointer;color:#111827}
+    .menu-item:hover{background:#eff6ff;color:#1d4ed8}
+
+    .modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:40;overflow:hidden}
+    .modal{background:#fff;border-radius:18px;max-width:480px;width:90%;padding:18px 20px;box-shadow:0 20px 45px rgba(15,23,42,.4);font-size:.9rem;max-height:calc(100dvh - 40px);overflow:hidden}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .modal-header h3{margin:0;font-size:1.05rem}
+    .modal-close{border:none;background:transparent;font-size:1.3rem;cursor:pointer;color:#6b7280;box-shadow:none;padding:0 6px}
+    .modal p{margin:4px 0;color:#111827}
+    .modal-actions{margin-top:14px;display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+
+    .link-copy-row{display:flex;gap:8px;align-items:center;margin-top:4px}
+    .link-copy-row input{flex:1}
+    .copy-msg{font-size:.8rem;margin-top:6px;color:#6b7280}
+
+    .img-beneficios-renting{max-width:100%;height:auto;border-radius:12px;display:block;margin:4px auto}
+
+    @media(max-width:900px){
+      .main-grid{grid-template-columns:1fr}
+      .brand-card{min-height:260px}
+    }
+    @media(max-width:640px){
+      .container{padding:22px 18px 24px;border-radius:18px}
+      .portal-header{flex-direction:column;align-items:flex-start}
+      .fab-menu{top:16px;right:16px}
+      #montoPago,#idContrato{width:100%}
+    }
+  </style>
+</head>
+
+<body>
+  <section class="login-screen">
+    <div class="login-bg"></div>
+    <div class="login-overlay"></div>
+
+    <div class="login-content">
+      <div class="login-logo">
+        <img src="icon-512.png" alt="RADIZ">
+      </div>
+
+      <h1 class="login-welcome">¡Buenas buenas!</h1>
+
+      <form class="login-form" onsubmit="event.preventDefault();loginInversiones('login');">
+        <input class="login-input" type="text" id="loginId" placeholder="Usuario (Ej: R4523)" autocomplete="username">
+        <input class="login-input" type="password" id="loginPassword" placeholder="Contraseña" autocomplete="current-password">
+        <button type="submit" class="login-btn">Entrar</button>
+        <div id="loginMsg" class="login-msg"></div>
+      </form>
+    </div>
+  </section>
+
+  <div class="page">
+    <div class="container">
+      <div class="logo-top">
+        <img src="logoradiz.png" alt="Logo RADIZ" id="logo-radiz">
+      </div>
+
+      <div class="fab-menu" id="fabMenu">
+        <button class="fab-btn" type="button" onclick="toggleMenu()">
+          <span></span>
+        </button>
+
+        <div class="menu-panel" id="menuPanel">
+          <div class="menu-title" id="menuTitle">Opciones</div>
+
+          <div id="menuInicial">
+            <div class="menu-item" onclick="abrirModal('modalInversiones')">Ir a inversiones</div>
+            <div class="menu-item" onclick="manejarDescargaApp()">Descarga la App</div>
+          </div>
+
+          <div id="menuRenting" style="display:none;">
+            <div class="menu-item" onclick="abrirModal('modalBeneficios')">Beneficios</div>
+            <div class="menu-item" onclick="solicitarGrua()">Solicitar grúa</div>
+            <div class="menu-item" onclick="abrirModal('modalActualizarKm')">Actualizar kilometraje</div>
+            <div class="menu-item">Señales</div>
+            <div class="menu-item" onclick="abrirModal('modalHistorialPagos')">Historial de pagos</div>
+            <div class="menu-item">Historial de mantenimientos</div>
+            <div class="menu-item" onclick="abrirModal('modalSaldoFavor')">Mi saldo a favor</div>
+            <div class="menu-item" onclick="abrirModal('modalAfiliado')">Link de referidos</div>
+            <div class="menu-item" onclick="abrirModal('modalIncidente')">Notificar incidente</div>
+            <div class="menu-item" onclick="abrirModal('modalTaller')">Taller asignado</div>
+          </div>
+
+          <div id="menuAfiliado" style="display:none;">
+            <div class="menu-item">Beneficios</div>
+            <div class="menu-item" onclick="abrirModal('modalHistorialPagos')">Historial de pagos</div>
+            <div class="menu-item">Mapa vehicular</div>
+            <div class="menu-item">Oportunidades</div>
+            <div class="menu-item" onclick="abrirModal('modalMisContratosAfiliado')">Mis contratos</div>
+            <div class="menu-item" onclick="abrirModal('modalActualizarDatosAfiliado')">Actualizar datos</div>
+            <div class="menu-item" onclick="abrirModal('modalMiFlotaAfiliado')">Mi flota</div>
+            <div class="menu-item" onclick="abrirModal('modalInvertirAfiliado')">Invertir</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="main-grid">
+        <div class="brand-card">
+          <div class="brand-image">
+            <img src="radiz-driver.jpg.jpg" alt="Conductor Radiz frente a vehículos de carga">
+          </div>
+          <div class="brand-overlay"></div>
+          <div class="brand-copy">
+            <p class="brand-kicker">Una marca de Proyecto I45 S.A.S.</p>
+            <h2>Vehículos que dignifican</h2>
+          </div>
+        </div>
+
+        <div class="panel-main">
+          <div class="welcome-banner">
+            <div class="welcome-icon"></div>
+            <div>
+              <p class="welcome-text-title">¡Bienvenido a Radiz Vehicular!</p>
+              <p class="welcome-text-sub">Consulte su contrato, realice pagos y descargue su historial.</p>
+            </div>
+          </div>
+
+          <header class="portal-header">
+            <div><h1></h1></div>
+          </header>
+
+          <div class="card card-consulta">
+            <div class="section-title">
+              <div class="section-icon section-icon-search"></div>
+              <span>Consulta de contrato</span>
+            </div>
+
+            <label for="idContrato">ID</label>
+
+            <div class="row-consulta">
+              <input type="text" id="idContrato" placeholder="Ejemplo: R4523">
+              <button id="btnConsultar" class="btn-main" onclick="consultar()">Consultar</button>
+            </div>
+
+            <div id="status" class="status"></div>
+          </div>
+
+          <div class="card card-pago" id="seccionPago">
+            <div class="section-title">
+              <div class="section-icon section-icon-money"></div>
+              <span>Realizar pago</span>
+            </div>
+
+            <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
+
+            <label for="montoPago">Monto a pagar (COP)</label>
+
+            <div class="row-pago">
+              <input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
+            </div>
+
+            <div class="row-pago row-pago-botones">
+              <button type="button" class="btn-main btn-pago" onclick="crearPagoWompi()">Pagar con Wompi</button>
+              <button type="button" class="btn-main btn-qr" onclick="abrirModal('modalQR')">Ver QR</button>
+            </div>
+
+            <p id="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
+            <p id="pagoContratoError">Digita tu ID antes de pagar.</p>
+          </div>
+
+          <div class="affiliate-row">
+            <button type="button" class="btn-app" onclick="abrirModal('modalInversiones')">Iniciar sesión</button>
+          </div>
+
+          <div class="grid" id="resultados" style="display:none;">
+            <div class="card card-contrato" id="cardContrato"></div>
+            <div class="card card-pagos" id="cardPagos"></div>
+            <div class="card card-mantenimientos" id="cardMantenimientos"></div>
+          </div>
+
+          <footer>Versión interna • RADIZ Suministro Vehicular</footer>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalBeneficios">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Beneficios del plan</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalBeneficios')">&times;</button>
+      </div>
+      <p id="modalBeneficiosTexto">Información no disponible.</p>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalHistorialPagos">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Historial de pagos</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalHistorialPagos')">&times;</button>
+      </div>
+
+      <p id="historialIntro" style="margin-bottom:6px;">
+        Ingresa tu correo electrónico y el ID para solicitar tu historial en PDF.
+      </p>
+
+      <label for="correoHistorial">Correo electrónico</label>
+      <input type="email" id="correoHistorial" placeholder="ejemplo@correo.com">
+
+      <label for="idHistorial">ID</label>
+      <input type="text" id="idHistorial" placeholder="Ej: R4523">
+
+      <p id="historialMsg" style="font-size:.85rem;margin-top:6px;color:#6b7280;"></p>
+
+      <div class="modal-actions">
+        <button type="button" onclick="cerrarModal('modalHistorialPagos')">Cerrar</button>
+        <button type="button" id="btnHistorialEnviar" onclick="enviarSolicitudHistorial()">Enviar</button>
+        <button type="button" id="btnHistorialDescargar" style="display:none;" onclick="descargarHistorialPdf()">Descargar PDF</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalTaller">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Taller asignado</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalTaller')">&times;</button>
+      </div>
+      <p id="modalTallerTexto">Información no disponible.</p>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalActualizarKm">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Actualizar kilometraje</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalActualizarKm')">&times;</button>
+      </div>
+
+      <p>Ingresa el nuevo kilometraje y la placa del vehículo.</p>
+
+      <label for="kmValor">Kilometraje actual</label>
+      <input type="number" id="kmValor" placeholder="Ej: 2500">
+
+      <label for="kmIdVehiculo">Placa / ID vehículo</label>
+      <input type="text" id="kmIdVehiculo" placeholder="Ej: WRG02H">
+
+      <p id="kmMsg" class="status"></p>
+
+      <div class="modal-actions">
+        <button type="button" onclick="cerrarModal('modalActualizarKm')">Cerrar</button>
+        <button type="button" onclick="enviarActualizacionKilometraje()">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalSaldoFavor">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Mi saldo a favor</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalSaldoFavor')">&times;</button>
+      </div>
+
+      <p>Tienes un saldo a favor por concepto de referidos: <strong>$0.00</strong>.</p>
+
+      <div class="modal-actions">
+        <button type="button" onclick="cerrarModal('modalSaldoFavor')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalQR">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Pagar con código QR</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalQR')">&times;</button>
+      </div>
+
+      <p>Escanea este código con la app de tu banco o billetera para realizar el pago:</p>
+
+      <img src="QRRADIZ-38.png" alt="Código QR de pago RADIZ" style="max-width:100%;height:auto;border-radius:12px;display:block;margin:8px auto;">
+
+      <p style="font-size:.8rem;color:#6b7280;margin-top:4px;">
+        Recuerda incluir tu ID de contrato en la referencia del pago.
+      </p>
+
+      <div class="modal-actions">
+        <button type="button" onclick="cerrarModal('modalQR')">Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalIncidente">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Notificar incidente</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalIncidente')">&times;</button>
+      </div>
+
+      <p>Cuéntanos qué sucedió con el vehículo.</p>
+
+      <label for="incidenteDescripcion">Descripción del incidente</label>
+      <textarea id="incidenteDescripcion" rows="4"></textarea>
+
+      <label for="incidenteIdVehiculo">Placa / ID vehículo</label>
+      <input type="text" id="incidenteIdVehiculo" placeholder="Ej: WRC01H">
+
+      <label for="incidenteFecha">Fecha del incidente</label>
+      <input type="date" id="incidenteFecha">
+
+      <p id="incidenteMsg" class="status"></p>
+
+      <div class="modal-actions">
+        <button type="button" onclick="cerrarModal('modalIncidente')">Cerrar</button>
+        <button type="button" onclick="enviarIncidente()">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalInversiones">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Iniciar sesión</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalInversiones')">&times;</button>
+      </div>
+
+      <p>Ingrese su ID y contraseña para acceder a su portal.</p>
+
+      <label for="invId">ID</label>
+      <input type="text" id="invId" placeholder="Ej: R4523">
+
+      <label for="invPassword">Contraseña</label>
+      <input type="password" id="invPassword" placeholder="Tu contraseña">
+
+      <p id="invLoginMsg" class="status"></p>
+
+      <div class="modal-actions">
+        <button type="button" onclick="cerrarModal('modalInversiones')">Cerrar</button>
+        <button type="button" onclick="loginInversiones()">Entrar</button>
+      </div>
+
+      <p style="font-size:.8rem;margin-top:8px;color:#6b7280;">
+        ¿Olvidó su contraseña? Escríbanos a
+        <a href="mailto:notificacionespi45@gmail.com">notificacionespi45@gmail.com</a>
+        con el asunto "Reasignar contraseña".
+      </p>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalFechaPagosAfiliado">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Fecha de pagos al afiliado</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalFechaPagosAfiliado')">&times;</button>
+      </div>
+      <p id="modalFechaPagosTexto">Dato no disponible.</p>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalVehiculosAfiliado">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Cantidad de vehículos afiliados</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalVehiculosAfiliado')">&times;</button>
+      </div>
+      <p id="modalVehiculosTexto">Número de vehículos: Dato no disponible.</p>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalLiquidacionesAfiliado">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Resumen de liquidaciones</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalLiquidacionesAfiliado')">&times;</button>
+      </div>
+      <p id="modalLiquidacionesTexto1">Número de liquidaciones: Dato no disponible.</p>
+      <p id="modalLiquidacionesTexto2">Valor total liquidado: Dato no disponible.</p>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalMisContratosAfiliado">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Mis contratos</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalMisContratosAfiliado')">&times;</button>
+      </div>
+
+      <p>Solicita copia de tus contratos.</p>
+
+      <label for="misContratosCorreo">Correo electrónico</label>
+      <input type="email" id="misContratosCorreo" placeholder="ejemplo@correo.com">
+
+      <label for="misContratosId">ID</label>
+      <input type="text" id="misContratosId" placeholder="Ej: A0016">
+
+      <p id="misContratosMsg" class="status"></p>
+
+      <div class="modal-actions">
+        <button type="button" onclick="cerrarModal('modalMisContratosAfiliado')">Cerrar</button>
+        <button type="button" onclick="enviarSolicitudMisContratos()">Solicitar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalActualizarDatosAfiliado">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Actualizar datos</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalActualizarDatosAfiliado')">&times;</button>
+      </div>
+
+      <p>Actualiza tus datos de pago y contacto.</p>
+
+      <label for="actualizarCuenta">Cuenta bancaria</label>
+      <input type="text" id="actualizarCuenta" placeholder="Ej: 1234567890">
+
+      <label for="actualizarCertificado">Certificado bancario (adjúntalo al responder el correo de confirmación)</label>
+      <input type="file" id="actualizarCertificado">
+
+      <label for="actualizarCorreo">Correo electrónico</label>
+      <input type="email" id="actualizarCorreo" placeholder="ejemplo@correo.com">
+
+      <label for="actualizarCelular">Número de celular</label>
+      <input type="text" id="actualizarCelular" placeholder="Ej: 3001234567">
+
+      <label for="actualizarId">ID</label>
+      <input type="text" id="actualizarId" placeholder="Ej: A0016">
+
+      <p id="actualizarDatosMsg" class="status"></p>
+
+      <div class="modal-actions">
+        <button type="button" onclick="cerrarModal('modalActualizarDatosAfiliado')">Cerrar</button>
+        <button type="button" onclick="enviarActualizacionDatosAfiliado()">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalMiFlotaAfiliado">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Mi flota</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalMiFlotaAfiliado')">&times;</button>
+      </div>
+      <p id="miFlotaTexto">Información no disponible.</p>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalInvertirAfiliado">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Invertir</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalInvertirAfiliado')">&times;</button>
+      </div>
+
+      <p>Pronto podrás conocer nuevas oportunidades de inversión con Radiz.</p>
+      <img src="invertir_afiliado.png" alt="Oportunidades de inversión Radiz" style="max-width:100%;border-radius:12px;margin-top:8px;">
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalAfiliado">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Link de afiliado</h3>
+        <button class="modal-close" type="button" onclick="cerrarModal('modalAfiliado')">&times;</button>
+      </div>
+
+      <p>Comparte nuestro link de referidos con tu ID (ejemplo: R4523) y gana hasta $70.000 pesos por cada referido aprobado.</p>
+
+      <label for="linkAfiliadoInput">Link del formulario</label>
+
+      <div class="link-copy-row">
+        <input id="linkAfiliadoInput" type="text" readonly value="https://forms.gle/Lv1Rkp9qWQigUS4g8">
+        <button type="button" onclick="copiarLinkAfiliado()">Copiar</button>
+      </div>
+
+      <p id="linkAfiliadoMsg" class="copy-msg"></p>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = 'https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
+    const WOMPI_PUBLIC_KEY = 'pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06';
+    const WOMPI_INTEGRITY_KEY = 'prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN';
+    const WOMPI_REDIRECT_URL = 'https://portal.radizco.com/';
+    const API_CALLBACK_URL = API_URL;
+
+    let tipoUsuarioActual = null;
+    let datosContratoActual = null;
+    let datosAfiliadoActual = null;
+
+    const RADIZ_USER_KEY = 'radiz_usuario_guardado';
+
+    let __modalOpenCount = 0;
+    const __touchBlocker = (e) => { e.preventDefault(); };
+    const __wheelBlocker = (e) => { if (e && e.ctrlKey) return; e.preventDefault(); };
+
+    const el = (id) => document.getElementById(id);
+
+    document.addEventListener('touchmove', __touchBlocker, { passive: false });
+    document.addEventListener('wheel', __wheelBlocker, { passive: false });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const fab = el('fabMenu');
+      const ini = el('menuInicial');
+      const ren = el('menuRenting');
+      const afi = el('menuAfiliado');
+
+      if (fab) fab.style.display = 'block';
+      if (ini) ini.style.display = 'block';
+      if (ren) ren.style.display = 'none';
+      if (afi) afi.style.display = 'none';
+
+      try {
+        const saved = localStorage.getItem(RADIZ_USER_KEY) || '';
+        const i = el('loginId');
+        if (i && saved) i.value = saved;
+      } catch (e) {}
     });
-  }catch(e){
-    console.error('Error Wompi',e);
-    alert('No fue posible iniciar el pago. Intenta de nuevo.');
-  }
-}
 
-async function registrarPagoEnSheet(reference,valor,idContrato,statusWompi){
-  try{
-    const formData=new URLSearchParams();
-    formData.append('accion','registrar_pago_portal');
-    formData.append('referencia',reference);
-    formData.append('monto',valor);
-    formData.append('idContrato',idContrato);
-    formData.append('origen','PORTAL_WEB');
-    if(statusWompi) formData.append('statusWompi',statusWompi);
-    await fetch(API_CALLBACK_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData.toString()});
-  }catch(e){console.error('Error registrando pago en hoja',e);}
-}
-
-async function enviarSolicitudHistorial(){
-  const correo=(el('correoHistorial').value||'').trim();
-  const idHist=(el('idHistorial').value||'').trim();
-  const msg=el('historialMsg');
-  msg.style.color='#6b7280';msg.textContent='Enviando solicitud...';
-  if(!correo||!idHist){msg.style.color='#b91c1c';msg.textContent='Debes ingresar el correo y el ID.';return;}
-  try{
-    const formData=new URLSearchParams();
-    formData.append('accion','solicitar_historial');
-    formData.append('correo',correo);
-    formData.append('idContrato',idHist);
-    const resp=await fetch(API_CALLBACK_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData.toString()});
-    const data=await resp.json();
-    if(data.ok){msg.style.color='#065f46';msg.textContent='Solicitud enviada correctamente. Nuestro equipo revisará y enviará el historial al correo registrado.';}
-    else{msg.style.color='#b91c1c';msg.textContent=data.error||'Ocurrió un problema al enviar la solicitud.';}
-  }catch(e){
-    console.error(e);
-    msg.style.color='#b91c1c';msg.textContent='Error al enviar la solicitud. Intenta de nuevo.';
-  }
-}
-
-async function descargarHistorialPdf(){
-  const idInput=el('idHistorial'),msg=el('historialMsg');
-  const id=(idInput.value||'').trim().toUpperCase();
-  msg.style.color='#6b7280';msg.textContent='Generando historial...';
-  if(!id){msg.style.color='#b91c1c';msg.textContent='Debes ingresar tu ID de contrato.';return;}
-  try{
-    const resp=await fetch(API_URL+'?accion=historial_pagos&id='+encodeURIComponent(id));
-    const data=await resp.json();
-    if(!data.ok){msg.style.color='#b91c1c';msg.textContent=data.error||'No se encontró información de pagos para ese ID.';return;}
-    const pagos=Array.isArray(data.pagos)?data.pagos:[];
-    if(pagos.length===0){msg.style.color='#b91c1c';msg.textContent='No hay pagos registrados en Alegra para este contrato.';return;}
-    const placa=data.placa||'';
-    const filasHtml=pagos.map(p=>{
-      const fecha=p.fecha||'',consecutivo=p.consecutivo||'',cliente=p.cliente||'',notas=p.notas||'';
-      const pagadas=(p.pagadas!==null&&p.pagadas!==undefined)?p.pagadas:'';
-      const vencidas=(p.vencidas!==null&&p.vencidas!==undefined)?p.vencidas:'';
-      const valorNum=Number(p.valor||0);
-      const valorStr=isNaN(valorNum)?(p.valor||''):valorNum.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
-      return '<tr><td>'+fecha+'</td><td>'+consecutivo+'</td><td>'+cliente+'</td><td style="text-align:right">'+valorStr+'</td><td>'+notas+'</td><td style="text-align:center">'+pagadas+'</td><td style="text-align:center">'+vencidas+'</td></tr>';
-    }).join('');
-    const w=window.open('','_blank');
-    if(!w){msg.style.color='#b91c1c';msg.textContent='El navegador bloqueó la ventana emergente. Habilítala para descargar el PDF.';return;}
-    const html='<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><title>Historial de pagos '+id+'</title><style>body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:24px;color:#111827}h1{font-size:20px;margin-bottom:4px}p{font-size:12px;margin:2px 0 10px}table{width:100%;border-collapse:collapse;font-size:11px;margin-top:10px}th,td{border:1px solid #d1d5db;padding:4px 6px}th{background:#eff6ff;text-align:left}</style></head><body><h1>Historial de pagos</h1><p><strong>Contrato:</strong> '+id+'</p><p><strong>Vehículo / CC:</strong> '+placa+'</p><table><thead><tr><th>Fecha</th><th>Consecutivo</th><th>Cliente</th><th>Valor</th><th>Notas</th><th>Pagadas</th><th>Vencidas</th></tr></thead><tbody>'+filasHtml+'</tbody></table><script>window.onload=function(){window.print();};<\/script></body></html>';
-    w.document.write(html);w.document.close();
-    msg.style.color='#065f46';msg.textContent='Historial generado. Se abrió una ventana de impresión para guardar en PDF.';
-  }catch(e){
-    console.error(e);
-    msg.style.color='#b91c1c';msg.textContent='Error al generar el historial. Intenta de nuevo.';
-  }
-}
-
-function copiarLinkAfiliado(){
-  const input=el('linkAfiliadoInput'),msg=el('linkAfiliadoMsg');
-  input.focus();input.select();
-  try{
-    const ok=document.execCommand('copy');
-    if(ok){msg.style.color='#065f46';msg.textContent='Link copiado al portapapeles.';}
-    else{msg.style.color='#b91c1c';msg.textContent='No se pudo copiar automáticamente. Selecciona y copia el link manualmente.';}
-  }catch(e){
-    console.error(e);
-    msg.style.color='#b91c1c';msg.textContent='No se pudo copiar automáticamente. Selecciona y copia el link manualmente.';
-  }
-}
-
-function solicitarGrua(){
-  const mensaje='Hola, necesito solicitar grúa para mi vehículo.';
-  window.open('https://wa.me/573159406263?text='+encodeURIComponent(mensaje),'_blank');
-}
-
-async function enviarActualizacionKilometraje(){
-  const kmInput=el('kmValor'),idVehInput=el('kmIdVehiculo'),msg=el('kmMsg');
-  msg.className='status';msg.textContent='';
-  const km=Number(kmInput.value||0);
-  const idVeh=(idVehInput.value||'').trim().toUpperCase();
-  const idContrato=obtenerIdContratoActual();
-  if(!idContrato||!km){msg.classList.add('error');msg.textContent='Debes ingresar el kilometraje e iniciar sesión con tu contrato.';return;}
-  msg.textContent='Enviando actualización...';
-  try{
-    const formData=new URLSearchParams();
-    formData.append('accion','actualizar_kilometraje');
-    formData.append('kilometraje',String(km));
-    formData.append('idVehiculo',idVeh);
-    formData.append('idContrato',idContrato);
-    const resp=await fetch(API_CALLBACK_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData.toString()});
-    const data=await resp.json();
-    if(data.ok){msg.className='status ok';msg.textContent='Kilometraje actualizado correctamente.';}
-    else{msg.className='status error';msg.textContent=data.error||'No fue posible actualizar el kilometraje.';}
-  }catch(e){
-    console.error(e);
-    msg.className='status error';msg.textContent='Error al enviar la actualización. Intenta de nuevo.';
-  }
-}
-
-async function enviarIncidente(){
-  const descInput=el('incidenteDescripcion'),idVehInput=el('incidenteIdVehiculo'),fechaInput=el('incidenteFecha'),msg=el('incidenteMsg');
-  msg.className='status';msg.textContent='';
-  const descripcion=(descInput.value||'').trim();
-  const idVeh=(idVehInput.value||'').trim().toUpperCase();
-  const fecha=fechaInput.value;
-  const idContrato=obtenerIdContratoActual();
-  if(!idContrato||!descripcion){msg.classList.add('error');msg.textContent='Debes ingresar la descripción y tener un contrato cargado.';return;}
-  msg.textContent='Enviando incidente...';
-  try{
-    const formData=new URLSearchParams();
-    formData.append('accion','notificar_incidente');
-    formData.append('descripcion',descripcion);
-    formData.append('idVehiculo',idVeh);
-    formData.append('idContrato',idContrato);
-    formData.append('fecha',fecha);
-    const resp=await fetch(API_CALLBACK_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData.toString()});
-    const data=await resp.json();
-    if(data.ok){msg.className='status ok';msg.textContent='Incidente registrado correctamente.';}
-    else{msg.className='status error';msg.textContent=data.error||'No fue posible registrar el incidente.';}
-  }catch(e){
-    console.error(e);
-    msg.className='status error';msg.textContent='Error al enviar el incidente. Intenta de nuevo.';
-  }
-}
-
-async function enviarSolicitudMisContratos(){
-  const correo=(el('misContratosCorreo').value||'').trim();
-  const id=(el('misContratosId').value||'').trim().toUpperCase();
-  const msg=el('misContratosMsg');
-  msg.className='status';msg.style.color='#6b7280';msg.textContent='Enviando solicitud...';
-  if(!correo||!id){msg.classList.add('error');msg.textContent='Debes ingresar el correo y el ID.';return;}
-  try{
-    const formData=new URLSearchParams();
-    formData.append('accion','solicitar_copia_contratos');
-    formData.append('correo',correo);
-    formData.append('idAfiliado',id);
-    const resp=await fetch(API_CALLBACK_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData.toString()});
-    const data=await resp.json();
-    if(data.ok){msg.className='status ok';msg.textContent='Solicitud enviada correctamente. Nuestro equipo se comunicará contigo al correo registrado.';}
-    else{msg.className='status error';msg.textContent=data.error||'No fue posible enviar la solicitud.';}
-  }catch(e){
-    console.error(e);
-    msg.className='status error';msg.textContent='Error al enviar la solicitud. Intenta de nuevo.';
-  }
-}
-
-async function enviarActualizacionDatosAfiliado(){
-  const cuenta=(el('actualizarCuenta').value||'').trim();
-  const correo=(el('actualizarCorreo').value||'').trim();
-  const celular=(el('actualizarCelular').value||'').trim();
-  const id=(el('actualizarId').value||'').trim().toUpperCase();
-  const archivoInput=el('actualizarCertificado');
-  const archivoNombre=(archivoInput&&archivoInput.value)?archivoInput.value.split('\\').pop():'';
-  const msg=el('actualizarDatosMsg');
-  msg.className='status';msg.style.color='#6b7280';msg.textContent='Enviando solicitud...';
-  if(!correo||!id){msg.classList.add('error');msg.textContent='Debes ingresar al menos tu correo e ID.';return;}
-  try{
-    const formData=new URLSearchParams();
-    formData.append('accion','actualizar_datos_afiliado');
-    formData.append('cuenta',cuenta);
-    formData.append('correo',correo);
-    formData.append('celular',celular);
-    formData.append('idAfiliado',id);
-    formData.append('certificadoNombre',archivoNombre);
-    const resp=await fetch(API_CALLBACK_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData.toString()});
-    const data=await resp.json();
-    if(data.ok){msg.className='status ok';msg.textContent='Solicitud enviada correctamente. Revisaremos tu información y te contactaremos al correo registrado.';}
-    else{msg.className='status error';msg.textContent=data.error||'No fue posible enviar la actualización de datos.';}
-  }catch(e){
-    console.error(e);
-    msg.className='status error';msg.textContent='Error al enviar la actualización. Intenta de nuevo.';
-  }
-}
-
-if('serviceWorker' in navigator){
-  window.addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});
-}
-
-let deferredInstallPrompt=null;
-window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredInstallPrompt=e;});
-function esIOS(){return /iphone|ipad|ipod/i.test(window.navigator.userAgent||'');}
-function esAndroid(){return /android/i.test(window.navigator.userAgent||'');}
-function estaEnModoApp(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
-function mostrarInstruccionesIOS(){alert('Para instalar la app RADIZ en iPhone/iPad:\n\n1. Toca el ícono "Compartir" (cuadro con flecha hacia arriba).\n2. Elige "Añadir a pantalla de inicio".\n3. Confirma con "Añadir".');}
-
-async function manejarDescargaApp(){
-  if(estaEnModoApp()){alert('La aplicación RADIZ ya está instalada en este dispositivo.');return;}
-  if(esIOS()){mostrarInstruccionesIOS();return;}
-  if(deferredInstallPrompt){
-    try{deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;}catch(e){}
-    return;
-  }
-  if(esAndroid()){
-    alert('Chrome todavía no muestra el cuadro automático de instalación.\n\nPara instalar la app RADIZ:\n1. Toca el ícono de tres puntos (⋮) en la esquina superior derecha.\n2. Elige "Instalar aplicación" o "Añadir a pantalla de inicio".\n3. Confirma con "Instalar".');
-    return;
-  }
-  alert('Para instalar la app RADIZ en tu dispositivo, usa la opción "Instalar aplicación" o "Añadir a pantalla de inicio" del navegador.');
-}
-
-async function loginInversiones(origen){
-  const useLogin=(origen==='login');
-  const idLogin=el('loginId'),passLogin=el('loginPassword'),msgLogin=el('loginMsg');
-  const idModal=el('invId'),passModal=el('invPassword'),msgModal=el('invLoginMsg');
-  const idInput=useLogin?idLogin:idModal;
-  const passInput=useLogin?passLogin:passModal;
-  const msg=useLogin?msgLogin:msgModal;
-  if(!idInput||!passInput||!msg) return;
-  msg.className=useLogin?'login-msg':'status';
-  msg.textContent='';
-  const idRaw=(idInput.value||'').trim();
-  const pass=(passInput.value||'').trim();
-  if(!idRaw||!pass){msg.classList.add('error');msg.textContent='Ingresa tu ID y tu contraseña.';return;}
-  const id=idRaw.toUpperCase();
-  try{localStorage.setItem(RADIZ_USER_KEY,id);}catch(e){}
-  msg.textContent='Verificando credenciales...';
-  try{
-    const formData=new URLSearchParams();
-    formData.append('accion','login_portal');
-    formData.append('id',id);
-    formData.append('password',pass);
-    const resp=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData.toString()});
-    const data=await resp.json();
-    if(!data.ok){msg.className=useLogin?'login-msg error':'status error';msg.textContent=data.error||'Usuario o contraseña incorrectos.';return;}
-    const tipo=(data.tipo||'').toString().toUpperCase();
-    const idFinal=(data.id||id).toString().toUpperCase();
-    if(tipo==='RENTING'){
-      msg.className=useLogin?'login-msg ok':'status ok';
-      msg.textContent='Acceso concedido. Abriendo tu panel...';
-      if(!useLogin) cerrarModal('modalInversiones');
-      window.location.href='https://portal.radizco.com/logistica/?id='+encodeURIComponent(idFinal);
-    }else if(tipo==='AFILIADO'){
-      msg.className=useLogin?'login-msg ok':'status ok';
-      msg.textContent='Acceso concedido. Abriendo tu portal de inversiones...';
-      if(!useLogin) cerrarModal('modalInversiones');
-      window.location.href='inversiones/?id='+encodeURIComponent(idFinal);
-    }else{
-      msg.className=useLogin?'login-msg error':'status error';
-      msg.textContent='Tipo de usuario no reconocido para este ID.';
+    function toggleMenu() {
+      const p = el('menuPanel');
+      if (p) p.style.display = (p.style.display === 'block' ? 'none' : 'block');
     }
-  }catch(e){
+
+    function __lockBody() {
+      if (__modalOpenCount === 0) {
+        document.body.classList.add('modal-lock');
+        document.addEventListener('touchmove', __touchBlocker, { passive: false });
+        document.addEventListener('wheel', __wheelBlocker, { passive: false });
+      }
+      __modalOpenCount++;
+    }
+
+    function __unlockBody() {
+      __modalOpenCount = Math.max(0, __modalOpenCount - 1);
+      if (__modalOpenCount === 0) {
+        document.body.classList.remove('modal-lock');
+        document.removeEventListener('touchmove', __touchBlocker, { passive: false });
+        document.removeEventListener('wheel', __wheelBlocker, { passive: false });
+      }
+    }
+
+    function abrirModal(id) {
+      if (id === 'modalHistorialPagos') prepararModalHistorial();
+      const m = el(id);
+      if (!m) return;
+      __lockBody();
+      m.style.display = 'flex';
+      const menu = el('menuPanel');
+      if (menu) menu.style.display = 'none';
+    }
+
+    function cerrarModal(id) {
+      const m = el(id);
+      if (!m) return;
+      m.style.display = 'none';
+      __unlockBody();
+    }
+
+    function prepararModalHistorial() {
+      const correoLabel = document.querySelector('label[for="correoHistorial"]');
+      const correoInput = el('correoHistorial');
+      const idInput = el('idHistorial');
+      const msg = el('historialMsg');
+      const intro = el('historialIntro');
+      const btnEnviar = el('btnHistorialEnviar');
+      const btnDescargar = el('btnHistorialDescargar');
+
+      const idActual = obtenerIdContratoActual();
+      if (idInput && idActual) idInput.value = idActual;
+
+      if (msg) {
+        msg.textContent = '';
+        msg.style.color = '#6b7280';
+      }
+
+      if (tipoUsuarioActual && tipoUsuarioActual.toUpperCase() === 'AFILIADO') {
+        if (correoLabel) correoLabel.style.display = 'block';
+        if (correoInput) correoInput.style.display = 'block';
+        if (btnEnviar) btnEnviar.style.display = 'inline-flex';
+        if (btnDescargar) btnDescargar.style.display = 'none';
+        if (intro) intro.textContent = 'Ingresa tu correo electrónico y el ID para que nuestro equipo te envíe el historial en PDF.';
+      } else {
+        if (correoLabel) correoLabel.style.display = 'none';
+        if (correoInput) correoInput.style.display = 'none';
+        if (btnEnviar) btnEnviar.style.display = 'none';
+        if (btnDescargar) btnDescargar.style.display = 'inline-flex';
+        if (intro) intro.textContent = 'Ingresa tu ID de contrato para descargar tu historial de pagos en PDF.';
+      }
+    }
+function _pick(obj, keys) {
+  if (!obj) return '';
+  for (const k of keys) {
+    const v = obj[k];
+    if (v !== undefined && v !== null && String(v).trim() !== '') return v;
+  }
+  return '';
+}
+
+function _pickBoth(a, b, keys) {
+  const v1 = _pick(a, keys);
+  if (v1 !== '') return v1;
+  const v2 = _pick(b, keys);
+  if (v2 !== '') return v2;
+  return '';
+}
+
+async function consultar() {
+  const id = (el('idContrato').value || '').trim().toUpperCase();
+  const status = el('status'), btn = el('btnConsultar'), res = el('resultados');
+  const cContrato = el('cardContrato'), cPagos = el('cardPagos'), cMtos = el('cardMantenimientos');
+  const fab = el('fabMenu'), mRen = el('menuRenting'), mAfi = el('menuAfiliado'), mIni = el('menuInicial');
+
+  status.className = 'status';
+  status.textContent = '';
+  res.style.display = 'none';
+  const panelMenu = el('menuPanel');
+  if (panelMenu) panelMenu.style.display = 'none';
+
+  if (!id) {
+    status.classList.add('error');
+    status.textContent = 'Por favor ingresa un ID.';
+    return;
+  }
+
+  btn.disabled = true;
+  status.textContent = 'Consultando información...';
+
+  try {
+    const resp = await fetch(API_URL + '?id=' + encodeURIComponent(id));
+    const data = await resp.json();
+
+    if (!data.ok) {
+      status.className = 'status error';
+      status.textContent = data.error || 'No se encontró información para ese ID.';
+      return;
+    }
+
+    const c = data.contrato || {};
+    datosContratoActual = c;
+
+    const tipo = (c['TIPO USUARIO'] || '').toString().toUpperCase();
+    tipoUsuarioActual = tipo;
+
+    const pagos = data.pagos || [];
+    const mtsList = Array.isArray(data.mantenimientos) ? data.mantenimientos : (data.mantenimientos ? [data.mantenimientos] : []);
+    const resumenMtos = data.mantenimientosResumen || {};
+    const beneficiosTexto = c['BENEFICIOS'] || 'Información no disponible';
+
+    cContrato.innerHTML = '';
+    cPagos.innerHTML = '';
+    cMtos.innerHTML = '';
+
+    const afiliados = data.afiliados || [], vehiculosAll = data.vehiculos || [];
+
+    if (tipo === 'AFILIADO') {
+      const idAfiliado = (c['ID AFILIADO'] || id).toString().trim().toUpperCase();
+      const af = afiliados.find(a => String(a['ID AFILIADO'] || '').trim().toUpperCase() === idAfiliado) || {};
+      datosAfiliadoActual = af;
+
+      const nombreAf = af['NOMBRE'] || c['ID CLIENTE'] || 'Dato no disponible';
+      const fechaAf = formatearFecha(af['FECHA AFILIACIÓN'] || af['FECHA AFILIACION'] || '');
+      const numLiq = (af['NO LIQUIDACIONES'] !== undefined && af['NO LIQUIDACIONES'] !== '') ? af['NO LIQUIDACIONES'] : '0';
+
+      let valorLiqTexto = '0';
+      if (af['VALOR LIQUIDADO'] !== undefined && af['VALOR LIQUIDADO'] !== '') {
+        const bruto = af['VALOR LIQUIDADO'];
+        valorLiqTexto = (typeof bruto === 'number') ? formatearNumero(bruto) : String(bruto);
+      }
+
+      cContrato.innerHTML =
+        '<h2>Contrato</h2>' +
+        '<p><strong>ID afiliado:</strong> ' + idAfiliado + '</p>' +
+        '<p><strong>Nombre:</strong> ' + nombreAf + '</p>' +
+        '<p><strong>Inicio de afiliación:</strong> ' + (fechaAf || 'Dato no disponible') + '</p>' +
+        '<p><strong>Tipo de usuario:</strong> Participación</p>';
+
+      const pagoRelacionado = pagos.find(p => {
+        const idAf = String(p['ID AFILIADO'] || '').trim().toUpperCase();
+        const idCt = String(p['ID CONTRATO'] || '').trim().toUpperCase();
+        return idAf === idAfiliado || idCt === id;
+      });
+
+      const diasCorte = pagoRelacionado
+        ? (pagoRelacionado['DÍAS DE CORTE'] || pagoRelacionado['DIAS DE CORTE'] || 'Dato no disponible')
+        : 'Dato no disponible';
+
+      cPagos.innerHTML =
+        '<h2>Pagos</h2>' +
+        '<p><strong>Día de corte:</strong> ' + diasCorte + '</p>' +
+        '<p><strong>No. de liquidaciones:</strong> ' + numLiq + '</p>' +
+        '<p><strong>Valor liquidado:</strong> ' + valorLiqTexto + '</p>';
+
+      const vehiculosAf = vehiculosAll.filter(v => String(v['ID AFILIADO'] || '').trim().toUpperCase() === idAfiliado);
+      const cantidadVeh = vehiculosAf.length;
+      const placas = vehiculosAf.map(v => v['ID VEHÍCULO'] || v['ID VEHICULO'] || '').filter(Boolean).join(', ') || 'Sin vehículos asociados';
+
+      cMtos.innerHTML =
+        '<h2>Flota</h2>' +
+        '<p><strong>Cantidad de vehículos:</strong> ' + cantidadVeh + '</p>' +
+        '<p><strong>Placas asociadas:</strong> ' + placas + '</p>' +
+        '<p><strong>Ventas:</strong> 0</p>';
+
+      const elFecha = el('modalFechaPagosTexto'),
+        elVeh = el('modalVehiculosTexto'),
+        elL1 = el('modalLiquidacionesTexto1'),
+        elL2 = el('modalLiquidacionesTexto2');
+
+      if (elFecha) elFecha.textContent = 'Día de corte de pagos: ' + diasCorte;
+      if (elVeh) elVeh.textContent = 'Número de vehículos: ' + cantidadVeh;
+      if (elL1) elL1.textContent = 'Número de liquidaciones: ' + numLiq;
+      if (elL2) elL2.textContent = 'Valor total liquidado: ' + valorLiqTexto;
+
+      const correoAf = af['CORREO ELECTRÓNICO'] || af['CORREO'] || '';
+      const cuentaAf = af['CUENTA BANCARIA'] || af['CUENTA_BANCARIA'] || '';
+      const celAf = af['CELULAR'] || af['TELÉFONO'] || af['TELEFONO'] || '';
+
+      const misCorreo = el('misContratosCorreo'),
+        misId = el('misContratosId'),
+        actCuenta = el('actualizarCuenta'),
+        actCorreo = el('actualizarCorreo'),
+        actCel = el('actualizarCelular'),
+        actId = el('actualizarId'),
+        flotaTexto = el('miFlotaTexto');
+
+      if (misCorreo) misCorreo.value = correoAf || '';
+      if (misId) misId.value = idAfiliado;
+      if (actCuenta) actCuenta.value = cuentaAf || '';
+      if (actCorreo) actCorreo.value = correoAf || '';
+      if (actCel) actCel.value = celAf || '';
+      if (actId) actId.value = idAfiliado;
+
+      if (flotaTexto) flotaTexto.textContent = cantidadVeh === 0
+        ? 'No se encontraron vehículos asociados a tu ID.'
+        : 'Tienes ' + cantidadVeh + ' vehículo(s) afiliado(s): ' + placas + '.';
+
+      if (mIni) mIni.style.display = 'none';
+      if (mRen) mRen.style.display = 'none';
+      if (mAfi) mAfi.style.display = 'block';
+      if (fab) fab.style.display = 'block';
+    } else {
+      datosAfiliadoActual = null;
+
+      const estado = (c['ESTADO'] || '').toString().toUpperCase();
+      cContrato.innerHTML =
+        '<h2>Contrato</h2>' +
+        '<p><strong>ID:</strong> ' + (c['ID CONTRATO'] || '') + '</p>' +
+        '<p><strong>Tipo usuario:</strong> ' + (c['TIPO USUARIO'] || '') + '</p>' +
+        '<p><strong>Vehículo:</strong> ' + (c['ID VEHÍCULO'] || c['ID VEHICULO'] || '') + '</p>' +
+        '<p><strong>Inicio:</strong> ' + formatearFecha(c['INICIO']) + '</p>' +
+        '<p><strong>Fin:</strong> ' + formatearFecha(c['FIN']) + '</p>' +
+        '<p><strong>Tarifa semanal:</strong> ' + formatearNumero(c['TARIFA SEMANAL']) + '</p>' +
+        '<p><strong>Beneficios:</strong> ' + beneficiosTexto + '</p>' +
+        '<p><span class="badge ' + (estado === 'ACTIVO' ? 'badge-activo' : 'badge-inactivo') + '">' + (estado || 'SIN ESTADO') + '</span></p>';
+
+      if (pagos.length === 0) {
+        cPagos.innerHTML = '<h2>Pagos</h2><p>No hay pagos registrados para este contrato.</p>';
+      } else {
+        const p = pagos[0];
+        const tarifasCompletadas = p['TARIFAS COMPLETADAS'] || '0';
+        const tarifasVencidas = p['TARIFAS VENCIDAS'] || '0';
+        const idContratoPagos = String(c['ID CONTRATO'] || '').trim().toUpperCase();
+        const esRentingPagos = idContratoPagos.startsWith('R');
+        const moraEstim = esRentingPagos ? (Number(c['TARIFA SEMANAL'] || 0) * Number(tarifasVencidas || 0)) : 0;
+        const moraHtml = (esRentingPagos && moraEstim > 0) ? '<p><strong>Mora estimada:</strong> ' + formatearNumero(moraEstim) + '</p>' : '';
+
+        cPagos.innerHTML =
+          '<h2>Pagos</h2>' +
+          '<p><strong>Día de corte:</strong> ' + (p['DÍAS DE CORTE'] || p['DIAS DE CORTE'] || '') + '</p>' +
+          '<p><strong>Tarifas completadas:</strong> ' + tarifasCompletadas + '</p>' +
+          '<p><strong>Tarifas vencidas:</strong> ' + tarifasVencidas + '</p>' +
+          moraHtml;
+      }
+
+      const tieneResumen = !!(resumenMtos && Object.keys(resumenMtos).length);
+      if ((!mtsList || mtsList.length === 0) && !tieneResumen) {
+        cMtos.innerHTML = '<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
+      } else {
+        const first = mtsList && mtsList.length ? mtsList[0] : {};
+        const placa = resumenMtos.placa || first.placa || first['ID VEHÍCULO'] || first['ID VEHICULO'] || '';
+
+        const totalRaw = _pickBoth(
+          resumenMtos,
+          first,
+          [
+            'totalMantenimientos',
+            'TOTAL MANTENIMIENTOS',
+            'TOTAL_MANTENIMIENTOS',
+            'VALOR GENERAL',
+            'VALOR MTOS',
+            'VALOR MANTENIMIENTOS',
+            'VALOR',
+            'VALOR MTO',
+            'TOTAL'
+          ]
+        );
+        const totalVal = aNumeroCO(totalRaw);
+
+        const cambiosAceite = (resumenMtos.cambiosAceite !== undefined)
+          ? aNumeroCO(resumenMtos.cambiosAceite)
+          : aNumeroCO((data.resumenMantenimientos || {}).aceites);
+
+        const pastillas = (resumenMtos.pastillas !== undefined)
+          ? aNumeroCO(resumenMtos.pastillas)
+          : aNumeroCO((data.resumenMantenimientos || {}).pastillas);
+
+        const kitRaw = _pickBoth(
+          resumenMtos,
+          first,
+          [
+            'kitArrastre',
+            'KIT DE ARRASTRE',
+            'Kit de arrastre',
+            'KIT_ARRASTRE',
+            'KITARRASTRE'
+          ]
+        );
+        const kitArrastre = aNumeroCO(kitRaw);
+
+        const ultimo = formatearFecha(
+          resumenMtos.ultimoMantenimiento ||
+          first.fecha ||
+          first['ÚLTIMO MANTENIMIENTO'] ||
+          first['ULTIMO MANTENIMIENTO'] ||
+          first['FECHA ULT. MANTENIMIENTO'] ||
+          ''
+        );
+
+        const tipoM =
+          resumenMtos.tipo ||
+          first.tipo ||
+          first['TIPO'] ||
+          first['TIPO ULT. MANTENIMIENTO'] ||
+          '';
+
+        const taller =
+          resumenMtos.taller ||
+          first.taller ||
+          first['TALLER ASIGNADO'] ||
+          '';
+
+        cMtos.innerHTML =
+          '<h2>Mantenimientos</h2>' +
+          '<p><strong>Total mantenimientos:</strong> ' + formatearNumero(totalVal) + '</p>' +
+          '<p><strong>Placa:</strong> ' + (placa || '') + '</p>' +
+          '<p><strong>Cambios de aceite:</strong> ' + cambiosAceite + '</p>' +
+          '<p><strong>Pastillas:</strong> ' + pastillas + '</p>' +
+          '<p><strong>Kit de arrastre:</strong> ' + kitArrastre + '</p>' +
+          '<p><strong>Último mantenimiento:</strong> ' + (ultimo || '') + '</p>' +
+          '<p><strong>Tipo de mantenimiento:</strong> ' + (tipoM || '') + '</p>' +
+          '<p><strong>Realizados:</strong> ' + (first['REALIZADOS'] || first['MTOS REALIZADOS'] || '') + '</p>' +
+          '<p><strong>Taller asignado:</strong> ' + (taller || '') + '</p>';
+      }
+
+      const idContratoActual = (c['ID CONTRATO'] || '').toString().trim().toUpperCase();
+      const esRentingId = idContratoActual.startsWith('R');
+
+      const b = el('modalBeneficiosTexto');
+      if (b) {
+        if (esRentingId) b.innerHTML = '<img src="../beneficios_renting.png" alt="Beneficios Renting Radiz" class="img-beneficios-renting">';
+        else b.textContent = beneficiosTexto || 'Información no disponible.';
+      }
+
+      const modalT = el('modalTallerTexto');
+      const tallerTxt = 'Taller asignado: ' + (resumenMtos.taller || (mtsList[0] ? (mtsList[0].taller || mtsList[0]['TALLER ASIGNADO']) : '') || 'Información no disponible.');
+      if (modalT) modalT.textContent = tallerTxt;
+
+      if (mIni) mIni.style.display = 'none';
+      if (mRen) mRen.style.display = 'block';
+      if (mAfi) mAfi.style.display = 'none';
+      if (fab) fab.style.display = 'block';
+    }
+
+    res.style.display = 'grid';
+    status.className = 'status ok';
+    status.textContent = 'Información cargada correctamente.';
+  } catch (e) {
     console.error(e);
-    msg.className=useLogin?'login-msg error':'status error';
-    msg.textContent='Error al iniciar sesión. Intenta de nuevo.';
+    status.className = 'status error';
+    status.textContent = 'Error al consultar la información. Intenta de nuevo.';
+  } finally {
+    btn.disabled = false;
   }
 }
+
 </script>
-</body></html>
+</body>
+</html>
