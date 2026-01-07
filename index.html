@@ -494,13 +494,13 @@ async function consultar(){
           const v=mm?.['KIT DE ARRASTRE']??mm?.['Kit de arrastre']??mm?.['KIT ARR']??mm?.kitdearrastre??mm?.kit_arrastre;
           if(v!==undefined&&v!==null&&String(v).trim()!==''){kitRaw=v;break;}
         }
-        if(kitRaw===null||kitRaw===undefined||String(kitRaw).trim()==='') kitRaw=resumenMtos.kitdearrastre??resumenMtos.kit_dearrastre??(data.resumenMantenimientos||{}).kit_arrastre??(data.resumenMantenimientos||{}).kitArrastre??0;
+        if(kitRaw===null||kitRaw===undefined||String(kitRaw).trim()==='') kitRaw=resumenMtos.kitdearrastre??resumenMtos.kit_dearrastre??(data.resumenMantenimientos||{}).kit_dearrastre??(data.resumenMantenimientos||{}).kitArrastre??0;
         const kitdearrastre=aNumeroCO(kitRaw);
 
         const ultimo=formatearFecha(resumenMtos.ultimoMantenimiento||mtsList[0]?.fecha||mtsList[0]?.['ÚLTIMO MANTENIMIENTO']||mtsList[0]?.['ULTIMO MANTENIMIENTO']||mtsList[0]?.['FECHA ULT. MANTENIMIENTO']||'');
         const tipoM=resumenMtos.tipo||mtsList[0]?.tipo||mtsList[0]?.['TIPO']||mtsList[0]?.['TIPO ULT. MANTENIMIENTO']||'';
         const taller=resumenMtos.taller||mtsList[0]?.taller||mtsList[0]?.['TALLER ASIGNADO']||'';
-        cMtos.innerHTML='<h2>Mantenimientos</h2><p><strong>Total mantenimientos:</strong> '+formatearNumero(totalVal)+'</p><p><strong>Placa:</strong> '+(placa||'')+'</p><p><strong>Cambios de aceite:</strong> '+cambiosAceite+'</p><p><strong>Pastillas:</strong> '+pastillas+'</p><p><strong>Kit de arrastre:</strong> '+kitArrastre+'</p><p><strong>Último mantenimiento:</strong> '+(ultimo||'')+'</p><p><strong>Tipo de mantenimiento:</strong> '+(tipoM||'')+'</p><p><strong>Realizados:</strong> '+(mtsList[0]?.['REALIZADOS']||mtsList[0]?.['MTOS REALIZADOS']||'')+'</p><p><strong>Taller asignado:</strong> '+(taller||'')+'</p>';
+        cMtos.innerHTML='<h2>Mantenimientos</h2><p><strong>Total mantenimientos:</strong> '+formatearNumero(totalVal)+'</p><p><strong>Placa:</strong> '+(placa||'')+'</p><p><strong>Cambios de aceite:</strong> '+cambiosAceite+'</p><p><strong>Pastillas:</strong> '+pastillas+'</p><p><strong>Kit de arrastre:</strong> '+kitdearrastre+'</p><p><strong>Último mantenimiento:</strong> '+(ultimo||'')+'</p><p><strong>Tipo de mantenimiento:</strong> '+(tipoM||'')+'</p><p><strong>Realizados:</strong> '+(mtsList[0]?.['REALIZADOS']||mtsList[0]?.['MTOS REALIZADOS']||'')+'</p><p><strong>Taller asignado:</strong> '+(taller||'')+'</p>';
       }
 
       const idContratoActual=(c['ID CONTRATO']||'').toString().trim().toUpperCase();
