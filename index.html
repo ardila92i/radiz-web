@@ -477,10 +477,26 @@ async function consultar(){
         cMtos.innerHTML='<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
       }else{
         const placa=resumenMtos.placa||mtsList[0]?.placa||mtsList[0]?.['ID VEHÍCULO']||mtsList[0]?.['ID VEHICULO']||'';
-        const totalVal=(resumenMtos.totalMantenimientos!==undefined)?Number(resumenMtos.totalMantenimientos||0):mtsList.reduce((s,mm)=>s+aNumeroCO(mm?.valor??mm?.['VALOR GENERAL']??mm?.['VALOR MTOS']??mm?.['VALOR']??mm?.['VALOR MTO']),0);
+
+        let totalRaw=null;
+        for(const mm of (mtsList||[])){
+          const v=mm?.['TOTAL MANTENIMIENTOS']??mm?.['TOTAL MANTENIMIENTOS $']??mm?.['VALOR GENERAL']??mm?.['TOTAL MTOS']??mm?.['VALOR MTOS']??mm?.totalMantenimientos??mm?.total_mantenimientos;
+          if(v!==undefined&&v!==null&&String(v).trim()!==''){totalRaw=v;break;}
+        }
+        if(totalRaw===null||totalRaw===undefined||String(totalRaw).trim()==='') totalRaw=resumenMtos.totalMantenimientos??resumenMtos.total_mantenimientos??resumenMtos.total??0;
+        const totalVal=aNumeroCO(totalRaw);
+
         const cambiosAceite=(resumenMtos.cambiosAceite!==undefined)?aNumeroCO(resumenMtos.cambiosAceite):aNumeroCO((data.resumenMantenimientos||{}).aceites);
         const pastillas=(resumenMtos.pastillas!==undefined)?aNumeroCO(resumenMtos.pastillas):aNumeroCO((data.resumenMantenimientos||{}).pastillas);
-        const kitArrastre=(resumenMtos.kitArrastre!==undefined)?aNumeroCO(resumenMtos.kitArrastre):aNumeroCO((data.resumenMantenimientos||{}).kit_arrastre|| (data.resumenMantenimientos||{}).kitArrastre);
+
+        let kitRaw=null;
+        for(const mm of (mtsList||[])){
+          const v=mm?.['KIT DE ARRASTRE']??mm?.['Kit de arrastre']??mm?.['KIT ARR']??mm?.kitArrastre??mm?.kit_arrastre;
+          if(v!==undefined&&v!==null&&String(v).trim()!==''){kitRaw=v;break;}
+        }
+        if(kitRaw===null||kitRaw===undefined||String(kitRaw).trim()==='') kitRaw=resumenMtos.kitArrastre??resumenMtos.kit_arrastre??(data.resumenMantenimientos||{}).kit_arrastre??(data.resumenMantenimientos||{}).kitArrastre??0;
+        const kitArrastre=aNumeroCO(kitRaw);
+
         const ultimo=formatearFecha(resumenMtos.ultimoMantenimiento||mtsList[0]?.fecha||mtsList[0]?.['ÚLTIMO MANTENIMIENTO']||mtsList[0]?.['ULTIMO MANTENIMIENTO']||mtsList[0]?.['FECHA ULT. MANTENIMIENTO']||'');
         const tipoM=resumenMtos.tipo||mtsList[0]?.tipo||mtsList[0]?.['TIPO']||mtsList[0]?.['TIPO ULT. MANTENIMIENTO']||'';
         const taller=resumenMtos.taller||mtsList[0]?.taller||mtsList[0]?.['TALLER ASIGNADO']||'';
