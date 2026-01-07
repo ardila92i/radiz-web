@@ -477,62 +477,14 @@ async function consultar(){
         cMtos.innerHTML='<h2>Mantenimientos</h2><p>No hay mantenimientos registrados para este contrato.</p>';
       }else{
         const placa=resumenMtos.placa||mtsList[0]?.placa||mtsList[0]?.['ID VEHÍCULO']||mtsList[0]?.['ID VEHICULO']||'';
-
-        let totalRaw=null;
-        for(const mm of (mtsList||[])){
-          const v=mm?.['TOTAL MANTENIMIENTOS']??mm?.['TOTAL MANTENIMIENTOS $']??mm?.['VALOR GENERAL']??mm?.['TOTAL MTOS']??mm?.['VALOR MTOS']??mm?.totalMantenimientos??mm?.total_mantenimientos;
-          if(v!==undefined&&v!==null&&String(v).trim()!==''){totalRaw=v;break;}
-        }
-        if(totalRaw===null||totalRaw===undefined||String(totalRaw).trim()==='') totalRaw=resumenMtos.totalMantenimientos??resumenMtos.total_mantenimientos??resumenMtos.total??0;
-        const totalVal=aNumeroCO(totalRaw);
-
+        const totalVal=(resumenMtos.totalMantenimientos!==undefined)?Number(resumenMtos.totalMantenimientos||0):mtsList.reduce((s,mm)=>s+aNumeroCO(mm?.valor??mm?.['VALOR GENERAL']??mm?.['VALOR MTOS']??mm?.['VALOR']??mm?.['VALOR MTO']),0);
         const cambiosAceite=(resumenMtos.cambiosAceite!==undefined)?aNumeroCO(resumenMtos.cambiosAceite):aNumeroCO((data.resumenMantenimientos||{}).aceites);
         const pastillas=(resumenMtos.pastillas!==undefined)?aNumeroCO(resumenMtos.pastillas):aNumeroCO((data.resumenMantenimientos||{}).pastillas);
-
-     let kitRaw=null;
-
-// 1) Prioridad: lo que venga en la lista (tu backend envía kitsArrastre)
-for(const mm of (mtsList||[])){
-  const v =
-    mm?.kitsArrastre ?? mm?.kitArrastre ??
-    mm?.['KITS DE ARRASTRE'] ?? mm?.['KIT DE ARRASTRE'] ?? mm?.['Kit de arrastre'] ??
-    mm?.kit_arrastre ?? mm?.kitdearrastre;
-  if(v!==undefined && v!==null && String(v).trim()!==''){ kitRaw=v; break; }
-}
-
-// 2) Fallback: resumen nuevo (tu backend envía kitArrastre / kitsArrastre)
-if(kitRaw===null || kitRaw===undefined || String(kitRaw).trim()===''){
-  kitRaw =
-    resumenMtos.kitArrastre ?? resumenMtos.kitsArrastre ??
-    (data.resumenMantenimientos||{}).kitArrastre ?? (data.resumenMantenimientos||{}).kitsArrastre ??
-    (data.resumenMantenimientos||{}).kit_dearrastre ?? 0;
-}
-
-const kitdearrastre = aNumeroCO(kitRaw);
-
-        const ultimo=formatearFecha(
-  resumenMtos.ultimoMantenimiento||
-  mtsList[0]?.fecha||
-  mtsList[0]?.['ÚLTIMO MANTENIMIENTO']||
-  mtsList[0]?.['ULTIMO MANTENIMIENTO']||
-  mtsList[0]?.['FECHA ULT. MANTENIMIENTO']||
-  ''
-);
-const tipoM=(resumenMtos.tipo||mtsList[0]?.tipo||mtsList[0]?.['TIPO']||mtsList[0]?.['TIPO ULT. MANTENIMIENTO']||'');
-const taller=(resumenMtos.taller||mtsList[0]?.taller||mtsList[0]?.['TALLER ASIGNADO']||'');
-const realizados=(mtsList[0]?.realizados ?? mtsList[0]?.['REALIZADOS'] ?? mtsList[0]?.['MTOS REALIZADOS'] ?? '');
-
-cMtos.innerHTML=
-  '<h2>Mantenimientos</h2>'+
-  '<p><strong>Placa:</strong> '+(placa||'')+'</p>'+
-  '<p><strong>Total mantenimientos:</strong> '+formatearNumero(totalVal)+'</p>'+
-  '<p><strong>Cambios de aceite:</strong> '+cambiosAceite+'</p>'+
-  '<p><strong>Cambios de pastillas:</strong> '+pastillas+'</p>'+
-  '<p><strong>Kit de arrastre:</strong> '+kitdearrastre+'</p>'+
-  (realizados!==''?'<p><strong>Realizados:</strong> '+realizados+'</p>':'')+
-  (ultimo?'<p><strong>Último:</strong> '+ultimo+'</p>':'')+
-  (tipoM?'<p><strong>Tipo:</strong> '+tipoM+'</p>':'')+
-  (taller?'<p><strong>Taller asignado:</strong> '+taller+'</p>':'');
+        const kitArrastre=(resumenMtos.kitArrastre!==undefined)?aNumeroCO(resumenMtos.kitArrastre):aNumeroCO((data.resumenMantenimientos||{}).kit_arrastre|| (data.resumenMantenimientos||{}).kitArrastre);
+        const ultimo=formatearFecha(resumenMtos.ultimoMantenimiento||mtsList[0]?.fecha||mtsList[0]?.['ÚLTIMO MANTENIMIENTO']||mtsList[0]?.['ULTIMO MANTENIMIENTO']||mtsList[0]?.['FECHA ULT. MANTENIMIENTO']||'');
+        const tipoM=resumenMtos.tipo||mtsList[0]?.tipo||mtsList[0]?.['TIPO']||mtsList[0]?.['TIPO ULT. MANTENIMIENTO']||'';
+        const taller=resumenMtos.taller||mtsList[0]?.taller||mtsList[0]?.['TALLER ASIGNADO']||'';
+        cMtos.innerHTML='<h2>Mantenimientos</h2><p><strong>Total mantenimientos:</strong> '+formatearNumero(totalVal)+'</p><p><strong>Placa:</strong> '+(placa||'')+'</p><p><strong>Cambios de aceite:</strong> '+cambiosAceite+'</p><p><strong>Pastillas:</strong> '+pastillas+'</p><p><strong>Kit de arrastre:</strong> '+kitArrastre+'</p><p><strong>Último mantenimiento:</strong> '+(ultimo||'')+'</p><p><strong>Tipo de mantenimiento:</strong> '+(tipoM||'')+'</p><p><strong>Realizados:</strong> '+(mtsList[0]?.['REALIZADOS']||mtsList[0]?.['MTOS REALIZADOS']||'')+'</p><p><strong>Taller asignado:</strong> '+(taller||'')+'</p>';
       }
 
       const idContratoActual=(c['ID CONTRATO']||'').toString().trim().toUpperCase();
