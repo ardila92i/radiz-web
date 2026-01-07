@@ -489,13 +489,26 @@ async function consultar(){
         const cambiosAceite=(resumenMtos.cambiosAceite!==undefined)?aNumeroCO(resumenMtos.cambiosAceite):aNumeroCO((data.resumenMantenimientos||{}).aceites);
         const pastillas=(resumenMtos.pastillas!==undefined)?aNumeroCO(resumenMtos.pastillas):aNumeroCO((data.resumenMantenimientos||{}).pastillas);
 
-        let kitRaw=null;
-        for(const mm of (mtsList||[])){
-          const v=mm?.['KIT DE ARRASTRE']??mm?.['Kit de arrastre']??mm?.['KIT ARR']??mm?.kitdearrastre??mm?.kit_arrastre;
-          if(v!==undefined&&v!==null&&String(v).trim()!==''){kitRaw=v;break;}
-        }
-        if(kitRaw===null||kitRaw===undefined||String(kitRaw).trim()==='') kitRaw=resumenMtos.kitdearrastre??resumenMtos.kit_dearrastre??(data.resumenMantenimientos||{}).kit_dearrastre??(data.resumenMantenimientos||{}).kitArrastre??0;
-        const kitdearrastre=aNumeroCO(kitRaw);
+     let kitRaw=null;
+
+// 1) Prioridad: lo que venga en la lista (tu backend envía kitsArrastre)
+for(const mm of (mtsList||[])){
+  const v =
+    mm?.kitsArrastre ?? mm?.kitArrastre ??
+    mm?.['KITS DE ARRASTRE'] ?? mm?.['KIT DE ARRASTRE'] ?? mm?.['Kit de arrastre'] ??
+    mm?.kit_arrastre ?? mm?.kitdearrastre;
+  if(v!==undefined && v!==null && String(v).trim()!==''){ kitRaw=v; break; }
+}
+
+// 2) Fallback: resumen nuevo (tu backend envía kitArrastre / kitsArrastre)
+if(kitRaw===null || kitRaw===undefined || String(kitRaw).trim()===''){
+  kitRaw =
+    resumenMtos.kitArrastre ?? resumenMtos.kitsArrastre ??
+    (data.resumenMantenimientos||{}).kitArrastre ?? (data.resumenMantenimientos||{}).kitsArrastre ??
+    (data.resumenMantenimientos||{}).kit_dearrastre ?? 0;
+}
+
+const kitdearrastre = aNumeroCO(kitRaw);
 
         const ultimo=formatearFecha(resumenMtos.ultimoMantenimiento||mtsList[0]?.fecha||mtsList[0]?.['ÚLTIMO MANTENIMIENTO']||mtsList[0]?.['ULTIMO MANTENIMIENTO']||mtsList[0]?.['FECHA ULT. MANTENIMIENTO']||'');
         const tipoM=resumenMtos.tipo||mtsList[0]?.tipo||mtsList[0]?.['TIPO']||mtsList[0]?.['TIPO ULT. MANTENIMIENTO']||'';
