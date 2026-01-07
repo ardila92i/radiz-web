@@ -513,7 +513,7 @@ const kitdearrastre = aNumeroCO(kitRaw);
         const ultimo=formatearFecha(resumenMtos.ultimoMantenimiento||mtsList[0]?.fecha||mtsList[0]?.['ÚLTIMO MANTENIMIENTO']||mtsList[0]?.['ULTIMO MANTENIMIENTO']||mtsList[0]?.['FECHA ULT. MANTENIMIENTO']||'');
         const tipoM=resumenMtos.tipo||mtsList[0]?.tipo||mtsList[0]?.['TIPO']||mtsList[0]?.['TIPO ULT. MANTENIMIENTO']||'';
         const taller=resumenMtos.taller||mtsList[0]?.taller||mtsList[0]?.['TALLER ASIGNADO']||'';
-        cMtos.innerHTML='<h2>Mantenimientos</h2><p><strong>Total mantenimientos:</strong> '+formatearNumero(totalVal)+'</p><p><strong>Placa:</strong> '+(placa||'')+'</p><p><strong>Cambios de aceite:</strong> '+cambiosAceite+'</p><p><strong>Pastillas:</strong> '+pastillas+'</p><p><strong>Kit de arrastre:</strong> '+kitdearrastre+'</p><p><strong>Último mantenimiento:</strong> '+(ultimo||'')+'</p><p><strong>Tipo de mantenimiento:</strong> '+(tipoM||'')+'</p><p><strong>Realizados:</strong> '+(mtsList[0]?.['REALIZADOS']||mtsList[0]?.['MTOS REALIZADOS']||'')+'</p><p><strong>Taller asignado:</strong> '+(taller||'')+'</p>';
+      <p><strong>Realizados:</strong> '+(mtsList[0]?.realizados ?? mtsList[0]?.['REALIZADOS'] ?? mtsList[0]?.['MTOS REALIZADOS'] ?? '')+'</p>
       }
 
       const idContratoActual=(c['ID CONTRATO']||'').toString().trim().toUpperCase();
