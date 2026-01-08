@@ -113,6 +113,11 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,
 .hist-line{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;font-size:.92rem}
 .hist-label{color:#111827;font-weight:800}
 .hist-value{color:var(--radiz-blue);font-weight:900}
+.fotos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.foto-box{border:1px dashed #cbd5e1;border-radius:14px;background:#f8fafc;min-height:72px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.foto-box img{width:100%;height:100%;object-fit:cover;display:block}
+.foto-x{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:999px;border:1px solid rgba(229,231,235,.9);background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:900;color:#111827;line-height:1}
+.foto-hint{font-size:.78rem;color:#64748b;font-weight:800;letter-spacing:.01em;padding:6px;text-align:center}
 </style>
 </head>
 
@@ -330,7 +335,7 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,
     </div>
     <p>Escanea el código con la app de tu banco para realizar el pago:</p>
     <img src="QRRADIZ-38.png" alt="Código QR de pago RADIZ" style="max-width:100%;height:auto;border-radius:12px;display:block;margin:8px auto;">
-    <p style="font-size:.8rem;color:#6b7280;margin-top:4px;">Incluye tu ID de contrato en la referencia de pago.</p>
+    <p style="font-size:.8rem;color:#6b7280;margin-top:4px;">Incluye tu ID de contrato en la imagine this should have been; include tu ID de contrato en la referencia de pago.</p>
     <div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="cerrarModal('modalQR')">Cerrar</button></div>
   </div>
 </div>
@@ -444,6 +449,14 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,
     <label for="incidenteFecha" style="display:block;margin-top:10px;">Fecha del incidente</label>
     <input type="date" id="incidenteFecha">
 
+    <label for="incidenteFotos" style="display:block;margin-top:10px;">Adjuntar hasta 3 fotos</label>
+    <input id="incidenteFotos" type="file" accept="image/*" capture="environment" multiple onchange="onIncidenteFotosChange(event)">
+    <div class="fotos-grid" id="incidenteFotosGrid">
+      <div class="foto-box"><div class="foto-hint">Foto 1</div></div>
+      <div class="foto-box"><div class="foto-hint">Foto 2</div></div>
+      <div class="foto-box"><div class="foto-hint">Foto 3</div></div>
+    </div>
+
     <p id="incidenteMsg" class="status"></p>
 
     <div class="modal-actions">
@@ -529,13 +542,14 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,
 const API_URL="https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec",
 WOMPI_PUBLIC_KEY="pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06",
 WOMPI_INTEGRITY_KEY="prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN",
-WOMPI_REDIRECT_URL="https://portal.radizco.com/";
+WOMPI_REDIRECT_URL="https://portal.radizco.com/",
+EVIDENCIAS_FOLDER="EVIDENCIAS INCIDENTES";
 let idContratoActual=null,contratoActual=null,tipoUsuarioActual=null,pagosCache=[],mantenimientosCache=[],turnoSeleccionado=null,turnoDetalleActual=null,ultimaAceptacion=null,
-NOTIF_KEY="RADIZ_NOTIFS_ANON",META_KEY="RADIZ_NOTIF_META_ANON",ultimoPdfUrlAbierto="";
+NOTIF_KEY="RADIZ_NOTIFS_ANON",META_KEY="RADIZ_NOTIF_META_ANON",ultimoPdfUrlAbierto="",incidenteFotos=[];
 document.addEventListener("DOMContentLoaded",()=>{idContratoActual=obtenerIdContratoDeUrl();if(idContratoActual){NOTIF_KEY="RADIZ_NOTIFS_"+idContratoActual;META_KEY="RADIZ_NOTIF_META_"+idContratoActual}cargarContratoYSaludo(idContratoActual);cargarTurnosDisponibles();actualizarIndicadorNotificaciones();cerrarSheetMenu()});
 function obtenerIdContratoDeUrl(){const p=new URLSearchParams(location.search),id=(p.get("id")||"").trim().toUpperCase();return id||null}
 function irAVista(v){const map={home:"viewHome",turnos:"viewTurnos",mantenimientos:"viewMantenimientos",pagos:"viewPagos"};Object.values(map).forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove("active")});const target=document.getElementById(map[v]||"viewHome");if(target)target.classList.add("active");if(v==="pagos")cargarPagos();if(v==="mantenimientos")cargarMantenimientos()}
-function abrirModal(id){const el=document.getElementById(id);if(!el)return;el.style.display="flex";if(id==="modalContrato")renderContratoModal();if(id==="modalHistorialPagos")prepararModalHistorial();if(id==="modalBeneficios")prepararModalBeneficios();if(id==="modalTaller")prepararModalTaller()}
+function abrirModal(id){const el=document.getElementById(id);if(!el)return;el.style.display="flex";if(id==="modalContrato")renderContratoModal();if(id==="modalHistorialPagos")prepararModalHistorial();if(id==="modalBeneficios")prepararModalBeneficios();if(id==="modalTaller")prepararModalTaller();if(id==="modalIncidente")resetIncidenteUI()}
 function cerrarModal(id){const el=document.getElementById(id);if(!el)return;el.style.display="none";if(id==="modalConfirmarTurno"){const msg=document.getElementById("confirmarTurnoMsg");if(msg){msg.className="status";msg.textContent=""}const chk=document.getElementById("chkTerminos");if(chk)chk.checked=false;onToggleTerminos();turnoSeleccionado=null}}
 function abrirModalPdf(titulo,urlPdf){try{cerrarModal("modalHistorialPagos")}catch(e){}const modal=document.getElementById("modalPdfViewer"),frame=document.getElementById("pdfFrame"),title=document.getElementById("pdfTitle"),btnTab=document.getElementById("btnPdfNuevaPestana");if(title)title.textContent=titulo||"Documento";ultimoPdfUrlAbierto=urlPdf||"";if(btnTab)btnTab.style.display=ultimoPdfUrlAbierto?"inline-flex":"none";if(frame)frame.src=ultimoPdfUrlAbierto||"";if(modal){modal.style.zIndex="60";modal.style.display="flex"}}
 function cerrarModalPdf(){const modal=document.getElementById("modalPdfViewer"),frame=document.getElementById("pdfFrame"),btnTab=document.getElementById("btnPdfNuevaPestana");if(frame){frame.srcdoc="";frame.src="about:blank"}if(modal)modal.style.display="none";if(btnTab)btnTab.style.display="none";ultimoPdfUrlAbierto=""}
@@ -610,13 +624,16 @@ function renderContratoModal(){
   html+='<div class="mini-card"><h4>Mantenimientos</h4>';
   if(!mantenimientosCache||mantenimientosCache.length===0)html+="<p>No hay mantenimientos registrados para este contrato.</p>";
   else{
-    const totalM=mantenimientosCache.reduce((s,m)=>s+(Number(m["VALOR GENERAL"]||m["VALOR MTOS"])||0),0),m=mantenimientosCache[0]||{};
-    html+='<p><strong>Total mantenimientos:</strong> '+escapeHtml(formatearNumeroCOP(totalM))+"</p>";
-    html+='<p><strong>Placa:</strong> '+escapeHtml(m["ID VEHÍCULO"]||m["ID VEHICULO"]||placa)+"</p>";
-    html+='<p><strong>Último mantenimiento:</strong> '+escapeHtml(formatearFechaCorta(m["ÚLTIMO MANTENIMIENTO"]||m["ULTIMO MANTENIMIENTO"]||m["FECHA ULT. MANTENIMIENTO"]))+"</p>";
-    html+='<p><strong>Tipo de mantenimiento:</strong> '+escapeHtml(m["TIPO"]||m["TIPO ULT. MANTENIMIENTO"]||"")+"</p>";
-    html+='<p><strong>Realizados:</strong> '+escapeHtml(m["REALIZADOS"]||m["MTOS REALIZADOS"]||"")+"</p>";
-    html+='<p><strong>Taller asignado:</strong> '+escapeHtml(m["TALLER ASIGNADO"]||"Información no disponible")+"</p>";
+    const m=mantenimientosCache[0]||{};
+    const totalManual=getByKeys_(m,["TOTAL MANTENIMIENTOS","TOTAL MTOS","TOTAL MTO","VALOR TOTAL MANTENIMIENTOS","VALOR TOTAL"]);
+    const totalFallback=sumValorMtos_(mantenimientosCache);
+    const total=(String(totalManual||"").trim()!=="")?totalManual:totalFallback;
+    html+='<p><strong>Total mantenimientos:</strong> '+escapeHtml(formatearNumeroCOP(total))+"</p>";
+    html+='<p><strong>Placa:</strong> '+escapeHtml(getByKeys_(m,["ID VEHÍCULO","ID VEHICULO","PLACA"])||placa)+"</p>";
+    html+='<p><strong>Último mantenimiento:</strong> '+escapeHtml(formatearFechaCorta(getByKeys_(m,["ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO","FECHA ULT. MANTENIMIENTO","FECHA ULTIMO"])||""))+"</p>";
+    html+='<p><strong>Tipo de mantenimiento:</strong> '+escapeHtml(getByKeys_(m,["TIPO","TIPO ULT. MANTENIMIENTO","TIPO MANTENIMIENTO"])||"")+"</p>";
+    html+='<p><strong>Realizados:</strong> '+escapeHtml(getByKeys_(m,["REALIZADOS","MTOS REALIZADOS","MANTENIMIENTOS REALIZADOS"])||"")+"</p>';
+    html+='<p><strong>Taller asignado:</strong> '+escapeHtml(getByKeys_(m,["TALLER ASIGNADO","TALLER","PROVEEDOR"])||"Información no disponible")+"</p>";
   }
   html+="</div>";
   cont.innerHTML=html;
@@ -637,7 +654,7 @@ function prepararModalBeneficios(){
 }
 function prepararModalTaller(){
   const el=document.getElementById("modalTallerTexto");if(!el)return;
-  const taller=(mantenimientosCache&&mantenimientosCache[0])?(mantenimientosCache[0]["TALLER ASIGNADO"]||""):"";
+  const taller=(mantenimientosCache&&mantenimientosCache[0])?(getByKeys_(mantenimientosCache[0],["TALLER ASIGNADO","TALLER","PROVEEDOR"])||""):"";
   el.textContent=taller?("Taller asignado: "+taller):"Información no disponible.";
 }
 async function cargarTurnosDisponibles(){
@@ -948,6 +965,65 @@ async function enviarActualizacionKilometraje(){
     msg.className="status error";msg.textContent="Error al enviar la actualización. Intenta de nuevo.";
   }
 }
+function resetIncidenteUI(){
+  const msg=document.getElementById("incidenteMsg"),file=document.getElementById("incidenteFotos");
+  if(msg){msg.className="status";msg.textContent=""}
+  incidenteFotos=[];
+  if(file)file.value="";
+  renderIncidenteFotosGrid();
+}
+function renderIncidenteFotosGrid(){
+  const grid=document.getElementById("incidenteFotosGrid");if(!grid)return;
+  const slots=[0,1,2].map(i=>incidenteFotos[i]||null);
+  grid.innerHTML=slots.map((f,i)=>`
+    <div class="foto-box">
+      ${f?`<img src="${escapeHtml(f.preview)}" alt="Foto ${i+1}"><div class="foto-x" onclick="quitarFotoIncidente(${i})">×</div>`:`<div class="foto-hint">Foto ${i+1}</div>`}
+    </div>`).join("");
+}
+function quitarFotoIncidente(idx){incidenteFotos=incidenteFotos.filter((_,i)=>i!==idx);renderIncidenteFotosGrid()}
+function fileToJpegDataUrl_(file,maxW,quality){
+  return new Promise((resolve,reject)=>{
+    const fr=new FileReader();
+    fr.onerror=()=>reject(new Error("No fue posible leer la imagen."));
+    fr.onload=()=>{
+      const img=new Image();
+      img.onerror=()=>reject(new Error("No fue posible procesar la imagen."));
+      img.onload=()=>{
+        let w=img.width,h=img.height;
+        if(!w||!h)return reject(new Error("Imagen inválida."));
+        if(w>maxW){h=Math.round(h*(maxW/w));w=maxW}
+        const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;
+        const ctx=canvas.getContext("2d");ctx.drawImage(img,0,0,w,h);
+        const dataUrl=canvas.toDataURL("image/jpeg",quality);
+        resolve(dataUrl);
+      };
+      img.src=String(fr.result||"");
+    };
+    fr.readAsDataURL(file);
+  });
+}
+async function onIncidenteFotosChange(e){
+  const msg=document.getElementById("incidenteMsg");
+  try{
+    const files=Array.from((e&&e.target&&e.target.files)?e.target.files:[]);
+    if(files.length===0)return;
+    if(msg){msg.className="status muted";msg.textContent="Procesando fotos..."}
+    const remaining=3-incidenteFotos.length;
+    const pick=files.slice(0,remaining);
+    for(const f of pick){
+      const dataUrl=await fileToJpegDataUrl_(f,1280,.78);
+      const base64=dataUrl.split(",")[1]||"";
+      const safeName=("INC_"+(idContratoActual||"")+"_"+Date.now()+"_"+Math.random().toString(16).slice(2)+".jpg").toUpperCase();
+      incidenteFotos.push({name:safeName,type:"image/jpeg",base64,preview:dataUrl});
+      if(incidenteFotos.length>=3)break;
+    }
+    renderIncidenteFotosGrid();
+    if(msg){msg.className="status";msg.textContent=""}
+  }catch(err){
+    console.error(err);
+    if(msg){msg.className="status error";msg.textContent=(err&&err.message)?err.message:"No fue posible procesar las fotos."}
+  }
+}
 async function enviarIncidente(){
   const descInput=document.getElementById("incidenteDescripcion"),idVehInput=document.getElementById("incidenteIdVehiculo"),
   fechaInput=document.getElementById("incidenteFecha"),msg=document.getElementById("incidenteMsg");
@@ -962,9 +1038,17 @@ async function enviarIncidente(){
     formData.append("idVehiculo",idVeh);
     formData.append("idContrato",idContrato);
     formData.append("fecha",fecha);
+    formData.append("carpetaDrive",EVIDENCIAS_FOLDER);
+    const fotos=incidenteFotos.slice(0,3);
+    fotos.forEach((f,i)=>{
+      const n=i+1;
+      formData.append("foto"+n,f.base64||"");
+      formData.append("foto"+n+"_name",f.name||("FOTO_"+n+".jpg"));
+      formData.append("foto"+n+"_type",f.type||"image/jpeg");
+    });
     const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:formData.toString()}),
     data=await resp.json();
-    if(data.ok){msg.className="status ok";msg.textContent="Incidente registrado correctamente."}
+    if(data.ok){msg.className="status ok";msg.textContent="Incidente registrado correctamente.";addNotificacion({type:"incidente",title:"Incidente registrado",text:"Tu reporte fue enviado y las evidencias quedaron guardadas.",read:false});setTimeout(()=>{cerrarModal("modalIncidente");actualizarIndicadorNotificaciones()},900)}
     else{msg.className="status error";msg.textContent=data.error||"No fue posible registrar el incidente."}
   }catch(e){
     console.error(e);
@@ -1089,11 +1173,16 @@ function matchTipo_(m,needles){
   return needles.some(n=>s.includes(normKey_(n)));
 }
 function getConteosMtos_(arr){
+  const first=(arr&&arr[0])?arr[0]:null;
+  const aceiteM=toNumInt_(getByKeys_(first,["CAMBIOS DE ACEITE","CAMBIO DE ACEITE","CAMBIOS ACEITE","N CAMBIOS ACEITE","ACEITES","aceites"]));
+  const pastM=toNumInt_(getByKeys_(first,["PASTILLAS","PASTILLAS DE FRENO","CAMBIO PASTILLAS","CAMBIOS PASTILLAS","pastillas"]));
+  const kitM=toNumInt_(getByKeys_(first,["KIT DE ARRASTRE","KIT ARRASTRE","KITS DE ARRASTRE","CAMBIO KIT ARRASTRE","kitArrastre"]));
+  if(aceiteM||pastM||kitM)return{aceite:aceiteM,pastillas:pastM,kit:kitM};
   let aceite=0,pastillas=0,kit=0;
   (arr||[]).forEach(m=>{
-    const aNum=toNumInt_(getByKeys_(m,["CAMBIOS DE ACEITE","CAMBIO DE ACEITE","CAMBIOS ACEITE","N CAMBIOS ACEITE","N° CAMBIOS ACEITE","ACEITE","ACEITES","aceites","cambiosAceite"])),
-    pNum=toNumInt_(getByKeys_(m,["PASTILLAS","PASTILLA","PASTILLAS DE FRENO","PASTILLAS FRENO","CAMBIO PASTILLAS","CAMBIOS PASTILLAS","pastillas","cambiosPastillas"])),
-    kNum=toNumInt_(getByKeys_(m,["KIT DE ARRASTRE","KIT ARRASTRE","KITS DE ARRASTRE","CAMBIO KIT ARRASTRE","TRANSMISIÓN","TRANSMISION","kitArrastre"]));
+    const aNum=toNumInt_(getByKeys_(m,["CAMBIOS DE ACEITE","CAMBIO DE ACEITE","ACEITE","ACEITES","cambiosAceite"])),
+    pNum=toNumInt_(getByKeys_(m,["PASTILLAS","PASTILLA","PASTILLAS DE FRENO","CAMBIO PASTILLAS","pastillas","cambiosPastillas"])),
+    kNum=toNumInt_(getByKeys_(m,["KIT DE ARRASTRE","KIT ARRASTRE","CAMBIO KIT ARRASTRE","TRANSMISIÓN","TRANSMISION","kitArrastre"]));
     if(aNum||pNum||kNum){aceite+=aNum;pastillas+=pNum;kit+=kNum;return}
     if(matchTipo_(m,["ACEITES","ACEITE","CAMBIO ACEITE","CAMBIO DE ACEITE","ACEITE Y FILTRO","FILTRO ACEITE"]))aceite+=1;
     if(matchTipo_(m,["PASTILLAS","PASTILLA","PASTILLAS DE FRENO","FRENOS","FRENO DELANTERO","FRENO TRASERO"]))pastillas+=1;
@@ -1127,7 +1216,8 @@ function renderMantenimientosUI_(arr){
     const a=Array.isArray(arr)?arr:[];
     if(a.length===0){if(estado){estado.className="status muted";estado.textContent="No hay mantenimientos registrados para este contrato (por ahora)."}return}
     if(estado){estado.className="status ok";estado.textContent="Mantenimientos encontrados: "+a.length}
-    const total=sumValorMtos_(a),ultimo=pickUltimoMto_(a),proximo=pickProximoMto_(a),conteos=getConteosMtos_(a),
+    const first=a[0]||{},totalManual=getByKeys_(first,["TOTAL MANTENIMIENTOS","TOTAL MTOS","VALOR TOTAL MANTENIMIENTOS","VALOR TOTAL","TOTAL"]),totalFallback=sumValorMtos_(a),
+    total=(String(totalManual||"").trim()!=="")?totalManual:totalFallback,ultimo=pickUltimoMto_(a),proximo=pickProximoMto_(a),conteos=getConteosMtos_(a),
     placa=(contratoActual&&(contratoActual["ID VEHÍCULO"]||contratoActual["ID VEHICULO"]))||"",
     ultimoFecha=getByKeys_(ultimo,["FECHA","FECHA MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO","FECHA ULT. MANTENIMIENTO"])||"",
     ultimoTipo=getByKeys_(ultimo,["TIPO","TIPO MANTENIMIENTO","TIPO ULT. MANTENIMIENTO","MANTENIMIENTO","SERVICIO","DESCRIPCIÓN","DESCRIPCION"])||"",
