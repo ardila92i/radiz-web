@@ -1,430 +1,448 @@
-<!doctype html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<title>Portal Logístico RADIZ</title>
+<!doctype html><html lang="es"><head>
+<meta charset="UTF-8"><title>Portal Logístico RADIZ</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="/manifest.json">
 <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png">
+<link rel="apple-touch-icon" href="/icon-512.png">
 <script src="https://checkout.wompi.co/widget.js" async></script>
 <style>
 *{box-sizing:border-box}
-:root{--radiz-blue:#2563eb;--radiz-blue-2:#1d4ed8;--ink:#0f172a;--muted:#6b7280;--bg:#f5f6f8;--card:#fff;--border:#e5e7eb;--shadow:0 18px 45px rgba(15,23,42,.14);--shadow-soft:0 10px 24px rgba(15,23,42,.1);--radius-xl:24px;--radius-lg:18px;--radius-md:14px}
-html,body{height:100%;overflow:hidden;overscroll-behavior:none}
-body{margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
-.page{height:100vh;height:100dvh;display:flex;align-items:flex-start;justify-content:center;padding:14px 14px calc(86px + env(safe-area-inset-bottom));overflow:hidden}
-.container{width:100%;max-width:520px;background:transparent;border-radius:0;box-shadow:none;padding:0;position:relative;overflow:hidden;height:100%;display:flex;flex-direction:column}
-.topbar{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;gap:8px;padding:6px 6px 10px;flex:0 0 auto}
-.topbar-left{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:transparent}
-.logo-wrap{display:flex;align-items:center;justify-content:center;gap:8px}
-.logo{width:34px;height:34px;border-radius:10px;object-fit:contain;display:block}
-.bell-btn{width:42px;height:42px;border-radius:14px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--shadow-soft);transition:transform .12s,box-shadow .12s,border-color .12s;position:relative;flex:0 0 auto}
-.bell-btn:hover{transform:translateY(-1px);border-color:#bfdbfe;box-shadow:0 14px 30px rgba(37,99,235,.18)}
-.bell-dot{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:999px;background:#ef4444;border:2px solid #fff;display:none}
-.hello{margin:6px 8px 10px;font-size:1.05rem;font-weight:750;letter-spacing:.01em;color:var(--ink);flex:0 0 auto}
-.hello-name{color:var(--radiz-blue);font-weight:850}
-.subline{margin:0 8px 12px;font-size:.86rem;color:var(--muted);line-height:1.35;flex:0 0 auto}
-.view{display:none;flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
-.view.active{display:block}
-#viewHome{overflow:hidden}
-#viewHome.active{display:flex;flex-direction:column}
-.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:8px;margin-top:6px;flex:1 1 auto;overflow:hidden}
-.home-banner{flex:0 0 auto;margin:8px;border-radius:18px;overflow:hidden;background:#0b1b5a url("banner-turnos.png") center/cover no-repeat;aspect-ratio:1040/350;height:auto;box-shadow:0 12px 26px rgba(15,23,42,.08)}
-@media (max-width:520px){.home-banner{background-size:108% auto;background-position:center;aspect-ratio:1040/350}}
-.home-tile{border:1px solid var(--border);border-radius:18px;background:#fff;padding:14px 12px 12px;cursor:pointer;box-shadow:0 12px 26px rgba(15,23,42,.08);transition:transform .12s,box-shadow .12s,border-color .12s;display:flex;flex-direction:column;gap:8px;min-height:118px;position:relative;overflow:hidden}
-.home-tile:hover{transform:translateY(-2px);border-color:#bfdbfe;box-shadow:0 18px 34px rgba(37,99,235,.14)}
-.tile-icon{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:#eff6ff;color:var(--radiz-blue);transition:transform .2s}
-.home-tile:hover .tile-icon{animation:iconPop .35s ease-out}
-@keyframes iconPop{0%{transform:scale(1)}55%{transform:scale(1.08)}100%{transform:scale(1)}}
-.tile-title{font-weight:750;font-size:.95rem;margin:0}
-.tile-desc{margin:0;font-size:.82rem;color:var(--muted);line-height:1.35}
-.section-title{margin:6px 8px 6px;font-size:1rem;font-weight:800}
-.coverage{margin:0 8px 10px;font-size:.84rem;color:var(--muted);font-weight:650}
-.status{font-size:.85rem;margin:8px 8px 0;min-height:1.1em}
-.status.error{color:#b91c1c}
-.status.ok{color:#065f46}
-.status.muted{color:#9ca3af}
-.turnos-list{display:flex;flex-direction:column;gap:10px;margin:10px 8px 14px}
-.turno-mini{border:1px solid var(--border);border-radius:16px;background:#fff;padding:10px;display:grid;grid-template-columns:72px 1fr auto;gap:10px;align-items:center;cursor:pointer;box-shadow:0 10px 22px rgba(15,23,42,.08);transition:transform .12s,box-shadow .12s,border-color .12s}
-.turno-mini:hover{transform:translateY(-1px);border-color:#bfdbfe;box-shadow:0 16px 30px rgba(37,99,235,.12)}
-.img-placeholder{width:72px;height:56px;border-radius:14px;background:var(--radiz-blue);display:flex;align-items:center;justify-content:center;color:#fff;position:relative;overflow:hidden}
-.img-placeholder .img-hint{font-size:.72rem;opacity:.95;font-weight:700;letter-spacing:.02em}
-.turno-info{display:flex;flex-direction:column;gap:4px;min-width:0}
-.turno-topline{display:flex;align-items:center;gap:8px;min-width:0}
-.dot-green{width:10px;height:10px;border-radius:999px;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,.15);flex:0 0 auto}
-.turno-empresa{font-weight:850;font-size:.94rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.turno-meta{font-size:.82rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.turno-pay{font-weight:850;font-size:.9rem;color:#111827;padding-left:8px;white-space:nowrap}
-.card-agenda{margin:0 8px 10px;border-radius:18px;background:#0f172a;color:#f9fafb;border:1px solid #1f2937;box-shadow:0 16px 38px rgba(15,23,42,.5);padding:14px}
-.card-agenda h2{margin:0 0 4px;font-size:1.02rem;color:#f9fafb;font-weight:850}
-.agenda-dia{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:12px;background:rgba(15,23,42,.7);border:1px solid rgba(148,163,184,.35);font-size:.85rem;margin-top:10px}
-.agenda-fecha{font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:#bfdbfe}
-.agenda-turno{font-weight:800;font-size:.9rem}
-.agenda-detalle{font-size:.8rem;color:#e5e7eb}
-.btn{padding:10px 16px;border-radius:999px;border:none;font-size:.9rem;font-weight:750;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:8px;white-space:nowrap;transition:transform .1s,box-shadow .1s,background .1s,color .1s,opacity .1s;user-select:none}
-.btn-primary{background:var(--radiz-blue);color:#fff;box-shadow:0 10px 24px rgba(37,99,235,.4)}
-.btn-primary:hover{background:var(--radiz-blue-2);box-shadow:0 12px 30px rgba(37,99,235,.55);transform:translateY(-1px)}
-.btn-secondary{background:#e5e7eb;color:#111827;box-shadow:none}
-.btn-secondary:hover{background:#d1d5db;transform:translateY(-1px)}
-.btn[disabled]{opacity:.55;cursor:not-allowed;transform:none!important;box-shadow:none!important}
-.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:40;padding:18px}
-.modal{background:#fff;border-radius:18px;max-width:520px;width:100%;padding:16px 16px 14px;box-shadow:0 20px 45px rgba(15,23,42,.4);font-size:.9rem}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:10px}
-.modal-header h3{margin:0;font-size:1.05rem;font-weight:850}
-.modal-close{border:none;background:transparent;font-size:1.35rem;cursor:pointer;color:#6b7280;line-height:1}
-.modal p{margin:6px 0;color:#111827}
-.modal-actions{margin-top:12px;display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
-label{font-size:.88rem;font-weight:750;color:#374151}
-input[type="text"],input[type="number"],input[type="email"],input[type="date"]{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #d1d5db;font-size:.95rem;outline:none;background:#f9fafb}
-input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,235,.18);background:#fff;outline:none}
-.terms-frame{width:100%;height:66vh;border:1px solid var(--border);border-radius:14px;overflow:hidden}
-.terms-frame iframe{width:100%;height:100%;border:0}
-.noti-list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
-.noti-item{border:1px solid var(--border);border-radius:14px;padding:10px 12px;background:#fff;box-shadow:0 10px 22px rgba(15,23,42,.06);display:flex;gap:10px;align-items:flex-start}
-.noti-bullet{width:10px;height:10px;border-radius:999px;background:#ef4444;margin-top:6px;flex:0 0 auto}
-.noti-bullet.read{background:#d1d5db}
-.noti-body{min-width:0}
-.noti-title{margin:0;font-weight:850;font-size:.9rem}
-.noti-text{margin:2px 0 0;font-size:.84rem;color:var(--muted);line-height:1.35}
-.noti-time{margin:6px 0 0;font-size:.78rem;color:#9ca3af}
-.bottom-bar{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:center;padding:10px 14px calc(14px + env(safe-area-inset-bottom));z-index:30}
-.bottom-inner{width:100%;max-width:520px;background:#fff;border:1px solid var(--border);border-radius:18px;box-shadow:0 18px 40px rgba(15,23,42,.18);padding:10px;display:flex;justify-content:space-between;align-items:center;gap:10px}
-.nav-btn{width:50%;border:none;background:transparent;padding:10px;border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:850;color:#111827;transition:background .12s,transform .12s}
-.nav-btn:hover{background:#eff6ff;transform:translateY(-1px)}
-.nav-ico{width:22px;height:22px;color:var(--radiz-blue)}
-.sheet-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;z-index:35}
-.sheet{position:fixed;left:0;right:0;bottom:0;transition:transform .18s ease-out;z-index:36;display:flex;justify-content:center;padding:0 14px 14px;transform:translateY(110%);pointer-events:none}
-.sheet.open{transform:translateY(0);pointer-events:auto}
-.sheet-card{width:100%;max-width:520px;background:#fff;border:1px solid var(--border);border-radius:22px;box-shadow:0 24px 50px rgba(15,23,42,.28);overflow:hidden}
-.sheet-handle{width:44px;height:5px;border-radius:999px;background:#e5e7eb;margin:10px auto 6px}
-.sheet-title{padding:6px 16px 10px;font-size:.82rem;letter-spacing:.08em;text-transform:uppercase;color:#6b7280;font-weight:800}
-.sheet-item{padding:12px 16px;font-size:.95rem;font-weight:800;cursor:pointer;color:#111827;display:flex;align-items:center;justify-content:space-between;gap:10px;border-top:1px solid #f3f4f6}
-.sheet-item:hover{background:#eff6ff;color:#1d4ed8}
-.sheet-item.disabled{cursor:default;color:#9ca3af}
-.sheet-item.disabled:hover{background:#fff;color:#9ca3af}
-.mini-card{border:1px solid var(--border);border-radius:16px;padding:12px;background:#fff;box-shadow:0 10px 22px rgba(15,23,42,.06);margin-top:10px}
-.mini-card h4{margin:0 0 8px;font-size:.98rem;font-weight:900}
-.mini-card p{margin:4px 0;color:#111827;font-size:.88rem}
-.pagoError{display:none;color:#dc2626;margin-top:6px;font-size:.85rem}
-.img-placeholder.has-img{background:#fff;border:1px solid rgba(229,231,235,.9)}
-.turno-logo{width:100%;height:100%;object-fit:contain;display:block;padding:10px}
-#modalPdfViewer{z-index:60}
-.hist-row{padding:12px 8px;border-top:1px solid #f3f4f6}
-.hist-row:first-child{border-top:none}
-.hist-line{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;font-size:.92rem}
-.hist-label{color:#111827;font-weight:800}
-.hist-value{color:var(--radiz-blue);font-weight:900}
-</style>
-</head>
-<body>
-<div class="page"><div class="container">
-<div class="topbar">
-<div class="topbar-left"></div>
-<div class="logo-wrap" aria-label="RADIZ"><img src="/icon-192.png" alt="RADIZ" class="logo"></div>
-<button class="bell-btn" type="button" onclick="abrirNotificaciones()" aria-label="Notificaciones">
-<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="color:#111827" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 7h18s-3 0-3-7"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-<span id="bellDot" class="bell-dot"></span>
-</button>
-</div>
-<div class="hello" id="helloText">Hola</div>
-<div class="subline" id="sublineText">Bienvenido a tu panel de control general.</div>
+:root{--bg:#0b1220;--card:rgba(255,255,255,.04);--b:#1f2937;--t:#e5e7eb;--m:#9ca3af;--a:#2563eb;--a2:#1d4ed8;--ok:#22c55e;--bad:#ef4444;--w:#f59e0b;--r:18px}
+html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;position:fixed;inset:0;touch-action:none}
+body{margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial;color:var(--t);background:linear-gradient(180deg,#0b1220 0%,#070b14 100%)}
+a{color:inherit}
+#app{height:100dvh;display:flex;flex-direction:column}
+.top{padding:14px 16px 10px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{width:34px;height:34px;border-radius:10px;background:#0b1220;border:1px solid var(--b);display:grid;place-items:center;overflow:hidden}
+.logo img{width:100%;height:100%;object-fit:cover}
+.tt{line-height:1.05;min-width:0}
+.tt b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tt span{display:block;font-size:12px;color:var(--m);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pill{display:flex;gap:8px;align-items:center}
+.badge{font-size:12px;color:var(--m);border:1px solid var(--b);padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.03)}
+.btn{border:0;border-radius:14px;padding:10px 12px;font-weight:800;color:#fff;background:linear-gradient(180deg,var(--a) 0%,var(--a2) 100%);cursor:pointer}
+.btn:active{transform:translateY(1px)}
+.btn2{background:rgba(255,255,255,.06);border:1px solid var(--b);color:var(--t)}
+.main{flex:1;min-height:0;padding:0 16px 12px;display:flex;flex-direction:column;gap:12px}
+.view{display:none;flex:1;min-height:0}
+.view.on{display:flex;flex-direction:column;gap:12px;min-height:0}
+.card{background:var(--card);border:1px solid var(--b);border-radius:var(--r);padding:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kpi{display:flex;flex-direction:column;gap:4px}
+.kpi small{color:var(--m);font-size:12px}
+.kpi b{font-size:18px}
+.banner{border-radius:var(--r);overflow:hidden;border:1px solid var(--b);background:rgba(255,255,255,.03)}
+.banner img{width:100%;height:170px;object-fit:cover;display:block}
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid var(--b)}
+.item .l{min-width:0}
+.item .l b{display:block;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .l span{display:block;font-size:12px;color:var(--m);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item .r{display:flex;align-items:center;gap:8px}
+.chip{font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--b);background:rgba(255,255,255,.03);color:var(--m);white-space:nowrap}
+.chip.ok{color:#bdf7c9;border-color:rgba(34,197,94,.35);background:rgba(34,197,94,.12)}
+.chip.bad{color:#fecaca;border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.12)}
+.chip.w{color:#fde68a;border-color:rgba(245,158,11,.35);background:rgba(245,158,11,.12)}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:30;padding:10px 10px 14px;background:linear-gradient(180deg,rgba(7,11,20,0) 0%,rgba(7,11,20,.55) 18%,rgba(7,11,20,.92) 55%,rgba(7,11,20,.98) 100%)}
+.nav{background:rgba(255,255,255,.05);border:1px solid var(--b);border-radius:22px;padding:10px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.nbtn{border:1px solid transparent;border-radius:16px;padding:10px 8px;background:transparent;color:var(--m);font-weight:900;font-size:12px;cursor:pointer}
+.nbtn.on{color:var(--t);background:rgba(37,99,235,.16);border-color:rgba(37,99,235,.35)}
+.modal{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.55);padding:14px}
+.modal.on{display:flex}
+.mbox{width:min(980px,100%);height:min(720px,100%);background:#050814;border:1px solid var(--b);border-radius:22px;overflow:hidden;display:flex;flex-direction:column}
+.mhead{padding:10px 12px;display:flex;gap:10px;align-items:center;justify-content:space-between;border-bottom:1px solid var(--b);background:rgba(255,255,255,.03)}
+.mhead b{font-size:13px}
+.mbody{flex:1;min-height:0}
+iframe{border:0;width:100%;height:100%}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:92px;z-index:70;max-width:92vw;background:#050814;border:1px solid var(--b);border-radius:999px;padding:10px 14px;font-size:13px;color:var(--t);display:none;gap:10px;align-items:center}
+.toast.on{display:flex}
+.dot{width:8px;height:8px;border-radius:50%}
+.dot.ok{background:var(--ok)}.dot.bad{background:var(--bad)}.dot.w{background:var(--w)}
+.loginWrap{height:100dvh;display:flex;flex-direction:column;justify-content:center;gap:12px;padding:18px}
+.inp{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--b);background:rgba(255,255,255,.04);color:var(--t);outline:none;font-weight:900}
+.row{display:flex;gap:10px}
+.row>*{flex:1}
+small.hint{color:var(--m);display:block;margin-top:-6px}
+.brands{display:flex;gap:10px;align-items:center;justify-content:space-between}
+.brands img{height:26px;opacity:.95;filter:saturate(1.05);object-fit:contain}
+</style></head><body>
+<div id="app">
+  <div id="login" class="loginWrap">
+    <div class="brand">
+      <div class="logo"><img src="/logoradiz.png" alt=""></div>
+      <div class="tt"><b>Portal Logístico</b><span>Acceso a turnos, pagos y mantenimientos</span></div>
+    </div>
+    <div class="card">
+      <div class="row">
+        <input id="id" class="inp" placeholder="ID (Ej: R4523)" autocomplete="username">
+        <button id="btnGo" class="btn">Entrar</button>
+      </div>
+      <small class="hint">Pantalla fija (sin scroll). Si entras desde el portal principal, el ID llega automático.</small>
+    </div>
+    <div class="card">
+      <div class="brands">
+        <img src="coordinadora.png" alt="Coordinadora">
+        <img src="logoscuz-verde.png" alt="" style="display:none">
+        <img src="logoscruz-verde.png" alt="Cruz Verde">
+        <img src="servientrega.png" alt="Servientrega">
+        <img src="inter-rapidisimo.png" alt="Inter Rapidísimo">
+      </div>
+    </div>
+  </div>
 
-<div class="view active" id="viewHome">
-<div class="home-grid">
-<div class="home-tile" onclick="irAVista('turnos')"><div class="tile-icon"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></div><p class="tile-title">Turnos</p><p class="tile-desc">Revisa los turnos disponibles</p></div>
-<div class="home-tile" onclick="abrirModal('modalPerfil')"><div class="tile-icon"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21a8 8 0 0 0-16 0"/><circle cx="12" cy="8" r="4"/></svg></div><p class="tile-title">Mi perfil</p><p class="tile-desc">Los datos principales de tu contrato</p></div>
-<div class="home-tile" onclick="irAVista('mantenimientos')"><div class="tile-icon"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0-1.4 0l-.8.8-1.5-1.5a1 1 0 0 0-1.4 0L7.3 6.9a1 1 0 0 0 0 1.4l1.5 1.5-.8.8a1 1 0 0 0 0 1.4l1.2 1.2a1 1 0 0 0 1.4 0l.8-.8 1.5 1.5a1 1 0 0 0 1.4 0l1.3-1.3a1 1 0 0 0 0-1.4l-1.5-1.5.8-.8a1 1 0 0 0 0-1.4z"/><path d="M5 19h4"/><path d="M15 19h4"/></svg></div><p class="tile-title">Mantenimientos</p><p class="tile-desc">Historial y próximos mantenimientos</p></div>
-<div class="home-tile" onclick="irAVista('pagos')"><div class="tile-icon"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h12"/><path d="M9 12h12"/><path d="M9 18h12"/><path d="M4 6h.01"/><path d="M4 12h.01"/><path d="M4 18h.01"/></svg></div><p class="tile-title">Historial de pagos</p><p class="tile-desc">Consulte sus últimos movimientos</p></div>
-<div class="home-tile" onclick="abrirModal('modalContrato')"><div class="tile-icon"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div><p class="tile-title">Contrato</p><p class="tile-desc">Generalidades de su contrato</p></div>
-<div class="home-tile" onclick="abrirModal('modalPagar')"><div class="tile-icon"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/><path d="M7 15h6"/></svg></div><p class="tile-title">Pagar</p><p class="tile-desc">Paga con Wompi o escanéa el QR</p></div>
-</div>
-<div class="home-banner" aria-label="Espacio para imagen"></div>
-</div>
+  <div id="dash" style="display:none;height:100dvh;flex-direction:column">
+    <div class="top">
+      <div class="brand">
+        <div class="logo"><img src="/logoradiz.png" alt=""></div>
+        <div class="tt"><b id="tCliente">RADIZ</b><span id="tSub">Logística</span></div>
+      </div>
+      <div class="pill">
+        <div class="badge" id="tContrato">—</div>
+        <button class="btn btn2" id="btnSalir">Salir</button>
+      </div>
+    </div>
 
-<div class="view" id="viewTurnos">
-<div class="section-title">Turnos disponibles</div>
-<div class="coverage">Cobertura: Bogotá</div>
-<div id="turnosEstado" class="status muted">Cargando turnos publicados...</div>
-<div id="turnosList" class="turnos-list"></div>
-<div class="card-agenda">
-<h2>Mi agenda</h2>
-<p id="agendaEstado" class="status" style="color:#e5e7eb;margin:6px 0 0;">Aún no tienes turnos aceptados.</p>
-<div id="agendaContenido"></div>
-</div>
-</div>
+    <div class="main">
+      <div id="vHome" class="view on">
+        <div class="banner"><img src="banner-turnos.png" alt=""></div>
+        <div class="card">
+          <div class="grid">
+            <div class="kpi"><small>Próximo pago</small><b id="kProx">—</b></div>
+            <div class="kpi"><small>Estado</small><b id="kEstado">—</b></div>
+            <div class="kpi"><small>Pagos (últimos)</small><b id="kPagos">—</b></div>
+            <div class="kpi"><small>Mantenimientos</small><b id="kMant">—</b></div>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:12px">
+            <button class="btn" id="btnPagar" style="flex:1">Pagar</button>
+            <button class="btn btn2" id="btnQR">QR</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="list">
+            <div class="item" id="goTurnos"><div class="l"><b>Turnos publicados</b><span>Ver oportunidades disponibles</span></div><div class="r"><span class="chip">Abrir</span></div></div>
+            <div class="item" id="goMant"><div class="l"><b>Mantenimientos</b><span>Resumen + historial</span></div><div class="r"><span class="chip">Abrir</span></div></div>
+            <div class="item" id="goPagos"><div class="l"><b>Historial de pagos</b><span>Últimos 6 + visor</span></div><div class="r"><span class="chip">Abrir</span></div></div>
+          </div>
+        </div>
+      </div>
 
-<div class="view" id="viewMantenimientos">
-<div class="section-title">Panel de mantenimientos</div>
-<div id="mtosEstado" class="status muted" style="margin:8px;">Cargando mantenimientos...</div>
-<div id="mtosResumen" style="margin:8px;"></div>
-<div id="mtosLista" class="noti-list" style="margin:8px;"></div>
-</div>
+      <div id="vTurnos" class="view">
+        <div class="card"><div class="item" style="border:0;background:transparent;padding:0"><div class="l"><b>Turnos</b><span>Publicados para logística</span></div><div class="r"><button class="btn btn2" id="refTurnos">Actualizar</button></div></div></div>
+        <div class="card"><div id="turnosList" class="list"></div></div>
+      </div>
 
-<div class="view" id="viewPagos">
-<div class="section-title">Pagos</div>
-<div class="subline" style="margin:0 8px 12px;"></div>
-<div id="pagosEstado" class="status muted" style="margin:8px;">Cargando información...</div>
-<div id="pagosContenido" style="margin:8px;"></div>
+      <div id="vMant" class="view">
+        <div class="card"><div class="item" style="border:0;background:transparent;padding:0"><div class="l"><b>Mantenimientos</b><span>Resumen y últimos registros</span></div><div class="r"><button class="btn btn2" id="refMant">Refrescar</button></div></div></div>
+        <div class="card">
+          <div class="grid">
+            <div class="kpi"><small>Aceite</small><b id="mAceite">—</b></div>
+            <div class="kpi"><small>Pastillas</small><b id="mPastillas">—</b></div>
+            <div class="kpi"><small>Kit arrastre</small><b id="mKit">—</b></div>
+            <div class="kpi"><small>Total</small><b id="mTotal">—</b></div>
+          </div>
+        </div>
+        <div class="card"><div id="mantList" class="list"></div></div>
+      </div>
+
+      <div id="vPagos" class="view">
+        <div class="card"><div class="item" style="border:0;background:transparent;padding:0"><div class="l"><b>Pagos</b><span>Últimos 6</span></div><div class="r"><button class="btn btn2" id="refPagos">Actualizar</button></div></div></div>
+        <div class="card"><div id="pagosList" class="list"></div></div>
+      </div>
+    </div>
+
+    <div class="sheet">
+      <div class="nav">
+        <button class="nbtn on" data-go="Home">Home</button>
+        <button class="nbtn" data-go="Turnos">Turnos</button>
+        <button class="nbtn" data-go="Mant">Mant.</button>
+        <button class="nbtn" data-go="Pagos">Pagos</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-</div></div></div>
-
-<div class="bottom-bar"><div class="bottom-inner">
-<button class="nav-btn" type="button" onclick="irAVista('home')"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M9 22V12h6v10"/></svg>Home</button>
-<button class="nav-btn" type="button" onclick="abrirSheetMenu()"><svg class="nav-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/></svg>Menú</button>
+<div id="pdfModal" class="modal"><div class="mbox">
+  <div class="mhead"><b id="pdfTitle">Documento</b><button class="btn btn2" id="pdfClose">Cerrar</button></div>
+  <div class="mbody"><iframe id="pdfFrame" src=""></iframe></div>
 </div></div>
 
-<div class="sheet-backdrop" id="sheetBackdrop" onclick="cerrarSheetMenu()"></div>
-<div class="sheet" id="sheetMenu"><div class="sheet-card">
-<div class="sheet-handle"></div>
-<div class="sheet-title">Opciones</div>
-<div class="sheet-item" onclick="abrirModal('modalBeneficios');cerrarSheetMenu();">Beneficios <span>›</span></div>
-<div class="sheet-item" onclick="solicitarGrua();cerrarSheetMenu();">Solicitar grúa <span>›</span></div>
-<div class="sheet-item" onclick="abrirModal('modalActualizarKm');cerrarSheetMenu();">Actualizar kilometraje <span>›</span></div>
-<div class="sheet-item" onclick="abrirModal('modalSaldoFavor');cerrarSheetMenu();">Mi saldo a favor <span>›</span></div>
-<div class="sheet-item" onclick="abrirModal('modalAfiliado');cerrarSheetMenu();">Link de referidos <span>›</span></div>
-<div class="sheet-item" onclick="abrirModal('modalIncidente');cerrarSheetMenu();">Notificar incidente <span>›</span></div>
-<div class="sheet-item" onclick="abrirModal('modalTaller');cerrarSheetMenu();">Taller asignado <span>›</span></div>
-<div class="sheet-item" onclick="cerrarSesion();">Cerrar sesión <span>›</span></div>
+<div id="qrModal" class="modal"><div class="mbox" style="height:min(620px,100%)">
+  <div class="mhead"><b>Código QR</b><button class="btn btn2" id="qrClose">Cerrar</button></div>
+  <div class="mbody" style="display:flex;align-items:center;justify-content:center;padding:14px">
+    <div class="card" style="width:min(520px,100%);text-align:center">
+      <div style="font-weight:900;margin-bottom:8px">Escanea para pagar</div>
+      <img src="QRRADIZ-38.png" alt="QR RADIZ" style="max-width:100%;height:auto;border-radius:14px;border:1px solid var(--b)">
+      <div style="color:var(--m);font-size:12px;margin-top:10px">Incluye tu ID en la referencia del pago.</div>
+    </div>
+  </div>
 </div></div>
 
-<div class="modal-backdrop" id="modalPerfil"><div class="modal">
-<div class="modal-header"><h3>Mi perfil</h3><button class="modal-close" type="button" onclick="cerrarModal('modalPerfil')">&times;</button></div>
-<div id="perfilContenido"><p class="status muted">Cargando información de tu contrato...</p></div>
-</div></div>
-
-<div class="modal-backdrop" id="modalContrato"><div class="modal">
-<div class="modal-header"><h3>&nbsp;</h3><button class="modal-close" type="button" onclick="cerrarModal('modalContrato')">&times;</button></div>
-<div id="contratoContenido"><p class="status muted">Cargando información...</p></div>
-<div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="cerrarModal('modalContrato')">Cerrar</button></div>
-</div></div>
-
-<div class="modal-backdrop" id="modalPagar"><div class="modal">
-<div class="modal-header"><h3>Realizar pago</h3><button class="modal-close" type="button" onclick="cerrarModal('modalPagar')">&times;</button></div>
-<p style="margin-top:0;color:#4b5563;font-size:.9rem;">Ingresa el monto a pagar</p>
-<label for="montoPago">Valor (COP)</label>
-<input id="montoPago" type="number" min="170000" step="1000" placeholder="Ej: 170000">
-<p id="pagoError" class="pagoError">Ingresa un monto válido (mínimo 170.000).</p>
-<p id="pagoContratoError" class="pagoError">No se encontró tu ID de contrato.</p>
-<div class="modal-actions" style="justify-content:flex-end;">
-<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">
-<button type="button" class="btn btn-secondary" onclick="abrirModal('modalQR')">Ver QR</button>
-<button type="button" class="btn btn-primary" onclick="crearPagoWompi()">Pagar con Wompi</button>
-</div></div>
-</div></div>
-
-<div class="modal-backdrop" id="modalPdfViewer">
-<div class="modal" style="max-width:920px;width:94%;padding:14px 14px 12px;">
-<div class="modal-header" style="margin-bottom:10px;">
-<h3 id="pdfTitle" style="margin:0;">Documento</h3>
-<button class="modal-close" type="button" onclick="cerrarModalPdf()">&times;</button>
-</div>
-<div style="width:100%;height:min(72vh,720px);border-radius:12px;overflow:hidden;border:1px solid #e5e7eb;">
-<iframe id="pdfFrame" title="PDF" style="width:100%;height:100%;border:0;background:#fff;" referrerpolicy="no-referrer"></iframe>
-</div>
-<div class="modal-actions" style="margin-top:10px;justify-content:space-between;">
-<button type="button" class="btn btn-secondary" onclick="cerrarModalPdf()">Cerrar</button>
-<button type="button" class="btn btn-secondary" id="btnPdfNuevaPestana" style="display:none;" onclick="abrirPdfEnNuevaPestana()">Abrir en nueva pestaña</button>
-</div>
-</div>
-</div>
-
-<div class="modal-backdrop" id="modalQR"><div class="modal">
-<div class="modal-header"><h3>Pagar con código QR</h3><button class="modal-close" type="button" onclick="cerrarModal('modalQR')">&times;</button></div>
-<p>Escanea el código con la app de tu banco para realizar el pago:</p>
-<img src="QRRADIZ-38.png" alt="Código QR de pago RADIZ" style="max-width:100%;height:auto;border-radius:12px;display:block;margin:8px auto;">
-<p style="font-size:.8rem;color:#6b7280;margin-top:4px;">Incluye tu ID de contrato en la referencia de pago.</p>
-<div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="cerrarModal('modalQR')">Cerrar</button></div>
-</div></div>
-
-<div class="modal-backdrop" id="modalBeneficios"><div class="modal">
-<div class="modal-header"><h3>Beneficios del plan</h3><button class="modal-close" type="button" onclick="cerrarModal('modalBeneficios')">&times;</button></div>
-<div id="modalBeneficiosTexto">Información no disponible.</div>
-<div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="cerrarModal('modalBeneficios')">Cerrar</button></div>
-</div></div>
-
-<div class="modal-backdrop" id="modalHistorialPagos"><div class="modal">
-<div class="modal-header"><h3>Historial de pagos</h3><button class="modal-close" type="button" onclick="cerrarModal('modalHistorialPagos')">&times;</button></div>
-<p id="historialIntro" style="margin-bottom:6px;">Ingresa tu correo electrónico y el ID para solicitar tu historial en PDF.</p>
-<label for="correoHistorial" id="correoHistorialLabel">Correo electrónico</label>
-<input type="email" id="correoHistorial" placeholder="ejemplo@correo.com">
-<label for="idHistorial">ID</label>
-<input type="text" id="idHistorial" placeholder="Ej: R7467">
-<p id="historialMsg" style="font-size:.85rem;margin-top:6px;color:#6b7280;"></p>
-<div id="historialListaWrap" style="display:none;margin-top:10px;">
-<div style="border:1px solid #e5e7eb;border-radius:14px;background:#fff;padding:10px 12px;">
-<p style="margin:0 0 8px;color:#6b7280;font-size:.82rem;">Aquí podrás visualizar los últimos <strong>6</strong> pagos realizados en tu cuenta.</p>
-<div id="historialLista"></div>
-</div></div>
-<div class="modal-actions">
-<button type="button" class="btn btn-secondary" onclick="cerrarModal('modalHistorialPagos')">Cerrar</button>
-<button type="button" class="btn btn-secondary" id="btnHistorialEnviar" onclick="enviarSolicitudHistorial()">Enviar</button>
-<button type="button" class="btn btn-primary" id="btnHistorialDescargar" style="display:none;" onclick="descargarHistorialPdf()">Descargar PDF</button>
-</div>
-</div></div>
-
-<div class="modal-backdrop" id="modalActualizarKm"><div class="modal">
-<div class="modal-header"><h3>Actualizar kilometraje</h3><button class="modal-close" type="button" onclick="cerrarModal('modalActualizarKm')">&times;</button></div>
-<label for="kmValor">Kilometraje actual</label>
-<input type="number" id="kmValor" placeholder="Ej: 2500">
-<label for="kmIdVehiculo">Placa / ID vehículo</label>
-<input type="text" id="kmIdVehiculo" placeholder="Ej: WRG02H">
-<p id="kmMsg" class="status"></p>
-<div class="modal-actions">
-<button type="button" class="btn btn-secondary" onclick="cerrarModal('modalActualizarKm')">Cerrar</button>
-<button type="button" class="btn btn-primary" onclick="enviarActualizacionKilometraje()">Enviar</button>
-</div>
-</div></div>
-
-<div class="modal-backdrop" id="modalSaldoFavor"><div class="modal">
-<div class="modal-header"><h3>Mi saldo a favor</h3><button class="modal-close" type="button" onclick="cerrarModal('modalSaldoFavor')">&times;</button></div>
-<p>Tienes un saldo a favor por concepto de referidos: <strong>$0.00</strong>.</p>
-<div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="cerrarModal('modalSaldoFavor')">Cerrar</button></div>
-</div></div>
-
-<div class="modal-backdrop" id="modalAfiliado"><div class="modal">
-<div class="modal-header"><h3>Link de referidos</h3><button class="modal-close" type="button" onclick="cerrarModal('modalAfiliado')">&times;</button></div>
-<p>Comparte nuestro formulario con tu ID (ejemplo: R4523) y gana hasta $70.000 pesos por cada conductor aprobado.</p>
-<label for="linkAfiliadoInput">Link</label>
-<div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
-<input id="linkAfiliadoInput" type="text" readonly value="https://forms.gle/Lv1Rkp9qWQigUS4g8">
-<button type="button" class="btn btn-secondary" onclick="copiarLinkAfiliado()">Copiar</button>
-</div>
-<p id="linkAfiliadoMsg" style="font-size:.82rem;margin-top:8px;color:#6b7280;"></p>
-<div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="cerrarModal('modalAfiliado')">Cerrar</button></div>
-</div></div>
-
-<div class="modal-backdrop" id="modalIncidente"><div class="modal">
-<div class="modal-header"><h3>Notificar incidente</h3><button class="modal-close" type="button" onclick="cerrarModal('modalIncidente')">&times;</button></div>
-<label for="incidenteDescripcion">Describa lo sucedido en este campo</label>
-<textarea id="incidenteDescripcion" rows="4" style="width:100%;border-radius:10px;border:1px solid #d1d5db;padding:10px 12px;font-family:inherit;font-size:.95rem;background:#f9fafb;"></textarea>
-<label for="incidenteIdVehiculo" style="display:block;margin-top:10px;">Placa</label>
-<input type="text" id="incidenteIdVehiculo" placeholder="Ej: WRC01H">
-<label for="incidenteFecha" style="display:block;margin-top:10px;">Fecha del incidente</label>
-<input type="date" id="incidenteFecha">
-<p id="incidenteMsg" class="status"></p>
-<div class="modal-actions">
-<button type="button" class="btn btn-secondary" onclick="cerrarModal('modalIncidente')">Cerrar</button>
-<button type="button" class="btn btn-primary" onclick="enviarIncidente()">Enviar</button>
-</div>
-</div></div>
-
-<div class="modal-backdrop" id="modalTaller"><div class="modal">
-<div class="modal-header"><h3>Taller asignado</h3><button class="modal-close" type="button" onclick="cerrarModal('modalTaller')">&times;</button></div>
-<p id="modalTallerTexto">Información no disponible.</p>
-<div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="cerrarModal('modalTaller')">Cerrar</button></div>
-</div></div>
-
-<div class="modal-backdrop" id="modalDetalleTurno"><div class="modal">
-<div class="modal-header"><h3 id="detalleTurnoTitulo">Detalle del turno</h3><button class="modal-close" type="button" onclick="cerrarModal('modalDetalleTurno')">&times;</button></div>
-<div id="detalleTurnoMedia" class="img-placeholder" style="width:100%;height:160px;border-radius:16px;"><div class="img-hint">Logo</div></div>
-<div id="detalleTurnoContenido" style="margin-top:10px;"></div>
-<div class="modal-actions">
-<button type="button" class="btn btn-secondary" onclick="cerrarModal('modalDetalleTurno')">Cerrar</button>
-<button type="button" class="btn btn-primary" onclick="aceptarDesdeDetalle()">Aceptar turno</button>
-</div>
-</div></div>
-
-<div class="modal-backdrop" id="modalConfirmarTurno"><div class="modal">
-<div class="modal-header"><h3>Confirmar aceptación de turno</h3><button class="modal-close" type="button" onclick="cerrarModal('modalConfirmarTurno')">&times;</button></div>
-<p>¿Está seguro de aceptar el turno? Recuerde que es un compromiso laboral legal que cumple con toda la normativa vigente. En caso de incumplimiento se cargará a su cuenta los valores de penalización.</p>
-<div style="display:flex;align-items:flex-start;gap:10px;margin-top:10px;font-size:.86rem;color:#111827;">
-<input type="checkbox" id="chkTerminos" onchange="onToggleTerminos()" style="margin-top:3px;transform:scale(1.08);">
-<label for="chkTerminos" style="font-weight:650;">Acepto términos y condiciones del servicio de mensajería.</label>
-</div>
-<p id="confirmarTurnoMsg" class="status"></p>
-<div class="modal-actions">
-<button type="button" class="btn btn-secondary" onclick="cerrarModal('modalConfirmarTurno')">Cancelar</button>
-<button type="button" class="btn btn-secondary" onclick="abrirTerminosTurno()">Términos y condiciones</button>
-<button type="button" class="btn btn-primary" id="btnConfirmarTurno" onclick="confirmarAceptarTurno()" disabled>Confirmar</button>
-</div>
-</div></div>
-
-<div class="modal-backdrop" id="modalTerminosTurno"><div class="modal">
-<div class="modal-header"><h3>Términos y condiciones</h3><button class="modal-close" type="button" onclick="volverDesdeTerminos()">&times;</button></div>
-<div class="terms-frame"><iframe id="termsIframe" src="terminos_y_condiciones_turnos.pdf"></iframe></div>
-<div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="volverDesdeTerminos()">Volver</button></div>
-</div></div>
-
-<div class="modal-backdrop" id="modalNotificaciones"><div class="modal">
-<div class="modal-header"><h3>Notificaciones</h3><button class="modal-close" type="button" onclick="cerrarModal('modalNotificaciones')">&times;</button></div>
-<div id="notiEstado" class="status muted">Sin notificaciones.</div>
-<div id="notiList" class="noti-list"></div>
-<div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="cerrarModal('modalNotificaciones')">Cerrar</button></div>
-</div></div>
+<div id="toast" class="toast"><span id="tdot" class="dot ok"></span><span id="tmsg">OK</span></div>
 
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec",WOMPI_PUBLIC_KEY="pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06",WOMPI_INTEGRITY_KEY="prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN",WOMPI_REDIRECT_URL="https://portal.radizco.com/";
-let idContratoActual=null,contratoActual=null,tipoUsuarioActual=null,pagosCache=[],mantenimientosCache=[],turnoSeleccionado=null,turnoDetalleActual=null,ultimaAceptacion=null,NOTIF_KEY="RADIZ_NOTIFS_ANON",META_KEY="RADIZ_NOTIF_META_ANON",ultimoPdfUrlAbierto="";
-document.addEventListener("DOMContentLoaded",()=>{idContratoActual=obtenerIdContratoDeUrl();if(idContratoActual){NOTIF_KEY="RADIZ_NOTIFS_"+idContratoActual;META_KEY="RADIZ_NOTIF_META_"+idContratoActual}cargarContratoYSaludo(idContratoActual);cargarTurnosDisponibles();actualizarIndicadorNotificaciones();cerrarSheetMenu()});
-function obtenerIdContratoDeUrl(){const p=new URLSearchParams(location.search),id=(p.get("id")||"").trim().toUpperCase();return id||null}
-function irAVista(v){const map={home:"viewHome",turnos:"viewTurnos",mantenimientos:"viewMantenimientos",pagos:"viewPagos"};Object.values(map).forEach(id=>{const el=document.getElementById(id);el&&el.classList.remove("active")});(document.getElementById(map[v]||"viewHome")||null)?.classList.add("active");v==="pagos"&&cargarPagos();v==="mantenimientos"&&cargarMantenimientos()}
-function abrirModal(id){const el=document.getElementById(id);if(!el)return;el.style.display="flex";id==="modalContrato"&&renderContratoModal();id==="modalHistorialPagos"&&prepararModalHistorial();id==="modalBeneficios"&&prepararModalBeneficios();id==="modalTaller"&&prepararModalTaller()}
-function cerrarModal(id){const el=document.getElementById(id);if(!el)return;el.style.display="none";if(id==="modalConfirmarTurno"){const msg=document.getElementById("confirmarTurnoMsg");msg&&(msg.className="status",msg.textContent="");const chk=document.getElementById("chkTerminos");chk&&(chk.checked=false);onToggleTerminos();turnoSeleccionado=null}}
-function abrirModalPdf(titulo,urlPdf){try{cerrarModal("modalHistorialPagos")}catch(e){}const modal=document.getElementById("modalPdfViewer"),frame=document.getElementById("pdfFrame"),title=document.getElementById("pdfTitle"),btnTab=document.getElementById("btnPdfNuevaPestana");title&&(title.textContent=titulo||"Documento");ultimoPdfUrlAbierto=urlPdf||"";btnTab&&(btnTab.style.display=ultimoPdfUrlAbierto?"inline-flex":"none");frame&&(frame.src=ultimoPdfUrlAbierto||"");modal&&(modal.style.zIndex="60",modal.style.display="flex")}
-function cerrarModalPdf(){const modal=document.getElementById("modalPdfViewer"),frame=document.getElementById("pdfFrame"),btnTab=document.getElementById("btnPdfNuevaPestana");frame&&(frame.srcdoc="",frame.src="about:blank");modal&&(modal.style.display="none");btnTab&&(btnTab.style.display="none");ultimoPdfUrlAbierto=""}
-function abrirPdfEnNuevaPestana(){ultimoPdfUrlAbierto&&window.open(ultimoPdfUrlAbierto,"_blank")}
-function abrirSheetMenu(){const bd=document.getElementById("sheetBackdrop"),sh=document.getElementById("sheetMenu");if(!bd||!sh)return;bd.style.display="block";sh.classList.add("open")}
-function cerrarSheetMenu(){const bd=document.getElementById("sheetBackdrop"),sh=document.getElementById("sheetMenu");if(!bd||!sh)return;bd.style.display="none";sh.classList.remove("open")}
-function cerrarSesion(){try{localStorage.clear()}catch(e){}location.href="https://portal.radizco.com/"}
-function formatearFechaCorta(v){if(!v)return"";const d=new Date(v);if(isNaN(d.getTime()))return v;return d.toLocaleDateString("es-CO",{day:"2-digit",month:"2-digit",year:"numeric"})}
-function formatearHora(h){return h||""}
-function formatearNumeroCOP(n){const num=Number(n);if(isNaN(num))return n||"";return num.toLocaleString("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0})}
-function primerNombre(nombreCompleto){const s=String(nombreCompleto||"").trim();if(!s)return"";const p=s.split(" ").filter(Boolean);return p[0]||""}
-function obtenerLogoPorEmpresa(empresa){const key=String(empresa||"").trim().toUpperCase();if(key==="CRUZ VERDE")return"logoscruz-verde.png";return""}
-function normalizarLogoUrl(logo){const s=String(logo||"").trim();if(!s)return"";if(/^https?:\/\//i.test(s))return s;if(s.startsWith("/"))return s;return s}
-async function cargarContratoYSaludo(id){const hello=document.getElementById("helloText"),perfil=document.getElementById("perfilContenido");if(!id){hello&&(hello.textContent="Hola");perfil&&(perfil.innerHTML='<p class="status error">No se encontró el ID del contrato en la URL.</p>');return}perfil&&(perfil.innerHTML='<p class="status muted">Cargando información de tu contrato...</p>');try{const resp=await fetch(API_URL+"?id="+encodeURIComponent(id)),data=await resp.json();if(!data.ok){hello&&(hello.textContent="Hola");perfil&&(perfil.innerHTML='<p class="status error">'+(data.error||"No se encontró información para este ID.")+"</p>");return}const c=data.contrato||{};contratoActual=c;tipoUsuarioActual=(c["TIPO USUARIO"]||"").toString().toUpperCase();pagosCache=Array.isArray(data.pagos)?data.pagos:[];const rawM=data.mantenimientos??data.mantenimiento??[];mantenimientosCache=Array.isArray(rawM)?rawM:(rawM?[rawM]:[]);const nombre=primerNombre((c["NOMBRE"]||c["ID CLIENTE"]||"").toString());if(hello){nombre?hello.innerHTML='Hola, <span class="hello-name">'+escapeHtml(nombre)+"</span>":hello.textContent="Hola"}const placa=c["ID VEHÍCULO"]||c["ID VEHICULO"]||"",inicio=c["INICIO"]||"",ciudad=c["CIUDAD"]||"",estado=(c["ESTADO"]||"").toString().toUpperCase(),tarifa=c["TARIFA SEMANAL"]||"",km=c["KILOMETRAJE"]||c["KILOMETRAJE ACTUAL"]||"";let html="";html+="<p><strong>ID contrato:</strong> "+escapeHtml(c["ID CONTRATO"]||"")+"</p>";html+="<p><strong>Placa:</strong> "+escapeHtml(placa)+"</p>";html+="<p><strong>Inicio:</strong> "+escapeHtml(formatearFechaCorta(inicio))+"</p>";html+="<p><strong>Cobertura:</strong> "+escapeHtml(ciudad||"Bogotá")+"</p>";tarifa&&(html+="<p><strong>Tarifa semanal:</strong> "+escapeHtml(formatearNumeroCOP(tarifa))+"</p>");km&&(html+="<p><strong>Kilometraje actual:</strong> "+escapeHtml(km)+" km</p>");html+='<p><strong>Estado:</strong> '+(estado?'<span style="padding:2px 8px;border-radius:999px;background:'+(estado==="ACTIVO"?"#dcfce7;color:#166534":"#fee2e2;color:#b91c1c")+';">'+escapeHtml(estado)+"</span>":"SIN ESTADO")+"</p>";perfil&&(perfil.innerHTML=html)}catch(e){console.error(e);hello&&(hello.textContent="Hola");perfil&&(perfil.innerHTML='<p class="status error">Error al cargar la información del contrato.</p>')}}
-function renderContratoModal(){const cont=document.getElementById("contratoContenido");if(!cont)return;if(!contratoActual){cont.innerHTML='<p class="status error">No se encontró información del contrato.</p>';return}const c=contratoActual,estado=(c["ESTADO"]||"").toString().toUpperCase(),beneficiosTexto=(c["BENEFICIOS"]||"Información no disponible").toString(),id=(c["ID CONTRATO"]||"").toString().trim().toUpperCase(),placa=(c["ID VEHÍCULO"]||c["ID VEHICULO"]||"").toString(),esRenting=id.startsWith("R");let html="";html+='<div class="mini-card"><h4>Contrato</h4>';html+="<p><strong>ID:</strong> "+escapeHtml(id)+"</p>";html+="<p><strong>Tipo usuario:</strong> "+escapeHtml(c["TIPO USUARIO"]||"")+"</p>";html+="<p><strong>Vehículo:</strong> "+escapeHtml(placa)+"</p>";html+="<p><strong>Inicio:</strong> "+escapeHtml(formatearFechaCorta(c["INICIO"]))+"</p>";html+="<p><strong>Fin:</strong> "+escapeHtml(formatearFechaCorta(c["FIN"]))+"</p>";html+="<p><strong>Tarifa semanal:</strong> "+escapeHtml(formatearNumeroCOP(c["TARIFA SEMANAL"]))+"</p>";html+="<p><strong>Beneficios:</strong> "+escapeHtml(beneficiosTexto)+"</p>";html+='<p><strong>Estado:</strong> '+(estado?'<span style="padding:2px 8px;border-radius:999px;background:'+(estado==="ACTIVO"?"#dcfce7;color:#166534":"#fee2e2;color:#b91c1c")+';">'+escapeHtml(estado)+"</span>":"SIN ESTADO")+"</p></div>";html+='<div class="mini-card"><h4>Pagos</h4>';if(!pagosCache||pagosCache.length===0)html+="<p>No hay pagos registrados para este contrato.</p>";else{const p=pagosCache[0]||{},tarifasCompletadas=p["TARIFAS COMPLETADAS"]||"0",tarifasVencidas=p["TARIFAS VENCIDAS"]||"0",diaCorte=p["DÍAS DE CORTE"]||p["DIAS DE CORTE"]||"",tarifaSemanalNum=Number(c["TARIFA SEMANAL"]||0),tarifasVencidasNum=Number(tarifasVencidas||0),moraEstim=esRenting?tarifaSemanalNum*tarifasVencidasNum:0;html+="<p><strong>Día de corte:</strong> "+escapeHtml(diaCorte)+"</p>";html+="<p><strong>Tarifas completadas:</strong> "+escapeHtml(tarifasCompletadas)+"</p>";html+="<p><strong>Tarifas vencidas:</strong> "+escapeHtml(tarifasVencidas)+"</p>";esRenting&&moraEstim>0&&(html+="<p><strong>Mora estimada:</strong> "+escapeHtml(formatearNumeroCOP(moraEstim))+"</p>")}html+="</div>";html+='<div class="mini-card"><h4>Mantenimientos</h4>';if(!mantenimientosCache||mantenimientosCache.length===0)html+="<p>No hay mantenimientos registrados para este contrato.</p>";else{const totalM=mantenimientosCache.reduce((s,m)=>s+(Number(m["VALOR GENERAL"]||m["VALOR MTOS"])||0),0),m=mantenimientosCache[0]||{};html+="<p><strong>Total mantenimientos:</strong> "+escapeHtml(formatearNumeroCOP(totalM))+"</p>";html+="<p><strong>Placa:</strong> "+escapeHtml(m["ID VEHÍCULO"]||m["ID VEHICULO"]||placa)+"</p>";html+="<p><strong>Último mantenimiento:</strong> "+escapeHtml(formatearFechaCorta(m["ÚLTIMO MANTENIMIENTO"]||m["ULTIMO MANTENIMIENTO"]||m["FECHA ULT. MANTENIMIENTO"]))+"</p>";html+="<p><strong>Tipo de mantenimiento:</strong> "+escapeHtml(m["TIPO"]||m["TIPO ULT. MANTENIMIENTO"]||"")+"</p>";html+="<p><strong>Realizados:</strong> "+escapeHtml(m["REALIZADOS"]||m["MTOS REALIZADOS"]||"")+"</p>";html+="<p><strong>Taller asignado:</strong> "+escapeHtml(m["TALLER ASIGNADO"]||"Información no disponible")+"</p>"}html+="</div>";cont.innerHTML=html}
-function prepararModalBeneficios(){const el=document.getElementById("modalBeneficiosTexto");if(!el)return;if(!contratoActual){el.textContent="Información no disponible.";return}const c=contratoActual,beneficiosTexto=c["BENEFICIOS"]||"Información no disponible.",id=(c["ID CONTRATO"]||"").toString().trim().toUpperCase(),esRenting=id.startsWith("R");if(esRenting){el.innerHTML="";const img=document.createElement("img");img.alt="Beneficios Renting Radiz";img.style.maxWidth="100%";img.style.height="auto";img.style.borderRadius="12px";img.style.display="block";img.style.margin="6px auto";const v=Date.now(),candidates=[`beneficios_renting.png?v=${v}`,`./beneficios_renting.png?v=${v}`,`/logistica/beneficios_renting.png?v=${v}`,`/beneficios_renting.png?v=${v}`];let i=0;const tryNext=()=>{if(i>=candidates.length)return;img.src=candidates[i++]};img.onerror=()=>tryNext();tryNext();el.appendChild(img)}else el.textContent=beneficiosTexto||"Información no disponible."}
-function prepararModalTaller(){const el=document.getElementById("modalTallerTexto");if(!el)return;const taller=mantenimientosCache&&mantenimientosCache[0]?mantenimientosCache[0]["TALLER ASIGNADO"]||"":"";el.textContent=taller?"Taller asignado: "+taller:"Información no disponible."}
-async function cargarTurnosDisponibles(){const estado=document.getElementById("turnosEstado"),cont=document.getElementById("turnosList");cont&&(cont.innerHTML="");estado&&(estado.className="status muted",estado.textContent="Cargando turnos publicados...");try{const resp=await fetch(API_URL+"?accion=get_turnos_publicados"),data=await resp.json(),turnos=Array.isArray(data.turnos)?data.turnos:[];if(!data.ok||turnos.length===0){estado&&(estado.className="status error",estado.textContent="No hay turnos disponibles en este momento.");return}estado&&(estado.className="status ok",estado.textContent="Encontrados: "+turnos.length);if(cont)turnos.forEach(t=>{const idTurno=t.id_turno||t.idTurno||t.ID_TURNO||t["ID TURNO"]||t.codigo||t.codigo_turno||"TURNO",empresa=(t.empresa||t.cliente||t.CLIENTE||"Cruz Verde").toString().trim()||"Cruz Verde",logoPreferido=normalizarLogoUrl(t.logoUrl||t["LOGO URL"]||t["LOGO"]||""),logoFallback=normalizarLogoUrl(obtenerLogoPorEmpresa(empresa)),logoUrl=logoPreferido||logoFallback,direccion=t.direccion||t.DIRECCION||t["DIRECCIÓN"]||"",fecha=t.fecha||t.FECHA||"",hora=t.hora||t.HORA||t.inicio||t.INICIO||"",ciudad=t.ciudad||t.CIUDAD||"Bogotá",dias=t.dias||t.DIAS||t.duracion_dias||t.DURACION_DIAS||3,pagoEstimado=t.valorTurno||t.pago||t.PAGO||t.valor||t.VALOR||"",fechaTxt=formatearFechaCorta(fecha)||"Por definir",pagoTxt=pagoEstimado?formatearNumeroCOP(pagoEstimado):"Por definir",mini=document.createElement("div");mini.className="turno-mini";mini.onclick=()=>abrirDetalleTurno({idTurno,empresa,direccion,fecha,hora,ciudad,dias,pago:pagoEstimado,logoUrl});mini.innerHTML=`<div class="img-placeholder ${logoUrl?"has-img":""}" title="Tocar para ampliar">${logoUrl?`<img class="turno-logo" src="${escapeHtml(logoUrl)}" alt="Logo ${escapeHtml(empresa)}">`:`<div class="img-hint">Ver</div>`}</div><div class="turno-info"><div class="turno-topline"><div class="dot-green"></div><div class="turno-empresa">${escapeHtml(empresa)}</div></div><div class="turno-meta">${escapeHtml(fechaTxt)} • ${escapeHtml(ciudad)}</div></div><div class="turno-pay">${escapeHtml(pagoTxt)}</div>`;cont.appendChild(mini)});const meta=getNotifMeta();if(meta.lastTurnosCount!==turnos.length){meta.lastTurnosCount=turnos.length;setNotifMeta(meta);addNotificacion({type:"turnos",title:"Turnos disponibles",text:"Hay "+turnos.length+" turno(s) activo(s) en Bogotá.",read:false})}}catch(e){console.error(e);estado&&(estado.className="status error",estado.textContent="Error al cargar los turnos publicados.")}}
-function abrirDetalleTurno(turno){turnoDetalleActual=turno;const title=document.getElementById("detalleTurnoTitulo"),cont=document.getElementById("detalleTurnoContenido");title&&(title.textContent=(turno.empresa||"Cruz Verde")+" • "+(turno.idTurno||"TURNO"));const logoUrl=normalizarLogoUrl(turno.logoUrl||obtenerLogoPorEmpresa(turno.empresa));turno.logoUrl=logoUrl;const imgBox=document.getElementById("detalleTurnoMedia");if(imgBox)logoUrl?(imgBox.classList.add("has-img"),imgBox.innerHTML=`<img class="turno-logo" src="${escapeHtml(logoUrl)}" alt="Logo ${escapeHtml(turno.empresa||"")}">`):(imgBox.classList.remove("has-img"),imgBox.innerHTML='<div class="img-hint">Logo</div>');const dias=Number(turno.dias||3),textoDias=dias+" día"+(dias===1?"":"s")+" consecutivo"+(dias===1?"":"s");let html="";html+="<p><strong>Empresa:</strong> "+escapeHtml(turno.empresa||"Cruz Verde")+"</p>";html+="<p><strong>Dirección:</strong> "+escapeHtml(turno.direccion||"Por definir")+"</p>";html+="<p><strong>Fecha de inicio:</strong> "+escapeHtml(formatearFechaCorta(turno.fecha)||"Por definir")+"</p>";html+="<p><strong>Duración:</strong> "+escapeHtml(textoDias)+"</p>";html+="<p><strong>Hora de llegada:</strong> "+escapeHtml(formatearHora(turno.hora)||"Por definir")+"</p>";turno.pago&&(html+="<p><strong>Valor estimado:</strong> "+escapeHtml(formatearNumeroCOP(turno.pago))+"</p>");cont&&(cont.innerHTML=html);abrirModal("modalDetalleTurno")}
-function aceptarDesdeDetalle(){if(!turnoDetalleActual)return;cerrarModal("modalDetalleTurno");abrirConfirmacionTurno({idTurno:turnoDetalleActual.idTurno,cliente:turnoDetalleActual.empresa,direccion:turnoDetalleActual.direccion,fecha:turnoDetalleActual.fecha,hora:turnoDetalleActual.hora,ciudad:turnoDetalleActual.ciudad,dias:turnoDetalleActual.dias})}
-function abrirConfirmacionTurno(turno){turnoSeleccionado=turno;const msg=document.getElementById("confirmarTurnoMsg");msg&&(msg.className="status",msg.textContent="");const chk=document.getElementById("chkTerminos");chk&&(chk.checked=false);onToggleTerminos();abrirModal("modalConfirmarTurno")}
-function onToggleTerminos(){const chk=document.getElementById("chkTerminos"),btn=document.getElementById("btnConfirmarTurno");btn&&(btn.disabled=!(chk&&chk.checked))}
-function abrirTerminosTurno(){cerrarModal("modalConfirmarTurno");abrirModal("modalTerminosTurno")}
-function volverDesdeTerminos(){cerrarModal("modalTerminosTurno");abrirModal("modalConfirmarTurno")}
-async function confirmarAceptarTurno(){const msg=document.getElementById("confirmarTurnoMsg"),chk=document.getElementById("chkTerminos");if(!turnoSeleccionado){msg&&(msg.className="status error",msg.textContent="No se encontró el turno seleccionado.");return}if(!idContratoActual){msg&&(msg.className="status error",msg.textContent="No se encontró tu contrato. Vuelve a ingresar desde el portal principal.");return}if(!chk||!chk.checked){msg&&(msg.className="status error",msg.textContent="Debes aceptar los términos y condiciones antes de confirmar.");return}msg&&(msg.className="status muted",msg.textContent="Enviando solicitud de turno...");try{const fd=new URLSearchParams();fd.append("accion","solicitar_turno");fd.append("idContrato",idContratoActual);fd.append("idTurno",turnoSeleccionado.idTurno||"");fd.append("cliente",turnoSeleccionado.cliente||"Cruz Verde");fd.append("direccion",turnoSeleccionado.direccion||"");fd.append("fecha",turnoSeleccionado.fecha||"");fd.append("hora",turnoSeleccionado.hora||"");fd.append("ciudad",turnoSeleccionado.ciudad||"");fd.append("dias",turnoSeleccionado.dias||"");const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:fd.toString()}),data=await resp.json();if(!data.ok){msg&&(msg.className="status error",msg.textContent=data.error||"No fue posible registrar la aceptación del turno.");return}msg&&(msg.className="status ok",msg.textContent="Solicitud enviada. Recibirás la confirmación de asignación por WhatsApp.");addNotificacion({type:"turno",title:"Solicitud enviada",text:"Tu solicitud para el turno "+(turnoSeleccionado.idTurno||"")+" fue enviada.",read:false});ultimaAceptacion={turno:turnoSeleccionado,fechaBase:turnoSeleccionado.fecha||new Date().toISOString()};actualizarAgendaDesdeUltimaAceptacion();setTimeout(()=>{cerrarModal("modalConfirmarTurno");actualizarIndicadorNotificaciones()},900)}catch(e){console.error(e);msg&&(msg.className="status error",msg.textContent="Error al enviar la solicitud. Intenta de nuevo.")}}
-function actualizarAgendaDesdeUltimaAceptacion(){const cont=document.getElementById("agendaContenido"),estado=document.getElementById("agendaEstado");if(!cont||!estado)return;if(!ultimaAceptacion){estado.style.color="#e5e7eb";estado.textContent="Aún no tienes turnos aceptados.";cont.innerHTML="";return}const t=ultimaAceptacion.turno,dias=Number(t.dias||3);let base=new Date(ultimaAceptacion.fechaBase);isNaN(base.getTime())&&(base=new Date());let html="";for(let i=0;i<dias&&i<3;i++){const d=new Date(base.getTime());d.setDate(base.getDate()+i);const fechaTexto=d.toLocaleDateString("es-CO",{weekday:"short",day:"2-digit",month:"short",year:"numeric"});html+=`<div class="agenda-dia"><div class="agenda-fecha">${escapeHtml(fechaTexto)}</div><div class="agenda-turno">Turno ${escapeHtml(t.idTurno||"TURNO")}</div><div class="agenda-detalle"><strong>Cliente:</strong> ${escapeHtml(t.cliente||"Cruz Verde")}</div><div class="agenda-detalle"><strong>Dirección:</strong> ${escapeHtml(t.direccion||"Dirección por definir")}</div><div class="agenda-detalle"><strong>Hora de llegada:</strong> ${escapeHtml(formatearHora(t.hora)||"08:00 a.m.")}</div></div>`}estado.style.color="#bbf7d0";estado.textContent="Tu próximo turno activo:";cont.innerHTML=html}
-async function cargarPagos(){const estado=document.getElementById("pagosEstado"),cont=document.getElementById("pagosContenido");cont&&(cont.innerHTML="");estado&&(estado.className="status muted",estado.textContent="Cargando información...");if(!idContratoActual){estado&&(estado.className="status error",estado.textContent="No se encontró el ID del contrato.");return}try{const resp=await fetch(API_URL+"?accion=historial_pagos&id="+encodeURIComponent(idContratoActual)),data=await resp.json();if(!data.ok){estado&&(estado.className="status muted",estado.textContent="Próximamente verás pagos realizados y próximos pagos.");return}const pagos=Array.isArray(data.pagos)?data.pagos:[];if(pagos.length===0){estado&&(estado.className="status muted",estado.textContent="No hay pagos para mostrar (por ahora).");return}estado&&(estado.className="status ok",estado.textContent="Pagos encontrados: "+pagos.length);let html="";pagos.slice(0,20).forEach(p=>{html+=`<div class="noti-item" style="cursor:default;"><div class="noti-bullet read"></div><div class="noti-body"><p class="noti-title">${escapeHtml(p.consecutivo||"Pago")}</p><p class="noti-text">${escapeHtml(p.fecha||"")} • ${escapeHtml(formatearNumeroCOP(p.valor||0))}</p></div></div>`});cont&&(cont.innerHTML=html)}catch(e){console.error(e);estado&&(estado.className="status muted",estado.textContent="Próximamente verás pagos realizados y próximos pagos.")}}
-function limpiarHistorialListaUI(){const wrap=document.getElementById("historialListaWrap"),list=document.getElementById("historialLista");wrap&&(wrap.style.display="none");list&&(list.innerHTML="")}
-function renderHistorialLista(pagos){const wrap=document.getElementById("historialListaWrap"),list=document.getElementById("historialLista");if(!wrap||!list)return;const arr=Array.isArray(pagos)?pagos.slice(0,6):[];wrap.style.display="block";if(arr.length===0){list.innerHTML='<div class="hist-row" style="color:#6b7280;font-size:.9rem;">No hay pagos para mostrar.</div>';return}list.innerHTML=arr.map(p=>{const fecha=p.fecha||p.FECHA||p["FECHA"]||"",valor=p.valor||p.VALOR||p["VALOR"]||0;return`<div class="hist-row"><div class="hist-line"><span class="hist-label">Fecha de Pago:</span><span class="hist-value">${escapeHtml(formatearFechaCorta(fecha)||fecha||"—")}</span></div><div class="hist-line"><span class="hist-label">Valor de pago:</span><span class="hist-value">${escapeHtml(formatearNumeroCOP(valor)||valor||"—")}</span></div></div>`}).join("")}
-async function cargarHistorialListaUltimos6(idContrato){const url=API_URL+"?accion=historial_pagos_lista&id="+encodeURIComponent(idContrato),resp=await fetch(url),data=await resp.json();if(!data.ok)throw new Error(data.error||"No fue posible cargar el historial.");return Array.isArray(data.pagos)?data.pagos:[]}
-function prepararModalHistorial(){const correoLabel=document.getElementById("correoHistorialLabel"),correoInput=document.getElementById("correoHistorial"),idInput=document.getElementById("idHistorial"),msg=document.getElementById("historialMsg"),intro=document.getElementById("historialIntro"),btnEnviar=document.getElementById("btnHistorialEnviar"),btnDescargar=document.getElementById("btnHistorialDescargar");idInput&&idContratoActual&&(idInput.value=idContratoActual);msg&&(msg.textContent="",msg.style.color="#6b7280");limpiarHistorialListaUI();if(tipoUsuarioActual&&tipoUsuarioActual.toUpperCase()==="AFILIADO"){correoLabel&&(correoLabel.style.display="block");correoInput&&(correoInput.style.display="block");btnEnviar&&(btnEnviar.style.display="inline-flex");btnDescargar&&(btnDescargar.style.display="none");intro&&(intro.textContent="Ingresa tu correo electrónico y el ID para que nuestro equipo te envíe el historial en PDF.")}else{correoLabel&&(correoLabel.style.display="none");correoInput&&(correoInput.style.display="none");btnEnviar&&(btnEnviar.style.display="none");btnDescargar&&(btnDescargar.style.display="inline-flex");intro&&(intro.textContent="Aquí podrás visualizar tus últimos pagos (y si lo necesitas, descargar el PDF).");(async()=>{try{msg&&(msg.style.color="#6b7280",msg.textContent="Cargando últimos pagos...");const pagos=await cargarHistorialListaUltimos6(idContratoActual);renderHistorialLista(pagos);msg&&(msg.textContent="")}catch(e){console.error(e);msg&&(msg.style.color="#b91c1c",msg.textContent=e&&e.message?e.message:"No fue posible cargar el historial.")}})()}}
-async function enviarSolicitudHistorial(){const correo=document.getElementById("correoHistorial").value.trim(),idHist=document.getElementById("idHistorial").value.trim(),msg=document.getElementById("historialMsg");msg.style.color="#6b7280";msg.textContent="Enviando solicitud...";if(!correo||!idHist){msg.style.color="#b91c1c";msg.textContent="Debes ingresar el correo y el ID.";return}try{const fd=new URLSearchParams();fd.append("accion","solicitar_historial");fd.append("correo",correo);fd.append("idContrato",idHist);const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:fd.toString()}),data=await resp.json();data.ok?(msg.style.color="#065f46",msg.textContent="Solicitud enviada correctamente. Nuestro equipo revisará y enviará el historial al correo registrado."):(msg.style.color="#b91c1c",msg.textContent=data.error||"Ocurrió un problema al enviar la solicitud.")}catch(e){console.error(e);msg.style.color="#b91c1c";msg.textContent="Error al enviar la solicitud. Intenta de nuevo."}}
-async function leerRespuestaPdf(resp){const ct=(resp.headers.get("content-type")||"").toLowerCase();if(ct.includes("application/pdf")){const blob=await resp.blob(),url=URL.createObjectURL(blob);return{ok:true,url,kind:"blob"}}if(ct.includes("application/json"))return normalizarRespuestaPdf(await resp.json());const txt=await resp.text();try{return normalizarRespuestaPdf(JSON.parse(txt))}catch(e){}const finalUrl=resp.url||"";return finalUrl?{ok:true,url:finalUrl,kind:"fallback-url"}:{ok:false,error:"Respuesta no válida al generar el PDF."}}
-function normalizarRespuestaPdf(data){const ok=!!(data&&(data.ok===true||data.ok==="true"));if(!ok)return{ok:false,error:data&&data.error?data.error:"No fue posible generar el PDF."};const fileId=data.fileId||data.fileID||"",downloadUrl=data.downloadUrl||data.downloadURL||"",url=data.url||data.pdfUrl||data.viewUrl||"";if(url||fileId||downloadUrl)return{ok:true,url,fileId,downloadUrl,kind:"json"};const dataUri=data.dataUri||data.dataURI||data.base64||"";return typeof dataUri==="string"&&dataUri.startsWith("data:application/pdf")?{ok:true,url:dataUri,kind:"datauri"}:{ok:false,error:"El servidor respondió OK, pero no entregó la URL del PDF."}}
-function construirUrlEmbedPdf(res){if(!res)return"";const fid=String(res.fileId||"").trim();if(fid)return"https://drive.google.com/file/d/"+encodeURIComponent(fid)+"/preview";const url=String(res.url||"").trim();if(!url)return"";if(url.startsWith("blob:")||url.startsWith("data:application/pdf"))return url;if(url.includes("drive.google.com")){try{const u=new URL(url),id=u.searchParams.get("id");if(id)return"https://drive.google.com/file/d/"+encodeURIComponent(id)+"/preview"}catch(e){}const m=url.match(/\/file\/d\/([^/]+)/i);if(m&&m[1])return"https://drive.google.com/file/d/"+encodeURIComponent(m[1])+"/preview";const m2=url.match(/[?&]id=([^&]+)/i);if(m2&&m2[1])return"https://drive.google.com/file/d/"+encodeURIComponent(m2[1])+"/preview";return url}return url}
-async function obtenerHistorialPdfResponse(id){const acciones=["historial_pagos_pdf","historial-pagos-pdf"];let ultimoError="No fue posible generar el PDF.";for(const acc of acciones){const url=API_URL+"?accion="+encodeURIComponent(acc)+"&id="+encodeURIComponent(id);try{const resp=await fetch(url,{method:"GET",redirect:"follow"}),r=await leerRespuestaPdf(resp);if(r&&r.ok)return r;r&&r.error&&(ultimoError=r.error)}catch(e){console.error(e);ultimoError="Error al generar el PDF. Intenta de nuevo."}}const vistaUrl=API_URL+"?accion="+encodeURIComponent("historial_pagos_vista")+"&id="+encodeURIComponent(id);return{ok:true,url:vistaUrl,kind:"vista-html"}}
-async function descargarHistorialPdf(){const idInput=document.getElementById("idHistorial"),msg=document.getElementById("historialMsg"),id=((idInput&&idInput.value)?idInput.value:"").trim().toUpperCase();msg.style.color="#6b7280";msg.textContent="Generando PDF...";if(!id){msg.style.color="#b91c1c";msg.textContent="Debes ingresar tu ID de contrato.";return}try{const res=await obtenerHistorialPdfResponse(id),embedUrl=construirUrlEmbedPdf(res);msg.style.color="#065f46";msg.textContent=res.kind==="vista-html"?"Listo. Abriendo vista (puedes imprimir/guardar como PDF)...":"Listo. Abriendo PDF...";cerrarModal("modalHistorialPagos");setTimeout(()=>abrirModalPdf("Historial de pagos "+id,embedUrl),50)}catch(e){console.error(e);msg.style.color="#b91c1c";msg.textContent=e&&e.message?e.message:"No fue posible generar el PDF."}}
-function copiarLinkAfiliado(){const input=document.getElementById("linkAfiliadoInput"),msg=document.getElementById("linkAfiliadoMsg");input.focus();input.select();try{const ok=document.execCommand("copy");ok?(msg.style.color="#065f46",msg.textContent="Link copiado al portapapeles."):(msg.style.color="#b91c1c",msg.textContent="No se pudo copiar automáticamente. Selecciona y copia el link manualmente.")}catch(e){console.error(e);msg.style.color="#b91c1c";msg.textContent="No se pudo copiar automáticamente. Selecciona y copia el link manualmente."}}
-function solicitarGrua(){const mensaje="Hola, necesito solicitar grúa para mi vehículo.",url="https://wa.me/573159406263?text="+encodeURIComponent(mensaje);window.open(url,"_blank")}
-async function enviarActualizacionKilometraje(){const kmInput=document.getElementById("kmValor"),idVehInput=document.getElementById("kmIdVehiculo"),msg=document.getElementById("kmMsg");msg.className="status";msg.textContent="";const km=Number(kmInput.value||0),idVeh=(idVehInput.value||"").trim().toUpperCase(),idContrato=idContratoActual;if(!idContrato||!km){msg.classList.add("error");msg.textContent="Debes ingresar el kilometraje e iniciar sesión con tu contrato.";return}msg.textContent="Enviando actualización...";try{const fd=new URLSearchParams();fd.append("accion","actualizar_kilometraje");fd.append("kilometraje",km.toString());fd.append("idVehiculo",idVeh);fd.append("idContrato",idContrato);const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:fd.toString()}),data=await resp.json();data.ok?(msg.className="status ok",msg.textContent="Kilometraje actualizado correctamente."):(msg.className="status error",msg.textContent=data.error||"No fue posible actualizar el kilometraje.")}catch(e){console.error(e);msg.className="status error";msg.textContent="Error al enviar la actualización. Intenta de nuevo."}}
-async function enviarIncidente(){const descInput=document.getElementById("incidenteDescripcion"),idVehInput=document.getElementById("incidenteIdVehiculo"),fechaInput=document.getElementById("incidenteFecha"),msg=document.getElementById("incidenteMsg");msg.className="status";msg.textContent="";const descripcion=(descInput.value||"").trim(),idVeh=(idVehInput.value||"").trim().toUpperCase(),fecha=fechaInput.value,idContrato=idContratoActual;if(!idContrato||!descripcion){msg.classList.add("error");msg.textContent="Debes ingresar la descripción y tener un contrato cargado.";return}msg.textContent="Enviando incidente...";try{const fd=new URLSearchParams();fd.append("accion","notificar_incidente");fd.append("descripcion",descripcion);fd.append("idVehiculo",idVeh);fd.append("idContrato",idContrato);fd.append("fecha",fecha);const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:fd.toString()}),data=await resp.json();data.ok?(msg.className="status ok",msg.textContent="Incidente registrado correctamente."):(msg.className="status error",msg.textContent=data.error||"No fue posible registrar el incidente.")}catch(e){console.error(e);msg.className="status error";msg.textContent="Error al enviar el incidente. Intenta de nuevo."}}
-async function generarIntegritySignature(reference,amountInCents,currency){const encoder=new TextEncoder(),data=`${reference}${amountInCents}${currency}${WOMPI_INTEGRITY_KEY}`,hashBuffer=await crypto.subtle.digest("SHA-256",encoder.encode(data)),hashArray=Array.from(new Uint8Array(hashBuffer));return hashArray.map(b=>b.toString(16).padStart(2,"0")).join("")}
-async function crearPagoWompi(){const montoInput=document.getElementById("montoPago"),errorLabel=document.getElementById("pagoError"),contratoError=document.getElementById("pagoContratoError"),valor=parseInt(montoInput.value,10),idContrato=(idContratoActual||"").trim().toUpperCase();errorLabel&&(errorLabel.style.display="none");contratoError&&(contratoError.style.display="none");if(!idContrato){contratoError&&(contratoError.style.display="block");return}if(!valor||valor<170000){errorLabel&&(errorLabel.style.display="block");return}if(typeof WidgetCheckout==="undefined"){alert("No se pudo cargar el checkout de Wompi. Por favor recarga la página.");return}const amountInCents=valor*100,reference="PAGO_"+idContrato+"_"+Date.now(),currency="COP";try{const integritySignature=await generarIntegritySignature(reference,amountInCents,currency),checkout=new WidgetCheckout({currency,amountInCents,reference,publicKey:WOMPI_PUBLIC_KEY,signature:{integrity:integritySignature},redirectUrl:WOMPI_REDIRECT_URL});checkout.open(result=>{const t=result.transaction;console.log("Transacción Wompi:",t&&t.id,t&&t.status);registrarPagoEnSheet(reference,valor,idContrato)})}catch(e){console.error("Error generando firma de integridad",e);alert("No fue posible iniciar el pago. Intenta de nuevo.")}}
-async function registrarPagoEnSheet(reference,valor,idContrato){try{const fd=new URLSearchParams();fd.append("accion","registrar_pago_portal");fd.append("referencia",reference);fd.append("monto",valor);fd.append("idContrato",idContrato);fd.append("origen","PORTAL_LOGISTICA");fd.append("sheet","PORTAL_PAGOS");await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:fd.toString()})}catch(e){console.error("Error registrando pago (portal) en hoja",e)}try{const fd2=new URLSearchParams();fd2.append("accion","registrar_pago");fd2.append("referencia",reference);fd2.append("monto",valor);fd2.append("idContrato",idContrato);fd2.append("origen","PORTAL_LOGISTICA");await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:fd2.toString()})}catch(e){console.error("Error registrando pago (fallback) en hoja",e)}}
-function getNotificaciones(){try{const raw=localStorage.getItem(NOTIF_KEY),arr=raw?JSON.parse(raw):[];return Array.isArray(arr)?arr:[]}catch(e){return[]}}
-function setNotificaciones(arr){try{localStorage.setItem(NOTIF_KEY,JSON.stringify(arr||[]))}catch(e){}}
-function getNotifMeta(){try{const raw=localStorage.getItem(META_KEY);return raw?JSON.parse(raw):{}}catch(e){return{}}}
-function setNotifMeta(obj){try{localStorage.setItem(META_KEY,JSON.stringify(obj||{}))}catch(e){}}
-function addNotificacion(n){const list=getNotificaciones(),item={id:"N"+Date.now(),type:n.type||"info",title:n.title||"Notificación",text:n.text||"",ts:Date.now(),read:!!n.read};list.unshift(item);setNotificaciones(list.slice(0,50));actualizarIndicadorNotificaciones()}
-function hayNoLeidas(){return getNotificaciones().some(n=>!n.read)}
-function actualizarIndicadorNotificaciones(){const dot=document.getElementById("bellDot");dot&&(dot.style.display=hayNoLeidas()?"block":"none")}
-function abrirNotificaciones(){renderNotificaciones();abrirModal("modalNotificaciones");const list=getNotificaciones(),updated=list.map(n=>(n.read=true,n));setNotificaciones(updated);actualizarIndicadorNotificaciones();renderNotificaciones()}
-function renderNotificaciones(){const estado=document.getElementById("notiEstado"),cont=document.getElementById("notiList");cont&&(cont.innerHTML="");const list=getNotificaciones();if(list.length===0){estado&&(estado.className="status muted",estado.textContent="Sin notificaciones.");return}estado&&(estado.className="status ok",estado.textContent="Historial: "+list.length);cont&&list.forEach(n=>{const d=new Date(n.ts),time=isNaN(d.getTime())?"":d.toLocaleString("es-CO",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}),item=document.createElement("div");item.className="noti-item";item.innerHTML=`<div class="noti-bullet ${n.read?"read":""}"></div><div class="noti-body"><p class="noti-title">${escapeHtml(n.title)}</p><p class="noti-text">${escapeHtml(n.text)}</p><p class="noti-time">${escapeHtml(time)}</p></div>`;cont.appendChild(item)})}
-function escapeHtml(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
-function normKey_(s){return String(s||"").toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim()}
-function getByKeys_(obj,keys){if(!obj)return"";for(const k of keys)if(Object.prototype.hasOwnProperty.call(obj,k))return obj[k];const target=keys.map(k=>normKey_(k));for(const realKey in obj){const rk=normKey_(realKey),idx=target.indexOf(rk);if(idx!==-1)return obj[realKey]}return""}
-function parseDateLoose_(v){if(!v)return null;if(v instanceof Date&&!isNaN(v.getTime()))return v;const s=String(v).trim();if(!s)return null;const d1=new Date(s);if(!isNaN(d1.getTime()))return d1;const m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);if(m){const dd=parseInt(m[1],10),mm=parseInt(m[2],10)-1;let yy=parseInt(m[3],10);yy<100&&(yy+=2000);const d2=new Date(yy,mm,dd);if(!isNaN(d2.getTime()))return d2}return null}
-function sumValorMtos_(arr){return(arr||[]).reduce((acc,m)=>{const v=getByKeys_(m,["VALOR GENERAL","VALOR MTOS","VALOR","COSTO","COSTO GENERAL"]),n=Number(v||0);return acc+(isNaN(n)?0:n)},0)}
-function toNumInt_(v){const n=Number(String(v??"").replace(/[^\d.-]/g,""));return isNaN(n)?0:Math.round(n)}
-function matchTipo_(m,needles){const tipo=getByKeys_(m,["TIPO","TIPO MANTENIMIENTO","MANTENIMIENTO","SERVICIO","DESCRIPCIÓN","DESCRIPCION","DETALLE","NOTAS"])||"",s=normKey_(tipo);return needles.some(n=>s.includes(normKey_(n)))}
-function getConteosMtos_(arr){let aceite=0,pastillas=0,kit=0;(arr||[]).forEach(m=>{const aNum=toNumInt_(getByKeys_(m,["CAMBIOS DE ACEITE","CAMBIO DE ACEITE","CAMBIOS ACEITE","N CAMBIOS ACEITE","N° CAMBIOS ACEITE","ACEITE","ACEITES","aceites","cambiosAceite"])),pNum=toNumInt_(getByKeys_(m,["PASTILLAS","PASTILLA","PASTILLAS DE FRENO","PASTILLAS FRENO","CAMBIO PASTILLAS","CAMBIOS PASTILLAS","pastillas","cambiosPastillas"])),kNum=toNumInt_(getByKeys_(m,["KIT DE ARRASTRE","KIT ARRASTRE","KITS DE ARRASTRE","CAMBIO KIT ARRASTRE","TRANSMISIÓN","TRANSMISION","kitArrastre"]));if(aNum||pNum||kNum){aceite+=aNum;pastillas+=pNum;kit+=kNum;return}matchTipo_(m,["ACEITES","ACEITE","CAMBIO ACEITE","CAMBIO DE ACEITE","ACEITE Y FILTRO","FILTRO ACEITE"])&&(aceite+=1);matchTipo_(m,["PASTILLAS","PASTILLA","PASTILLAS DE FRENO","FRENOS","FRENO DELANTERO","FRENO TRASERO"])&&(pastillas+=1);matchTipo_(m,["KIT DE ARRASTRE","KIT ARRASTRE","ARRASTRE","CADENA","SPROCKET","CORONA","PIÑON","PIÑÓN","TRANSMISION","TRANSMISIÓN"])&&(kit+=1)});return{aceite,pastillas,kit}}
-function pickUltimoMto_(arr){let best=null,bestT=-1;(arr||[]).forEach(m=>{const f=getByKeys_(m,["FECHA","FECHA MANTENIMIENTO","F. MANTENIMIENTO","FECHA ULT. MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO"]),d=parseDateLoose_(f),t=d?d.getTime():-1;t>bestT&&(bestT=t,best=m)});return best}
-function pickProximoMto_(arr){const now=Date.now();let best=null,bestT=Infinity;(arr||[]).forEach(m=>{const f=getByKeys_(m,["PRÓXIMO MANTENIMIENTO","PROXIMO MANTENIMIENTO","FECHA PROX","FECHA PRÓXIMA","PROXIMA FECHA","PRÓXIMA FECHA"]),d=parseDateLoose_(f),t=d?d.getTime():Infinity;t>=now&&t<bestT&&(bestT=t,best=m)});return best}
-function renderMantenimientosUI_(arr){const estado=document.getElementById("mtosEstado"),resumen=document.getElementById("mtosResumen"),lista=document.getElementById("mtosLista");resumen&&(resumen.innerHTML="");lista&&(lista.innerHTML="");try{if(!idContratoActual){estado&&(estado.className="status error",estado.textContent="No se encontró el ID del contrato.");return}const a=Array.isArray(arr)?arr:[];if(a.length===0){estado&&(estado.className="status muted",estado.textContent="No hay mantenimientos registrados para este contrato (por ahora).");return}estado&&(estado.className="status ok",estado.textContent="Mantenimientos encontrados: "+a.length);const total=sumValorMtos_(a),ultimo=pickUltimoMto_(a),proximo=pickProximoMto_(a),conteos=getConteosMtos_(a),placa=(contratoActual&&(contratoActual["ID VEHÍCULO"]||contratoActual["ID VEHICULO"]))||"",ultimoFecha=getByKeys_(ultimo,["FECHA","FECHA MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO","FECHA ULT. MANTENIMIENTO"])||"",ultimoTipo=getByKeys_(ultimo,["TIPO","TIPO MANTENIMIENTO","TIPO ULT. MANTENIMIENTO","MANTENIMIENTO","SERVICIO","DESCRIPCIÓN","DESCRIPCION"])||"",ultimoKm=getByKeys_(ultimo,["KILOMETRAJE","KM","KMS","KILOMETRAJE ACTUAL"])||"",ultimoTaller=getByKeys_(ultimo,["TALLER","TALLER ASIGNADO","PROVEEDOR"])||"",proxFecha=proximo?(getByKeys_(proximo,["PRÓXIMO MANTENIMIENTO","PROXIMO MANTENIMIENTO","FECHA PROX","FECHA PRÓXIMA","PRÓXIMA FECHA","PROXIMA FECHA"])||""):"";if(resumen){let html='<div class="mini-card"><h4>Resumen</h4>';placa&&(html+="<p><strong>Placa:</strong> "+escapeHtml(placa)+"</p>");html+="<p><strong>Total mantenimientos:</strong> "+escapeHtml(formatearNumeroCOP(total))+"</p>";html+="<p><strong>Cambios de aceite:</strong> "+escapeHtml(String(conteos.aceite||0))+"</p>";html+="<p><strong>Pastillas:</strong> "+escapeHtml(String(conteos.pastillas||0))+"</p>";html+="<p><strong>Kit de arrastre:</strong> "+escapeHtml(String(conteos.kit||0))+"</p>";ultimoFecha&&(html+="<p><strong>Último mantenimiento:</strong> "+escapeHtml(formatearFechaCorta(ultimoFecha)||ultimoFecha)+"</p>");ultimoTipo&&(html+="<p><strong>Tipo:</strong> "+escapeHtml(ultimoTipo)+"</p>");ultimoKm&&(html+="<p><strong>Kilometraje:</strong> "+escapeHtml(ultimoKm)+" km</p>");ultimoTaller&&(html+="<p><strong>Taller:</strong> "+escapeHtml(ultimoTaller)+"</p>");proxFecha&&(html+="<p><strong>Próximo mantenimiento:</strong> "+escapeHtml(formatearFechaCorta(proxFecha)||proxFecha)+"</p>");html+="</div>";resumen.innerHTML=html}const sorted=a.slice().sort((x,y)=>{const dx=parseDateLoose_(getByKeys_(x,["FECHA","FECHA MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO"]))||new Date(0),dy=parseDateLoose_(getByKeys_(y,["FECHA","FECHA MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO"]))||new Date(0);return dy.getTime()-dx.getTime()}),top=sorted.slice(0,50);if(lista)top.forEach(m=>{const f=getByKeys_(m,["FECHA","FECHA MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO"])||"",tipo=getByKeys_(m,["TIPO","TIPO MANTENIMIENTO","MANTENIMIENTO","SERVICIO","DESCRIPCIÓN","DESCRIPCION"])||"Mantenimiento",valor=getByKeys_(m,["VALOR GENERAL","VALOR MTOS","VALOR","COSTO","COSTO GENERAL"])||"",taller=getByKeys_(m,["TALLER","TALLER ASIGNADO","PROVEEDOR"])||"",card=document.createElement("div");card.className="noti-item";card.style.cursor="default";const fechaTxt=formatearFechaCorta(f)||f||"Fecha por definir",valorTxt=valor!==""?formatearNumeroCOP(valor):"",extra=[valorTxt,taller].filter(Boolean).join(" • ");card.innerHTML=`<div class="noti-bullet read"></div><div class="noti-body"><p class="noti-title">${escapeHtml(tipo)}</p><p class="noti-text">${escapeHtml(fechaTxt)}${extra?" • "+escapeHtml(extra):""}</p></div>`;lista.appendChild(card)})}catch(e){console.error(e);estado&&(estado.className="status error",estado.textContent="No fue posible cargar el panel de mantenimientos.")}}
-function cargarMantenimientos(){const estado=document.getElementById("mtosEstado");estado&&(estado.className="status muted",estado.textContent="Cargando mantenimientos...");if(!contratoActual&&idContratoActual){cargarContratoYSaludo(idContratoActual).then(()=>renderMantenimientosUI_(mantenimientosCache)).catch(()=>renderMantenimientosUI_(mantenimientosCache));return}renderMantenimientosUI_(mantenimientosCache)}
-</script>
-</body>
-</html>
+const API_URL='https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
+const WOMPI_PUBLIC_KEY='pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06';
+const WOMPI_INTEGRITY_KEY='prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN';
+const WOMPI_REDIRECT_URL=(location.origin||'https://portal.radizco.com')+'/logistica/';
+const API_CALLBACK_URL=API_URL;
 
+let S={id:'',tipo:'',contrato:null,pagos:null,mantenimientos:null,resumen:null,turnos:null};
+
+const $=s=>document.querySelector(s);
+const $$=s=>Array.from(document.querySelectorAll(s));
+const qs=o=>Object.entries(o).filter(([,v])=>v!==undefined&&v!==null&&v!=='').map(([k,v])=>encodeURIComponent(k)+'='+encodeURIComponent(v)).join('&');
+const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+const money=n=>{n=Number(n||0);return n.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0})};
+function toast(msg,mode){const t=$("#toast"),d=$("#tdot"),m=$("#tmsg");d.className="dot "+(mode==="bad"?"bad":mode==="w"?"w":"ok");m.textContent=msg;t.classList.add("on");setTimeout(()=>t.classList.remove("on"),2200)}
+const __touchBlocker=e=>{e.preventDefault();};
+const __wheelBlocker=e=>{if(e&&e.ctrlKey)return;e.preventDefault();};
+document.addEventListener('touchmove',__touchBlocker,{passive:false});
+document.addEventListener('wheel',__wheelBlocker,{passive:false});
+
+async function get(p){const r=await fetch(API_URL+'?'+qs(p),{cache:"no-store"});return await r.json()}
+async function postForm(p){const r=await fetch(API_CALLBACK_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'},body:qs(p)});try{return await r.json()}catch(e){return {ok:true}}}
+
+function show(v){
+  ["Home","Turnos","Mant","Pagos"].forEach(x=>{
+    const el=$("#v"+x);
+    el.classList.toggle("on",x===v);
+    el.style.display=x===v?"flex":"none";
+  });
+  $$(".nbtn").forEach(b=>b.classList.toggle("on",b.dataset.go===v));
+}
+
+function openPDF(title,url){
+  $("#pdfTitle").textContent=title||"Documento";
+  $("#pdfFrame").src=url||"";
+  $("#pdfModal").classList.add("on");
+}
+function closePDF(){ $("#pdfModal").classList.remove("on"); $("#pdfFrame").src=""; }
+$("#pdfClose").onclick=closePDF;
+$("#pdfModal").onclick=e=>{if(e.target.id==="pdfModal")closePDF()};
+
+function openQR(){ $("#qrModal").classList.add("on"); }
+function closeQR(){ $("#qrModal").classList.remove("on"); }
+$("#qrClose").onclick=closeQR;
+$("#qrModal").onclick=e=>{if(e.target.id==="qrModal")closeQR()};
+$("#btnQR").onclick=openQR;
+
+function qparam(k){try{return new URLSearchParams(location.search).get(k)||''}catch(e){return ''}}
+
+$("#btnSalir").onclick=()=>{S={id:'',tipo:'',contrato:null,pagos:null,mantenimientos:null,resumen:null,turnos:null};$("#dash").style.display="none";$("#login").style.display="flex";$("#id").value='';toast("Sesión cerrada","w")};
+
+$("#goTurnos").onclick=()=>{show("Turnos");loadTurnos()};
+$("#goMant").onclick=()=>{show("Mant");loadMant()};
+$("#goPagos").onclick=()=>{show("Pagos");loadPagos()};
+$$(".nbtn").forEach(b=>b.onclick=()=>{show(b.dataset.go);if(b.dataset.go==="Turnos")loadTurnos();if(b.dataset.go==="Mant")loadMant();if(b.dataset.go==="Pagos")loadPagos();});
+
+async function boot(id){
+  if(!id) return;
+  id=String(id).trim().toUpperCase();
+  $("#id").value=id;
+  try{
+    const data=await get({id:id});
+    if(!data||data.ok===false) throw new Error(data?.error||"No fue posible cargar");
+    const c=data.contrato||{};
+    S.id=id;
+    S.contrato=c;
+    S.pagos=Array.isArray(data.pagos)?data.pagos:[];
+    S.mantenimientos=Array.isArray(data.mantenimientos)?data.mantenimientos:[];
+    S.resumen=data.mantenimientosResumen||data.resumenMantenimientos||{};
+    const nombre=(c['ID CLIENTE']||c['NOMBRE']||'RADIZ').toString();
+    $("#tCliente").textContent=nombre;
+    $("#tContrato").textContent="ID: "+id;
+    $("#login").style.display="none";
+    $("#dash").style.display="flex";
+    show("Home");
+    await loadHome();
+    toast("Listo","ok");
+  }catch(e){
+    toast(String(e.message||e),"bad");
+  }
+}
+
+$("#btnGo").onclick=()=>boot(($("#id").value||"").trim());
+document.addEventListener("DOMContentLoaded",()=>{const id=qparam("id");if(id) boot(id);});
+
+async function loadHome(){
+  const c=S.contrato||{};
+  const estado=(c['ESTADO']||'').toString().toUpperCase()||"—";
+  $("#kEstado").textContent=estado;
+  $("#kPagos").textContent=String((S.pagos||[]).length||0);
+  $("#kMant").textContent=String((S.mantenimientos||[]).length||0);
+  const p=(S.pagos&&S.pagos.length)?S.pagos[0]:null;
+  const prox=p?(p['DÍAS DE CORTE']||p['DIAS DE CORTE']||''):'';
+  $("#kProx").textContent=prox?String(prox):"—";
+}
+
+async function loadTurnos(){
+  try{
+    if(S.turnos){renderTurnos(S.turnos);return}
+    const r=await get({accion:"get_turnos_publicados",idContrato:S.id,id:S.id});
+    const list=r?.turnos||r?.data||r||[];
+    S.turnos=Array.isArray(list)?list:[];
+    renderTurnos(S.turnos);
+  }catch(e){toast("Error en turnos","bad")}
+}
+function renderTurnos(list){
+  const el=$("#turnosList");el.innerHTML="";
+  if(!list||!list.length){
+    el.innerHTML='<div class="item"><div class="l"><b>Sin turnos</b><span>No hay turnos publicados por ahora</span></div><div class="r"><span class="chip">—</span></div></div>';
+    return;
+  }
+  list.slice(0,10).forEach(t=>{
+    const titulo=t.titulo||t.nombre||"Turno";
+    const det=(t.detalle||t.descripcion||t.ruta||"").toString();
+    const tag=t.tag||t.estado||"Disponible";
+    const c=document.createElement("div");
+    c.className="item";
+    c.innerHTML='<div class="l"><b>'+esc(titulo)+'</b><span>'+esc(det)+'</span></div><div class="r"><span class="chip ok">'+esc(tag)+'</span></div>';
+    el.appendChild(c);
+  });
+}
+$("#refTurnos").onclick=async()=>{S.turnos=null;await loadTurnos();toast("Actualizado","ok")};
+
+function numCO(v){
+  if(v===null||v===undefined) return 0;
+  if(typeof v==='number') return isNaN(v)?0:v;
+  let s=String(v).trim();if(!s) return 0;
+  s=s.replace(/[^\d.,-]/g,'');
+  if(/^\d{1,3}(\.\d{3})+$/.test(s)) s=s.replace(/\./g,'');
+  else if(s.includes('.')&&s.includes(',')) s=s.replace(/\./g,'').replace(/,/g,'.');
+  else if(s.includes(',')&&!s.includes('.')){const p=s.split(',');s=(p.length===2&&p[1].length===3)?(p[0]+p[1]):(p[0]+'.'+p[1]);}
+  const n=parseFloat(s);return isNaN(n)?0:n;
+}
+
+async function loadMant(){
+  try{
+    const rm=S.resumen||{};
+    const mts=S.mantenimientos||[];
+    const totalVal=(rm.totalMantenimientos!==undefined)?Number(rm.totalMantenimientos||0):mts.reduce((s,mm)=>s+numCO(mm?.valor??mm?.['VALOR GENERAL']??mm?.['VALOR MTOS']??mm?.['VALOR']??mm?.['VALOR MTO']),0);
+    const ace=numCO(rm.cambiosAceite??rm.aceites??rm.Aceites??rm['CAMBIOS ACEITE']??(mts[0]?.cambiosAceite));
+    const pas=numCO(rm.pastillas??rm.Pastillas??rm['PASTILLAS']??(mts[0]?.pastillas));
+    const kit=numCO(rm.kitArrastre??rm.kitsArrastre??rm.KitArrastre??rm.KitsArrastre??rm.kit_arrastre??rm.kits_arrastre??rm['Kit de arrastre']??rm['KIT DE ARRASTRE']??(mts[0]?.kitArrastre));
+    $("#mAceite").textContent=String(ace||0);
+    $("#mPastillas").textContent=String(pas||0);
+    $("#mKit").textContent=String(kit||0);
+    $("#mTotal").textContent=money(totalVal||0);
+    renderMant(mts);
+  }catch(e){toast("Error en mantenimientos","bad")}
+}
+function renderMant(list){
+  const el=$("#mantList");el.innerHTML="";
+  if(!list||!list.length){
+    el.innerHTML='<div class="item"><div class="l"><b>Sin registros</b><span>No hay mantenimientos para mostrar</span></div><div class="r"><span class="chip">—</span></div></div>';
+    return;
+  }
+  list.slice(0,8).forEach(m=>{
+    const f=(m.fecha||m.f||m.date||"").toString();
+    const t=(m.tipo||m.concepto||m.item||m['TIPO']||"Mantenimiento").toString();
+    const v=m.valor||m.monto||m.total||m['VALOR']||"";
+    const c=document.createElement("div");
+    c.className="item";
+    c.innerHTML='<div class="l"><b>'+esc(t)+'</b><span>'+esc(f)+'</span></div><div class="r"><span class="chip">'+esc(v? (typeof v==="number"?money(v):String(v)):"—")+'</span></div>';
+    el.appendChild(c);
+  });
+}
+$("#refMant").onclick=async()=>{try{const data=await get({id:S.id});if(data&&data.ok!==false){S.pagos=Array.isArray(data.pagos)?data.pagos:[];S.mantenimientos=Array.isArray(data.mantenimientos)?data.mantenimientos:[];S.resumen=data.mantenimientosResumen||data.resumenMantenimientos||{};await loadHome();await loadMant();toast("Actualizado","ok")}}catch(e){toast("No se pudo actualizar","bad")}};
+
+async function loadPagos(){
+  try{
+    const r=await get({accion:"historial_pagos_lista",idContrato:S.id,id:S.id,limite:6});
+    const list=r?.pagos||r?.data||r||[];
+    const arr=Array.isArray(list)?list:[];
+    renderPagos(arr);
+  }catch(e){toast("Error en pagos","bad")}
+}
+function renderPagos(list){
+  const el=$("#pagosList");el.innerHTML="";
+  if(!list||!list.length){
+    el.innerHTML='<div class="item"><div class="l"><b>Sin pagos</b><span>No hay pagos registrados</span></div><div class="r"><span class="chip">—</span></div></div>';
+    return;
+  }
+  list.slice(0,6).forEach(p=>{
+    const ref=(p.referencia||p.ref||p.id||p.consecutivo||"—").toString();
+    const f=(p.fecha||p.f||"").toString();
+    const v=p.monto||p.valor||p.total||p['VALOR']||"";
+    const st=(p.estado||p.status||"").toString().toLowerCase();
+    const cls=st.includes("ok")||st.includes("aprob")?"ok":st.includes("rech")?"bad":"w";
+    const row=document.createElement("div");
+    row.className="item";
+    row.innerHTML='<div class="l"><b>'+esc(ref)+'</b><span>'+esc(f)+'</span></div><div class="r"><span class="chip '+cls+'">'+esc(v? (typeof v==="number"?money(v):String(v)):"—")+'</span><button class="btn btn2" style="padding:8px 10px" data-ref="'+esc(ref)+'">Ver</button></div>';
+    row.querySelector("button").onclick=()=>openPagoPDF(ref);
+    el.appendChild(row);
+  });
+}
+$("#refPagos").onclick=()=>{loadPagos();toast("Actualizado","ok")};
+
+async function openPagoPDF(ref){
+  try{
+    const r=await get({accion:"historial_pagos_pdf",idContrato:S.id,id:S.id,referencia:ref});
+    const url=r?.url||r?.pdf||r?.link;
+    if(!url) throw new Error("Sin PDF");
+    openPDF("Comprobante de pago",url);
+  }catch(e){toast("No se pudo abrir","bad")}
+}
+
+async function __ensureWompiLoaded(){
+  if(typeof WidgetCheckout!=='undefined') return true;
+  if(window.__wompiLoading) return window.__wompiLoading;
+  window.__wompiLoading=new Promise((resolve,reject)=>{
+    const s=document.createElement('script');
+    s.src='https://checkout.wompi.co/widget.js';
+    s.async=true;
+    s.onload=()=>resolve(true);
+    s.onerror=()=>reject(new Error('Wompi no cargó'));
+    document.head.appendChild(s);
+  });
+  return window.__wompiLoading;
+}
+
+async function generarIntegritySignature(reference,amountInCents,currency){
+  if(!(window.crypto&&crypto.subtle)) throw new Error('Crypto no disponible');
+  const encoder=new TextEncoder();
+  const raw=`${reference}${amountInCents}${currency}${WOMPI_INTEGRITY_KEY}`;
+  const hashBuffer=await crypto.subtle.digest('SHA-256',encoder.encode(raw));
+  const hashArray=Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+async function registrarPagoEnSheet(reference,valor,idContrato,statusWompi){
+  try{
+    const p={accion:'registrar_pago_portal',referencia:reference,monto:valor,idContrato:idContrato,origen:'PORTAL_WEB'};
+    if(statusWompi) p.statusWompi=statusWompi;
+    const r=await postForm(p);
+    if(r&&r.ok===false) throw new Error(r.error||"falló");
+  }catch(e){
+    try{await postForm({accion:'registrar_pago',referencia:reference,monto:valor,idContrato:idContrato,origen:'PORTAL_WEB',statusWompi:statusWompi||''});}catch(_){}
+  }
+}
+
+$("#btnPagar").onclick=async()=>{
+  if(!S.id) return toast("Falta ID","bad");
+  try{
+    await __ensureWompiLoaded();
+    const valor=170000;
+    const amountInCents=valor*100;
+    const reference='PAGO_'+S.id+'_'+Date.now();
+    const currency='COP';
+    const integritySignature=await generarIntegritySignature(reference,amountInCents,currency);
+    const checkout=new WidgetCheckout({currency,amountInCents,reference,publicKey:WOMPI_PUBLIC_KEY,signature:{integrity:integritySignature},redirectUrl:WOMPI_REDIRECT_URL});
+    checkout.open(async function(result){
+      const t=result&&result.transaction?result.transaction:null;
+      const status=t&&t.status?t.status:'';
+      await registrarPagoEnSheet(reference,valor,S.id,status);
+      toast(status&&String(status).toUpperCase()==="APPROVED"?"Pago aprobado":"Pago registrado","ok");
+      show("Home");
+      try{const data=await get({id:S.id});if(data&&data.ok!==false){S.pagos=Array.isArray(data.pagos)?data.pagos:[];S.mantenimientos=Array.isArray(data.mantenimientos)?data.mantenimientos:[];S.resumen=data.mantenimientosResumen||data.resumenMantenimientos||{};await loadHome();}}catch(e){}
+    });
+  }catch(e){
+    toast("No fue posible iniciar el pago","bad");
+  }
+};
+
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('/sw.js').catch(()=>{});});}
+</script></body></html>
