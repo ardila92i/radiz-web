@@ -113,11 +113,6 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,
 .hist-line{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:2px 0;font-size:.92rem}
 .hist-label{color:#111827;font-weight:800}
 .hist-value{color:var(--radiz-blue);font-weight:900}
-.fotos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
-.foto-box{border:1px dashed #cbd5e1;border-radius:14px;background:#f8fafc;min-height:72px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.foto-box img{width:100%;height:100%;object-fit:cover;display:block}
-.foto-x{position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:999px;border:1px solid rgba(229,231,235,.9);background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;cursor:pointer;font-weight:900;color:#111827;line-height:1}
-.foto-hint{font-size:.78rem;color:#64748b;font-weight:800;letter-spacing:.01em;padding:6px;text-align:center}
 </style>
 </head>
 
@@ -335,7 +330,7 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,
     </div>
     <p>Escanea el código con la app de tu banco para realizar el pago:</p>
     <img src="QRRADIZ-38.png" alt="Código QR de pago RADIZ" style="max-width:100%;height:auto;border-radius:12px;display:block;margin:8px auto;">
-    <p style="font-size:.8rem;color:#6b7280;margin-top:4px;">Incluye tu ID de contrato en la imagine this should have been; include tu ID de contrato en la referencia de pago.</p>
+    <p style="font-size:.8rem;color:#6b7280;margin-top:4px;">Incluye tu ID de contrato en la referencia de pago.</p>
     <div class="modal-actions"><button type="button" class="btn btn-secondary" onclick="cerrarModal('modalQR')">Cerrar</button></div>
   </div>
 </div>
@@ -449,13 +444,11 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,
     <label for="incidenteFecha" style="display:block;margin-top:10px;">Fecha del incidente</label>
     <input type="date" id="incidenteFecha">
 
-    <label for="incidenteFotos" style="display:block;margin-top:10px;">Adjuntar hasta 3 fotos</label>
-    <input id="incidenteFotos" type="file" accept="image/*" capture="environment" multiple onchange="onIncidenteFotosChange(event)">
-    <div class="fotos-grid" id="incidenteFotosGrid">
-      <div class="foto-box"><div class="foto-hint">Foto 1</div></div>
-      <div class="foto-box"><div class="foto-hint">Foto 2</div></div>
-      <div class="foto-box"><div class="foto-hint">Foto 3</div></div>
-    </div>
+    <label style="display:block;margin-top:10px;">Adjuntar evidencias (máx. 3 fotos)</label>
+    <input id="incidenteFoto1" type="file" accept="image/*" style="width:100%;margin-top:6px">
+    <input id="incidenteFoto2" type="file" accept="image/*" style="width:100%;margin-top:6px">
+    <input id="incidenteFoto3" type="file" accept="image/*" style="width:100%;margin-top:6px">
+    <p style="margin:6px 0 0;color:#6b7280;font-size:.8rem">Las fotos se guardan en Drive en la carpeta <strong>EVIDENCIAS INCIDENTES</strong>.</p>
 
     <p id="incidenteMsg" class="status"></p>
 
@@ -542,51 +535,109 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,
 const API_URL="https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec",
 WOMPI_PUBLIC_KEY="pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06",
 WOMPI_INTEGRITY_KEY="prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN",
-WOMPI_REDIRECT_URL="https://portal.radizco.com/",
-EVIDENCIAS_FOLDER="EVIDENCIAS INCIDENTES";
+WOMPI_REDIRECT_URL="https://portal.radizco.com/";
 let idContratoActual=null,contratoActual=null,tipoUsuarioActual=null,pagosCache=[],mantenimientosCache=[],turnoSeleccionado=null,turnoDetalleActual=null,ultimaAceptacion=null,
-NOTIF_KEY="RADIZ_NOTIFS_ANON",META_KEY="RADIZ_NOTIF_META_ANON",ultimoPdfUrlAbierto="",incidenteFotos=[];
-document.addEventListener("DOMContentLoaded",()=>{idContratoActual=obtenerIdContratoDeUrl();if(idContratoActual){NOTIF_KEY="RADIZ_NOTIFS_"+idContratoActual;META_KEY="RADIZ_NOTIF_META_"+idContratoActual}cargarContratoYSaludo(idContratoActual);cargarTurnosDisponibles();actualizarIndicadorNotificaciones();cerrarSheetMenu()});
-function obtenerIdContratoDeUrl(){const p=new URLSearchParams(location.search),id=(p.get("id")||"").trim().toUpperCase();return id||null}
-function irAVista(v){const map={home:"viewHome",turnos:"viewTurnos",mantenimientos:"viewMantenimientos",pagos:"viewPagos"};Object.values(map).forEach(id=>{const el=document.getElementById(id);if(el)el.classList.remove("active")});const target=document.getElementById(map[v]||"viewHome");if(target)target.classList.add("active");if(v==="pagos")cargarPagos();if(v==="mantenimientos")cargarMantenimientos()}
-function abrirModal(id){const el=document.getElementById(id);if(!el)return;el.style.display="flex";if(id==="modalContrato")renderContratoModal();if(id==="modalHistorialPagos")prepararModalHistorial();if(id==="modalBeneficios")prepararModalBeneficios();if(id==="modalTaller")prepararModalTaller();if(id==="modalIncidente")resetIncidenteUI()}
-function cerrarModal(id){const el=document.getElementById(id);if(!el)return;el.style.display="none";if(id==="modalConfirmarTurno"){const msg=document.getElementById("confirmarTurnoMsg");if(msg){msg.className="status";msg.textContent=""}const chk=document.getElementById("chkTerminos");if(chk)chk.checked=false;onToggleTerminos();turnoSeleccionado=null}}
-function abrirModalPdf(titulo,urlPdf){try{cerrarModal("modalHistorialPagos")}catch(e){}const modal=document.getElementById("modalPdfViewer"),frame=document.getElementById("pdfFrame"),title=document.getElementById("pdfTitle"),btnTab=document.getElementById("btnPdfNuevaPestana");if(title)title.textContent=titulo||"Documento";ultimoPdfUrlAbierto=urlPdf||"";if(btnTab)btnTab.style.display=ultimoPdfUrlAbierto?"inline-flex":"none";if(frame)frame.src=ultimoPdfUrlAbierto||"";if(modal){modal.style.zIndex="60";modal.style.display="flex"}}
-function cerrarModalPdf(){const modal=document.getElementById("modalPdfViewer"),frame=document.getElementById("pdfFrame"),btnTab=document.getElementById("btnPdfNuevaPestana");if(frame){frame.srcdoc="";frame.src="about:blank"}if(modal)modal.style.display="none";if(btnTab)btnTab.style.display="none";ultimoPdfUrlAbierto=""}
+NOTIF_KEY="RADIZ_NOTIFS_ANON",META_KEY="RADIZ_NOTIF_META_ANON",ultimoPdfUrlAbierto="";
+
+document.addEventListener("DOMContentLoaded",function(){
+  idContratoActual=obtenerIdContratoDeUrl();
+  if(idContratoActual){NOTIF_KEY="RADIZ_NOTIFS_"+idContratoActual;META_KEY="RADIZ_NOTIF_META_"+idContratoActual}
+  cargarContratoYSaludo(idContratoActual);
+  cargarTurnosDisponibles();
+  actualizarIndicadorNotificaciones();
+  cerrarSheetMenu();
+});
+
+function obtenerIdContratoDeUrl(){var p=new URLSearchParams(location.search),id=(p.get("id")||"").trim().toUpperCase();return id||null}
+function determinarTipoPorPrefijo(id){
+  var s=String(id||"").trim().toUpperCase();if(!s)return"";
+  var p=s.charAt(0);
+  if(p==="R")return"RENTING";
+  if(p==="I"||p==="J")return"AFILIADO";
+  return"";
+}
+
+function irAVista(v){
+  var map={home:"viewHome",turnos:"viewTurnos",mantenimientos:"viewMantenimientos",pagos:"viewPagos"};
+  Object.values(map).forEach(function(id){var el=document.getElementById(id);if(el)el.classList.remove("active")});
+  var target=document.getElementById(map[v]||"viewHome");if(target)target.classList.add("active");
+  if(v==="pagos")cargarPagos();
+  if(v==="mantenimientos")cargarMantenimientos();
+}
+
+function abrirModal(id){
+  var el=document.getElementById(id);if(!el)return;
+  el.style.display="flex";
+  if(id==="modalContrato")renderContratoModal();
+  if(id==="modalHistorialPagos")prepararModalHistorial();
+  if(id==="modalBeneficios")prepararModalBeneficios();
+  if(id==="modalTaller")prepararModalTaller();
+}
+
+function cerrarModal(id){
+  var el=document.getElementById(id);if(!el)return;
+  el.style.display="none";
+  if(id==="modalConfirmarTurno"){
+    var msg=document.getElementById("confirmarTurnoMsg");if(msg){msg.className="status";msg.textContent=""}
+    var chk=document.getElementById("chkTerminos");if(chk)chk.checked=false;
+    onToggleTerminos();turnoSeleccionado=null;
+  }
+}
+
+function abrirModalPdf(titulo,urlPdf){
+  try{cerrarModal("modalHistorialPagos")}catch(e){}
+  var modal=document.getElementById("modalPdfViewer"),frame=document.getElementById("pdfFrame"),title=document.getElementById("pdfTitle"),btnTab=document.getElementById("btnPdfNuevaPestana");
+  if(title)title.textContent=titulo||"Documento";
+  ultimoPdfUrlAbierto=urlPdf||"";
+  if(btnTab)btnTab.style.display=ultimoPdfUrlAbierto?"inline-flex":"none";
+  if(frame)frame.src=ultimoPdfUrlAbierto||"";
+  if(modal){modal.style.zIndex="60";modal.style.display="flex"}
+}
+
+function cerrarModalPdf(){
+  var modal=document.getElementById("modalPdfViewer"),frame=document.getElementById("pdfFrame"),btnTab=document.getElementById("btnPdfNuevaPestana");
+  if(frame){frame.srcdoc="";frame.src="about:blank"}
+  if(modal)modal.style.display="none";
+  if(btnTab)btnTab.style.display="none";
+  ultimoPdfUrlAbierto="";
+}
+
 function abrirPdfEnNuevaPestana(){if(!ultimoPdfUrlAbierto)return;window.open(ultimoPdfUrlAbierto,"_blank")}
-function abrirSheetMenu(){const bd=document.getElementById("sheetBackdrop"),sh=document.getElementById("sheetMenu");if(!bd||!sh)return;bd.style.display="block";sh.classList.add("open")}
-function cerrarSheetMenu(){const bd=document.getElementById("sheetBackdrop"),sh=document.getElementById("sheetMenu");if(!bd||!sh)return;bd.style.display="none";sh.classList.remove("open")}
+function abrirSheetMenu(){var bd=document.getElementById("sheetBackdrop"),sh=document.getElementById("sheetMenu");if(!bd||!sh)return;bd.style.display="block";sh.classList.add("open")}
+function cerrarSheetMenu(){var bd=document.getElementById("sheetBackdrop"),sh=document.getElementById("sheetMenu");if(!bd||!sh)return;bd.style.display="none";sh.classList.remove("open")}
 function cerrarSesion(){try{localStorage.clear()}catch(e){}location.href="https://portal.radizco.com/"}
-function formatearFechaCorta(v){if(!v)return"";const d=new Date(v);if(isNaN(d.getTime()))return v;return d.toLocaleDateString("es-CO",{day:"2-digit",month:"2-digit",year:"numeric"})}
+function formatearFechaCorta(v){if(!v)return"";var d=new Date(v);if(isNaN(d.getTime()))return v;return d.toLocaleDateString("es-CO",{day:"2-digit",month:"2-digit",year:"numeric"})}
 function formatearHora(h){return h||""}
-function formatearNumeroCOP(n){const num=Number(n);if(isNaN(num))return n||"";return num.toLocaleString("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0})}
-function primerNombre(nombreCompleto){const s=String(nombreCompleto||"").trim();if(!s)return"";const partes=s.split(" ").filter(Boolean);return partes[0]||""}
-function obtenerLogoPorEmpresa(empresa){const key=String(empresa||"").trim().toUpperCase();if(key==="CRUZ VERDE")return"logoscruz-verde.png";return""}
-function normalizarLogoUrl(logo){const s=String(logo||"").trim();if(!s)return"";if(/^https?:\/\//i.test(s))return s;if(s.startsWith("/"))return s;return s}
+function formatearNumeroCOP(n){var num=Number(n);if(isNaN(num))return n||"";return num.toLocaleString("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0})}
+function primerNombre(nombreCompleto){var s=String(nombreCompleto||"").trim();if(!s)return"";var partes=s.split(" ").filter(Boolean);return partes[0]||""}
+function obtenerLogoPorEmpresa(empresa){var key=String(empresa||"").trim().toUpperCase();if(key==="CRUZ VERDE")return"logoscruz-verde.png";return""}
+function normalizarLogoUrl(logo){var s=String(logo||"").trim();if(!s)return"";if(/^https?:\/\//i.test(s))return s;if(s.startsWith("/"))return s;return s}
+function escapeHtml(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
+
 async function cargarContratoYSaludo(id){
-  const hello=document.getElementById("helloText"),perfil=document.getElementById("perfilContenido");
+  var hello=document.getElementById("helloText"),perfil=document.getElementById("perfilContenido");
   if(!id){if(hello)hello.textContent="Hola";if(perfil)perfil.innerHTML='<p class="status error">No se encontró el ID del contrato en la URL.</p>';return}
   if(perfil)perfil.innerHTML='<p class="status muted">Cargando información de tu contrato...</p>';
   try{
-    const resp=await fetch(API_URL+"?id="+encodeURIComponent(id)),data=await resp.json();
+    var resp=await fetch(API_URL+"?id="+encodeURIComponent(id)),data=await resp.json();
     if(!data.ok){if(hello)hello.textContent="Hola";if(perfil)perfil.innerHTML='<p class="status error">'+(data.error||"No se encontró información para este ID.")+"</p>";return}
-    const c=data.contrato||{};contratoActual=c;
-    tipoUsuarioActual=(c["TIPO USUARIO"]||"").toString().toUpperCase();
+    var c=data.contrato||{};contratoActual=c;
+    tipoUsuarioActual=determinarTipoPorPrefijo(idContratoActual)||String(c["TIPO USUARIO"]||"").toUpperCase();
     pagosCache=Array.isArray(data.pagos)?data.pagos:[];
-    const rawM=data.mantenimientos??data.mantenimiento??[];
+    var rawM=(data.mantenimientos!=null?data.mantenimientos:(data.mantenimiento!=null?data.mantenimiento:[]));
     mantenimientosCache=Array.isArray(rawM)?rawM:(rawM?[rawM]:[]);
-    const nombreRaw=(c["NOMBRE"]||c["ID CLIENTE"]||"").toString(),nombre=primerNombre(nombreRaw);
-    if(hello){if(nombre)hello.innerHTML='Hola, <span class="hello-name">'+escapeHtml(nombre)+"</span>";else hello.textContent="Hola"}
-    const placa=c["ID VEHÍCULO"]||c["ID VEHICULO"]||"",inicio=c["INICIO"]||"",ciudad=c["CIUDAD"]||"",estado=(c["ESTADO"]||"").toString().toUpperCase(),
+    var nombreRaw=String(c["NOMBRE"]||c["ID CLIENTE"]||""),nombre=primerNombre(nombreRaw);
+    if(hello){if(nombre)hello.innerHTML='Hola, <span class="hello-name">'+escapeHtml(nombre)+'</span>';else hello.textContent="Hola"}
+    var placa=c["ID VEHÍCULO"]||c["ID VEHICULO"]||"",inicio=c["INICIO"]||"",ciudad=c["CIUDAD"]||"",estado=String(c["ESTADO"]||"").toUpperCase(),
     tarifa=c["TARIFA SEMANAL"]||"",km=c["KILOMETRAJE"]||c["KILOMETRAJE ACTUAL"]||"";
-    let html="";
+    var html="";
     html+='<p><strong>ID contrato:</strong> '+escapeHtml(c["ID CONTRATO"]||"")+"</p>";
     html+='<p><strong>Placa:</strong> '+escapeHtml(placa)+"</p>";
     html+='<p><strong>Inicio:</strong> '+escapeHtml(formatearFechaCorta(inicio))+"</p>";
     html+='<p><strong>Cobertura:</strong> '+escapeHtml(ciudad||"Bogotá")+"</p>";
     if(tarifa)html+='<p><strong>Tarifa semanal:</strong> '+escapeHtml(formatearNumeroCOP(tarifa))+"</p>";
     if(km)html+='<p><strong>Kilometraje actual:</strong> '+escapeHtml(km)+" km</p>";
-    html+='<p><strong>Estado:</strong> '+(estado?'<span style="padding:2px 8px;border-radius:999px;background:'+(estado==="ACTIVO"?"#dcfce7;color:#166534":"#fee2e2;color:#b91c1c")+';">'+escapeHtml(estado)+"</span>":"SIN ESTADO")+"</p>";
+    html+='<p><strong>Estado:</strong> '+(estado?'<span style="padding:2px 8px;border-radius:999px;background:'+(estado==="ACTIVO"?"#dcfce7;color:#166534":"#fee2e2;color:#b91c1c")+';">'+escapeHtml(estado)+'</span>':"SIN ESTADO")+"</p>";
     if(perfil)perfil.innerHTML=html;
   }catch(e){
     console.error(e);
@@ -594,100 +645,101 @@ async function cargarContratoYSaludo(id){
     if(perfil)perfil.innerHTML='<p class="status error">Error al cargar la información del contrato.</p>';
   }
 }
+
 function renderContratoModal(){
-  const cont=document.getElementById("contratoContenido");if(!cont)return;
+  var cont=document.getElementById("contratoContenido");if(!cont)return;
   if(!contratoActual){cont.innerHTML='<p class="status error">No se encontró información del contrato.</p>';return}
-  const c=contratoActual,estado=(c["ESTADO"]||"").toString().toUpperCase(),beneficiosTexto=(c["BENEFICIOS"]||"Información no disponible").toString(),
-  id=(c["ID CONTRATO"]||"").toString().trim().toUpperCase(),placa=(c["ID VEHÍCULO"]||c["ID VEHICULO"]||"").toString(),esRenting=id.startsWith("R");
-  let html="";
+  var c=contratoActual,estado=String(c["ESTADO"]||"").toUpperCase(),beneficiosTexto=String(c["BENEFICIOS"]||"Información no disponible"),
+  id=String(c["ID CONTRATO"]||"").trim().toUpperCase(),placa=String(c["ID VEHÍCULO"]||c["ID VEHICULO"]||""),esRenting=id.startsWith("R");
+  var html="";
   html+='<div class="mini-card"><h4>Contrato</h4>';
   html+='<p><strong>ID:</strong> '+escapeHtml(id)+"</p>";
-  html+='<p><strong>Tipo usuario:</strong> '+escapeHtml(c["TIPO USUARIO"]||"")+"</p>";
+  html+='<p><strong>Tipo usuario:</strong> '+escapeHtml(tipoUsuarioActual||c["TIPO USUARIO"]||"")+"</p>";
   html+='<p><strong>Vehículo:</strong> '+escapeHtml(placa)+"</p>";
   html+='<p><strong>Inicio:</strong> '+escapeHtml(formatearFechaCorta(c["INICIO"]))+"</p>";
   html+='<p><strong>Fin:</strong> '+escapeHtml(formatearFechaCorta(c["FIN"]))+"</p>";
   html+='<p><strong>Tarifa semanal:</strong> '+escapeHtml(formatearNumeroCOP(c["TARIFA SEMANAL"]))+"</p>";
   html+='<p><strong>Beneficios:</strong> '+escapeHtml(beneficiosTexto)+"</p>";
-  html+='<p><strong>Estado:</strong> '+(estado?'<span style="padding:2px 8px;border-radius:999px;background:'+(estado==="ACTIVO"?"#dcfce7;color:#166534":"#fee2e2;color:#b91c1c")+';">'+escapeHtml(estado)+"</span>":"SIN ESTADO")+"</p>";
-  html+="</div>";
+  html+='<p><strong>Estado:</strong> '+(estado?'<span style="padding:2px 8px;border-radius:999px;background:'+(estado==="ACTIVO"?"#dcfce7;color:#166534":"#fee2e2;color:#b91c1c")+';">'+escapeHtml(estado)+'</span>':"SIN ESTADO")+"</p>";
+  html+='</div>';
   html+='<div class="mini-card"><h4>Pagos</h4>';
   if(!pagosCache||pagosCache.length===0)html+="<p>No hay pagos registrados para este contrato.</p>";
   else{
-    const p=pagosCache[0]||{},tarifasCompletadas=p["TARIFAS COMPLETADAS"]||"0",tarifasVencidas=p["TARIFAS VENCIDAS"]||"0",diaCorte=p["DÍAS DE CORTE"]||p["DIAS DE CORTE"]||"",
+    var p=pagosCache[0]||{},tarifasCompletadas=p["TARIFAS COMPLETADAS"]||"0",tarifasVencidas=p["TARIFAS VENCIDAS"]||"0",diaCorte=p["DÍAS DE CORTE"]||p["DIAS DE CORTE"]||"",
     tarifaSemanalNum=Number(c["TARIFA SEMANAL"]||0),tarifasVencidasNum=Number(tarifasVencidas||0),moraEstim=esRenting?tarifaSemanalNum*tarifasVencidasNum:0;
     html+='<p><strong>Día de corte:</strong> '+escapeHtml(diaCorte)+"</p>";
     html+='<p><strong>Tarifas completadas:</strong> '+escapeHtml(tarifasCompletadas)+"</p>";
     html+='<p><strong>Tarifas vencidas:</strong> '+escapeHtml(tarifasVencidas)+"</p>";
     if(esRenting&&moraEstim>0)html+='<p><strong>Mora estimada:</strong> '+escapeHtml(formatearNumeroCOP(moraEstim))+"</p>";
   }
-  html+="</div>";
+  html+='</div>';
   html+='<div class="mini-card"><h4>Mantenimientos</h4>';
   if(!mantenimientosCache||mantenimientosCache.length===0)html+="<p>No hay mantenimientos registrados para este contrato.</p>";
   else{
-    const m=mantenimientosCache[0]||{};
-    const totalManual=getByKeys_(m,["TOTAL MANTENIMIENTOS","TOTAL MTOS","TOTAL MTO","VALOR TOTAL MANTENIMIENTOS","VALOR TOTAL"]);
-    const totalFallback=sumValorMtos_(mantenimientosCache);
-    const total=(String(totalManual||"").trim()!=="")?totalManual:totalFallback;
-    html+='<p><strong>Total mantenimientos:</strong> '+escapeHtml(formatearNumeroCOP(total))+"</p>";
-    html+='<p><strong>Placa:</strong> '+escapeHtml(getByKeys_(m,["ID VEHÍCULO","ID VEHICULO","PLACA"])||placa)+"</p>";
-    html+='<p><strong>Último mantenimiento:</strong> '+escapeHtml(formatearFechaCorta(getByKeys_(m,["ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO","FECHA ULT. MANTENIMIENTO","FECHA ULTIMO"])||""))+"</p>";
-    html+='<p><strong>Tipo de mantenimiento:</strong> '+escapeHtml(getByKeys_(m,["TIPO","TIPO ULT. MANTENIMIENTO","TIPO MANTENIMIENTO"])||"")+"</p>";
-    html+='<p><strong>Realizados:</strong> '+escapeHtml(getByKeys_(m,["REALIZADOS","MTOS REALIZADOS","MANTENIMIENTOS REALIZADOS"])||"")+"</p>';
-    html+='<p><strong>Taller asignado:</strong> '+escapeHtml(getByKeys_(m,["TALLER ASIGNADO","TALLER","PROVEEDOR"])||"Información no disponible")+"</p>";
+    var totalM=mantenimientosCache.reduce(function(s,m){return s+(Number(m["VALOR GENERAL"]||m["VALOR MTOS"])||0)},0),m=mantenimientosCache[0]||{};
+    html+='<p><strong>Total mantenimientos:</strong> '+escapeHtml(formatearNumeroCOP(totalM))+"</p>";
+    html+='<p><strong>Placa:</strong> '+escapeHtml(m["ID VEHÍCULO"]||m["ID VEHICULO"]||placa)+"</p>";
+    html+='<p><strong>Último mantenimiento:</strong> '+escapeHtml(formatearFechaCorta(m["ÚLTIMO MANTENIMIENTO"]||m["ULTIMO MANTENIMIENTO"]||m["FECHA ULT. MANTENIMIENTO"]))+"</p>";
+    html+='<p><strong>Tipo de mantenimiento:</strong> '+escapeHtml(m["TIPO"]||m["TIPO ULT. MANTENIMIENTO"]||"")+"</p>";
+    html+='<p><strong>Realizados:</strong> '+escapeHtml(m["REALIZADOS"]||m["MTOS REALIZADOS"]||"")+"</p>";
+    html+='<p><strong>Taller asignado:</strong> '+escapeHtml(m["TALLER ASIGNADO"]||"Información no disponible")+"</p>";
   }
-  html+="</div>";
+  html+='</div>';
   cont.innerHTML=html;
 }
+
 function prepararModalBeneficios(){
-  const el=document.getElementById("modalBeneficiosTexto");if(!el)return;
+  var el=document.getElementById("modalBeneficiosTexto");if(!el)return;
   if(!contratoActual){el.textContent="Información no disponible.";return}
-  const c=contratoActual,beneficiosTexto=c["BENEFICIOS"]||"Información no disponible.",id=(c["ID CONTRATO"]||"").toString().trim().toUpperCase(),esRenting=id.startsWith("R");
+  var c=contratoActual,beneficiosTexto=c["BENEFICIOS"]||"Información no disponible.",id=String(c["ID CONTRATO"]||"").trim().toUpperCase(),esRenting=id.startsWith("R");
   if(esRenting){
     el.innerHTML="";
-    const img=document.createElement("img");
+    var img=document.createElement("img");
     img.alt="Beneficios Renting Radiz";
     img.style.maxWidth="100%";img.style.height="auto";img.style.borderRadius="12px";img.style.display="block";img.style.margin="6px auto";
-    const v=Date.now(),candidates=[`beneficios_renting.png?v=${v}`,`./beneficios_renting.png?v=${v}`,`/logistica/beneficios_renting.png?v=${v}`,`/beneficios_renting.png?v=${v}`];
-    let i=0;const tryNext=()=>{if(i>=candidates.length)return;img.src=candidates[i++]};
-    img.onerror=()=>tryNext();tryNext();el.appendChild(img);
+    var v=Date.now(),candidates=["beneficios_renting.png?v="+v,"./beneficios_renting.png?v="+v,"/logistica/beneficios_renting.png?v="+v,"/beneficios_renting.png?v="+v];
+    var i=0;var tryNext=function(){if(i>=candidates.length)return;img.src=candidates[i++]};
+    img.onerror=function(){tryNext()};tryNext();el.appendChild(img);
   }else el.textContent=beneficiosTexto||"Información no disponible.";
 }
+
 function prepararModalTaller(){
-  const el=document.getElementById("modalTallerTexto");if(!el)return;
-  const taller=(mantenimientosCache&&mantenimientosCache[0])?(getByKeys_(mantenimientosCache[0],["TALLER ASIGNADO","TALLER","PROVEEDOR"])||""):"";
+  var el=document.getElementById("modalTallerTexto");if(!el)return;
+  var taller=(mantenimientosCache&&mantenimientosCache[0])?(mantenimientosCache[0]["TALLER ASIGNADO"]||""):"";
   el.textContent=taller?("Taller asignado: "+taller):"Información no disponible.";
 }
+
 async function cargarTurnosDisponibles(){
-  const estado=document.getElementById("turnosEstado"),cont=document.getElementById("turnosList");
+  var estado=document.getElementById("turnosEstado"),cont=document.getElementById("turnosList");
   if(cont)cont.innerHTML="";
   if(estado){estado.className="status muted";estado.textContent="Cargando turnos publicados..."}
   try{
-    const resp=await fetch(API_URL+"?accion=get_turnos_publicados"),data=await resp.json(),turnos=Array.isArray(data.turnos)?data.turnos:[];
+    var resp=await fetch(API_URL+"?accion=get_turnos_publicados"),data=await resp.json(),turnos=Array.isArray(data.turnos)?data.turnos:[];
     if(!data.ok||turnos.length===0){if(estado){estado.className="status error";estado.textContent="No hay turnos disponibles en este momento."}return}
     if(estado){estado.className="status ok";estado.textContent="Encontrados: "+turnos.length}
     if(cont){
-      turnos.forEach(t=>{
-        const idTurno=t.id_turno||t.idTurno||t.ID_TURNO||t["ID TURNO"]||t.codigo||t.codigo_turno||"TURNO",
-        empresa=(t.empresa||t.cliente||t.CLIENTE||"Cruz Verde").toString().trim()||"Cruz Verde",
+      turnos.forEach(function(t){
+        var idTurno=t.id_turno||t.idTurno||t.ID_TURNO||t["ID TURNO"]||t.codigo||t.codigo_turno||"TURNO",
+        empresa=String(t.empresa||t.cliente||t.CLIENTE||"Cruz Verde").trim()||"Cruz Verde",
         logoPreferido=normalizarLogoUrl(t.logoUrl||t["LOGO URL"]||t["LOGO"]||""),logoFallback=normalizarLogoUrl(obtenerLogoPorEmpresa(empresa)),logoUrl=logoPreferido||logoFallback,
         direccion=t.direccion||t.DIRECCION||t["DIRECCIÓN"]||"",fecha=t.fecha||t.FECHA||"",hora=t.hora||t.HORA||t.inicio||t.INICIO||"",ciudad=t.ciudad||t.CIUDAD||"Bogotá",
         dias=t.dias||t.DIAS||t.duracion_dias||t.DURACION_DIAS||3,pagoEstimado=t.valorTurno||t.pago||t.PAGO||t.valor||t.VALOR||"",
         fechaTxt=formatearFechaCorta(fecha)||"Por definir",pagoTxt=pagoEstimado?formatearNumeroCOP(pagoEstimado):"Por definir";
-        const mini=document.createElement("div");mini.className="turno-mini";
-        mini.onclick=()=>abrirDetalleTurno({idTurno,empresa,direccion,fecha,hora,ciudad,dias,pago:pagoEstimado,logoUrl});
-        mini.innerHTML=`
-          <div class="img-placeholder ${logoUrl?"has-img":""}" title="Tocar para ampliar">
-            ${logoUrl?`<img class="turno-logo" src="${escapeHtml(logoUrl)}" alt="Logo ${escapeHtml(empresa)}">`:`<div class="img-hint">Ver</div>`}
-          </div>
-          <div class="turno-info">
-            <div class="turno-topline"><div class="dot-green"></div><div class="turno-empresa">${escapeHtml(empresa)}</div></div>
-            <div class="turno-meta">${escapeHtml(fechaTxt)} • ${escapeHtml(ciudad)}</div>
-          </div>
-          <div class="turno-pay">${escapeHtml(pagoTxt)}</div>`;
+        var mini=document.createElement("div");mini.className="turno-mini";
+        mini.onclick=function(){abrirDetalleTurno({idTurno:idTurno,empresa:empresa,direccion:direccion,fecha:fecha,hora:hora,ciudad:ciudad,dias:dias,pago:pagoEstimado,logoUrl:logoUrl})};
+        mini.innerHTML=
+          '<div class="img-placeholder '+(logoUrl?"has-img":"")+'" title="Tocar para ampliar">'+
+            (logoUrl?'<img class="turno-logo" src="'+escapeHtml(logoUrl)+'" alt="Logo '+escapeHtml(empresa)+'">':'<div class="img-hint">Ver</div>')+
+          '</div>'+
+          '<div class="turno-info">'+
+            '<div class="turno-topline"><div class="dot-green"></div><div class="turno-empresa">'+escapeHtml(empresa)+'</div></div>'+
+            '<div class="turno-meta">'+escapeHtml(fechaTxt)+' • '+escapeHtml(ciudad)+'</div>'+
+          '</div>'+
+          '<div class="turno-pay">'+escapeHtml(pagoTxt)+'</div>';
         cont.appendChild(mini);
       });
     }
-    const meta=getNotifMeta();
+    var meta=getNotifMeta();
     if(meta.lastTurnosCount!==turnos.length){
       meta.lastTurnosCount=turnos.length;setNotifMeta(meta);
       addNotificacion({type:"turnos",title:"Turnos disponibles",text:"Hay "+turnos.length+" turno(s) activo(s) en Bogotá.",read:false});
@@ -697,18 +749,19 @@ async function cargarTurnosDisponibles(){
     if(estado){estado.className="status error";estado.textContent="Error al cargar los turnos publicados."}
   }
 }
+
 function abrirDetalleTurno(turno){
   turnoDetalleActual=turno;
-  const title=document.getElementById("detalleTurnoTitulo"),cont=document.getElementById("detalleTurnoContenido");
+  var title=document.getElementById("detalleTurnoTitulo"),cont=document.getElementById("detalleTurnoContenido");
   if(title)title.textContent=(turno.empresa||"Cruz Verde")+" • "+(turno.idTurno||"TURNO");
-  const logoUrl=normalizarLogoUrl(turno.logoUrl||obtenerLogoPorEmpresa(turno.empresa));turno.logoUrl=logoUrl;
-  const imgBox=document.getElementById("detalleTurnoMedia");
+  var logoUrl=normalizarLogoUrl(turno.logoUrl||obtenerLogoPorEmpresa(turno.empresa));turno.logoUrl=logoUrl;
+  var imgBox=document.getElementById("detalleTurnoMedia");
   if(imgBox){
-    if(logoUrl){imgBox.classList.add("has-img");imgBox.innerHTML=`<img class="turno-logo" src="${escapeHtml(logoUrl)}" alt="Logo ${escapeHtml(turno.empresa||"")}">`}
-    else{imgBox.classList.remove("has-img");imgBox.innerHTML=`<div class="img-hint">Logo</div>`}
+    if(logoUrl){imgBox.classList.add("has-img");imgBox.innerHTML='<img class="turno-logo" src="'+escapeHtml(logoUrl)+'" alt="Logo '+escapeHtml(turno.empresa||"")+'">'}
+    else{imgBox.classList.remove("has-img");imgBox.innerHTML='<div class="img-hint">Logo</div>'}
   }
-  const dias=Number(turno.dias||3),textoDias=dias+" día"+(dias===1?"":"s")+" consecutivo"+(dias===1?"":"s");
-  let html="";
+  var dias=Number(turno.dias||3),textoDias=dias+" día"+(dias===1?"":"s")+" consecutivo"+(dias===1?"":"s");
+  var html="";
   html+='<p><strong>Empresa:</strong> '+escapeHtml(turno.empresa||"Cruz Verde")+"</p>";
   html+='<p><strong>Dirección:</strong> '+escapeHtml(turno.direccion||"Por definir")+"</p>";
   html+='<p><strong>Fecha de inicio:</strong> '+escapeHtml(formatearFechaCorta(turno.fecha)||"Por definir")+"</p>";
@@ -718,19 +771,33 @@ function abrirDetalleTurno(turno){
   if(cont)cont.innerHTML=html;
   abrirModal("modalDetalleTurno");
 }
-function aceptarDesdeDetalle(){if(!turnoDetalleActual)return;cerrarModal("modalDetalleTurno");abrirConfirmacionTurno({idTurno:turnoDetalleActual.idTurno,cliente:turnoDetalleActual.empresa,direccion:turnoDetalleActual.direccion,fecha:turnoDetalleActual.fecha,hora:turnoDetalleActual.hora,ciudad:turnoDetalleActual.ciudad,dias:turnoDetalleActual.dias})}
-function abrirConfirmacionTurno(turno){turnoSeleccionado=turno;const msg=document.getElementById("confirmarTurnoMsg");if(msg){msg.className="status";msg.textContent=""}const chk=document.getElementById("chkTerminos");if(chk)chk.checked=false;onToggleTerminos();abrirModal("modalConfirmarTurno")}
-function onToggleTerminos(){const chk=document.getElementById("chkTerminos"),btn=document.getElementById("btnConfirmarTurno");if(!btn)return;btn.disabled=!(chk&&chk.checked)}
+
+function aceptarDesdeDetalle(){
+  if(!turnoDetalleActual)return;
+  cerrarModal("modalDetalleTurno");
+  abrirConfirmacionTurno({idTurno:turnoDetalleActual.idTurno,cliente:turnoDetalleActual.empresa,direccion:turnoDetalleActual.direccion,fecha:turnoDetalleActual.fecha,hora:turnoDetalleActual.hora,ciudad:turnoDetalleActual.ciudad,dias:turnoDetalleActual.dias});
+}
+
+function abrirConfirmacionTurno(turno){
+  turnoSeleccionado=turno;
+  var msg=document.getElementById("confirmarTurnoMsg");if(msg){msg.className="status";msg.textContent=""}
+  var chk=document.getElementById("chkTerminos");if(chk)chk.checked=false;
+  onToggleTerminos();
+  abrirModal("modalConfirmarTurno");
+}
+
+function onToggleTerminos(){var chk=document.getElementById("chkTerminos"),btn=document.getElementById("btnConfirmarTurno");if(!btn)return;btn.disabled=!(chk&&chk.checked)}
 function abrirTerminosTurno(){cerrarModal("modalConfirmarTurno");abrirModal("modalTerminosTurno")}
 function volverDesdeTerminos(){cerrarModal("modalTerminosTurno");abrirModal("modalConfirmarTurno")}
+
 async function confirmarAceptarTurno(){
-  const msg=document.getElementById("confirmarTurnoMsg"),chk=document.getElementById("chkTerminos");
+  var msg=document.getElementById("confirmarTurnoMsg"),chk=document.getElementById("chkTerminos");
   if(!turnoSeleccionado){if(msg){msg.className="status error";msg.textContent="No se encontró el turno seleccionado."}return}
   if(!idContratoActual){if(msg){msg.className="status error";msg.textContent="No se encontró tu contrato. Vuelve a ingresar desde el portal principal."}return}
   if(!chk||!chk.checked){if(msg){msg.className="status error";msg.textContent="Debes aceptar los términos y condiciones antes de confirmar."}return}
   if(msg){msg.className="status muted";msg.textContent="Enviando solicitud de turno..."}
   try{
-    const formData=new URLSearchParams();
+    var formData=new URLSearchParams();
     formData.append("accion","solicitar_turno");
     formData.append("idContrato",idContratoActual);
     formData.append("idTurno",turnoSeleccionado.idTurno||"");
@@ -740,61 +807,60 @@ async function confirmarAceptarTurno(){
     formData.append("hora",turnoSeleccionado.hora||"");
     formData.append("ciudad",turnoSeleccionado.ciudad||"");
     formData.append("dias",turnoSeleccionado.dias||"");
-    const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:formData.toString()}),
+    var resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:formData.toString()}),
     data=await resp.json();
     if(!data.ok){if(msg){msg.className="status error";msg.textContent=data.error||"No fue posible registrar la aceptación del turno."}return}
     if(msg){msg.className="status ok";msg.textContent="Solicitud enviada. Recibirás la confirmación de asignación por WhatsApp."}
     addNotificacion({type:"turno",title:"Solicitud enviada",text:"Tu solicitud para el turno "+(turnoSeleccionado.idTurno||"")+" fue enviada.",read:false});
     ultimaAceptacion={turno:turnoSeleccionado,fechaBase:turnoSeleccionado.fecha||new Date().toISOString()};
     actualizarAgendaDesdeUltimaAceptacion();
-    setTimeout(()=>{cerrarModal("modalConfirmarTurno");actualizarIndicadorNotificaciones()},900);
+    setTimeout(function(){cerrarModal("modalConfirmarTurno");actualizarIndicadorNotificaciones()},900);
   }catch(e){
     console.error(e);
     if(msg){msg.className="status error";msg.textContent="Error al enviar la solicitud. Intenta de nuevo."}
   }
 }
+
 function actualizarAgendaDesdeUltimaAceptacion(){
-  const cont=document.getElementById("agendaContenido"),estado=document.getElementById("agendaEstado");
+  var cont=document.getElementById("agendaContenido"),estado=document.getElementById("agendaEstado");
   if(!cont||!estado)return;
   if(!ultimaAceptacion){estado.style.color="#e5e7eb";estado.textContent="Aún no tienes turnos aceptados.";cont.innerHTML="";return}
-  const t=ultimaAceptacion.turno,dias=Number(t.dias||3);
-  let base=new Date(ultimaAceptacion.fechaBase);if(isNaN(base.getTime()))base=new Date();
-  let html="";
-  for(let i=0;i<dias&&i<3;i++){
-    const d=new Date(base.getTime());d.setDate(base.getDate()+i);
-    const fechaTexto=d.toLocaleDateString("es-CO",{weekday:"short",day:"2-digit",month:"short",year:"numeric"});
-    html+=`
-      <div class="agenda-dia">
-        <div class="agenda-fecha">${escapeHtml(fechaTexto)}</div>
-        <div class="agenda-turno">Turno ${escapeHtml(t.idTurno||"TURNO")}</div>
-        <div class="agenda-detalle"><strong>Cliente:</strong> ${escapeHtml(t.cliente||"Cruz Verde")}</div>
-        <div class="agenda-detalle"><strong>Dirección:</strong> ${escapeHtml(t.direccion||"Dirección por definir")}</div>
-        <div class="agenda-detalle"><strong>Hora de llegada:</strong> ${escapeHtml(formatearHora(t.hora)||"08:00 a.m.")}</div>
-      </div>`;
+  var t=ultimaAceptacion.turno,dias=Number(t.dias||3);
+  var base=new Date(ultimaAceptacion.fechaBase);if(isNaN(base.getTime()))base=new Date();
+  var html="";
+  for(var i=0;i<dias&&i<3;i++){
+    var d=new Date(base.getTime());d.setDate(base.getDate()+i);
+    var fechaTexto=d.toLocaleDateString("es-CO",{weekday:"short",day:"2-digit",month:"short",year:"numeric"});
+    html+='<div class="agenda-dia">'+
+      '<div class="agenda-fecha">'+escapeHtml(fechaTexto)+'</div>'+
+      '<div class="agenda-turno">Turno '+escapeHtml(t.idTurno||"TURNO")+'</div>'+
+      '<div class="agenda-detalle"><strong>Cliente:</strong> '+escapeHtml(t.cliente||"Cruz Verde")+'</div>'+
+      '<div class="agenda-detalle"><strong>Dirección:</strong> '+escapeHtml(t.direccion||"Dirección por definir")+'</div>'+
+      '<div class="agenda-detalle"><strong>Hora de llegada:</strong> '+escapeHtml(formatearHora(t.hora)||"08:00 a.m.")+'</div>'+
+    '</div>';
   }
   estado.style.color="#bbf7d0";estado.textContent="Tu próximo turno activo:";cont.innerHTML=html;
 }
+
 async function cargarPagos(){
-  const estado=document.getElementById("pagosEstado"),cont=document.getElementById("pagosContenido");
+  var estado=document.getElementById("pagosEstado"),cont=document.getElementById("pagosContenido");
   if(cont)cont.innerHTML="";
   if(estado){estado.className="status muted";estado.textContent="Cargando información..."}
   if(!idContratoActual){if(estado){estado.className="status error";estado.textContent="No se encontró el ID del contrato."}return}
   try{
-    const resp=await fetch(API_URL+"?accion=historial_pagos&id="+encodeURIComponent(idContratoActual)),data=await resp.json();
+    var resp=await fetch(API_URL+"?accion=historial_pagos&id="+encodeURIComponent(idContratoActual)),data=await resp.json();
     if(!data.ok){if(estado){estado.className="status muted";estado.textContent="Próximamente verás pagos realizados y próximos pagos."}return}
-    const pagos=Array.isArray(data.pagos)?data.pagos:[];
+    var pagos=Array.isArray(data.pagos)?data.pagos:[];
     if(pagos.length===0){if(estado){estado.className="status muted";estado.textContent="No hay pagos para mostrar (por ahora)."}return}
     if(estado){estado.className="status ok";estado.textContent="Pagos encontrados: "+pagos.length}
-    let html="";
-    pagos.slice(0,20).forEach(p=>{
-      html+=`
-        <div class="noti-item" style="cursor:default;">
-          <div class="noti-bullet read"></div>
-          <div class="noti-body">
-            <p class="noti-title">${escapeHtml(p.consecutivo||"Pago")}</p>
-            <p class="noti-text">${escapeHtml(p.fecha||"")} • ${escapeHtml(formatearNumeroCOP(p.valor||0))}</p>
-          </div>
-        </div>`;
+    var html="";
+    pagos.slice(0,20).forEach(function(p){
+      html+='<div class="noti-item" style="cursor:default;">'+
+        '<div class="noti-bullet read"></div>'+
+        '<div class="noti-body">'+
+          '<p class="noti-title">'+escapeHtml(p.consecutivo||"Pago")+'</p>'+
+          '<p class="noti-text">'+escapeHtml(p.fecha||"")+' • '+escapeHtml(formatearNumeroCOP(p.valor||0))+'</p>'+
+        '</div></div>';
     });
     if(cont)cont.innerHTML=html;
   }catch(e){
@@ -802,33 +868,36 @@ async function cargarPagos(){
     if(estado){estado.className="status muted";estado.textContent="Próximamente verás pagos realizados y próximos pagos."}
   }
 }
-function limpiarHistorialListaUI(){const wrap=document.getElementById("historialListaWrap"),list=document.getElementById("historialLista");if(wrap)wrap.style.display="none";if(list)list.innerHTML=""}
+
+function limpiarHistorialListaUI(){var wrap=document.getElementById("historialListaWrap"),list=document.getElementById("historialLista");if(wrap)wrap.style.display="none";if(list)list.innerHTML=""}
 function renderHistorialLista(pagos){
-  const wrap=document.getElementById("historialListaWrap"),list=document.getElementById("historialLista");
+  var wrap=document.getElementById("historialListaWrap"),list=document.getElementById("historialLista");
   if(!wrap||!list)return;
-  const arr=Array.isArray(pagos)?pagos.slice(0,6):[];wrap.style.display="block";
-  if(arr.length===0){list.innerHTML=`<div class="hist-row" style="color:#6b7280;font-size:.9rem;">No hay pagos para mostrar.</div>`;return}
-  list.innerHTML=arr.map(p=>{
-    const fecha=p.fecha||p.FECHA||p["FECHA"]||"",valor=p.valor||p.VALOR||p["VALOR"]||0;
-    return`
-      <div class="hist-row">
-        <div class="hist-line"><span class="hist-label">Fecha de Pago:</span><span class="hist-value">${escapeHtml(formatearFechaCorta(fecha)||fecha||"—")}</span></div>
-        <div class="hist-line"><span class="hist-label">Valor de pago:</span><span class="hist-value">${escapeHtml(formatearNumeroCOP(valor)||valor||"—")}</span></div>
-      </div>`;
+  var arr=Array.isArray(pagos)?pagos.slice(0,6):[];wrap.style.display="block";
+  if(arr.length===0){list.innerHTML='<div class="hist-row" style="color:#6b7280;font-size:.9rem;">No hay pagos para mostrar.</div>';return}
+  list.innerHTML=arr.map(function(p){
+    var fecha=p.fecha||p.FECHA||p["FECHA"]||"",valor=p.valor||p.VALOR||p["VALOR"]||0;
+    return '<div class="hist-row">'+
+      '<div class="hist-line"><span class="hist-label">Fecha de Pago:</span><span class="hist-value">'+escapeHtml(formatearFechaCorta(fecha)||fecha||"—")+'</span></div>'+
+      '<div class="hist-line"><span class="hist-label">Valor de pago:</span><span class="hist-value">'+escapeHtml(formatearNumeroCOP(valor)||valor||"—")+'</span></div>'+
+    '</div>';
   }).join("");
 }
+
 async function cargarHistorialListaUltimos6(idContrato){
-  const url=API_URL+"?accion=historial_pagos_lista&id="+encodeURIComponent(idContrato),resp=await fetch(url),data=await resp.json();
+  var url=API_URL+"?accion=historial_pagos_lista&id="+encodeURIComponent(idContrato),resp=await fetch(url),data=await resp.json();
   if(!data.ok)throw new Error(data.error||"No fue posible cargar el historial.");
   return Array.isArray(data.pagos)?data.pagos:[];
 }
+
 function prepararModalHistorial(){
-  const correoLabel=document.getElementById("correoHistorialLabel"),correoInput=document.getElementById("correoHistorial"),
+  var correoLabel=document.getElementById("correoHistorialLabel"),correoInput=document.getElementById("correoHistorial"),
   idInput=document.getElementById("idHistorial"),msg=document.getElementById("historialMsg"),intro=document.getElementById("historialIntro"),
   btnEnviar=document.getElementById("btnHistorialEnviar"),btnDescargar=document.getElementById("btnHistorialDescargar");
   if(idInput&&idContratoActual)idInput.value=idContratoActual;
   if(msg){msg.textContent="";msg.style.color="#6b7280"}limpiarHistorialListaUI();
-  if(tipoUsuarioActual&&tipoUsuarioActual.toUpperCase()==="AFILIADO"){
+  var tipo=String(tipoUsuarioActual||"").toUpperCase();
+  if(tipo==="AFILIADO"){
     if(correoLabel)correoLabel.style.display="block";
     if(correoInput)correoInput.style.display="block";
     if(btnEnviar)btnEnviar.style.display="inline-flex";
@@ -840,10 +909,10 @@ function prepararModalHistorial(){
     if(btnEnviar)btnEnviar.style.display="none";
     if(btnDescargar)btnDescargar.style.display="inline-flex";
     if(intro)intro.textContent="Aquí podrás visualizar tus últimos pagos (y si lo necesitas, descargar el PDF).";
-    (async()=>{
+    (async function(){
       try{
         if(msg){msg.style.color="#6b7280";msg.textContent="Cargando últimos pagos..."}
-        const pagos=await cargarHistorialListaUltimos6(idContratoActual);
+        var pagos=await cargarHistorialListaUltimos6(idContratoActual);
         renderHistorialLista(pagos);
         if(msg)msg.textContent="";
       }catch(e){
@@ -853,16 +922,19 @@ function prepararModalHistorial(){
     })();
   }
 }
+
 async function enviarSolicitudHistorial(){
-  const correo=document.getElementById("correoHistorial").value.trim(),idHist=document.getElementById("idHistorial").value.trim(),msg=document.getElementById("historialMsg");
+  var correo=(document.getElementById("correoHistorial").value||"").trim(),
+  idHist=(document.getElementById("idHistorial").value||"").trim(),
+  msg=document.getElementById("historialMsg");
   msg.style.color="#6b7280";msg.textContent="Enviando solicitud...";
   if(!correo||!idHist){msg.style.color="#b91c1c";msg.textContent="Debes ingresar el correo y el ID.";return}
   try{
-    const formData=new URLSearchParams();
+    var formData=new URLSearchParams();
     formData.append("accion","solicitar_historial");
     formData.append("correo",correo);
     formData.append("idContrato",idHist);
-    const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:formData.toString()}),
+    var resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:formData.toString()}),
     data=await resp.json();
     if(data.ok){msg.style.color="#065f46";msg.textContent="Solicitud enviada correctamente. Nuestro equipo revisará y enviará el historial al correo registrado."}
     else{msg.style.color="#b91c1c";msg.textContent=data.error||"Ocurrió un problema al enviar la solicitud."}
@@ -871,71 +943,77 @@ async function enviarSolicitudHistorial(){
     msg.style.color="#b91c1c";msg.textContent="Error al enviar la solicitud. Intenta de nuevo.";
   }
 }
+
 async function leerRespuestaPdf(resp){
-  const ct=(resp.headers.get("content-type")||"").toLowerCase();
-  if(ct.includes("application/pdf")){const blob=await resp.blob(),url=URL.createObjectURL(blob);return{ok:true,url,kind:"blob"}}
-  if(ct.includes("application/json")){const data=await resp.json();return normalizarRespuestaPdf(data)}
-  const txt=await resp.text();
-  try{const data=JSON.parse(txt);return normalizarRespuestaPdf(data)}catch(e){}
-  const finalUrl=resp.url||"";if(finalUrl)return{ok:true,url:finalUrl,kind:"fallback-url"};
+  var ct=(resp.headers.get("content-type")||"").toLowerCase();
+  if(ct.includes("application/pdf")){var blob=await resp.blob(),url=URL.createObjectURL(blob);return{ok:true,url:url,kind:"blob"}}
+  if(ct.includes("application/json")){var data=await resp.json();return normalizarRespuestaPdf(data)}
+  var txt=await resp.text();
+  try{var data2=JSON.parse(txt);return normalizarRespuestaPdf(data2)}catch(e){}
+  var finalUrl=resp.url||"";if(finalUrl)return{ok:true,url:finalUrl,kind:"fallback-url"};
   return{ok:false,error:"Respuesta no válida al generar el PDF."}
 }
+
 function normalizarRespuestaPdf(data){
-  const ok=!!(data&&(data.ok===true||data.ok==="true"));
+  var ok=!!(data&&(data.ok===true||data.ok==="true"));
   if(!ok)return{ok:false,error:(data&&data.error)?data.error:"No fue posible generar el PDF."};
-  const fileId=data.fileId||data.fileID||"",downloadUrl=data.downloadUrl||data.downloadURL||"",url=data.url||data.pdfUrl||data.viewUrl||"";
-  if(url||fileId||downloadUrl)return{ok:true,url,fileId,downloadUrl,kind:"json"};
-  const dataUri=data.dataUri||data.dataURI||data.base64||"";
+  var fileId=data.fileId||data.fileID||"",downloadUrl=data.downloadUrl||data.downloadURL||"",url=data.url||data.pdfUrl||data.viewUrl||"";
+  if(url||fileId||downloadUrl)return{ok:true,url:url,fileId:fileId,downloadUrl:downloadUrl,kind:"json"};
+  var dataUri=data.dataUri||data.dataURI||data.base64||"";
   if(typeof dataUri==="string"&&dataUri.startsWith("data:application/pdf"))return{ok:true,url:dataUri,kind:"datauri"};
   return{ok:false,error:"El servidor respondió OK, pero no entregó la URL del PDF."}
 }
+
 function construirUrlEmbedPdf(res){
   if(!res)return"";
-  const fid=String(res.fileId||"").trim();if(fid)return"https://drive.google.com/file/d/"+encodeURIComponent(fid)+"/preview";
-  const url=String(res.url||"").trim();if(!url)return"";
+  var fid=String(res.fileId||"").trim();if(fid)return"https://drive.google.com/file/d/"+encodeURIComponent(fid)+"/preview";
+  var url=String(res.url||"").trim();if(!url)return"";
   if(url.startsWith("blob:")||url.startsWith("data:application/pdf"))return url;
   if(url.includes("drive.google.com")){
-    try{const u=new URL(url),id=u.searchParams.get("id");if(id)return"https://drive.google.com/file/d/"+encodeURIComponent(id)+"/preview"}catch(e){}
-    const m=url.match(/\/file\/d\/([^/]+)/i);if(m&&m[1])return"https://drive.google.com/file/d/"+encodeURIComponent(m[1])+"/preview";
-    const m2=url.match(/[?&]id=([^&]+)/i);if(m2&&m2[1])return"https://drive.google.com/file/d/"+encodeURIComponent(m2[1])+"/preview";
+    try{var u=new URL(url),id=u.searchParams.get("id");if(id)return"https://drive.google.com/file/d/"+encodeURIComponent(id)+"/preview"}catch(e){}
+    var m=url.match(/\/file\/d\/([^/]+)/i);if(m&&m[1])return"https://drive.google.com/file/d/"+encodeURIComponent(m[1])+"/preview";
+    var m2=url.match(/[?&]id=([^&]+)/i);if(m2&&m2[1])return"https://drive.google.com/file/d/"+encodeURIComponent(m2[1])+"/preview";
     return url;
   }
   return url;
 }
+
 async function obtenerHistorialPdfResponse(id){
-  const acciones=["historial_pagos_pdf","historial-pagos-pdf"];let ultimoError="No fue posible generar el PDF.";
-  for(const acc of acciones){
-    const url=API_URL+"?accion="+encodeURIComponent(acc)+"&id="+encodeURIComponent(id);
+  var acciones=["historial_pagos_pdf","historial-pagos-pdf"],ultimoError="No fue posible generar el PDF.";
+  for(var i=0;i<acciones.length;i++){
+    var acc=acciones[i],url=API_URL+"?accion="+encodeURIComponent(acc)+"&id="+encodeURIComponent(id);
     try{
-      const resp=await fetch(url,{method:"GET",redirect:"follow"}),r=await leerRespuestaPdf(resp);
+      var resp=await fetch(url,{method:"GET",redirect:"follow"}),r=await leerRespuestaPdf(resp);
       if(r&&r.ok)return r;
       if(r&&r.error)ultimoError=r.error;
     }catch(e){console.error(e);ultimoError="Error al generar el PDF. Intenta de nuevo."}
   }
-  const vistaUrl=API_URL+"?accion="+encodeURIComponent("historial_pagos_vista")+"&id="+encodeURIComponent(id);
+  var vistaUrl=API_URL+"?accion="+encodeURIComponent("historial_pagos_vista")+"&id="+encodeURIComponent(id);
   return{ok:true,url:vistaUrl,kind:"vista-html"};
 }
+
 async function descargarHistorialPdf(){
-  const idInput=document.getElementById("idHistorial"),msg=document.getElementById("historialMsg"),
-  id=((idInput&&idInput.value)?idInput.value:"").trim().toUpperCase();
+  var idInput=document.getElementById("idHistorial"),msg=document.getElementById("historialMsg"),
+  id=String((idInput&&idInput.value)?idInput.value:"").trim().toUpperCase();
   msg.style.color="#6b7280";msg.textContent="Generando PDF...";
   if(!id){msg.style.color="#b91c1c";msg.textContent="Debes ingresar tu ID de contrato.";return}
   try{
-    const res=await obtenerHistorialPdfResponse(id),embedUrl=construirUrlEmbedPdf(res);
+    var res=await obtenerHistorialPdfResponse(id),embedUrl=construirUrlEmbedPdf(res);
     msg.style.color="#065f46";
     msg.textContent=(res.kind==="vista-html")?"Listo. Abriendo vista (puedes imprimir/guardar como PDF)...":"Listo. Abriendo PDF...";
     cerrarModal("modalHistorialPagos");
-    setTimeout(()=>abrirModalPdf("Historial de pagos "+id,embedUrl),50);
+    setTimeout(function(){abrirModalPdf("Historial de pagos "+id,embedUrl)},50);
   }catch(e){
     console.error(e);
     msg.style.color="#b91c1c";msg.textContent=e&&e.message?e.message:"No fue posible generar el PDF.";
   }
 }
+
 function copiarLinkAfiliado(){
-  const input=document.getElementById("linkAfiliadoInput"),msg=document.getElementById("linkAfiliadoMsg");
+  var input=document.getElementById("linkAfiliadoInput"),msg=document.getElementById("linkAfiliadoMsg");
   input.focus();input.select();
   try{
-    const ok=document.execCommand("copy");
+    var ok=document.execCommand("copy");
     if(ok){msg.style.color="#065f46";msg.textContent="Link copiado al portapapeles."}
     else{msg.style.color="#b91c1c";msg.textContent="No se pudo copiar automáticamente. Selecciona y copia el link manualmente."}
   }catch(e){
@@ -943,20 +1021,22 @@ function copiarLinkAfiliado(){
     msg.style.color="#b91c1c";msg.textContent="No se pudo copiar automáticamente. Selecciona y copia el link manualmente.";
   }
 }
-function solicitarGrua(){const mensaje="Hola, necesito solicitar grúa para mi vehículo.",url="https://wa.me/573159406263?text="+encodeURIComponent(mensaje);window.open(url,"_blank")}
+
+function solicitarGrua(){var mensaje="Hola, necesito solicitar grúa para mi vehículo.",url="https://wa.me/573159406263?text="+encodeURIComponent(mensaje);window.open(url,"_blank")}
+
 async function enviarActualizacionKilometraje(){
-  const kmInput=document.getElementById("kmValor"),idVehInput=document.getElementById("kmIdVehiculo"),msg=document.getElementById("kmMsg");
+  var kmInput=document.getElementById("kmValor"),idVehInput=document.getElementById("kmIdVehiculo"),msg=document.getElementById("kmMsg");
   msg.className="status";msg.textContent="";
-  const km=Number(kmInput.value||0),idVeh=(idVehInput.value||"").trim().toUpperCase(),idContrato=idContratoActual;
-  if(!idContrato||!km){msg.classList.add("error");msg.textContent="Debes ingresar el kilometraje e iniciar sesión con tu contrato.";return}
+  var km=Number(kmInput.value||0),idVeh=String(idVehInput.value||"").trim().toUpperCase(),idContrato=idContratoActual;
+  if(!idContrato||!km){msg.className="status error";msg.textContent="Debes ingresar el kilometraje e iniciar sesión con tu contrato.";return}
   msg.textContent="Enviando actualización...";
   try{
-    const formData=new URLSearchParams();
+    var formData=new URLSearchParams();
     formData.append("accion","actualizar_kilometraje");
-    formData.append("kilometraje",km.toString());
+    formData.append("kilometraje",String(km));
     formData.append("idVehiculo",idVeh);
     formData.append("idContrato",idContrato);
-    const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:formData.toString()}),
+    var resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:formData.toString()}),
     data=await resp.json();
     if(data.ok){msg.className="status ok";msg.textContent="Kilometraje actualizado correctamente."}
     else{msg.className="status error";msg.textContent=data.error||"No fue posible actualizar el kilometraje."}
@@ -965,115 +1045,112 @@ async function enviarActualizacionKilometraje(){
     msg.className="status error";msg.textContent="Error al enviar la actualización. Intenta de nuevo.";
   }
 }
-function resetIncidenteUI(){
-  const msg=document.getElementById("incidenteMsg"),file=document.getElementById("incidenteFotos");
-  if(msg){msg.className="status";msg.textContent=""}
-  incidenteFotos=[];
-  if(file)file.value="";
-  renderIncidenteFotosGrid();
-}
-function renderIncidenteFotosGrid(){
-  const grid=document.getElementById("incidenteFotosGrid");if(!grid)return;
-  const slots=[0,1,2].map(i=>incidenteFotos[i]||null);
-  grid.innerHTML=slots.map((f,i)=>`
-    <div class="foto-box">
-      ${f?`<img src="${escapeHtml(f.preview)}" alt="Foto ${i+1}"><div class="foto-x" onclick="quitarFotoIncidente(${i})">×</div>`:`<div class="foto-hint">Foto ${i+1}</div>`}
-    </div>`).join("");
-}
-function quitarFotoIncidente(idx){incidenteFotos=incidenteFotos.filter((_,i)=>i!==idx);renderIncidenteFotosGrid()}
-function fileToJpegDataUrl_(file,maxW,quality){
-  return new Promise((resolve,reject)=>{
-    const fr=new FileReader();
-    fr.onerror=()=>reject(new Error("No fue posible leer la imagen."));
-    fr.onload=()=>{
-      const img=new Image();
-      img.onerror=()=>reject(new Error("No fue posible procesar la imagen."));
-      img.onload=()=>{
-        let w=img.width,h=img.height;
-        if(!w||!h)return reject(new Error("Imagen inválida."));
-        if(w>maxW){h=Math.round(h*(maxW/w));w=maxW}
-        const canvas=document.createElement("canvas");canvas.width=w;canvas.height=h;
-        const ctx=canvas.getContext("2d");ctx.drawImage(img,0,0,w,h);
-        const dataUrl=canvas.toDataURL("image/jpeg",quality);
-        resolve(dataUrl);
-      };
-      img.src=String(fr.result||"");
-    };
+
+function readFileAsDataURL_(file){
+  return new Promise(function(resolve,reject){
+    var fr=new FileReader();
+    fr.onload=function(){resolve(String(fr.result||""))};
+    fr.onerror=function(){reject(new Error("No fue posible leer el archivo."))};
     fr.readAsDataURL(file);
   });
 }
-async function onIncidenteFotosChange(e){
-  const msg=document.getElementById("incidenteMsg");
-  try{
-    const files=Array.from((e&&e.target&&e.target.files)?e.target.files:[]);
-    if(files.length===0)return;
-    if(msg){msg.className="status muted";msg.textContent="Procesando fotos..."}
-    const remaining=3-incidenteFotos.length;
-    const pick=files.slice(0,remaining);
-    for(const f of pick){
-      const dataUrl=await fileToJpegDataUrl_(f,1280,.78);
-      const base64=dataUrl.split(",")[1]||"";
-      const safeName=("INC_"+(idContratoActual||"")+"_"+Date.now()+"_"+Math.random().toString(16).slice(2)+".jpg").toUpperCase();
-      incidenteFotos.push({name:safeName,type:"image/jpeg",base64,preview:dataUrl});
-      if(incidenteFotos.length>=3)break;
-    }
-    renderIncidenteFotosGrid();
-    if(msg){msg.className="status";msg.textContent=""}
-  }catch(err){
-    console.error(err);
-    if(msg){msg.className="status error";msg.textContent=(err&&err.message)?err.message:"No fue posible procesar las fotos."}
-  }
+
+function compressImageToJpegDataUrl_(file,maxSide,quality){
+  return new Promise(function(resolve){
+    if(!file||!file.type||file.type.indexOf("image/")!==0){resolve("");return}
+    var fr=new FileReader();
+    fr.onload=function(){
+      var img=new Image();
+      img.onload=function(){
+        try{
+          var w=img.naturalWidth||img.width,h=img.naturalHeight||img.height;
+          if(!w||!h){resolve("");return}
+          var ms=maxSide||1280,q=(typeof quality==="number"?quality:0.75),scale=Math.min(1,ms/Math.max(w,h));
+          var cw=Math.max(1,Math.round(w*scale)),ch=Math.max(1,Math.round(h*scale));
+          var c=document.createElement("canvas");c.width=cw;c.height=ch;
+          var ctx=c.getContext("2d");ctx.drawImage(img,0,0,cw,ch);
+          resolve(c.toDataURL("image/jpeg",q));
+        }catch(e){resolve("")}
+      };
+      img.onerror=function(){resolve("")};
+      img.src=String(fr.result||"");
+    };
+    fr.onerror=function(){resolve("")};
+    fr.readAsDataURL(file);
+  });
 }
+
 async function enviarIncidente(){
-  const descInput=document.getElementById("incidenteDescripcion"),idVehInput=document.getElementById("incidenteIdVehiculo"),
-  fechaInput=document.getElementById("incidenteFecha"),msg=document.getElementById("incidenteMsg");
+  var descInput=document.getElementById("incidenteDescripcion"),
+  idVehInput=document.getElementById("incidenteIdVehiculo"),
+  fechaInput=document.getElementById("incidenteFecha"),
+  f1=document.getElementById("incidenteFoto1"),
+  f2=document.getElementById("incidenteFoto2"),
+  f3=document.getElementById("incidenteFoto3"),
+  msg=document.getElementById("incidenteMsg");
+
   msg.className="status";msg.textContent="";
-  const descripcion=(descInput.value||"").trim(),idVeh=(idVehInput.value||"").trim().toUpperCase(),fecha=fechaInput.value,idContrato=idContratoActual;
-  if(!idContrato||!descripcion){msg.classList.add("error");msg.textContent="Debes ingresar la descripción y tener un contrato cargado.";return}
-  msg.textContent="Enviando incidente...";
+  var descripcion=String(descInput.value||"").trim(),
+  idVeh=String(idVehInput.value||"").trim().toUpperCase(),
+  fecha=String(fechaInput.value||""),
+  idContrato=idContratoActual;
+
+  if(!idContrato||!descripcion){msg.className="status error";msg.textContent="Debes ingresar la descripción y tener un contrato cargado.";return}
+  msg.className="status muted";msg.textContent="Enviando incidente...";
+
   try{
-    const formData=new URLSearchParams();
+    var files=[(f1&&f1.files&&f1.files[0])?f1.files[0]:null,(f2&&f2.files&&f2.files[0])?f2.files[0]:null,(f3&&f3.files&&f3.files[0])?f3.files[0]:null];
+    var fotosData=[],fotosName=[];
+    for(var i=0;i<files.length;i++){
+      var fi=files[i];
+      if(!fi){fotosData.push("");fotosName.push("");continue}
+      var dataUrl=await compressImageToJpegDataUrl_(fi,1280,0.75);
+      if(!dataUrl)dataUrl=await readFileAsDataURL_(fi);
+      fotosData.push(dataUrl||"");
+      fotosName.push(String(fi.name||("foto"+(i+1)+".jpg")));
+    }
+
+    var formData=new URLSearchParams();
     formData.append("accion","notificar_incidente");
     formData.append("descripcion",descripcion);
     formData.append("idVehiculo",idVeh);
     formData.append("idContrato",idContrato);
     formData.append("fecha",fecha);
-    formData.append("carpetaDrive",EVIDENCIAS_FOLDER);
-    const fotos=incidenteFotos.slice(0,3);
-    fotos.forEach((f,i)=>{
-      const n=i+1;
-      formData.append("foto"+n,f.base64||"");
-      formData.append("foto"+n+"_name",f.name||("FOTO_"+n+".jpg"));
-      formData.append("foto"+n+"_type",f.type||"image/jpeg");
-    });
-    const resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:formData.toString()}),
+    formData.append("carpetaDrive","EVIDENCIAS INCIDENTES");
+    formData.append("foto1",fotosData[0]||"");formData.append("foto1Nombre",fotosName[0]||"");
+    formData.append("foto2",fotosData[1]||"");formData.append("foto2Nombre",fotosName[1]||"");
+    formData.append("foto3",fotosData[2]||"");formData.append("foto3Nombre",fotosName[2]||"");
+
+    var resp=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:formData.toString()}),
     data=await resp.json();
-    if(data.ok){msg.className="status ok";msg.textContent="Incidente registrado correctamente.";addNotificacion({type:"incidente",title:"Incidente registrado",text:"Tu reporte fue enviado y las evidencias quedaron guardadas.",read:false});setTimeout(()=>{cerrarModal("modalIncidente");actualizarIndicadorNotificaciones()},900)}
+    if(data.ok){msg.className="status ok";msg.textContent="Incidente registrado correctamente."}
     else{msg.className="status error";msg.textContent=data.error||"No fue posible registrar el incidente."}
   }catch(e){
     console.error(e);
     msg.className="status error";msg.textContent="Error al enviar el incidente. Intenta de nuevo.";
   }
 }
+
 async function generarIntegritySignature(reference,amountInCents,currency){
-  const encoder=new TextEncoder(),data=`${reference}${amountInCents}${currency}${WOMPI_INTEGRITY_KEY}`,
+  var encoder=new TextEncoder(),data=String(reference)+String(amountInCents)+String(currency)+String(WOMPI_INTEGRITY_KEY),
   hashBuffer=await crypto.subtle.digest("SHA-256",encoder.encode(data)),hashArray=Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b=>b.toString(16).padStart(2,"0")).join("");
+  return hashArray.map(function(b){return b.toString(16).padStart(2,"0")}).join("");
 }
+
 async function crearPagoWompi(){
-  const montoInput=document.getElementById("montoPago"),errorLabel=document.getElementById("pagoError"),contratoError=document.getElementById("pagoContratoError"),
-  valor=parseInt(montoInput.value,10),idContrato=(idContratoActual||"").trim().toUpperCase();
+  var montoInput=document.getElementById("montoPago"),errorLabel=document.getElementById("pagoError"),contratoError=document.getElementById("pagoContratoError"),
+  valor=parseInt(montoInput.value,10),idContrato=String(idContratoActual||"").trim().toUpperCase();
   if(errorLabel)errorLabel.style.display="none";
   if(contratoError)contratoError.style.display="none";
   if(!idContrato){if(contratoError)contratoError.style.display="block";return}
   if(!valor||valor<170000){if(errorLabel)errorLabel.style.display="block";return}
   if(typeof WidgetCheckout==="undefined"){alert("No se pudo cargar el checkout de Wompi. Por favor recarga la página.");return}
-  const amountInCents=valor*100,reference="PAGO_"+idContrato+"_"+Date.now(),currency="COP";
+  var amountInCents=valor*100,reference="PAGO_"+idContrato+"_"+Date.now(),currency="COP";
   try{
-    const integritySignature=await generarIntegritySignature(reference,amountInCents,currency);
-    const checkout=new WidgetCheckout({currency,amountInCents,reference,publicKey:WOMPI_PUBLIC_KEY,signature:{integrity:integritySignature},redirectUrl:WOMPI_REDIRECT_URL});
-    checkout.open(result=>{
-      const transaction=result.transaction;
+    var integritySignature=await generarIntegritySignature(reference,amountInCents,currency);
+    var checkout=new WidgetCheckout({currency:currency,amountInCents:amountInCents,reference:reference,publicKey:WOMPI_PUBLIC_KEY,signature:{integrity:integritySignature},redirectUrl:WOMPI_REDIRECT_URL});
+    checkout.open(function(result){
+      var transaction=result.transaction;
       console.log("Transacción Wompi:",transaction&&transaction.id,transaction&&transaction.status);
       registrarPagoEnSheet(reference,valor,idContrato);
     });
@@ -1082,9 +1159,10 @@ async function crearPagoWompi(){
     alert("No fue posible iniciar el pago. Intenta de nuevo.");
   }
 }
+
 async function registrarPagoEnSheet(reference,valor,idContrato){
   try{
-    const formData=new URLSearchParams();
+    var formData=new URLSearchParams();
     formData.append("accion","registrar_pago_portal");
     formData.append("referencia",reference);
     formData.append("monto",valor);
@@ -1094,7 +1172,7 @@ async function registrarPagoEnSheet(reference,valor,idContrato){
     await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:formData.toString()});
   }catch(e){console.error("Error registrando pago (portal) en hoja",e)}
   try{
-    const formData2=new URLSearchParams();
+    var formData2=new URLSearchParams();
     formData2.append("accion","registrar_pago");
     formData2.append("referencia",reference);
     formData2.append("monto",valor);
@@ -1103,121 +1181,121 @@ async function registrarPagoEnSheet(reference,valor,idContrato){
     await fetch(API_URL,{method:"POST",headers:{"Content-Type":"application/x-www-form-urlencoded"},body:formData2.toString()});
   }catch(e){console.error("Error registrando pago (fallback) en hoja",e)}
 }
-function getNotificaciones(){try{const raw=localStorage.getItem(NOTIF_KEY),arr=raw?JSON.parse(raw):[];return Array.isArray(arr)?arr:[]}catch(e){return[]}}
+
+function getNotificaciones(){try{var raw=localStorage.getItem(NOTIF_KEY),arr=raw?JSON.parse(raw):[];return Array.isArray(arr)?arr:[]}catch(e){return[]}}
 function setNotificaciones(arr){try{localStorage.setItem(NOTIF_KEY,JSON.stringify(arr||[]))}catch(e){}}
-function getNotifMeta(){try{const raw=localStorage.getItem(META_KEY);return raw?JSON.parse(raw):{}}catch(e){return{}}}
+function getNotifMeta(){try{var raw=localStorage.getItem(META_KEY);return raw?JSON.parse(raw):{}}catch(e){return{}}}
 function setNotifMeta(obj){try{localStorage.setItem(META_KEY,JSON.stringify(obj||{}))}catch(e){}}
 function addNotificacion(n){
-  const list=getNotificaciones();
-  const item={id:"N"+Date.now(),type:n.type||"info",title:n.title||"Notificación",text:n.text||"",ts:Date.now(),read:!!n.read};
+  var list=getNotificaciones();
+  var item={id:"N"+Date.now(),type:n.type||"info",title:n.title||"Notificación",text:n.text||"",ts:Date.now(),read:!!n.read};
   list.unshift(item);setNotificaciones(list.slice(0,50));actualizarIndicadorNotificaciones();
 }
-function hayNoLeidas(){return getNotificaciones().some(n=>!n.read)}
-function actualizarIndicadorNotificaciones(){const dot=document.getElementById("bellDot");if(!dot)return;dot.style.display=hayNoLeidas()?"block":"none"}
+function hayNoLeidas(){return getNotificaciones().some(function(n){return !n.read})}
+function actualizarIndicadorNotificaciones(){var dot=document.getElementById("bellDot");if(!dot)return;dot.style.display=hayNoLeidas()?"block":"none"}
+
 function abrirNotificaciones(){
   renderNotificaciones();abrirModal("modalNotificaciones");
-  const list=getNotificaciones(),updated=list.map(n=>{n.read=true;return n});
+  var list=getNotificaciones(),updated=list.map(function(n){n.read=true;return n});
   setNotificaciones(updated);actualizarIndicadorNotificaciones();renderNotificaciones();
 }
+
 function renderNotificaciones(){
-  const estado=document.getElementById("notiEstado"),cont=document.getElementById("notiList");
+  var estado=document.getElementById("notiEstado"),cont=document.getElementById("notiList");
   if(cont)cont.innerHTML="";
-  const list=getNotificaciones();
+  var list=getNotificaciones();
   if(list.length===0){if(estado){estado.className="status muted";estado.textContent="Sin notificaciones."}return}
   if(estado){estado.className="status ok";estado.textContent="Historial: "+list.length}
   if(cont){
-    list.forEach(n=>{
-      const d=new Date(n.ts),time=isNaN(d.getTime())?"":d.toLocaleString("es-CO",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
-      const item=document.createElement("div");item.className="noti-item";
-      item.innerHTML=`
-        <div class="noti-bullet ${n.read?"read":""}"></div>
-        <div class="noti-body">
-          <p class="noti-title">${escapeHtml(n.title)}</p>
-          <p class="noti-text">${escapeHtml(n.text)}</p>
-          <p class="noti-time">${escapeHtml(time)}</p>
-        </div>`;
+    list.forEach(function(n){
+      var d=new Date(n.ts),time=isNaN(d.getTime())?"":d.toLocaleString("es-CO",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"});
+      var item=document.createElement("div");item.className="noti-item";
+      item.innerHTML='<div class="noti-bullet '+(n.read?"read":"")+'"></div>'+
+        '<div class="noti-body">'+
+          '<p class="noti-title">'+escapeHtml(n.title)+'</p>'+
+          '<p class="noti-text">'+escapeHtml(n.text)+'</p>'+
+          '<p class="noti-time">'+escapeHtml(time)+'</p>'+
+        '</div>';
       cont.appendChild(item);
     });
   }
 }
-function escapeHtml(s){return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;")}
+
 function normKey_(s){return String(s||"").toUpperCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/\s+/g," ").trim()}
 function getByKeys_(obj,keys){
   if(!obj)return"";
-  for(const k of keys)if(Object.prototype.hasOwnProperty.call(obj,k))return obj[k];
-  const target=keys.map(k=>normKey_(k));
-  for(const realKey in obj){const rk=normKey_(realKey),idx=target.indexOf(rk);if(idx!==-1)return obj[realKey]}
+  for(var i=0;i<keys.length;i++){var k=keys[i];if(Object.prototype.hasOwnProperty.call(obj,k))return obj[k]}
+  var target=keys.map(function(k){return normKey_(k)});
+  for(var realKey in obj){
+    var rk=normKey_(realKey),idx=target.indexOf(rk);
+    if(idx!==-1)return obj[realKey];
+  }
   return"";
 }
 function parseDateLoose_(v){
   if(!v)return null;
   if(v instanceof Date&&!isNaN(v.getTime()))return v;
-  const s=String(v).trim();if(!s)return null;
-  const d1=new Date(s);if(!isNaN(d1.getTime()))return d1;
-  const m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+  var s=String(v).trim();if(!s)return null;
+  var d1=new Date(s);if(!isNaN(d1.getTime()))return d1;
+  var m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
   if(m){
-    const dd=parseInt(m[1],10),mm=parseInt(m[2],10)-1;let yy=parseInt(m[3],10);if(yy<100)yy+=2000;
-    const d2=new Date(yy,mm,dd);if(!isNaN(d2.getTime()))return d2;
+    var dd=parseInt(m[1],10),mm=parseInt(m[2],10)-1,yy=parseInt(m[3],10);if(yy<100)yy+=2000;
+    var d2=new Date(yy,mm,dd);if(!isNaN(d2.getTime()))return d2;
   }
   return null;
 }
 function sumValorMtos_(arr){
-  return (arr||[]).reduce((acc,m)=>{
-    const v=getByKeys_(m,["VALOR GENERAL","VALOR MTOS","VALOR","COSTO","COSTO GENERAL"]),n=Number(v||0);
+  return (arr||[]).reduce(function(acc,m){
+    var v=getByKeys_(m,["VALOR GENERAL","VALOR MTOS","VALOR","COSTO","COSTO GENERAL"]),n=Number(v||0);
     return acc+(isNaN(n)?0:n);
   },0);
 }
-function toNumInt_(v){const n=Number(String(v??"").replace(/[^\d.-]/g,""));return isNaN(n)?0:Math.round(n)}
+function toNumInt_(v){var n=Number(String(v==null?"":v).replace(/[^\d.-]/g,""));return isNaN(n)?0:Math.round(n)}
 function matchTipo_(m,needles){
-  const tipo=getByKeys_(m,["TIPO","TIPO MANTENIMIENTO","MANTENIMIENTO","SERVICIO","DESCRIPCIÓN","DESCRIPCION","DETALLE","NOTAS"])||"",s=normKey_(tipo);
-  return needles.some(n=>s.includes(normKey_(n)));
+  var tipo=getByKeys_(m,["TIPO","TIPO MANTENIMIENTO","MANTENIMIENTO","SERVICIO","DESCRIPCIÓN","DESCRIPCION","DETALLE","NOTAS"])||"",s=normKey_(tipo);
+  return needles.some(function(n){return s.includes(normKey_(n))});
 }
 function getConteosMtos_(arr){
-  const first=(arr&&arr[0])?arr[0]:null;
-  const aceiteM=toNumInt_(getByKeys_(first,["CAMBIOS DE ACEITE","CAMBIO DE ACEITE","CAMBIOS ACEITE","N CAMBIOS ACEITE","ACEITES","aceites"]));
-  const pastM=toNumInt_(getByKeys_(first,["PASTILLAS","PASTILLAS DE FRENO","CAMBIO PASTILLAS","CAMBIOS PASTILLAS","pastillas"]));
-  const kitM=toNumInt_(getByKeys_(first,["KIT DE ARRASTRE","KIT ARRASTRE","KITS DE ARRASTRE","CAMBIO KIT ARRASTRE","kitArrastre"]));
-  if(aceiteM||pastM||kitM)return{aceite:aceiteM,pastillas:pastM,kit:kitM};
-  let aceite=0,pastillas=0,kit=0;
-  (arr||[]).forEach(m=>{
-    const aNum=toNumInt_(getByKeys_(m,["CAMBIOS DE ACEITE","CAMBIO DE ACEITE","ACEITE","ACEITES","cambiosAceite"])),
-    pNum=toNumInt_(getByKeys_(m,["PASTILLAS","PASTILLA","PASTILLAS DE FRENO","CAMBIO PASTILLAS","pastillas","cambiosPastillas"])),
-    kNum=toNumInt_(getByKeys_(m,["KIT DE ARRASTRE","KIT ARRASTRE","CAMBIO KIT ARRASTRE","TRANSMISIÓN","TRANSMISION","kitArrastre"]));
+  var aceite=0,pastillas=0,kit=0;
+  (arr||[]).forEach(function(m){
+    var aNum=toNumInt_(getByKeys_(m,["CAMBIOS DE ACEITE","CAMBIO DE ACEITE","CAMBIOS ACEITE","N CAMBIOS ACEITE","N° CAMBIOS ACEITE","ACEITE","ACEITES","cambiosAceite"])),
+    pNum=toNumInt_(getByKeys_(m,["PASTILLAS","PASTILLA","PASTILLAS DE FRENO","PASTILLAS FRENO","CAMBIO PASTILLAS","CAMBIOS PASTILLAS","cambiosPastillas"])),
+    kNum=toNumInt_(getByKeys_(m,["KIT DE ARRASTRE","KIT ARRASTRE","KITS DE ARRASTRE","CAMBIO KIT ARRASTRE","TRANSMISIÓN","TRANSMISION","kitArrastre"]));
     if(aNum||pNum||kNum){aceite+=aNum;pastillas+=pNum;kit+=kNum;return}
     if(matchTipo_(m,["ACEITES","ACEITE","CAMBIO ACEITE","CAMBIO DE ACEITE","ACEITE Y FILTRO","FILTRO ACEITE"]))aceite+=1;
     if(matchTipo_(m,["PASTILLAS","PASTILLA","PASTILLAS DE FRENO","FRENOS","FRENO DELANTERO","FRENO TRASERO"]))pastillas+=1;
     if(matchTipo_(m,["KIT DE ARRASTRE","KIT ARRASTRE","ARRASTRE","CADENA","SPROCKET","CORONA","PIÑON","PIÑÓN","TRANSMISION","TRANSMISIÓN"]))kit+=1;
   });
-  return{aceite,pastillas,kit};
+  return{aceite:aceite,pastillas:pastillas,kit:kit};
 }
 function pickUltimoMto_(arr){
-  let best=null,bestT=-1;
-  (arr||[]).forEach(m=>{
-    const f=getByKeys_(m,["FECHA","FECHA MANTENIMIENTO","F. MANTENIMIENTO","FECHA ULT. MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO"]),
+  var best=null,bestT=-1;
+  (arr||[]).forEach(function(m){
+    var f=getByKeys_(m,["FECHA","FECHA MANTENIMIENTO","F. MANTENIMIENTO","FECHA ULT. MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO"]),
     d=parseDateLoose_(f),t=d?d.getTime():-1;
     if(t>bestT){bestT=t;best=m}
   });
   return best;
 }
 function pickProximoMto_(arr){
-  const now=Date.now();let best=null,bestT=Infinity;
-  (arr||[]).forEach(m=>{
-    const f=getByKeys_(m,["PRÓXIMO MANTENIMIENTO","PROXIMO MANTENIMIENTO","FECHA PROX","FECHA PRÓXIMA","PROXIMA FECHA","PRÓXIMA FECHA"]),
+  var now=Date.now(),best=null,bestT=Infinity;
+  (arr||[]).forEach(function(m){
+    var f=getByKeys_(m,["PRÓXIMO MANTENIMIENTO","PROXIMO MANTENIMIENTO","FECHA PROX","FECHA PRÓXIMA","PROXIMA FECHA","PRÓXIMA FECHA"]),
     d=parseDateLoose_(f),t=d?d.getTime():Infinity;
     if(t>=now&&t<bestT){bestT=t;best=m}
   });
   return best;
 }
+
 function renderMantenimientosUI_(arr){
-  const estado=document.getElementById("mtosEstado"),resumen=document.getElementById("mtosResumen"),lista=document.getElementById("mtosLista");
+  var estado=document.getElementById("mtosEstado"),resumen=document.getElementById("mtosResumen"),lista=document.getElementById("mtosLista");
   if(resumen)resumen.innerHTML="";if(lista)lista.innerHTML="";
   try{
     if(!idContratoActual){if(estado){estado.className="status error";estado.textContent="No se encontró el ID del contrato."}return}
-    const a=Array.isArray(arr)?arr:[];
+    var a=Array.isArray(arr)?arr:[];
     if(a.length===0){if(estado){estado.className="status muted";estado.textContent="No hay mantenimientos registrados para este contrato (por ahora)."}return}
     if(estado){estado.className="status ok";estado.textContent="Mantenimientos encontrados: "+a.length}
-    const first=a[0]||{},totalManual=getByKeys_(first,["TOTAL MANTENIMIENTOS","TOTAL MTOS","VALOR TOTAL MANTENIMIENTOS","VALOR TOTAL","TOTAL"]),totalFallback=sumValorMtos_(a),
-    total=(String(totalManual||"").trim()!=="")?totalManual:totalFallback,ultimo=pickUltimoMto_(a),proximo=pickProximoMto_(a),conteos=getConteosMtos_(a),
+    var total=sumValorMtos_(a),ultimo=pickUltimoMto_(a),proximo=pickProximoMto_(a),conteos=getConteosMtos_(a),
     placa=(contratoActual&&(contratoActual["ID VEHÍCULO"]||contratoActual["ID VEHICULO"]))||"",
     ultimoFecha=getByKeys_(ultimo,["FECHA","FECHA MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO","FECHA ULT. MANTENIMIENTO"])||"",
     ultimoTipo=getByKeys_(ultimo,["TIPO","TIPO MANTENIMIENTO","TIPO ULT. MANTENIMIENTO","MANTENIMIENTO","SERVICIO","DESCRIPCIÓN","DESCRIPCION"])||"",
@@ -1225,7 +1303,7 @@ function renderMantenimientosUI_(arr){
     ultimoTaller=getByKeys_(ultimo,["TALLER","TALLER ASIGNADO","PROVEEDOR"])||"",
     proxFecha=proximo?(getByKeys_(proximo,["PRÓXIMO MANTENIMIENTO","PROXIMO MANTENIMIENTO","FECHA PROX","FECHA PRÓXIMA","PRÓXIMA FECHA","PROXIMA FECHA"])||""):"";
     if(resumen){
-      let html='<div class="mini-card"><h4>Resumen</h4>';
+      var html='<div class="mini-card"><h4>Resumen</h4>';
       if(placa)html+='<p><strong>Placa:</strong> '+escapeHtml(placa)+"</p>";
       html+='<p><strong>Total mantenimientos:</strong> '+escapeHtml(formatearNumeroCOP(total))+"</p>";
       html+='<p><strong>Cambios de aceite:</strong> '+escapeHtml(String(conteos.aceite||0))+"</p>";
@@ -1236,28 +1314,26 @@ function renderMantenimientosUI_(arr){
       if(ultimoKm)html+='<p><strong>Kilometraje:</strong> '+escapeHtml(ultimoKm)+" km</p>";
       if(ultimoTaller)html+='<p><strong>Taller:</strong> '+escapeHtml(ultimoTaller)+"</p>";
       if(proxFecha)html+='<p><strong>Próximo mantenimiento:</strong> '+escapeHtml(formatearFechaCorta(proxFecha)||proxFecha)+"</p>";
-      html+="</div>";resumen.innerHTML=html;
+      html+='</div>';resumen.innerHTML=html;
     }
-    const sorted=a.slice().sort((x,y)=>{
-      const dx=parseDateLoose_(getByKeys_(x,["FECHA","FECHA MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO"]))||new Date(0),
+    var sorted=a.slice().sort(function(x,y){
+      var dx=parseDateLoose_(getByKeys_(x,["FECHA","FECHA MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO"]))||new Date(0),
       dy=parseDateLoose_(getByKeys_(y,["FECHA","FECHA MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO"]))||new Date(0);
       return dy.getTime()-dx.getTime();
     }),top=sorted.slice(0,50);
     if(lista){
-      top.forEach(m=>{
-        const f=getByKeys_(m,["FECHA","FECHA MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO"])||"",
+      top.forEach(function(m){
+        var f=getByKeys_(m,["FECHA","FECHA MANTENIMIENTO","ÚLTIMO MANTENIMIENTO","ULTIMO MANTENIMIENTO"])||"",
         tipo=getByKeys_(m,["TIPO","TIPO MANTENIMIENTO","MANTENIMIENTO","SERVICIO","DESCRIPCIÓN","DESCRIPCION"])||"Mantenimiento",
         valor=getByKeys_(m,["VALOR GENERAL","VALOR MTOS","VALOR","COSTO","COSTO GENERAL"])||"",
         taller=getByKeys_(m,["TALLER","TALLER ASIGNADO","PROVEEDOR"])||"",
-        fechaTxt=formatearFechaCorta(f)||f||"Fecha por definir",valorTxt=valor!==""?formatearNumeroCOP(valor):"",extra=[valorTxt,taller].filter(Boolean).join(" • ");
-        const card=document.createElement("div");
+        fechaTxt=formatearFechaCorta(f)||f||"Fecha por definir",valorTxt=(valor!==""?formatearNumeroCOP(valor):""),extra=[valorTxt,taller].filter(Boolean).join(" • ");
+        var card=document.createElement("div");
         card.className="noti-item";card.style.cursor="default";
-        card.innerHTML=`
-          <div class="noti-bullet read"></div>
-          <div class="noti-body">
-            <p class="noti-title">${escapeHtml(tipo)}</p>
-            <p class="noti-text">${escapeHtml(fechaTxt)}${extra?" • "+escapeHtml(extra):""}</p>
-          </div>`;
+        card.innerHTML='<div class="noti-bullet read"></div><div class="noti-body">'+
+          '<p class="noti-title">'+escapeHtml(tipo)+'</p>'+
+          '<p class="noti-text">'+escapeHtml(fechaTxt)+(extra?(" • "+escapeHtml(extra)):"")+'</p>'+
+        '</div>';
         lista.appendChild(card);
       });
     }
@@ -1266,11 +1342,12 @@ function renderMantenimientosUI_(arr){
     if(estado){estado.className="status error";estado.textContent="No fue posible cargar el panel de mantenimientos."}
   }
 }
+
 function cargarMantenimientos(){
-  const estado=document.getElementById("mtosEstado");
+  var estado=document.getElementById("mtosEstado");
   if(estado){estado.className="status muted";estado.textContent="Cargando mantenimientos..."}
   if(!contratoActual&&idContratoActual){
-    cargarContratoYSaludo(idContratoActual).then(()=>renderMantenimientosUI_(mantenimientosCache)).catch(()=>renderMantenimientosUI_(mantenimientosCache));
+    cargarContratoYSaludo(idContratoActual).then(function(){renderMantenimientosUI_(mantenimientosCache)}).catch(function(){renderMantenimientosUI_(mantenimientosCache)});
     return;
   }
   renderMantenimientosUI_(mantenimientosCache);
