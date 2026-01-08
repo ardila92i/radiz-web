@@ -9,10 +9,10 @@
 <style>
 *{box-sizing:border-box}
 :root{--radiz-blue:#2563eb;--radiz-blue-2:#1d4ed8;--ink:#0f172a;--muted:#6b7280;--bg:#f5f6f8;--card:#fff;--border:#e5e7eb;--shadow:0 18px 45px rgba(15,23,42,.14);--shadow-soft:0 10px 24px rgba(15,23,42,.10);--radius-xl:24px;--radius-lg:18px;--radius-md:14px}
-html,body{height:100%;overflow:hidden;overscroll-behavior:none}
-body{margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
-.page{height:100vh;height:100dvh;display:flex;align-items:flex-start;justify-content:center;padding:14px 14px calc(86px + env(safe-area-inset-bottom));overflow:hidden}
-.container{width:100%;max-width:520px;background:transparent;border-radius:0;box-shadow:none;padding:0;position:relative;overflow:hidden;height:100%;display:flex;flex-direction:column}
+html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;position:fixed;inset:0;touch-action:none}
+body{margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+.page{height:100vh;height:100dvh;display:flex;align-items:flex-start;justify-content:center;padding:14px 14px calc(86px + env(safe-area-inset-bottom));overflow:hidden;touch-action:none}
+.container{width:100%;max-width:520px;background:transparent;border-radius:0;box-shadow:none;padding:0;position:relative;overflow:hidden;height:100%;display:flex;flex-direction:column;min-height:0}
 .topbar{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;gap:8px;padding:6px 6px 10px;flex:0 0 auto}
 .topbar-left{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;background:transparent}
 .logo-wrap{display:flex;align-items:center;justify-content:center;gap:8px}
@@ -23,11 +23,11 @@ body{margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"
 .hello{margin:6px 8px 10px;font-size:1.05rem;font-weight:750;letter-spacing:.01em;color:var(--ink);flex:0 0 auto}
 .hello-name{color:var(--radiz-blue);font-weight:850}
 .subline{margin:0 8px 12px;font-size:.86rem;color:var(--muted);line-height:1.35;flex:0 0 auto}
-.view{display:none;flex:1;overflow:auto;-webkit-overflow-scrolling:touch}
+.view{display:none;flex:1;overflow:hidden;min-height:0}
 .view.active{display:block}
 #viewHome{overflow:hidden}
 #viewHome.active{display:flex;flex-direction:column}
-.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:8px;margin-top:6px;flex:1 1 auto;overflow:hidden}
+.home-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:8px;margin-top:6px;flex:1 1 auto;overflow:hidden;min-height:0}
 .home-banner{flex:0 0 auto;margin:8px;border-radius:18px;overflow:hidden;background:#0b1b5a url("banner-turnos.png") center/cover no-repeat;aspect-ratio:1040/350;height:auto;box-shadow:0 12px 26px rgba(15,23,42,.08)}
 @media (max-width:520px){.home-banner{background-size:108% auto;background-position:center;aspect-ratio:1040/350}}
 .home-tile{border:1px solid var(--border);border-radius:18px;background:#fff;padding:14px 12px 12px;cursor:pointer;box-shadow:0 12px 26px rgba(15,23,42,.08);transition:transform .12s,box-shadow .12s,border-color .12s;display:flex;flex-direction:column;gap:8px;min-height:118px;position:relative;overflow:hidden}
@@ -43,7 +43,7 @@ body{margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"
 .status.error{color:#b91c1c}
 .status.ok{color:#065f46}
 .status.muted{color:#9ca3af}
-.turnos-list{display:flex;flex-direction:column;gap:10px;margin:10px 8px 14px}
+.turnos-list{display:flex;flex-direction:column;gap:10px;margin:10px 8px 14px;overflow:hidden}
 .turno-mini{border:1px solid var(--border);border-radius:16px;background:#fff;padding:10px;display:grid;grid-template-columns:72px 1fr auto;gap:10px;align-items:center;cursor:pointer;box-shadow:0 10px 22px rgba(15,23,42,.08);transition:transform .12s,box-shadow .12s,border-color .12s}
 .turno-mini:hover{transform:translateY(-1px);border-color:#bfdbfe;box-shadow:0 16px 30px rgba(37,99,235,.12)}
 .img-placeholder{width:72px;height:56px;border-radius:14px;background:var(--radiz-blue);display:flex;align-items:center;justify-content:center;color:#fff;position:relative;overflow:hidden}
@@ -54,7 +54,7 @@ body{margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"
 .turno-empresa{font-weight:850;font-size:.94rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .turno-meta{font-size:.82rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .turno-pay{font-weight:850;font-size:.9rem;color:#111827;padding-left:8px;white-space:nowrap}
-.card-agenda{margin:0 8px 10px;border-radius:18px;background:#0f172a;color:#f9fafb;border:1px solid #1f2937;box-shadow:0 16px 38px rgba(15,23,42,.5);padding:14px}
+.card-agenda{margin:0 8px 10px;border-radius:18px;background:#0f172a;color:#f9fafb;border:1px solid #1f2937;box-shadow:0 16px 38px rgba(15,23,42,.5);padding:14px;overflow:hidden}
 .card-agenda h2{margin:0 0 4px;font-size:1.02rem;color:#f9fafb;font-weight:850}
 .agenda-dia{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:12px;background:rgba(15,23,42,.7);border:1px solid rgba(148,163,184,.35);font-size:.85rem;margin-top:10px}
 .agenda-fecha{font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:#bfdbfe}
@@ -66,8 +66,8 @@ body{margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"
 .btn-secondary{background:#e5e7eb;color:#111827;box-shadow:none}
 .btn-secondary:hover{background:#d1d5db;transform:translateY(-1px)}
 .btn[disabled]{opacity:.55;cursor:not-allowed;transform:none!important;box-shadow:none!important}
-.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:40;padding:18px}
-.modal{background:#fff;border-radius:18px;max-width:520px;width:100%;padding:16px 16px 14px;box-shadow:0 20px 45px rgba(15,23,42,.4);font-size:.9rem}
+.modal-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;align-items:center;justify-content:center;z-index:40;padding:18px;overflow:hidden;touch-action:none}
+.modal{background:#fff;border-radius:18px;max-width:520px;width:100%;padding:16px 16px 14px;box-shadow:0 20px 45px rgba(15,23,42,.4);font-size:.9rem;max-height:calc(100dvh - 36px);overflow:hidden}
 .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;gap:10px}
 .modal-header h3{margin:0;font-size:1.05rem;font-weight:850}
 .modal-close{border:none;background:transparent;font-size:1.35rem;cursor:pointer;color:#6b7280;line-height:1}
@@ -78,7 +78,7 @@ input[type=text],input[type=number],input[type=email],input[type=date]{width:100
 input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,235,.18);background:#fff;outline:none}
 .terms-frame{width:100%;height:66vh;border:1px solid var(--border);border-radius:14px;overflow:hidden}
 .terms-frame iframe{width:100%;height:100%;border:0}
-.noti-list{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.noti-list{display:flex;flex-direction:column;gap:10px;margin-top:10px;overflow:hidden}
 .noti-item{border:1px solid var(--border);border-radius:14px;padding:10px 12px;background:#fff;box-shadow:0 10px 22px rgba(15,23,42,.06);display:flex;gap:10px;align-items:flex-start}
 .noti-bullet{width:10px;height:10px;border-radius:999px;background:#ef4444;margin-top:6px;flex:0 0 auto}
 .noti-bullet.read{background:#d1d5db}
@@ -91,7 +91,7 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,
 .nav-btn{width:50%;border:none;background:transparent;padding:10px;border-radius:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:850;color:#111827;transition:background .12s,transform .12s}
 .nav-btn:hover{background:#eff6ff;transform:translateY(-1px)}
 .nav-ico{width:22px;height:22px;color:var(--radiz-blue)}
-.sheet-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;z-index:35}
+.sheet-backdrop{position:fixed;inset:0;background:rgba(15,23,42,.45);display:none;z-index:35;overflow:hidden;touch-action:none}
 .sheet{position:fixed;left:0;right:0;bottom:0;transition:transform .18s ease-out;z-index:36;display:flex;justify-content:center;padding:0 14px 14px;transform:translateY(110%);pointer-events:none}
 .sheet.open{transform:translateY(0);pointer-events:auto}
 .sheet-card{width:100%;max-width:520px;background:#fff;border:1px solid var(--border);border-radius:22px;box-shadow:0 24px 50px rgba(15,23,42,.28);overflow:hidden}
@@ -101,7 +101,7 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,
 .sheet-item:hover{background:#eff6ff;color:#1d4ed8}
 .sheet-item.disabled{cursor:default;color:#9ca3af}
 .sheet-item.disabled:hover{background:#fff;color:#9ca3af}
-.mini-card{border:1px solid var(--border);border-radius:16px;padding:12px;background:#fff;box-shadow:0 10px 22px rgba(15,23,42,.06);margin-top:10px}
+.mini-card{border:1px solid var(--border);border-radius:16px;padding:12px;background:#fff;box-shadow:0 10px 22px rgba(15,23,42,.06);margin-top:10px;overflow:hidden}
 .mini-card h4{margin:0 0 8px;font-size:.98rem;font-weight:900}
 .mini-card p{margin:4px 0;color:#111827;font-size:.88rem}
 .pagoError{display:none;color:#dc2626;margin-top:6px;font-size:.85rem}
@@ -217,7 +217,7 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,
     <div class="view" id="viewMantenimientos">
       <div class="section-title">Panel de mantenimientos</div>
       <div id="mtosEstado" class="status muted" style="margin:8px;">Cargando mantenimientos...</div>
-      <div id="mtosResumen" style="margin:8px;"></div>
+      <div id="mtosResumen" style="margin:8px;overflow:hidden"></div>
       <div id="mtosLista" class="noti-list" style="margin:8px;"></div>
     </div>
 
@@ -225,7 +225,7 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,
       <div class="section-title">Pagos</div>
       <div class="subline" style="margin:0 8px 12px;"></div>
       <div id="pagosEstado" class="status muted" style="margin:8px;">Cargando información...</div>
-      <div id="pagosContenido" style="margin:8px;"></div>
+      <div id="pagosContenido" style="margin:8px;overflow:hidden"></div>
     </div>
   </div>
 </div>
@@ -364,7 +364,7 @@ input:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 1px rgba(37,99,
     <p id="historialMsg" style="font-size:.85rem;margin-top:6px;color:#6b7280;"></p>
 
     <div id="historialListaWrap" style="display:none;margin-top:10px;">
-      <div style="border:1px solid #e5e7eb;border-radius:14px;background:#fff;padding:10px 12px;">
+      <div style="border:1px solid #e5e7eb;border-radius:14px;background:#fff;padding:10px 12px;overflow:hidden">
         <p style="margin:0 0 8px;color:#6b7280;font-size:.82rem;">Aquí podrás visualizar los últimos <strong>6</strong> pagos realizados en tu cuenta.</p>
         <div id="historialLista"></div>
       </div>
@@ -538,6 +538,12 @@ WOMPI_INTEGRITY_KEY="prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN",
 WOMPI_REDIRECT_URL="https://portal.radizco.com/";
 let idContratoActual=null,contratoActual=null,tipoUsuarioActual=null,pagosCache=[],mantenimientosCache=[],turnoSeleccionado=null,turnoDetalleActual=null,ultimaAceptacion=null,
 NOTIF_KEY="RADIZ_NOTIFS_ANON",META_KEY="RADIZ_NOTIF_META_ANON",ultimoPdfUrlAbierto="";
+
+(function(){
+  var lock=function(e){if(!e)return;var t=e.target&&e.target.tagName?String(e.target.tagName).toLowerCase():"";if(t==="input"||t==="textarea"||t==="select")return;e.preventDefault()};
+  window.addEventListener("wheel",lock,{passive:false});
+  window.addEventListener("touchmove",lock,{passive:false});
+})();
 
 document.addEventListener("DOMContentLoaded",function(){
   idContratoActual=obtenerIdContratoDeUrl();
