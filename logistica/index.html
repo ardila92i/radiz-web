@@ -543,8 +543,8 @@ NOTIF_KEY="RADIZ_NOTIFS_ANON",META_KEY="RADIZ_NOTIF_META_ANON",ultimoPdfUrlAbier
   var set=function(){
     var vv=window.visualViewport,vh=(vv&&vv.height)?vv.height:window.innerHeight;
     document.documentElement.style.setProperty("--appH",Math.round(vh)+"px");
-    var nav=document.querySelector(".bottom-inner"),h=nav?Math.ceil(nav.getBoundingClientRect().height):86;
-    document.documentElement.style.setProperty("--navH",h+"px");
+    var nav=document.querySelector(".bottom-bar"),h=nav?Math.ceil(nav.getBoundingClientRect().height):110;
+document.documentElement.style.setProperty("--navH",h+"px");
   };
   set();
   window.addEventListener("resize",set,{passive:true});
