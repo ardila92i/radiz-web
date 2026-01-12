@@ -540,9 +540,16 @@ let idContratoActual=null,contratoActual=null,tipoUsuarioActual=null,pagosCache=
 NOTIF_KEY="RADIZ_NOTIFS_ANON",META_KEY="RADIZ_NOTIF_META_ANON",ultimoPdfUrlAbierto="";
 
 (function(){
-  var lock=function(e){if(!e)return;var t=e.target&&e.target.tagName?String(e.target.tagName).toLowerCase():"";if(t==="input"||t==="textarea"||t==="select")return;e.preventDefault()};
-  window.addEventListener("wheel",lock,{passive:false});
-  window.addEventListener("touchmove",lock,{passive:false});
+  var set=function(){
+    var vv=window.visualViewport,vh=(vv&&vv.height)?vv.height:window.innerHeight;
+    document.documentElement.style.setProperty("--appH",Math.round(vh)+"px");
+    var nav=document.querySelector(".bottom-inner"),h=nav?Math.ceil(nav.getBoundingClientRect().height):86;
+    document.documentElement.style.setProperty("--navH",h+"px");
+  };
+  set();
+  window.addEventListener("resize",set,{passive:true});
+  window.addEventListener("orientationchange",set,{passive:true});
+  if(window.visualViewport)window.visualViewport.addEventListener("resize",set,{passive:true});
 })();
 
 document.addEventListener("DOMContentLoaded",function(){
