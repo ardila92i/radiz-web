@@ -1,7 +1,8 @@
+```html
 <!DOCTYPE html><html lang="es"><head>
 <meta charset="UTF-8"/><title></title><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <meta name="theme-color" content="#0f172a"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="icon" type="image/png" sizes="512x512" href="icon-512.png"><link rel="apple-touch-icon" href="icon-512.png">
+<link rel="manifest" href="manifest.json"><link rel="icon" type="image/png" sizes="192x192" href="icon-192.png"><link rel="icon" type="image/png" sizes="512x512" href="icon-512.png"><link rel="apple-touch-icon" href="icon-512.png"><link rel="preload" as="image" href="radiz-driver.jpg.jpg" fetchpriority="high">
 <script src="https://checkout.wompi.co/widget.js" async></script>
 <style>
 *{box-sizing:border-box}html,body{height:100%;width:100%;overflow:hidden;overscroll-behavior:none;position:fixed;inset:0;touch-action:none}body{margin:0;padding:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#0f172a;color:#111827}
@@ -114,6 +115,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
 @media(max-width:640px){.container{padding:22px 18px 24px;border-radius:18px}.portal-header{flex-direction:column;align-items:flex-start}.fab-menu{top:16px;right:16px}#montoPago,#idContrato{width:100%}}
 </style>
 </head><body>
+<div id="splash" aria-label="Cargando"><div class="box"><img src="icon-512.png" alt="RADIZ"><div class="spin"></div></div></div>
 
 <section class="login-screen">
   <div class="login-bg"></div><div class="login-overlay"></div>
@@ -331,6 +333,11 @@ const INC_MAX_FOTOS=3,INC_MAX_LADO=1280,INC_JPEG_Q=.75;
 
 const el=(id)=>document.getElementById(id);
 
+const SPLASH_MIN_MS=3000,SPLASH_MAX_MS=7000;
+const __preloadImg=(src)=>new Promise(r=>{const i=new Image();i.onload=()=>r(true);i.onerror=()=>r(false);i.src=src;});
+function __hideSplash(){const s=el('splash');if(!s)return;s.classList.add('hide');setTimeout(()=>{try{s.remove()}catch(e){}},260);}
+function __initSplash(){const s=el('splash');if(!s)return;const min=new Promise(r=>setTimeout(r,SPLASH_MIN_MS));const img=__preloadImg('radiz-driver.jpg.jpg');const max=setTimeout(__hideSplash,SPLASH_MAX_MS);Promise.all([min,img]).then(()=>{clearTimeout(max);__hideSplash();});}
+
 document.addEventListener('touchmove',__touchBlocker,{passive:false});
 document.addEventListener('wheel',__wheelBlocker,{passive:false});
 
@@ -342,6 +349,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(afi) afi.style.display='none';
   try{const saved=localStorage.getItem(RADIZ_USER_KEY)||'';const i=el('loginId');if(i&&saved)i.value=saved;}catch(e){}
   const f=el('incidenteFotos');if(f) f.addEventListener('change',()=>{const h=el('incidenteFotosHint');if(!h)return;const n=(f.files&&f.files.length)?f.files.length:0;if(n>INC_MAX_FOTOS){h.textContent='Máximo '+INC_MAX_FOTOS+' imágenes. Ajusta tu selección.';}else if(n>0){h.textContent=n+' imagen(es) seleccionada(s).';}else{h.textContent='Puedes seleccionar hasta 3 imágenes.';}});
+  __initSplash();
 });
 
 function toggleMenu(){const p=el('menuPanel');if(p)p.style.display=(p.style.display==='block'?'none':'block');}
@@ -908,3 +916,4 @@ async function loginInversiones(origen){
 }
 </script>
 </body></html>
+```
