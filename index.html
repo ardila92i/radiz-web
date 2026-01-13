@@ -856,24 +856,54 @@ if('serviceWorker' in navigator){
 }
 
 let deferredInstallPrompt=null;
-window.addEventListener('beforeinstallprompt',(e)=>{deferredInstallPrompt=e;});
-function esIOS(){return /iphone|ipad|ipod/i.test(window.navigator.userAgent||'');}
-function esAndroid(){return /android/i.test(window.navigator.userAgent||'');}
-function estaEnModoApp(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
-function mostrarInstruccionesIOS(){alert('Para instalar la app RADIZ en iPhone/iPad:\n\n1. Toca el ícono "Compartir" (cuadro con flecha hacia arriba).\n2. Elige "Añadir a pantalla de inicio".\n3. Confirma con "Añadir".');}
+
+function esIOS(){return /iphone|ipad|ipod/i.test(navigator.userAgent||'');}
+function esAndroid(){return /android/i.test(navigator.userAgent||'');}
+function estaEnModoApp(){return window.matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;}
+function mostrarInstruccionesIOS(){alert('Para instalar RADIZ en iPhone/iPad:\n\n1. Toca "Compartir".\n2. "Añadir a pantalla de inicio".\n3. "Añadir".');}
+
+function __setTextoInstalacion(){
+  const it=document.getElementById('menuDescargaApp');
+  if(!it) return;
+  if(estaEnModoApp()){it.textContent='App instalada';return;}
+  if(esIOS()){it.textContent='Instalar en iPhone';return;}
+  if(deferredInstallPrompt){it.textContent='Instalar app';return;}
+  it.textContent=esAndroid()?'Cómo instalar':'Descarga la App';
+}
+
+window.addEventListener('beforeinstallprompt',(e)=>{
+  e.preventDefault();
+  deferredInstallPrompt=e;
+  __setTextoInstalacion();
+});
+
+window.addEventListener('appinstalled',()=>{
+  deferredInstallPrompt=null;
+  __setTextoInstalacion();
+});
+
+document.addEventListener('DOMContentLoaded',()=>{__setTextoInstalacion();});
 
 async function manejarDescargaApp(){
-  if(estaEnModoApp()){alert('La aplicación RADIZ ya está instalada en este dispositivo.');return;}
+  if(estaEnModoApp()){alert('La app RADIZ ya está instalada en este dispositivo.');return;}
   if(esIOS()){mostrarInstruccionesIOS();return;}
+
   if(deferredInstallPrompt){
-    try{deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;}catch(e){}
+    try{
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+    }catch(e){}
+    deferredInstallPrompt=null;
+    __setTextoInstalacion();
     return;
   }
+
   if(esAndroid()){
-    alert('Chrome todavía no muestra el cuadro automático de instalación.\n\nPara instalar la app RADIZ:\n1. Toca el ícono de tres puntos (⋮) en la esquina superior derecha.\n2. Elige "Instalar aplicación" o "Añadir a pantalla de inicio".\n3. Confirma con "Instalar".');
+    alert('Para instalar RADIZ:\n\n1. Abre el menú (⋮)\n2. "Instalar aplicación" / "Añadir a pantalla de inicio"\n3. Confirmar');
     return;
   }
-  alert('Para instalar la app RADIZ en tu dispositivo, usa la opción "Instalar aplicación" o "Añadir a pantalla de inicio" del navegador.');
+
+  alert('Usa "Instalar aplicación" o "Añadir a pantalla de inicio" en el navegador.');
 }
 
 async function loginInversiones(origen){
