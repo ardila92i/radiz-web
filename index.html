@@ -133,6 +133,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
       <input class="login-input" type="password" id="loginPassword" placeholder="Contraseña" autocomplete="current-password">
       <button type="submit" class="login-btn">Entrar</button>
       <div id="loginMsg" class="login-msg"></div>
+      <button type="button" class="btn-app" onclick="manejarDescargaApp()">Descarga la App</button>
     </form>
   </div>
 </section>
@@ -147,7 +148,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
         <div class="menu-title" id="menuTitle">Opciones</div>
         <div id="menuInicial">
           <div class="menu-item" onclick="abrirModal('modalInversiones')">Ir a inversiones</div>
-         <div class="menu-item" id="menuDescargaApp" onclick="manejarDescargaApp()">Descarga la App</div>
+          <div class="menu-item" id="menuDescargaApp" onclick="manejarDescargaApp()">Descarga la App</div>
         </div>
         <div id="menuRenting" style="display:none;">
           <div class="menu-item" onclick="abrirModal('modalBeneficios')">Beneficios</div>
@@ -331,6 +332,8 @@ const API_CALLBACK_URL=API_URL;
 
 let tipoUsuarioActual=null,datosContratoActual=null,datosAfiliadoActual=null;
 const RADIZ_USER_KEY='radiz_usuario_guardado';
+const RADIZ_SES_ID='radiz_sesion_id';
+const RADIZ_SES_TIPO='radiz_sesion_tipo';
 let __modalOpenCount=0;
 const __touchBlocker=(e)=>{e.preventDefault();};
 const __wheelBlocker=(e)=>{if(e&&e.ctrlKey)return;e.preventDefault();};
@@ -347,7 +350,22 @@ function __initSplash(){const s=el('splash');if(!s)return;const min=new Promise(
 document.addEventListener('touchmove',__touchBlocker,{passive:false});
 document.addEventListener('wheel',__wheelBlocker,{passive:false});
 
+function __getSesionGuardada(){
+  try{
+    const id=(localStorage.getItem(RADIZ_SES_ID)||'').trim().toUpperCase();
+    const tipo=(localStorage.getItem(RADIZ_SES_TIPO)||'').trim().toUpperCase();
+    return {id,tipo};
+  }catch(e){return {id:'',tipo:''};}
+}
+function __autoEntrarSiHaySesion(){
+  const s=__getSesionGuardada();
+  if(!s.id||!s.tipo) return;
+  if(s.tipo==='RENTING'){window.location.replace('/logistica/?id='+encodeURIComponent(s.id));return;}
+  if(s.tipo==='AFILIADO'){window.location.replace('/inversiones/?id='+encodeURIComponent(s.id));return;}
+}
+
 document.addEventListener('DOMContentLoaded',()=>{
+  __autoEntrarSiHaySesion();
   const fab=el('fabMenu'),ini=el('menuInicial'),ren=el('menuRenting'),afi=el('menuAfiliado');
   if(fab) fab.style.display='block';
   if(ini) ini.style.display='block';
@@ -932,16 +950,17 @@ async function loginInversiones(origen){
     if(!data.ok){msg.className=useLogin?'login-msg error':'status error';msg.textContent=data.error||'Usuario o contraseña incorrectos.';return;}
     const tipo=(data.tipo||'').toString().toUpperCase();
     const idFinal=(data.id||id).toString().toUpperCase();
+    try{localStorage.setItem(RADIZ_SES_ID,idFinal);localStorage.setItem(RADIZ_SES_TIPO,tipo);}catch(e){}
     if(tipo==='RENTING'){
       msg.className=useLogin?'login-msg ok':'status ok';
       msg.textContent='Acceso concedido. Abriendo tu panel...';
       if(!useLogin) cerrarModal('modalInversiones');
-      window.location.href='https://portal.radizco.com/logistica/?id='+encodeURIComponent(idFinal);
+      window.location.href='/logistica/?id='+encodeURIComponent(idFinal);
     }else if(tipo==='AFILIADO'){
       msg.className=useLogin?'login-msg ok':'status ok';
       msg.textContent='Acceso concedido. Abriendo tu portal de inversiones...';
       if(!useLogin) cerrarModal('modalInversiones');
-      window.location.href='inversiones/?id='+encodeURIComponent(idFinal);
+      window.location.href='/inversiones/?id='+encodeURIComponent(idFinal);
     }else{
       msg.className=useLogin?'login-msg error':'status error';
       msg.textContent='Tipo de usuario no reconocido para este ID.';
