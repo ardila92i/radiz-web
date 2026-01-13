@@ -854,7 +854,7 @@ if('serviceWorker' in navigator){
 }
 
 let deferredInstallPrompt=null;
-window.addEventListener('beforeinstallprompt',(e)=>{e.preventDefault();deferredInstallPrompt=e;});
+window.addEventListener('beforeinstallprompt',(e)=>{deferredInstallPrompt=e;});
 function esIOS(){return /iphone|ipad|ipod/i.test(window.navigator.userAgent||'');}
 function esAndroid(){return /android/i.test(window.navigator.userAgent||'');}
 function estaEnModoApp(){return window.matchMedia('(display-mode: standalone)').matches||window.navigator.standalone===true;}
