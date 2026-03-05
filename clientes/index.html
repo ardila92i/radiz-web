@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Radiz — Mensajería y Logística</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC6ATgiaLgz8Ce4OpNpAel_icyrFTFctcg&libraries=places&language=es&region=CO" async defer></script>
+<script>(g=>{var h,a,k,p="The Google Maps JavaScript API",c="google",l="importLibrary",q="__ib__",m=document,b=window;b=b[c]||(b[c]={});var d=b.maps||(b.maps={}),r=new Set,e=new URLSearchParams,u=()=>h||(h=new Promise(async(f,n)=>{await (a=m.createElement("script"));e.set("libraries",[...r]+"");for(k in g)e.set(k.replace(/[A-Z]/g,t=>"_"+t[0].toLowerCase()),g[k]);e.set("callback",c+".maps."+q);a.src=`https://maps.${c}apis.com/maps/api/js?`+e;d[q]=f;a.onerror=()=>h=n(Error(p+" could not load."));a.nonce=m.querySelector("script[nonce]")?.nonce||"";m.head.append(a)}));d[l]?console.warn(p+" only loads once. Ignoring:",g):d[l]=(f,...n)=>r.add(f)&&u().then(()=>d[l](f,...n))})({key:"AIzaSyC6ATgiaLgz8Ce4OpNpAel_icyrFTFctcg",v:"weekly",language:"es",region:"CO"});</script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -670,30 +670,7 @@ function habilitarDirecciones(ok) {
 // ── AUTOCOMPLETE GOOGLE PLACES ──
 let acInstances = {};
 
-function iniciarAutocomplete(input, idx) {
-  if (!window.google || acInstances[idx]) return;
-  const bounds = ciudadSeleccionada
-    ? new google.maps.Circle({ center: { lat: ciudadSeleccionada.lat, lng: ciudadSeleccionada.lon }, radius: 30000 }).getBounds()
-    : null;
-  const opts = { componentRestrictions: { country: 'co' }, fields: ['geometry','name','formatted_address'] };
-  if (bounds) opts.bounds = bounds;
-  const ac = new google.maps.places.Autocomplete(input, opts);
-  ac.addListener('place_changed', () => {
-    const place = ac.getPlace();
-    if (!place.geometry) return;
-    const lat = place.geometry.location.lat();
-    const lon = place.geometry.location.lng();
-    coordenadas[idx] = [lat, lon];
-    ponerMarcador(idx, lat, lon);
-    document.getElementById('mapa-instruccion').style.display = 'none';
-    if (Object.keys(coordenadas).length >= 2) calcularRutaReal();
-  });
-  acInstances[idx] = ac;
-}
-
 function buscarDir(input, idx) {
-  // El autocomplete de Google se activa automáticamente al escribir
-  // Esta función solo inicia el autocomplete si no está iniciado
   if (window.google && !acInstances[idx]) iniciarAutocomplete(input, idx);
 }
 
@@ -743,11 +720,16 @@ function toggleRegreso() {
   document.getElementById('check-regreso').classList.toggle('checked', conRegreso);
 }
 
-// ── MAPA GOOGLE MAPS ──
-function iniciarMapa() {
-  mapa = new google.maps.Map(document.getElementById('mapa'), {
+// ── MAPA GOOGLE MAPS (nueva API v: weekly) ──
+async function iniciarMapa() {
+  const { Map } = await google.maps.importLibrary("maps");
+  const { DirectionsService, DirectionsRenderer } = await google.maps.importLibrary("routes");
+  const { Geocoder } = await google.maps.importLibrary("geocoding");
+
+  mapa = new Map(document.getElementById('mapa'), {
     center: { lat: 4.7110, lng: -74.0721 },
     zoom: 5,
+    mapId: 'radiz_dark',
     styles: [
       {elementType:'geometry',stylers:[{color:'#1a1a2e'}]},
       {elementType:'labels.text.stroke',stylers:[{color:'#1a1a2e'}]},
@@ -758,8 +740,6 @@ function iniciarMapa() {
       {featureType:'water',elementType:'geometry',stylers:[{color:'#0d0d1a'}]},
       {featureType:'poi',stylers:[{visibility:'off'}]},
       {featureType:'transit',stylers:[{visibility:'off'}]},
-      {featureType:'administrative',elementType:'geometry',stylers:[{color:'#2a2a40'}]},
-      {featureType:'administrative.country',elementType:'labels.text.fill',stylers:[{color:'#4a4a6a'}]},
     ],
     disableDefaultUI: false,
     zoomControl: true,
@@ -767,21 +747,52 @@ function iniciarMapa() {
     streetViewControl: false,
     fullscreenControl: false,
   });
-  geocoder = new google.maps.Geocoder();
-  directionsService = new google.maps.DirectionsService();
-  directionsRenderer = new google.maps.DirectionsRenderer({
+
+  geocoder = new Geocoder();
+  directionsService = new DirectionsService();
+  directionsRenderer = new DirectionsRenderer({
     map: mapa,
     suppressMarkers: true,
     polylineOptions: { strokeColor: '#1A56D4', strokeWeight: 4, strokeOpacity: 0.8 }
   });
   mapaIniciado = true;
-  // Iniciar autocomplete en inputs ya existentes
+
+  // Iniciar autocomplete en inputs existentes
   setTimeout(() => {
     const oi = document.getElementById('origen-input');
     const di = document.getElementById('destino-input');
     if (oi) iniciarAutocomplete(oi, 0);
     if (di) iniciarAutocomplete(di, 1);
-  }, 200);
+  }, 300);
+}
+
+async function iniciarAutocomplete(input, idx) {
+  if (acInstances[idx]) return;
+  const { Autocomplete } = await google.maps.importLibrary("places");
+  const opts = {
+    componentRestrictions: { country: 'co' },
+    fields: ['geometry','name','formatted_address']
+  };
+  if (ciudadSeleccionada) {
+    const { LatLngBounds, Circle } = await google.maps.importLibrary("core");
+    opts.bounds = new google.maps.Circle({
+      center: { lat: ciudadSeleccionada.lat, lng: ciudadSeleccionada.lon },
+      radius: 30000
+    }).getBounds();
+    opts.strictBounds = false;
+  }
+  const ac = new Autocomplete(input, opts);
+  ac.addListener('place_changed', () => {
+    const place = ac.getPlace();
+    if (!place.geometry) return;
+    const lat = place.geometry.location.lat();
+    const lon = place.geometry.location.lng();
+    coordenadas[idx] = [lat, lon];
+    ponerMarcador(idx, lat, lon);
+    document.getElementById('mapa-instruccion').style.display = 'none';
+    if (Object.keys(coordenadas).length >= 2) calcularRutaReal();
+  });
+  acInstances[idx] = ac;
 }
 
 function ponerMarcador(idx, lat, lon) {
@@ -805,30 +816,27 @@ function ponerMarcador(idx, lat, lon) {
   mapa.setZoom(14);
 }
 
-// ── RUTA REAL con Directions API ──
 let distanciaRutaMetros = 0;
 
 function calcularRutaReal() {
   if (!mapaIniciado || !directionsService) return;
   const keys   = Object.keys(coordenadas).sort((a,b)=>a-b).map(Number);
   if (keys.length < 2) return;
-
   const puntos  = keys.map(k => coordenadas[k]);
   const origen  = { lat: puntos[0][0], lng: puntos[0][1] };
-  const destino = { lat: puntos[puntos.length-1][0], lng: puntos[puntos.length-1][1] };
-  const waypoints = puntos.slice(1,-1).map(p => ({ location: { lat:p[0], lng:p[1] }, stopover: true }));
-  if (conRegreso) waypoints.push({ location: origen, stopover: false });
-
+  const destFinal = conRegreso ? origen : { lat: puntos[puntos.length-1][0], lng: puntos[puntos.length-1][1] };
+  const waypoints = puntos.slice(1, conRegreso ? undefined : -1).map(p => ({
+    location: { lat: p[0], lng: p[1] }, stopover: true
+  }));
   directionsService.route({
     origin: origen,
-    destination: conRegreso ? origen : destino,
+    destination: destFinal,
     waypoints,
     travelMode: google.maps.TravelMode.DRIVING,
     region: 'CO'
   }, (result, status) => {
     if (status === 'OK') {
       directionsRenderer.setDirections(result);
-      // Sumar distancias de todos los tramos
       let metros = 0;
       result.routes[0].legs.forEach(leg => metros += leg.distance.value);
       distanciaRutaMetros = metros;
