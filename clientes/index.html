@@ -122,7 +122,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 /* Paradas */
 .paradas-wrap{display:flex;flex-direction:column;gap:8px}
 .parada-item{display:flex;align-items:flex-start;gap:10px}
-.parada-dot{width:11px;height:11px;border-radius:50%;flex:0 0 auto;margin-top:14px}
+.parada-dot{width:22px;height:22px;border-radius:6px;flex:0 0 auto;margin-top:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.7rem;font-weight:800;color:#fff}
 .parada-dot.origen{background:var(--green)}
 .parada-dot.destino{background:var(--orange)}
 .parada-dot.parada{background:var(--blue-light)}
@@ -315,7 +315,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
         <h2>Mensajería punto a punto</h2>
         <p>Envía documentos o paquetes. Precio según distancia, calculado al instante.</p>
         <div class="hcard-footer">
-          <div class="hcard-badge"><span class="dot-live"></span> Disponible ahora</div>
+          
           <div class="hcard-price">Desde $3.450</div>
         </div>
       </div>
@@ -324,7 +324,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
         <h2>Domiciliario por días</h2>
         <p>Motorizado dedicado para tu empresa. Elige días, horario y tipo de moto.</p>
         <div class="hcard-footer">
-          <div class="hcard-badge"><span class="dot-live"></span> Disponible ahora</div>
+          
           <div class="hcard-price">Desde $103.500/día</div>
         </div>
       </div>
@@ -404,14 +404,14 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
           <span class="form-label">Puntos del recorrido</span>
           <div class="paradas-wrap" id="paradas-wrap">
             <div class="parada-item">
-              <div class="parada-dot origen"></div>
+              <div class="parada-dot origen">A</div>
               <div class="parada-field">
                 <input class="parada-input" id="origen-input" placeholder="📍 Dirección de recogida (origen)" autocomplete="off" disabled onfocus="buscarDir(this,0)">
                 <input class="parada-complemento" id="origen-comp" placeholder="Edificio, oficina, apartamento, piso..." disabled>
               </div>
             </div>
             <div class="parada-item">
-              <div class="parada-dot destino"></div>
+              <div class="parada-dot destino">B</div>
               <div class="parada-field">
                 <input class="parada-input" id="destino-input" placeholder="📍 Dirección de entrega (destino)" autocomplete="off" disabled onfocus="buscarDir(this,1)">
                 <input class="parada-complemento" id="destino-comp" placeholder="Edificio, oficina, apartamento, piso..." disabled>
@@ -781,11 +781,12 @@ function agregarParada() {
   const wrap = document.getElementById('paradas-wrap');
   const div  = document.createElement('div');
   div.className = 'parada-item'; div.id = 'parada-extra-' + idx;
+  const letra = String.fromCharCode(65 + idx); // A=65, B=66, C=67...
   div.innerHTML = `
-    <div class="parada-dot parada"></div>
+    <div class="parada-dot parada">${letra}</div>
     <div class="parada-field">
-      <input class="parada-input" placeholder="📍 Parada ${idx}" autocomplete="off" onfocus="iniciarAutocomplete(this,${idx})">
-      <input class="parada-complemento" placeholder="Apto, oficina, piso, referencia...">
+      <input class="parada-input" placeholder="📍 Parada ${letra}" autocomplete="off" onfocus="iniciarAutocomplete(this,${idx})">
+      <input class="parada-complemento" placeholder="Edificio, oficina, apartamento, piso...">
     </div>
     <button class="btn-remove" onclick="eliminarParada(${idx})">×</button>`;
   wrap.insertBefore(div, wrap.lastElementChild);
