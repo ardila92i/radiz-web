@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Radiz — Mensajería y Logística</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,400&display=swap" rel="stylesheet">
-<link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
-<script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm0PzoGphUs1a3TME47zPorau74ubFuic&libraries=places&language=es&region=CO" async defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -37,8 +36,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 
 /* HOME */
 .home-hero{padding:56px 0 36px}
-.home-tag{display:inline-flex;align-items:center;gap:8px;background:var(--surface2);border:1px solid var(--border2);border-radius:999px;padding:7px 16px;font-size:.75rem;color:var(--muted);margin-bottom:24px;letter-spacing:.07em;text-transform:uppercase}
-.home-tag-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2.5s infinite}
+/* home-tag eliminado */
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .home-hero h1{font-family:'Syne',sans-serif;font-size:3.6rem;font-weight:800;line-height:1.02;letter-spacing:-.05em;margin-bottom:16px}
 .home-hero h1 .azul{color:var(--blue-light)}
@@ -246,7 +244,8 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 .toast.error{border-color:var(--orange);color:var(--orange)}
 .toast.success{border-color:var(--green);color:var(--green)}
 
-.mapboxgl-ctrl-logo,.mapboxgl-ctrl-attrib{display:none!important}
+/* Google Maps UI cleanup */
+.gm-style-cc, .gm-style a[href^="https://maps.google"]{display:none!important}
 </style>
 </head>
 <body>
@@ -267,7 +266,6 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 <div class="vista activa" id="vista-home">
   <div class="page-wrap">
     <div class="home-hero">
-      <div class="home-tag"><span class="home-tag-dot"></span> Mensajería · Colombia</div>
       <h1>Envíos<br><span class="azul">rápidos</span> y<br><span class="naranja">confiables.</span></h1>
       <p>Cotización inmediata, pago seguro y seguimiento en tiempo real para tu empresa.</p>
     </div>
@@ -553,14 +551,13 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 
 <script>
 const API_URL = 'https://script.google.com/macros/s/AKfycbzmOALbwzhXeq8rSwX108y44eOa-ZxY8Gq7WgyzvBcDjeYLsaOZCRcM9lJPwsCU-zVw/exec';
-const MAPBOX_TOKEN = 'pk.eyJ1IjoiYXJkaWxhOTJpIiwiYSI6ImNtbWN0aHhtMjA2ajEyc3B4ajh3MXZodzAifQ.Xe_wT72Oxim_CDBwF86UDw';
-mapboxgl.accessToken = MAPBOX_TOKEN;
+const GMAPS_KEY = 'AIzaSyCm0PzoGphUs1a3TME47zPorau74ubFuic';
+const RECARGO_GRANDE = 5000;
 
-// Estado
 let servicioActivo = 'mensajeria';
 let ultimaCotizacionMens = null;
 let ultimaCotizacionDom  = null;
-let ciudadSeleccionada   = null; // { nombre, lat, lon }
+let ciudadSeleccionada   = null;
 let mapa, mapaIniciado   = false;
 let marcadores  = {};
 let coordenadas = {};
@@ -571,6 +568,7 @@ let tipoMoto    = 'estandar';
 let modoHorario = 'ahora';
 let tipoCliente = 'natural';
 let acTimers    = {};
+let geocoder, directionsService, directionsRenderer;
 
 // ── NAVEGACIÓN ──
 function mostrarVista(id) {
@@ -609,7 +607,6 @@ function selHorario(modo) {
 function selCiudad(el, nombre, lat, lon, tipo) {
   document.querySelectorAll('.ciudad-btn').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
-
   const otrasWrap = document.getElementById('ciudad-otras-wrap');
   if (tipo === 'otra') {
     otrasWrap.classList.add('visible');
@@ -617,39 +614,37 @@ function selCiudad(el, nombre, lat, lon, tipo) {
     habilitarDirecciones(false);
     return;
   }
-
   otrasWrap.classList.remove('visible');
   ciudadSeleccionada = { nombre, lat, lon };
-  document.getElementById('ciudad-aviso').classList.add('hidden');
   habilitarDirecciones(true);
-
   if (mapaIniciado) {
-    mapa.flyTo({ center: [lon, lat], zoom: 12, duration: 1000 });
-    document.getElementById('mapa-instruccion').textContent = `Ciudad: ${nombre} — escribe la dirección`;
+    mapa.setCenter({lat, lng: lon});
+    mapa.setZoom(12);
+    document.getElementById('mapa-instruccion').textContent = `${nombre} — escribe la dirección`;
     document.getElementById('mapa-instruccion').style.display = 'block';
   }
 }
 
-async function buscarCiudad(input) {
+function buscarCiudad(input) {
   clearTimeout(acTimers['ciudad']);
   const q = input.value.trim();
   const listEl = document.getElementById('ac-ciudad');
-  if (q.length < 3) { listEl.style.display = 'none'; return; }
-  acTimers['ciudad'] = setTimeout(async () => {
-    try {
-      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q)}.json?access_token=${MAPBOX_TOKEN}&country=co&types=place&language=es&limit=5`;
-      const r = await fetch(url);
-      const data = await r.json();
-      if (!data.features?.length) { listEl.style.display='none'; return; }
-      listEl.innerHTML = data.features.map(f => {
-        const [lon, lat] = f.center;
-        return `<div class="ac-item" onclick="confirmarCiudadLibre('${f.text}',${lat},${lon})">
-          <div class="ac-name">${f.text}</div>
-          <div class="ac-detail">${f.place_name}</div>
+  if (q.length < 3) { listEl.style.display='none'; return; }
+  acTimers['ciudad'] = setTimeout(() => {
+    if (!geocoder) return;
+    geocoder.geocode({ address: q + ', Colombia', componentRestrictions: { country: 'CO' }, types: ['locality','administrative_area_level_2'] }, (results, status) => {
+      if (status !== 'OK' || !results.length) { listEl.style.display='none'; return; }
+      listEl.innerHTML = results.slice(0,5).map(r => {
+        const lat = r.geometry.location.lat();
+        const lon = r.geometry.location.lng();
+        const nombre = r.address_components[0].long_name;
+        return `<div class="ac-item" onclick="confirmarCiudadLibre('${nombre}',${lat},${lon})">
+          <div class="ac-name">${nombre}</div>
+          <div class="ac-detail">${r.formatted_address}</div>
         </div>`;
       }).join('');
       listEl.style.display = 'block';
-    } catch(e) { listEl.style.display='none'; }
+    });
   }, 400);
 }
 
@@ -657,11 +652,11 @@ function confirmarCiudadLibre(nombre, lat, lon) {
   ciudadSeleccionada = { nombre, lat, lon };
   document.getElementById('ciudad-libre').value = nombre;
   document.getElementById('ac-ciudad').style.display = 'none';
-  document.getElementById('ciudad-aviso').classList.add('hidden');
   habilitarDirecciones(true);
   if (mapaIniciado) {
-    mapa.flyTo({ center: [lon, lat], zoom: 12, duration: 1000 });
-    document.getElementById('mapa-instruccion').textContent = `Ciudad: ${nombre} — escribe la dirección`;
+    mapa.setCenter({lat, lng: lon});
+    mapa.setZoom(12);
+    document.getElementById('mapa-instruccion').textContent = `${nombre} — escribe la dirección`;
   }
 }
 
@@ -672,47 +667,34 @@ function habilitarDirecciones(ok) {
   document.getElementById('ciudad-aviso').classList.toggle('hidden', ok);
 }
 
-// ── AUTOCOMPLETE DIRECCIONES ──
-async function buscarDir(input, idx) {
-  if (!ciudadSeleccionada) return;
-  clearTimeout(acTimers[idx]);
-  const q = input.value.trim();
-  const listEl = document.getElementById('ac-' + idx);
-  if (q.length < 3) { listEl.style.display='none'; return; }
+// ── AUTOCOMPLETE GOOGLE PLACES ──
+let acInstances = {};
 
-  acTimers[idx] = setTimeout(async () => {
-    try {
-      const prox = `${ciudadSeleccionada.lon},${ciudadSeleccionada.lat}`;
-      const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(q + ', ' + ciudadSeleccionada.nombre)}.json?access_token=${MAPBOX_TOKEN}&country=co&language=es&limit=5&proximity=${prox}&types=address,poi`;
-      const r = await fetch(url);
-      const data = await r.json();
-      if (!data.features?.length) { listEl.style.display='none'; return; }
-
-      listEl.innerHTML = data.features.map(f => {
-        const nombre  = f.text || f.place_name.split(',')[0];
-        const detalle = f.place_name.split(',').slice(1,3).join(',').trim();
-        const [lon,lat] = f.center;
-        return `<div class="ac-item" onclick="selDir(${idx},'${(f.place_name).replace(/'/g,"\\'")}',${lat},${lon})">
-          <div class="ac-name">${nombre}</div>
-          <div class="ac-detail">${detalle}</div>
-        </div>`;
-      }).join('');
-      listEl.style.display = 'block';
-    } catch(e) { listEl.style.display='none'; }
-  }, 400);
+function iniciarAutocomplete(input, idx) {
+  if (!window.google || acInstances[idx]) return;
+  const bounds = ciudadSeleccionada
+    ? new google.maps.Circle({ center: { lat: ciudadSeleccionada.lat, lng: ciudadSeleccionada.lon }, radius: 30000 }).getBounds()
+    : null;
+  const opts = { componentRestrictions: { country: 'co' }, fields: ['geometry','name','formatted_address'] };
+  if (bounds) opts.bounds = bounds;
+  const ac = new google.maps.places.Autocomplete(input, opts);
+  ac.addListener('place_changed', () => {
+    const place = ac.getPlace();
+    if (!place.geometry) return;
+    const lat = place.geometry.location.lat();
+    const lon = place.geometry.location.lng();
+    coordenadas[idx] = [lat, lon];
+    ponerMarcador(idx, lat, lon);
+    document.getElementById('mapa-instruccion').style.display = 'none';
+    if (Object.keys(coordenadas).length >= 2) calcularRutaReal();
+  });
+  acInstances[idx] = ac;
 }
 
-function selDir(idx, nombre, lat, lon) {
-  let inp = idx===0 ? document.getElementById('origen-input')
-          : idx===1 ? document.getElementById('destino-input')
-          : document.querySelector(`#parada-extra-${idx} .parada-input`);
-  if (inp) inp.value = nombre.split(',')[0];
-  const listEl = document.getElementById('ac-'+idx);
-  if (listEl) listEl.style.display='none';
-  coordenadas[idx] = [lat,lon];
-  ponerMarcador(idx,lat,lon);
-  document.getElementById('mapa-instruccion').style.display='none';
-  if (Object.keys(coordenadas).length >= 2) dibujarRuta();
+function buscarDir(input, idx) {
+  // El autocomplete de Google se activa automáticamente al escribir
+  // Esta función solo inicia el autocomplete si no está iniciado
+  if (window.google && !acInstances[idx]) iniciarAutocomplete(input, idx);
 }
 
 document.addEventListener('click', e => {
@@ -732,22 +714,28 @@ function agregarParada() {
   div.innerHTML = `
     <div class="parada-dot parada"></div>
     <div class="parada-field">
-      <input class="parada-input" placeholder="📍 Parada ${idx}" autocomplete="off" oninput="buscarDir(this,${idx})">
+      <input class="parada-input" placeholder="📍 Parada ${idx}" autocomplete="off" onfocus="iniciarAutocomplete(this,${idx})">
       <div class="ac-list" id="ac-${idx}"></div>
     </div>
     <button class="btn-remove" onclick="eliminarParada(${idx})">×</button>`;
   wrap.insertBefore(div, wrap.lastElementChild);
   if (numParadas >= 6) document.getElementById('btn-add-parada').style.display='none';
+  // Iniciar autocomplete en el nuevo input
+  setTimeout(() => {
+    const newInput = div.querySelector('.parada-input');
+    if (newInput) iniciarAutocomplete(newInput, idx);
+  }, 100);
 }
 
 function eliminarParada(idx) {
   const el = document.getElementById('parada-extra-'+idx);
   if (el) el.remove();
-  if (marcadores[idx]) { marcadores[idx].remove(); delete marcadores[idx]; }
+  if (marcadores[idx]) { marcadores[idx].setMap(null); delete marcadores[idx]; }
   delete coordenadas[idx];
+  delete acInstances[idx];
   numParadas--;
   document.getElementById('btn-add-parada').style.display='flex';
-  if (Object.keys(coordenadas).length >= 2) dibujarRuta();
+  if (Object.keys(coordenadas).length >= 2) calcularRutaReal();
 }
 
 function toggleRegreso() {
@@ -755,45 +743,98 @@ function toggleRegreso() {
   document.getElementById('check-regreso').classList.toggle('checked', conRegreso);
 }
 
-// ── MAPA MAPBOX ──
+// ── MAPA GOOGLE MAPS ──
 function iniciarMapa() {
-  mapa = new mapboxgl.Map({
-    container: 'mapa',
-    style: 'mapbox://styles/mapbox/dark-v11',
-    center: [-74.0721, 4.7110],
-    zoom: 5
+  mapa = new google.maps.Map(document.getElementById('mapa'), {
+    center: { lat: 4.7110, lng: -74.0721 },
+    zoom: 5,
+    styles: [
+      {elementType:'geometry',stylers:[{color:'#1a1a2e'}]},
+      {elementType:'labels.text.stroke',stylers:[{color:'#1a1a2e'}]},
+      {elementType:'labels.text.fill',stylers:[{color:'#6b6b8a'}]},
+      {featureType:'road',elementType:'geometry',stylers:[{color:'#2a2a40'}]},
+      {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#1e1e30'}]},
+      {featureType:'road',elementType:'labels.text.fill',stylers:[{color:'#6b6b8a'}]},
+      {featureType:'water',elementType:'geometry',stylers:[{color:'#0d0d1a'}]},
+      {featureType:'poi',stylers:[{visibility:'off'}]},
+      {featureType:'transit',stylers:[{visibility:'off'}]},
+      {featureType:'administrative',elementType:'geometry',stylers:[{color:'#2a2a40'}]},
+      {featureType:'administrative.country',elementType:'labels.text.fill',stylers:[{color:'#4a4a6a'}]},
+    ],
+    disableDefaultUI: false,
+    zoomControl: true,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: false,
   });
-  mapa.addControl(new mapboxgl.NavigationControl(), 'top-right');
+  geocoder = new google.maps.Geocoder();
+  directionsService = new google.maps.DirectionsService();
+  directionsRenderer = new google.maps.DirectionsRenderer({
+    map: mapa,
+    suppressMarkers: true,
+    polylineOptions: { strokeColor: '#1A56D4', strokeWeight: 4, strokeOpacity: 0.8 }
+  });
   mapaIniciado = true;
+  // Iniciar autocomplete en inputs ya existentes
+  setTimeout(() => {
+    const oi = document.getElementById('origen-input');
+    const di = document.getElementById('destino-input');
+    if (oi) iniciarAutocomplete(oi, 0);
+    if (di) iniciarAutocomplete(di, 1);
+  }, 200);
 }
 
 function ponerMarcador(idx, lat, lon) {
   if (!mapaIniciado) return;
-  if (marcadores[idx]) marcadores[idx].remove();
+  if (marcadores[idx]) marcadores[idx].setMap(null);
   const colors = {0:'#22c55e', 1:'#F05A28'};
   const color  = colors[idx] || '#1A56D4';
-  const el = document.createElement('div');
-  el.style.cssText = `width:16px;height:16px;border-radius:50%;background:${color};border:2.5px solid white;box-shadow:0 0 12px ${color}90`;
-  marcadores[idx] = new mapboxgl.Marker({element:el}).setLngLat([lon,lat]).addTo(mapa);
-  mapa.flyTo({center:[lon,lat], zoom:14, duration:800});
+  marcadores[idx] = new google.maps.Marker({
+    position: { lat, lng: lon },
+    map: mapa,
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 8,
+      fillColor: color,
+      fillOpacity: 1,
+      strokeColor: '#ffffff',
+      strokeWeight: 2.5
+    }
+  });
+  mapa.panTo({ lat, lng: lon });
+  mapa.setZoom(14);
 }
 
-function dibujarRuta() {
-  if (!mapaIniciado) return;
-  const keys   = Object.keys(coordenadas).sort((a,b)=>a-b);
-  const puntos = keys.map(k => [coordenadas[k][1], coordenadas[k][0]]);
-  const addRuta = () => {
-    if (mapa.getLayer('ruta')) mapa.removeLayer('ruta');
-    if (mapa.getSource('ruta')) mapa.removeSource('ruta');
-    if (puntos.length < 2) return;
-    mapa.addSource('ruta', { type:'geojson', data:{ type:'Feature', geometry:{ type:'LineString', coordinates:puntos }}});
-    mapa.addLayer({ id:'ruta', type:'line', source:'ruta',
-      layout:{'line-join':'round','line-cap':'round'},
-      paint:{'line-color':'#1A56D4','line-width':3,'line-dasharray':[2,2],'line-opacity':.8}});
-    const lons=puntos.map(p=>p[0]), lats=puntos.map(p=>p[1]);
-    mapa.fitBounds([[Math.min(...lons),Math.min(...lats)],[Math.max(...lons),Math.max(...lats)]], {padding:60, duration:800});
-  };
-  if (mapa.isStyleLoaded()) addRuta(); else mapa.once('load', addRuta);
+// ── RUTA REAL con Directions API ──
+let distanciaRutaMetros = 0;
+
+function calcularRutaReal() {
+  if (!mapaIniciado || !directionsService) return;
+  const keys   = Object.keys(coordenadas).sort((a,b)=>a-b).map(Number);
+  if (keys.length < 2) return;
+
+  const puntos  = keys.map(k => coordenadas[k]);
+  const origen  = { lat: puntos[0][0], lng: puntos[0][1] };
+  const destino = { lat: puntos[puntos.length-1][0], lng: puntos[puntos.length-1][1] };
+  const waypoints = puntos.slice(1,-1).map(p => ({ location: { lat:p[0], lng:p[1] }, stopover: true }));
+  if (conRegreso) waypoints.push({ location: origen, stopover: false });
+
+  directionsService.route({
+    origin: origen,
+    destination: conRegreso ? origen : destino,
+    waypoints,
+    travelMode: google.maps.TravelMode.DRIVING,
+    region: 'CO'
+  }, (result, status) => {
+    if (status === 'OK') {
+      directionsRenderer.setDirections(result);
+      // Sumar distancias de todos los tramos
+      let metros = 0;
+      result.routes[0].legs.forEach(leg => metros += leg.distance.value);
+      distanciaRutaMetros = metros;
+      document.getElementById('mapa-instruccion').style.display = 'none';
+    }
+  });
 }
 
 // ── COTIZADOR MENSAJERÍA ──
@@ -801,28 +842,26 @@ async function cotizarMensajeria() {
   if (!ciudadSeleccionada) { showToast('Selecciona primero la ciudad','error'); return; }
   const keys = Object.keys(coordenadas).sort((a,b)=>a-b).map(Number);
   if (keys.length < 2) { showToast('Escribe al menos origen y destino','error'); return; }
+  if (distanciaRutaMetros === 0) { showToast('Espera a que se calcule la ruta en el mapa','error'); return; }
 
   document.getElementById('btn-cotizar-mens').disabled = true;
   document.getElementById('loading-mens').classList.add('visible');
   document.getElementById('result-mens').classList.remove('visible');
   try {
-    const puntos = keys.map(k => coordenadas[k]);
-    let dist = [];
-    for (let i=0; i<puntos.length-1; i++) dist.push(haversine(puntos[i],puntos[i+1]));
-    if (conRegreso) dist.push(haversine(puntos[puntos.length-1],puntos[0]));
-    const distTotal = dist.reduce((a,b)=>a+b,0).toFixed(2);
-
-    const r    = await fetch(`${API_URL}?accion=cotizar&km=${distTotal}`);
+    const distKm = (distanciaRutaMetros / 1000).toFixed(2);
+    const r    = await fetch(`${API_URL}?accion=cotizar&km=${distKm}`);
     const data = await r.json();
     if (!data.ok) { showToast(data.error||'Error al cotizar','error'); return; }
 
-    const propina = parseInt(document.getElementById('propina-mens').value)||0;
+    const propina  = parseInt(document.getElementById('propina-mens').value)||0;
+    const recargo  = tipoEnvio === 'paquete_grande' ? RECARGO_GRANDE : 0;
     data._propina   = propina;
-    data._distTotal = distTotal;
+    data._recargo   = recargo;
+    data._distTotal = distKm;
     data._ciudad    = ciudadSeleccionada.nombre;
     data._horario   = modoHorario==='ahora' ? 'Ahora mismo' : document.getElementById('hora-recogida').value;
     ultimaCotizacionMens = data;
-    mostrarResultadoMens(data, distTotal, propina);
+    mostrarResultadoMens(data, distKm, propina, recargo);
   } catch(e) {
     showToast('Error de conexión. Intenta de nuevo.','error');
   } finally {
@@ -831,16 +870,17 @@ async function cotizarMensajeria() {
   }
 }
 
-function mostrarResultadoMens(data, distTotal, propina) {
-  const totalFinal = data.totalCliente + propina;
+function mostrarResultadoMens(data, distKm, propina, recargo) {
+  const totalFinal = data.totalCliente + propina + recargo;
   let html = `
     <div class="cotiz-row"><span class="cotiz-row-label">Ciudad</span><span class="cotiz-row-value">📍 ${data._ciudad}</span></div>
-    <div class="cotiz-row"><span class="cotiz-row-label">Distancia total</span><span class="cotiz-row-value">${parseFloat(distTotal).toFixed(1)} km</span></div>
+    <div class="cotiz-row"><span class="cotiz-row-label">Distancia por ruta</span><span class="cotiz-row-value">${parseFloat(distKm).toFixed(1)} km</span></div>
     <div class="cotiz-row"><span class="cotiz-row-label">Subtotal por distancia</span><span class="cotiz-row-value">${data.fmt.subtotalKm}</span></div>
     <div class="cotiz-row"><span class="cotiz-row-label">Tarifa de servicio</span><span class="cotiz-row-value">${data.fmt.tarifaServicio}</span></div>
     <div class="cotiz-row"><span class="cotiz-row-label">Tarifa de gestión</span><span class="cotiz-row-value">${data.fmt.comisionCliente}</span></div>
     <div class="cotiz-row"><span class="cotiz-row-label">Hora de recogida</span><span class="cotiz-row-value">⏰ ${data._horario}</span></div>
     <div class="cotiz-row"><span class="cotiz-row-label">Tiempo estimado</span><span class="cotiz-row-value">⏱ ${data.tiempoEstimadoTexto}</span></div>`;
+  if (recargo>0) html+=`<div class="cotiz-row"><span class="cotiz-row-label">📦 Recargo paquete grande</span><span class="cotiz-row-value">+ ${fmtCOP(recargo)}</span></div>`;
   if (propina>0) html+=`<div class="cotiz-row"><span class="cotiz-row-label">🤝 Propina mensajero</span><span class="cotiz-row-value" style="color:var(--green)">+ ${fmtCOP(propina)}</span></div>`;
   if (data.aplicaTarifaMinima) html+=`<div class="cotiz-row"><span class="cotiz-row-label" style="color:var(--orange)">⚠ Tarifa mínima aplicada</span><span class="cotiz-row-value" style="color:var(--orange)">$3.450</span></div>`;
   document.getElementById('detalle-mens').innerHTML = html;
@@ -879,8 +919,7 @@ async function cotizarDomiciliario() {
       <div class="cotiz-row"><span class="cotiz-row-label">Días contratados</span><span class="cotiz-row-value">${data.dias} día(s)</span></div>
       <div class="cotiz-row"><span class="cotiz-row-label">Tarifa del domiciliario</span><span class="cotiz-row-value">${data.fmt.tarifaTotal}</span></div>
       <div class="cotiz-row"><span class="cotiz-row-label">Tarifa de gestión Radiz</span><span class="cotiz-row-value">${data.fmt.comisionRadiz}</span></div>
-      <div class="cotiz-row"><span class="cotiz-row-label">Bono rodamiento y desempeño</span><span class="cotiz-row-value">${data.fmt.bonoRodamiento}</span></div>
-      <div class="cotiz-row"><span class="cotiz-row-label">Día de pago al domiciliario</span><span class="cotiz-row-value">📅 ${data.diaPago}</span></div>`;
+      <div class="cotiz-row"><span class="cotiz-row-label">Bono rodamiento y desempeño</span><span class="cotiz-row-value">${data.fmt.bonoRodamiento}</span></div>`;
     if (propina>0) html+=`<div class="cotiz-row"><span class="cotiz-row-label">🤝 Propina domiciliario</span><span class="cotiz-row-value" style="color:var(--green)">+ ${fmtCOP(propina)}</span></div>`;
     document.getElementById('detalle-dom').innerHTML = html;
     document.getElementById('total-dom-valor').textContent = fmtCOP(totalFinal);
@@ -904,11 +943,11 @@ function selTipoCliente(tipo) {
 function poblarResumen() {
   let html = '';
   if (servicioActivo==='mensajeria' && ultimaCotizacionMens) {
-    const d=ultimaCotizacionMens, p=d._propina||0, total=d.totalCliente+p;
+    const d=ultimaCotizacionMens, p=d._propina||0, rec=d._recargo||0, total=d.totalCliente+p+rec;
     html=`
       <div class="reg-resumen-row"><span>Servicio</span><span>Mensajería punto a punto</span></div>
       <div class="reg-resumen-row"><span>Ciudad</span><span>${d._ciudad||''}</span></div>
-      <div class="reg-resumen-row"><span>Distancia</span><span>${parseFloat(d._distTotal).toFixed(1)} km</span></div>
+      <div class="reg-resumen-row"><span>Distancia por ruta</span><span>${parseFloat(d._distTotal).toFixed(1)} km</span></div>
       <div class="reg-resumen-row"><span>Recogida</span><span>${d._horario||'Ahora mismo'}</span></div>
       ${p>0?`<div class="reg-resumen-row"><span>Propina</span><span>${fmtCOP(p)}</span></div>`:''}
       <div class="reg-resumen-row total"><span>Total</span><span class="val" style="color:var(--blue-light)">${fmtCOP(total)}</span></div>`;
@@ -925,21 +964,16 @@ function poblarResumen() {
 }
 
 function procesarPago() {
-  const nombre  = document.getElementById('reg-nombre').value.trim();
-  const tel     = document.getElementById('reg-telefono').value.trim();
-  const correo  = document.getElementById('reg-correo').value.trim();
+  const nombre = document.getElementById('reg-nombre').value.trim();
+  const tel    = document.getElementById('reg-telefono').value.trim();
+  const correo = document.getElementById('reg-correo').value.trim();
   if (!nombre||!tel||!correo) { showToast('Completa todos los campos requeridos','error'); return; }
   if (!correo.includes('@')) { showToast('Ingresa un correo válido','error'); return; }
   showToast('Redirigiendo al pago seguro...','success');
-  setTimeout(()=>showToast('Módulo Wompi — disponible en Sesión 4','')  ,2000);
+  setTimeout(()=>showToast('Módulo Wompi — disponible en Sesión 4',''), 2000);
 }
 
 // ── UTILIDADES ──
-function haversine([lat1,lon1],[lat2,lon2]) {
-  const R=6371,dLat=(lat2-lat1)*Math.PI/180,dLon=(lon2-lon1)*Math.PI/180;
-  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
-}
 function fmtCOP(n) { return '$ '+Math.round(n).toLocaleString('es-CO'); }
 
 // INIT
@@ -947,6 +981,10 @@ const hoy = new Date().toISOString().split('T')[0];
 document.getElementById('fecha-inicio').min = hoy;
 document.getElementById('fecha-inicio').value = hoy;
 actualizarFechaFin();
+
+// Esperar a que Google Maps cargue
+window.initMap = function() { /* se llama desde callback si fuera necesario */ };
+
 </script>
 </body>
 </html>
