@@ -323,8 +323,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
             <div class="ciudad-btn" onclick="selCiudad(this,'otra',0,0,'otra')">🔍 Otra ciudad</div>
           </div>
           <div class="ciudad-otras" id="ciudad-otras-wrap">
-            <input class="form-input" id="ciudad-libre" placeholder="Escribe tu ciudad..." oninput="buscarCiudad(this)">
-            <div class="ac-list" id="ac-ciudad"></div>
+            <input class="form-input" id="ciudad-libre" placeholder="Escribe tu ciudad..." autocomplete="off" onfocus="iniciarAutocompleteCiudad()" oninput="iniciarAutocompleteCiudad()">
           </div>
         </div>
 
@@ -587,6 +586,7 @@ function irARegistro(s) { servicioActivo = s; poblarResumen(); mostrarVista('reg
 function volverDesdePago() { mostrarVista(servicioActivo); }
 
 function reiniciarMensajeria() {
+  acCiudadIniciado = false;
   // Limpiar coordenadas y marcadores
   Object.keys(marcadores).forEach(k => { marcadores[k].setMap(null); });
   marcadores = {}; coordenadas = {}; distanciaRutaMetros = 0;
@@ -668,30 +668,25 @@ function selCiudad(el, nombre, lat, lon, tipo) {
   }
 }
 
-async function buscarCiudad(input) {
-  clearTimeout(acTimers['ciudad']);
-  const q = input.value.trim();
-  const listEl = document.getElementById('ac-ciudad');
-  if (q.length < 3) { listEl.style.display='none'; return; }
-  acTimers['ciudad'] = setTimeout(async () => {
-    try {
-      const { Geocoder } = await google.maps.importLibrary("geocoding");
-      const gc = new Geocoder();
-      gc.geocode({ address: q + ', Colombia', componentRestrictions: { country: 'CO' } }, (results, status) => {
-        if (status !== 'OK' || !results.length) { listEl.style.display='none'; return; }
-        listEl.innerHTML = results.slice(0,5).map(r => {
-          const lat = r.geometry.location.lat();
-          const lon = r.geometry.location.lng();
-          const nombre = r.address_components[0].long_name;
-          return `<div class="ac-item" onclick="confirmarCiudadLibre('${nombre.replace(/'/g,"\\'")}',${lat},${lon})">
-            <div class="ac-name">${nombre}</div>
-            <div class="ac-detail">${r.formatted_address}</div>
-          </div>`;
-        }).join('');
-        listEl.style.display = 'block';
-      });
-    } catch(e) { listEl.style.display='none'; }
-  }, 400);
+let acCiudadIniciado = false;
+async function iniciarAutocompleteCiudad() {
+  if (acCiudadIniciado) return;
+  acCiudadIniciado = true;
+  const { Autocomplete } = await google.maps.importLibrary("places");
+  const input = document.getElementById('ciudad-libre');
+  const ac = new Autocomplete(input, {
+    componentRestrictions: { country: 'co' },
+    types: ['(cities)'],
+    fields: ['geometry','name','address_components']
+  });
+  ac.addListener('place_changed', () => {
+    const place = ac.getPlace();
+    if (!place.geometry) return;
+    const nombre = place.name;
+    const lat = place.geometry.location.lat();
+    const lon = place.geometry.location.lng();
+    confirmarCiudadLibre(nombre, lat, lon);
+  });
 }
 
 function confirmarCiudadLibre(nombre, lat, lon) {
@@ -740,7 +735,7 @@ function agregarParada() {
     <div class="parada-dot parada"></div>
     <div class="parada-field">
       <input class="parada-input" placeholder="📍 Parada ${idx}" autocomplete="off" onfocus="iniciarAutocomplete(this,${idx})">
-      <div class="ac-list" id="ac-${idx}"></div>
+      <input class="parada-complemento" placeholder="Apto, oficina, piso, referencia...">
     </div>
     <button class="btn-remove" onclick="eliminarParada(${idx})">×</button>`;
   wrap.insertBefore(div, wrap.lastElementChild);
