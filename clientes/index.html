@@ -251,6 +251,28 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 .buscando-timer-label{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--blue-light)}
 .btn-cancelar-busqueda{background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:12px;padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:.88rem;cursor:pointer;transition:.2s;width:100%}
 .btn-cancelar-busqueda:hover{border-color:var(--orange);color:var(--orange)}
+/* Jornada aviso */
+.jornada-aviso{margin-top:8px;padding:10px 14px;background:rgba(240,90,40,.1);border:1px solid rgba(240,90,40,.3);border-radius:10px;font-size:.82rem;color:var(--orange)}
+/* Bono total */
+.bono-total-row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.2);border-radius:10px;margin-top:10px}
+.bono-total-label{font-size:.82rem;color:var(--muted)}
+.bono-total-valor{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:var(--green)}
+/* Modal términos */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:2000;display:none;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.visible{display:flex}
+.modal-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:32px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;position:relative}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.modal-titulo{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:700;letter-spacing:-.02em}
+.modal-close{background:var(--surface2);border:1px solid var(--border2);border-radius:8px;width:32px;height:32px;cursor:pointer;color:var(--muted);font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:.2s}
+.modal-close:hover{border-color:var(--orange);color:var(--orange)}
+.modal-sub{font-size:.85rem;color:var(--muted);margin-bottom:20px;line-height:1.5}
+.modal-reglas{display:flex;flex-direction:column;gap:12px;margin-bottom:20px}
+.modal-regla{display:flex;gap:12px;align-items:flex-start;font-size:.85rem;line-height:1.6;color:var(--text)}
+.regla-num{background:var(--orange-soft);border:1px solid rgba(240,90,40,.3);color:var(--orange);border-radius:6px;min-width:26px;height:26px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;flex:0 0 auto}
+.modal-pdf-link{display:block;text-align:center;color:var(--blue-light);font-size:.83rem;margin-bottom:16px;text-decoration:none;padding:10px;border:1px solid var(--border2);border-radius:10px;transition:.2s}
+.modal-pdf-link:hover{border-color:var(--blue);background:var(--blue-soft)}
+.modal-check-row{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface2);border:1px solid var(--border2);border-radius:12px;cursor:pointer;margin-bottom:4px}
+.modal-check-row:hover{border-color:var(--orange)}
 
 /* Toast */
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface2);border:1px solid var(--border2);border-radius:14px;padding:13px 22px;font-size:.85rem;color:var(--text);z-index:9999;transition:.3s;opacity:0;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.3)}
@@ -479,40 +501,46 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
         <input type="text" class="form-input" id="ciudad-op" placeholder="Ej: Bogotá, Medellín, Cali...">
       </div>
       <div class="form-block">
-        <span class="form-label">Tipo de moto requerida</span>
+        <span class="form-label">Equipamiento del motorizado</span>
         <div class="tipo-moto-grid">
-          <div class="moto-btn selected" onclick="selMoto(this,'estandar')"><div class="moto-btn-icon">🏍️</div><div class="moto-btn-label">Moto estándar</div></div>
-          <div class="moto-btn" onclick="selMoto(this,'cajon')"><div class="moto-btn-icon">📦</div><div class="moto-btn-label">Con cajón</div></div>
-          <div class="moto-btn" onclick="selMoto(this,'nevera')"><div class="moto-btn-icon">🧊</div><div class="moto-btn-label">Con nevera</div></div>
+          <div class="moto-btn selected" onclick="selMoto(this,'estandar')"><div class="moto-btn-icon">🏍️</div><div class="moto-btn-label">Con maleta estándar</div></div>
+          <div class="moto-btn" onclick="selMoto(this,'maletero')"><div class="moto-btn-icon">📦</div><div class="moto-btn-label">Con maletero rígido</div></div>
+          <div class="moto-btn" onclick="selMoto(this,'termica')"><div class="moto-btn-icon">🧊</div><div class="moto-btn-label">Con caja térmica</div></div>
         </div>
       </div>
       <div class="form-block">
+        <span class="form-label">Jornada o turno</span>
         <div class="grid-2">
-          <div><span class="form-label">Hora inicio</span><input type="time" class="form-input" id="hora-inicio" value="08:00"></div>
-          <div><span class="form-label">Hora fin</span><input type="time" class="form-input" id="hora-fin" value="18:00"></div>
+          <div><span class="form-label" style="font-size:.7rem;margin-bottom:6px;display:block">Hora inicio</span><input type="time" class="form-input" id="hora-inicio" value="08:00" onchange="validarJornada()"></div>
+          <div><span class="form-label" style="font-size:.7rem;margin-bottom:6px;display:block">Hora fin</span><input type="time" class="form-input" id="hora-fin" value="16:00" onchange="validarJornada()"></div>
         </div>
+        <div class="jornada-aviso" id="jornada-aviso" style="display:none">⚠️ La jornada no puede superar 8 horas (Ley laboral colombiana)</div>
       </div>
       <div class="form-block">
         <span class="form-label">Descripción del trabajo</span>
         <textarea class="form-input" id="desc-trabajo" rows="3" placeholder="Describe brevemente el tipo de trabajo a realizar..." style="resize:none;line-height:1.6"></textarea>
       </div>
       <div class="form-block">
-        <span class="form-label">Propina para el domiciliario (opcional)</span>
+        <span class="form-label">Incentivo o bonificación</span>
         <div class="propina-wrap">
           <div class="propina-row">
-            <div class="propina-icon">🤝</div>
+            <div class="propina-icon">⭐</div>
             <div class="propina-text">
-              <div class="propina-title">Propina voluntaria</div>
+              <div class="propina-title">Bono diario</div>
               <div class="propina-sub">El 70% va al domiciliario y el 30% al personal administrativo</div>
             </div>
             <div class="propina-input-wrap">
               <span class="propina-currency">$</span>
-              <input type="number" class="propina-input" id="propina-dom" placeholder="0" min="0" step="1000">
+              <input type="number" class="propina-input" id="propina-dom" placeholder="0" min="0" step="1000" oninput="actualizarBonoDom()">
             </div>
+          </div>
+          <div class="bono-total-row" id="bono-total-row" style="display:none">
+            <span class="bono-total-label">Total bono (<span id="bono-dias-label">1</span> día(s))</span>
+            <span class="bono-total-valor" id="bono-total-valor">$ 0</span>
           </div>
         </div>
       </div>
-      <button class="btn-cotizar naranja" onclick="cotizarDomiciliario()" id="btn-cotizar-dom">Calcular cotización →</button>
+      <button class="btn-cotizar naranja" onclick="mostrarTerminosDom()" id="btn-cotizar-dom">Calcular cotización →</button>
       <div class="loading" id="loading-dom"><span class="spinner"></span> Calculando...</div>
       <div class="cotizacion-result" id="result-dom">
         <div class="cotiz-titulo">Detalle de la cotización</div>
@@ -524,6 +552,32 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
         <button class="btn-continuar naranja" onclick="irARegistro('domiciliario')">Continuar con el pago →</button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- MODAL TÉRMINOS DOMICILIARIO -->
+<div class="modal-overlay" id="modal-terminos" onclick="cerrarModalTerminos(event)">
+  <div class="modal-card">
+    <div class="modal-header">
+      <div class="modal-titulo">Términos y condiciones</div>
+      <button class="modal-close" onclick="cerrarModalTerminos()">×</button>
+    </div>
+    <div class="modal-sub">Lee y acepta antes de continuar con tu solicitud de domiciliario.</div>
+    <div class="modal-reglas">
+      <div class="modal-regla"><span class="regla-num">1</span><span>Al aceptar, usted firmará un contrato por prestación de servicios legalmente válido en Colombia.</span></div>
+      <div class="modal-regla"><span class="regla-num">2</span><span>El domiciliario cubrirá exclusivamente su zona de influencia y hasta 30 paradas por día.</span></div>
+      <div class="modal-regla"><span class="regla-num">3</span><span>Radiz actúa como intermediario entre las partes; no es empleador de ninguna de ellas.</span></div>
+      <div class="modal-regla"><span class="regla-num">4</span><span>El cobro se realizará anticipadamente y se liberará al domiciliario cuando cumpla con su misión.</span></div>
+      <div class="modal-regla"><span class="regla-num">5</span><span>En caso de incumplimiento por parte del domiciliario, Radiz buscará un reemplazo. Si no hay reemplazo disponible, se realizará reembolso en 3 días hábiles.</span></div>
+      <div class="modal-regla"><span class="regla-num">6</span><span>El domiciliario es responsable de mantener sus seguros y pólizas todo riesgo al día.</span></div>
+      <div class="modal-regla"><span class="regla-num">7</span><span>El domiciliario es responsable de pagar y mantener al día su ARL.</span></div>
+    </div>
+    <a class="modal-pdf-link" href="#" target="_blank">📄 Ver contrato completo en PDF →</a>
+    <div class="modal-check-row" onclick="toggleTerminos()">
+      <div class="check-box" id="check-terminos"></div>
+      <div class="check-label">He leído y acepto los términos y condiciones</div>
+    </div>
+    <button class="btn-cotizar naranja" id="btn-aceptar-terminos" onclick="aceptarTerminosYCotizar()" disabled style="opacity:.4;margin-top:16px">Aceptar y calcular cotización →</button>
   </div>
 </div>
 
@@ -953,6 +1007,7 @@ function cambiarDias(d) {
   diasDomiciliario = Math.max(1, diasDomiciliario+d);
   document.getElementById('dias-num').textContent = diasDomiciliario;
   actualizarFechaFin();
+  actualizarBonoDom(); // actualizar total bono al cambiar días
 }
 function actualizarFechaFin() {
   const inicio = document.getElementById('fecha-inicio').value;
@@ -970,16 +1025,19 @@ async function cotizarDomiciliario() {
     const r    = await fetch(`${API_URL}?accion=cotizar_domiciliario&dias=${diasDomiciliario}`);
     const data = await r.json();
     if (!data.ok) { showToast(data.error||'Error al cotizar','error'); return; }
-    const propina    = parseInt(document.getElementById('propina-dom').value)||0;
-    data._propina    = propina;
+    const bonoDiario  = parseInt(document.getElementById('propina-dom').value)||0;
+    const bonoTotal   = bonoDiario * diasDomiciliario;
+    data._propina     = bonoTotal;
+    data._bonoDiario  = bonoDiario;
     ultimaCotizacionDom = data;
-    const totalFinal = data.totalCliente + propina;
+    const totalFinal  = data.totalCliente + bonoTotal;
     let html = `
       <div class="cotiz-row"><span class="cotiz-row-label">Días contratados</span><span class="cotiz-row-value">${data.dias} día(s)</span></div>
       <div class="cotiz-row"><span class="cotiz-row-label">Tarifa del domiciliario</span><span class="cotiz-row-value">${data.fmt.tarifaTotal}</span></div>
       <div class="cotiz-row"><span class="cotiz-row-label">Tarifa de gestión Radiz</span><span class="cotiz-row-value">${data.fmt.comisionRadiz}</span></div>
       <div class="cotiz-row"><span class="cotiz-row-label">Bono rodamiento y desempeño</span><span class="cotiz-row-value">${data.fmt.bonoRodamiento}</span></div>`;
-    if (propina>0) html+=`<div class="cotiz-row"><span class="cotiz-row-label">🤝 Propina domiciliario</span><span class="cotiz-row-value" style="color:var(--green)">+ ${fmtCOP(propina)}</span></div>`;
+    if (bonoDiario>0) html+=`
+      <div class="cotiz-row"><span class="cotiz-row-label">⭐ Bono diario × ${diasDomiciliario} día(s)</span><span class="cotiz-row-value" style="color:var(--green)">+ ${fmtCOP(bonoTotal)}</span></div>`;
     document.getElementById('detalle-dom').innerHTML = html;
     document.getElementById('total-dom-valor').textContent = fmtCOP(totalFinal);
     document.getElementById('result-dom').classList.add('visible');
@@ -1020,6 +1078,59 @@ function poblarResumen() {
       <div class="reg-resumen-row total"><span>Total</span><span class="val" style="color:var(--orange)">${fmtCOP(total)}</span></div>`;
   }
   document.getElementById('reg-resumen').innerHTML = html;
+}
+
+// ── VALIDACIÓN JORNADA (máx 8h) ──
+function validarJornada() {
+  const ini = document.getElementById('hora-inicio').value;
+  const fin = document.getElementById('hora-fin').value;
+  if (!ini || !fin) return;
+  const [hI, mI] = ini.split(':').map(Number);
+  const [hF, mF] = fin.split(':').map(Number);
+  const mins = (hF * 60 + mF) - (hI * 60 + mI);
+  const aviso = document.getElementById('jornada-aviso');
+  const btnCot = document.getElementById('btn-cotizar-dom');
+  if (mins > 480 || mins <= 0) {
+    aviso.style.display = 'block';
+    btnCot.disabled = true; btnCot.style.opacity = '.4';
+  } else {
+    aviso.style.display = 'none';
+    btnCot.disabled = false; btnCot.style.opacity = '1';
+  }
+}
+
+// ── BONO DIARIO DOM ──
+function actualizarBonoDom() {
+  const bono = parseInt(document.getElementById('propina-dom').value) || 0;
+  const filaTotal = document.getElementById('bono-total-row');
+  if (bono > 0) {
+    filaTotal.style.display = 'flex';
+    document.getElementById('bono-dias-label').textContent = diasDomiciliario;
+    document.getElementById('bono-total-valor').textContent = fmtCOP(bono * diasDomiciliario);
+  } else {
+    filaTotal.style.display = 'none';
+  }
+}
+
+// ── MODAL TÉRMINOS DOM ──
+let terminosAceptados = false;
+function mostrarTerminosDom() {
+  document.getElementById('modal-terminos').classList.add('visible');
+}
+function cerrarModalTerminos(e) {
+  if (!e || e.target === document.getElementById('modal-terminos'))
+    document.getElementById('modal-terminos').classList.remove('visible');
+}
+function toggleTerminos() {
+  terminosAceptados = !terminosAceptados;
+  document.getElementById('check-terminos').classList.toggle('checked', terminosAceptados);
+  const btn = document.getElementById('btn-aceptar-terminos');
+  btn.disabled = !terminosAceptados;
+  btn.style.opacity = terminosAceptados ? '1' : '.4';
+}
+function aceptarTerminosYCotizar() {
+  document.getElementById('modal-terminos').classList.remove('visible');
+  cotizarDomiciliario();
 }
 
 let timerBusqueda = null;
