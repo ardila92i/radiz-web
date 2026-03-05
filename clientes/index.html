@@ -244,8 +244,12 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 .toast.error{border-color:var(--orange);color:var(--orange)}
 .toast.success{border-color:var(--green);color:var(--green)}
 
-/* Google Maps UI cleanup */
-.gm-style-cc, .gm-style a[href^="https://maps.google"]{display:none!important}
+.parada-complemento{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 14px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.82rem;outline:none;transition:.2s;margin-top:6px}
+.parada-complemento:focus{border-color:var(--blue)}
+.parada-complemento::placeholder{color:var(--muted2)}
+.parada-complemento:disabled{opacity:.3;cursor:not-allowed}
+.btn-nueva-cotiz{width:100%;background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:12px;padding:11px;font-family:'DM Sans',sans-serif;font-size:.88rem;cursor:pointer;margin-top:8px;transition:.2s}
+.btn-nueva-cotiz:hover{border-color:var(--blue);color:var(--blue-light)}
 </style>
 </head>
 <body>
@@ -377,6 +381,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
               <div class="parada-dot origen"></div>
               <div class="parada-field">
                 <input class="parada-input" id="origen-input" placeholder="📍 Punto de recogida (origen)" autocomplete="off" disabled oninput="buscarDir(this,0)">
+                <input class="parada-complemento" id="origen-comp" placeholder="Apto, oficina, piso, referencia..." disabled>
                 <div class="ac-list" id="ac-0"></div>
               </div>
             </div>
@@ -384,6 +389,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
               <div class="parada-dot destino"></div>
               <div class="parada-field">
                 <input class="parada-input" id="destino-input" placeholder="📍 Punto de entrega (destino)" autocomplete="off" disabled oninput="buscarDir(this,1)">
+                <input class="parada-complemento" id="destino-comp" placeholder="Apto, oficina, piso, referencia..." disabled>
                 <div class="ac-list" id="ac-1"></div>
               </div>
             </div>
@@ -423,6 +429,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
             <div class="cotiz-total-value" id="total-mens-valor">$0</div>
           </div>
           <button class="btn-continuar" onclick="irARegistro('mensajeria')">Continuar con el pago →</button>
+          <button class="btn-nueva-cotiz" onclick="reiniciarMensajeria()">↩ Nueva cotización</button>
         </div>
       </div>
 
@@ -570,7 +577,6 @@ let tipoCliente = 'natural';
 let acTimers    = {};
 let geocoder, directionsService, directionsRenderer;
 
-// ── NAVEGACIÓN ──
 function mostrarVista(id) {
   document.querySelectorAll('.vista').forEach(v => v.classList.remove('activa'));
   const el = document.getElementById('vista-' + id);
@@ -579,6 +585,43 @@ function mostrarVista(id) {
 }
 function irARegistro(s) { servicioActivo = s; poblarResumen(); mostrarVista('registro'); }
 function volverDesdePago() { mostrarVista(servicioActivo); }
+
+function reiniciarMensajeria() {
+  // Limpiar coordenadas y marcadores
+  Object.keys(marcadores).forEach(k => { marcadores[k].setMap(null); });
+  marcadores = {}; coordenadas = {}; distanciaRutaMetros = 0;
+  acInstances = {}; numParadas = 2; conRegreso = false;
+  ultimaCotizacionMens = null;
+
+  // Limpiar inputs
+  ['origen-input','destino-input','origen-comp','destino-comp'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.value = ''; el.disabled = true; }
+  });
+
+  // Limpiar paradas extra
+  document.querySelectorAll('[id^="parada-extra-"]').forEach(el => el.remove());
+  document.getElementById('btn-add-parada').style.display = 'flex';
+  document.getElementById('btn-add-parada').disabled = true;
+
+  // Limpiar mapa
+  if (directionsRenderer) directionsRenderer.setDirections({routes:[]});
+
+  // Limpiar propina y resultado
+  document.getElementById('propina-mens').value = '';
+  document.getElementById('result-mens').classList.remove('visible');
+
+  // Limpiar ciudad
+  document.querySelectorAll('.ciudad-btn').forEach(b => b.classList.remove('selected'));
+  document.getElementById('ciudad-otras-wrap').classList.remove('visible');
+  document.getElementById('ciudad-libre').value = '';
+  ciudadSeleccionada = null;
+  document.getElementById('ciudad-aviso').classList.remove('hidden');
+  document.getElementById('check-regreso').classList.remove('checked');
+  document.getElementById('mapa-instruccion').textContent = 'Selecciona una ciudad para comenzar';
+  document.getElementById('mapa-instruccion').style.display = 'block';
+  if (mapaIniciado) { mapa.setCenter({lat:4.7110, lng:-74.0721}); mapa.setZoom(5); }
+}
 
 // ── TOAST ──
 function showToast(msg, tipo='') {
@@ -625,26 +668,29 @@ function selCiudad(el, nombre, lat, lon, tipo) {
   }
 }
 
-function buscarCiudad(input) {
+async function buscarCiudad(input) {
   clearTimeout(acTimers['ciudad']);
   const q = input.value.trim();
   const listEl = document.getElementById('ac-ciudad');
   if (q.length < 3) { listEl.style.display='none'; return; }
-  acTimers['ciudad'] = setTimeout(() => {
-    if (!geocoder) return;
-    geocoder.geocode({ address: q + ', Colombia', componentRestrictions: { country: 'CO' }, types: ['locality','administrative_area_level_2'] }, (results, status) => {
-      if (status !== 'OK' || !results.length) { listEl.style.display='none'; return; }
-      listEl.innerHTML = results.slice(0,5).map(r => {
-        const lat = r.geometry.location.lat();
-        const lon = r.geometry.location.lng();
-        const nombre = r.address_components[0].long_name;
-        return `<div class="ac-item" onclick="confirmarCiudadLibre('${nombre}',${lat},${lon})">
-          <div class="ac-name">${nombre}</div>
-          <div class="ac-detail">${r.formatted_address}</div>
-        </div>`;
-      }).join('');
-      listEl.style.display = 'block';
-    });
+  acTimers['ciudad'] = setTimeout(async () => {
+    try {
+      const { Geocoder } = await google.maps.importLibrary("geocoding");
+      const gc = new Geocoder();
+      gc.geocode({ address: q + ', Colombia', componentRestrictions: { country: 'CO' } }, (results, status) => {
+        if (status !== 'OK' || !results.length) { listEl.style.display='none'; return; }
+        listEl.innerHTML = results.slice(0,5).map(r => {
+          const lat = r.geometry.location.lat();
+          const lon = r.geometry.location.lng();
+          const nombre = r.address_components[0].long_name;
+          return `<div class="ac-item" onclick="confirmarCiudadLibre('${nombre.replace(/'/g,"\\'")}',${lat},${lon})">
+            <div class="ac-name">${nombre}</div>
+            <div class="ac-detail">${r.formatted_address}</div>
+          </div>`;
+        }).join('');
+        listEl.style.display = 'block';
+      });
+    } catch(e) { listEl.style.display='none'; }
   }, 400);
 }
 
@@ -661,8 +707,10 @@ function confirmarCiudadLibre(nombre, lat, lon) {
 }
 
 function habilitarDirecciones(ok) {
-  document.getElementById('origen-input').disabled = !ok;
-  document.getElementById('destino-input').disabled = !ok;
+  ['origen-input','destino-input','origen-comp','destino-comp'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = !ok;
+  });
   document.getElementById('btn-add-parada').disabled = !ok;
   document.getElementById('ciudad-aviso').classList.toggle('hidden', ok);
 }
