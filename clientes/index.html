@@ -236,6 +236,21 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 .loading.visible{display:block}
 .spinner{display:inline-block;width:18px;height:18px;border:2px solid var(--border2);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;margin-right:8px;vertical-align:middle}
 @keyframes spin{to{transform:rotate(360deg)}}
+/* Buscando mensajero */
+.buscando-wrap{max-width:440px;margin:60px auto 0;text-align:center}
+.buscando-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:40px 32px}
+.buscando-anim{position:relative;width:100px;height:100px;margin:0 auto 28px}
+.buscando-ring{position:absolute;inset:0;border-radius:50%;border:3px solid var(--border2);border-top-color:var(--blue-light);animation:spin 1.2s linear infinite}
+.buscando-icon{font-size:2.8rem;line-height:100px;text-align:center}
+.buscando-icon-sad{font-size:3.5rem;margin-bottom:20px}
+.buscando-titulo{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:10px;letter-spacing:-.02em}
+.buscando-sub{font-size:.88rem;color:var(--muted);line-height:1.6;margin-bottom:28px}
+.buscando-timer-wrap{margin-bottom:24px}
+.buscando-timer-bar{height:6px;background:var(--border2);border-radius:999px;overflow:hidden;margin-bottom:10px}
+.buscando-timer-fill{height:100%;width:100%;background:linear-gradient(90deg,var(--blue),var(--blue-light));border-radius:999px;transition:width 1s linear}
+.buscando-timer-label{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;color:var(--blue-light)}
+.btn-cancelar-busqueda{background:transparent;border:1px solid var(--border2);color:var(--muted);border-radius:12px;padding:12px 28px;font-family:'DM Sans',sans-serif;font-size:.88rem;cursor:pointer;transition:.2s;width:100%}
+.btn-cancelar-busqueda:hover{border-color:var(--orange);color:var(--orange)}
 
 /* Toast */
 .toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(100px);background:var(--surface2);border:1px solid var(--border2);border-radius:14px;padding:13px 22px;font-size:.85rem;color:var(--text);z-index:9999;transition:.3s;opacity:0;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.3)}
@@ -314,17 +329,12 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
         <div class="form-block">
           <span class="form-label">Ciudad del servicio</span>
           <div class="ciudad-selector">
-            <div class="ciudad-btn" onclick="selCiudad(this,'Bogotá',4.7110,-74.0721)">📍 Bogotá</div>
-            <div class="ciudad-btn" onclick="selCiudad(this,'Medellín',6.2442,-75.5812)">📍 Medellín</div>
-            <div class="ciudad-btn" onclick="selCiudad(this,'Cali',3.4516,-76.5319)">📍 Cali</div>
-            <div class="ciudad-btn" onclick="selCiudad(this,'Barranquilla',10.9639,-74.7964)">📍 Barranquilla</div>
-            <div class="ciudad-btn" onclick="selCiudad(this,'Pereira',4.8133,-75.6961)">📍 Pereira</div>
+            <div class="ciudad-btn" onclick="selCiudad(this,'Bogotá',4.7110,-74.0721)">Bogotá</div>
+            <div class="ciudad-btn" onclick="selCiudad(this,'Medellín',6.2442,-75.5812)">Medellín</div>
+            <div class="ciudad-btn" onclick="selCiudad(this,'Cali',3.4516,-76.5319)">Cali</div>
+            <div class="ciudad-btn" onclick="selCiudad(this,'Barranquilla',10.9639,-74.7964)">Barranquilla</div>
+            <div class="ciudad-btn" onclick="selCiudad(this,'Pereira',4.8133,-75.6961)">Pereira</div>
           </div>
-        </div>
-
-        <!-- Aviso ciudad no seleccionada -->
-        <div class="ciudad-aviso" id="ciudad-aviso">
-          ℹ️ Selecciona primero la ciudad para buscar direcciones
         </div>
 
         <!-- Tipo de envío -->
@@ -355,7 +365,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
           <div class="horario-tabs">
             <div class="horario-tab selected" id="tab-ahora" onclick="selHorario('ahora')">
               <div class="horario-tab-icon">⚡</div>
-              <div class="horario-tab-label">Ahora mismo</div>
+              <div class="horario-tab-label">Lo antes posible</div>
             </div>
             <div class="horario-tab" id="tab-programar" onclick="selHorario('programar')">
               <div class="horario-tab-icon">🕐</div>
@@ -395,18 +405,18 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 
         <!-- Indicaciones del servicio -->
         <div class="form-block">
-          <span class="form-label">Indicaciones para el mensajero (opcional)</span>
+          <span class="form-label">Indicaciones para el mensajero (detalles)</span>
           <textarea class="form-input" id="indicaciones-mens" rows="3" placeholder="Ej: El paquete debe entregarse en recepción, llamar antes de llegar, frágil..." style="resize:none;line-height:1.6"></textarea>
         </div>
 
         <!-- Propina -->
         <div class="form-block">
-          <span class="form-label">Propina para el mensajero (opcional)</span>
+          <span class="form-label">Propina para el mensajero</span>
           <div class="propina-wrap">
             <div class="propina-row">
               <div class="propina-icon">🤝</div>
               <div class="propina-text">
-                <div class="propina-title">Propina voluntaria</div>
+                <div class="propina-title">Su propina es voluntaria</div>
                 <div class="propina-sub">El 70% va al mensajero y el 30% al personal administrativo</div>
               </div>
               <div class="propina-input-wrap">
@@ -545,8 +555,37 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
           <span class="reg-label">Razón social</span>
           <input class="reg-input" id="reg-razon" placeholder="Nombre de la empresa S.A.S.">
         </div>
-        <button class="btn-pagar" onclick="procesarPago()">🔒 Ir al pago seguro →</button>
-        <div class="reg-disclaimer">Al continuar aceptas los <u style="cursor:pointer">términos y condiciones</u> del servicio. Pago procesado por Wompi.</div>
+        <button class="btn-pagar" onclick="procesarPago()">🔒 Confirmar y buscar mensajero →</button>
+        <div class="reg-disclaimer">No se realizará ningún cobro hasta que un mensajero acepte el servicio. Al continuar aceptas los <u style="cursor:pointer">términos y condiciones</u>.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BUSCANDO MENSAJERO -->
+<div class="vista" id="vista-buscando">
+  <div class="page-wrap">
+    <div class="buscando-wrap">
+      <div class="buscando-card" id="buscando-card-activo">
+        <div class="buscando-anim">
+          <div class="buscando-ring"></div>
+          <div class="buscando-icon">🏍️</div>
+        </div>
+        <div class="buscando-titulo">Buscando un mensajero</div>
+        <div class="buscando-sub">Estamos conectando tu servicio con un mensajero disponible cerca de ti.</div>
+        <div class="buscando-timer-wrap">
+          <div class="buscando-timer-bar"><div class="buscando-timer-fill" id="timer-fill"></div></div>
+          <div class="buscando-timer-label" id="timer-label">5:00</div>
+        </div>
+        <button class="btn-cancelar-busqueda" onclick="cancelarBusqueda()">Cancelar búsqueda</button>
+      </div>
+
+      <div class="buscando-card" id="buscando-card-notfound" style="display:none">
+        <div class="buscando-icon-sad">😔</div>
+        <div class="buscando-titulo">No encontramos mensajero</div>
+        <div class="buscando-sub">En este momento no hay mensajeros disponibles cerca de ti. Puedes reintentar o cancelar.</div>
+        <button class="btn-cotizar" style="margin-top:20px" onclick="reiniciarBusqueda()">🔄 Reiniciar búsqueda</button>
+        <button class="btn-nueva-cotiz" style="margin-top:10px" onclick="mostrarVista('home')">Cancelar y volver al inicio</button>
       </div>
     </div>
   </div>
@@ -613,7 +652,6 @@ function reiniciarMensajeria() {
   // Ciudad
   document.querySelectorAll('.ciudad-btn').forEach(b => b.classList.remove('selected'));
   ciudadSeleccionada = null;
-  document.getElementById('ciudad-aviso').classList.remove('hidden');
   document.getElementById('check-regreso').classList.remove('checked');
   document.getElementById('mapa-instruccion').textContent = 'Selecciona una ciudad para comenzar';
   document.getElementById('mapa-instruccion').style.display = 'block';
@@ -666,7 +704,6 @@ function habilitarDirecciones(ok) {
     if (el) el.disabled = !ok;
   });
   document.getElementById('btn-add-parada').disabled = !ok;
-  document.getElementById('ciudad-aviso').classList.toggle('hidden', ok);
 }
 
 // ── AUTOCOMPLETE GOOGLE PLACES ──
@@ -973,14 +1010,60 @@ function poblarResumen() {
   document.getElementById('reg-resumen').innerHTML = html;
 }
 
+let timerBusqueda = null;
+let segundosBusqueda = 300; // 5 minutos
+
 function procesarPago() {
   const nombre = document.getElementById('reg-nombre').value.trim();
   const tel    = document.getElementById('reg-telefono').value.trim();
   const correo = document.getElementById('reg-correo').value.trim();
   if (!nombre||!tel||!correo) { showToast('Completa todos los campos requeridos','error'); return; }
   if (!correo.includes('@')) { showToast('Ingresa un correo válido','error'); return; }
-  showToast('Redirigiendo al pago seguro...','success');
-  setTimeout(()=>showToast('Módulo Wompi — disponible en Sesión 4',''), 2000);
+  iniciarBusquedaMensajero();
+}
+
+function iniciarBusquedaMensajero() {
+  mostrarVista('buscando');
+  document.getElementById('buscando-card-activo').style.display = 'block';
+  document.getElementById('buscando-card-notfound').style.display = 'none';
+  segundosBusqueda = 300;
+  actualizarTimer();
+  clearInterval(timerBusqueda);
+  timerBusqueda = setInterval(() => {
+    segundosBusqueda--;
+    actualizarTimer();
+    if (segundosBusqueda <= 0) {
+      clearInterval(timerBusqueda);
+      mostrarNoEncontrado();
+    }
+  }, 1000);
+}
+
+function actualizarTimer() {
+  const mins = Math.floor(segundosBusqueda / 60);
+  const segs = segundosBusqueda % 60;
+  document.getElementById('timer-label').textContent = `${mins}:${segs.toString().padStart(2,'0')}`;
+  const pct = (segundosBusqueda / 300) * 100;
+  document.getElementById('timer-fill').style.width = pct + '%';
+  // Cambiar color cuando queda poco tiempo
+  if (segundosBusqueda <= 60) {
+    document.getElementById('timer-fill').style.background = 'linear-gradient(90deg,var(--orange),#ff8c5a)';
+    document.getElementById('timer-label').style.color = 'var(--orange)';
+  }
+}
+
+function mostrarNoEncontrado() {
+  document.getElementById('buscando-card-activo').style.display = 'none';
+  document.getElementById('buscando-card-notfound').style.display = 'block';
+}
+
+function cancelarBusqueda() {
+  clearInterval(timerBusqueda);
+  mostrarVista('registro');
+}
+
+function reiniciarBusqueda() {
+  iniciarBusquedaMensajero();
 }
 
 // ── UTILIDADES ──
