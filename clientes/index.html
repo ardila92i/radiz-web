@@ -411,7 +411,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 
         <!-- Propina -->
         <div class="form-block">
-          <span class="form-label">Zona de gratitud</span>
+          <span class="form-label">Propina para el mensajero</span>
           <div class="propina-wrap">
             <div class="propina-row">
               <div class="propina-icon">🤝</div>
@@ -757,6 +757,8 @@ function eliminarParada(idx) {
 function toggleRegreso() {
   conRegreso = !conRegreso;
   document.getElementById('check-regreso').classList.toggle('checked', conRegreso);
+  // Recalcular ruta inmediatamente si ya hay coordenadas
+  if (Object.keys(coordenadas).length >= 2) calcularRutaReal();
 }
 
 // ── MAPA GOOGLE MAPS (nueva API v: weekly) ──
@@ -859,17 +861,27 @@ let distanciaRutaMetros = 0;
 
 function calcularRutaReal() {
   if (!mapaIniciado || !directionsService) return;
-  const keys   = Object.keys(coordenadas).sort((a,b)=>a-b).map(Number);
+  const keys  = Object.keys(coordenadas).sort((a,b)=>a-b).map(Number);
   if (keys.length < 2) return;
-  const puntos  = keys.map(k => coordenadas[k]);
-  const origen  = { lat: puntos[0][0], lng: puntos[0][1] };
-  const destFinal = conRegreso ? origen : { lat: puntos[puntos.length-1][0], lng: puntos[puntos.length-1][1] };
-  const waypoints = puntos.slice(1, conRegreso ? undefined : -1).map(p => ({
+  const puntos = keys.map(k => coordenadas[k]);
+  const origen = { lat: puntos[0][0], lng: puntos[0][1] };
+  const destino = { lat: puntos[puntos.length-1][0], lng: puntos[puntos.length-1][1] };
+
+  // Waypoints: paradas intermedias (sin origen ni destino final)
+  const waypoints = puntos.slice(1, -1).map(p => ({
     location: { lat: p[0], lng: p[1] }, stopover: true
   }));
+
+  // Si hay regreso, el destino final vuelve al origen
+  // y el destino original se convierte en waypoint intermedio
+  const destinoFinal = conRegreso ? origen : destino;
+  if (conRegreso) {
+    waypoints.push({ location: destino, stopover: true });
+  }
+
   directionsService.route({
     origin: origen,
-    destination: destFinal,
+    destination: destinoFinal,
     waypoints,
     travelMode: google.maps.TravelMode.DRIVING,
     region: 'CO'
@@ -906,7 +918,7 @@ async function cotizarMensajeria() {
     data._recargo   = recargo;
     data._distTotal = distKm;
     data._ciudad    = ciudadSeleccionada.nombre;
-    data._horario   = modoHorario==='ahora' ? 'Ahora mismo' : document.getElementById('hora-recogida').value;
+    data._horario   = modoHorario==='ahora' ? 'Lo antes posible' : document.getElementById('hora-recogida').value;
     ultimaCotizacionMens = data;
     mostrarResultadoMens(data, distKm, propina, recargo);
   } catch(e) {
