@@ -329,8 +329,8 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 .mlogin-tipo{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:14px;margin-bottom:4px}
 .mlogin-tipo-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:10px;padding:9px;text-align:center;cursor:pointer;transition:.2s;font-size:.8rem;color:var(--muted)}
 .mlogin-tipo-btn.selected{background:var(--blue-soft);border-color:var(--blue);color:var(--blue-light)}
-.mlogin-nit-wrap{display:none!important}
-.mlogin-nit-wrap.visible{display:block!important}
+.mlogin-nit-wrap{display:none}
+.mlogin-nit-wrap.visible{display:block}
 /* Estado del spinner dentro del botón */
 @keyframes spin-btn{to{transform:rotate(360deg)}}
 .btn-spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin-btn .6s linear infinite;margin-right:8px;vertical-align:middle}
@@ -746,7 +746,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
         <div class="mlogin-tipo-btn selected" id="reg-tipo-natural" onclick="selRegTipo('natural')">Persona natural</div>
         <div class="mlogin-tipo-btn" id="reg-tipo-juridica" onclick="selRegTipo('juridica')">Empresa</div>
       </div>
-      <div class="mlogin-nit-wrap" id="reg-nit-wrap">
+      <div class="mlogin-nit-wrap" id="reg-nit-wrap" style="display:none">
         <span class="mlogin-label">NIT de la empresa</span>
         <input class="mlogin-input" id="reg-nit" placeholder="900.123.456-7">
         <span class="mlogin-label">Razón social</span>
@@ -1383,7 +1383,7 @@ function selRegTipo(tipo) {
   regTipoCliente = tipo;
   document.getElementById('reg-tipo-natural').classList.toggle('selected', tipo==='natural');
   document.getElementById('reg-tipo-juridica').classList.toggle('selected', tipo==='juridica');
-  document.getElementById('reg-nit-wrap').classList.toggle('visible', tipo==='juridica');
+  document.getElementById('reg-nit-wrap').style.display = tipo==='juridica' ? 'block' : 'none';
 }
 
 function setBtnLoading(btnId, loading, textoOriginal) {
@@ -1435,17 +1435,20 @@ async function ejecutarLogin() {
 async function ejecutarRegistro() {
   ocultarError('reg-error');
   document.getElementById('reg-success').classList.remove('visible');
-  const nombre = document.getElementById('reg-nombre').value.trim();
-  const correo = document.getElementById('reg-correo').value.trim();
-  const pass   = document.getElementById('reg-pass').value;
-  const pass2  = document.getElementById('reg-pass2').value;
-  const nit    = document.getElementById('reg-nit')?.value.trim() || '';
-  const razon  = document.getElementById('reg-razon')?.value.trim() || '';
+  const nombre = (document.getElementById('reg-nombre').value || '').trim();
+  const correo = (document.getElementById('reg-correo').value || '').trim();
+  const pass   = document.getElementById('reg-pass').value  || '';
+  const pass2  = document.getElementById('reg-pass2').value || '';
+  const nit    = (document.getElementById('reg-nit')   ? document.getElementById('reg-nit').value.trim()   : '');
+  const razon  = (document.getElementById('reg-razon') ? document.getElementById('reg-razon').value.trim() : '');
 
-  if (!nombre||!correo||!pass||!pass2) { mostrarError('reg-error','Completa todos los campos requeridos.'); return; }
+  if (!nombre) { mostrarError('reg-error','El nombre es requerido.'); return; }
+  if (!correo) { mostrarError('reg-error','El correo es requerido.'); return; }
   if (!correo.includes('@')) { mostrarError('reg-error','Ingresa un correo válido.'); return; }
+  if (!pass)   { mostrarError('reg-error','La contraseña es requerida.'); return; }
   if (pass.length < 8) { mostrarError('reg-error','La contraseña debe tener al menos 8 caracteres.'); return; }
-  if (pass !== pass2) { mostrarError('reg-error','Las contraseñas no coinciden.'); return; }
+  if (pass !== pass2)  { mostrarError('reg-error','Las contraseñas no coinciden.'); return; }
+  if (regTipoCliente === 'juridica' && !nit) { mostrarError('reg-error','El NIT es requerido para empresas.'); return; }
 
   setBtnLoading('btn-registro', true, 'Crear cuenta →');
   try {
@@ -1457,7 +1460,6 @@ async function ejecutarRegistro() {
     const r = await fetch(`${API_URL}?${params}`);
     const data = await r.json();
     if (!data.ok) { mostrarError('reg-error', data.error || 'Error al crear la cuenta.'); return; }
-    // Mostrar mensaje de éxito
     document.getElementById('btn-registro').style.display = 'none';
     const suc = document.getElementById('reg-success');
     suc.innerHTML = `Te enviamos un correo a <strong>${correo}</strong>.<br>Haz clic en "Activar cuenta" para completar tu registro.`;
