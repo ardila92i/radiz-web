@@ -361,7 +361,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 
         <!-- Tipo de envío -->
         <div class="form-block">
-          <span class="form-label">¿Qué vas a enviar?</span>
+          <span class="form-label">¿Qué necesita enviar?</span>
           <div class="tipo-envio">
             <div class="tipo-btn selected" onclick="selTipo(this,'documentos')">
               <div class="tipo-btn-icon">📄</div>
@@ -383,7 +383,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 
         <!-- Horario -->
         <div class="form-block">
-          <span class="form-label">¿Cuándo necesitas el servicio?</span>
+          <span class="form-label">¿Cuándo necesita el servicio?</span>
           <div class="horario-tabs">
             <div class="horario-tab selected" id="tab-ahora" onclick="selHorario('ahora')">
               <div class="horario-tab-icon">⚡</div>
@@ -421,25 +421,25 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
           <button class="btn-add-parada" onclick="agregarParada()" id="btn-add-parada" disabled>+ Agregar parada intermedia</button>
           <div class="check-row" onclick="toggleRegreso()">
             <div class="check-box" id="check-regreso"></div>
-            <div class="check-label">🔄 Incluir regreso al punto de origen</div>
+            <div class="check-label">🚩IMPORTANTE: seleccione si el domiciliario debe regresar al punto de origen</div>
           </div>
         </div>
 
         <!-- Indicaciones del servicio -->
         <div class="form-block">
-          <span class="form-label">Indicaciones para el mensajero (detalles)</span>
+          <span class="form-label">Indicaciones</span>
           <textarea class="form-input" id="indicaciones-mens" rows="3" placeholder="Ej: El paquete debe entregarse en recepción, llamar antes de llegar, frágil..." style="resize:none;line-height:1.6"></textarea>
         </div>
 
         <!-- Propina -->
         <div class="form-block">
-          <span class="form-label">Propina para el mensajero</span>
+          <span class="form-label">Incentivos</span>
           <div class="propina-wrap">
             <div class="propina-row">
               <div class="propina-icon">🤝</div>
               <div class="propina-text">
-                <div class="propina-title">Su propina es voluntaria</div>
-                <div class="propina-sub">El 70% va al mensajero y el 30% al personal administrativo</div>
+                <div class="propina-title">Bonificación estretégica</div>
+                <div class="propina-sub">Este valor se libera al domiciliario cuando entrega a tiempo, es cordialidad y cuida su paqueteria</div>
               </div>
               <div class="propina-input-wrap">
                 <span class="propina-currency">$</span>
@@ -483,7 +483,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
     </div>
     <div class="dom-layout">
       <div class="form-block" style="margin-top:0">
-        <span class="form-label">¿Cuántos días necesitas?</span>
+        <span class="form-label">¿Cuántos días necesita?</span>
         <div class="dias-selector">
           <button class="dias-btn" onclick="cambiarDias(-1)">−</button>
           <div><div class="dias-num" id="dias-num">1</div><div class="dias-label">día(s)</div></div>
@@ -501,7 +501,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
         <input type="text" class="form-input" id="ciudad-op" placeholder="Ej: Bogotá, Medellín, Cali...">
       </div>
       <div class="form-block">
-        <span class="form-label">Equipamiento del motorizado</span>
+        <span class="form-label">Equipamiento</span>
         <div class="tipo-moto-grid">
           <div class="moto-btn selected" onclick="selMoto(this,'estandar')"><div class="moto-btn-icon">🏍️</div><div class="moto-btn-label">Con maleta estándar</div></div>
           <div class="moto-btn" onclick="selMoto(this,'maletero')"><div class="moto-btn-icon">📦</div><div class="moto-btn-label">Con maletero rígido</div></div>
