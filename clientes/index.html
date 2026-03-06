@@ -753,18 +753,18 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
         <input class="mlogin-input" id="modal-reg-razon" placeholder="Empresa S.A.S.">
       </div>
       <span class="mlogin-label">Nombre completo</span>
-      <input class="mlogin-input" id="reg-nombre" placeholder="Tu nombre completo">
+      <input class="mlogin-input" id="modal-reg-nombre" placeholder="Tu nombre completo">
       <span class="mlogin-label">Correo electrónico</span>
-      <input class="mlogin-input" id="reg-correo" type="email" placeholder="correo@ejemplo.com">
+      <input class="mlogin-input" id="modal-reg-correo" type="email" placeholder="correo@ejemplo.com">
       <span class="mlogin-label">Contraseña</span>
       <div class="mlogin-pass-wrap">
-        <input class="mlogin-input" id="reg-pass" type="password" placeholder="Mínimo 8 caracteres">
-        <button class="mlogin-pass-toggle" type="button" onclick="togglePass('reg-pass',this)">Ver</button>
+        <input class="mlogin-input" id="modal-reg-pass" type="password" placeholder="Mínimo 8 caracteres">
+        <button class="mlogin-pass-toggle" type="button" onclick="togglePass('modal-reg-pass',this)">Ver</button>
       </div>
       <span class="mlogin-label">Confirmar contraseña</span>
       <div class="mlogin-pass-wrap">
-        <input class="mlogin-input" id="reg-pass2" type="password" placeholder="Repite la contraseña">
-        <button class="mlogin-pass-toggle" type="button" onclick="togglePass('reg-pass2',this)">Ver</button>
+        <input class="mlogin-input" id="modal-reg-pass2" type="password" placeholder="Repite la contraseña">
+        <button class="mlogin-pass-toggle" type="button" onclick="togglePass('modal-reg-pass2',this)">Ver</button>
       </div>
       <div class="mlogin-error-msg" id="reg-error"></div>
       <div class="mlogin-success-msg" id="reg-success"></div>
@@ -1435,19 +1435,22 @@ async function ejecutarLogin() {
 async function ejecutarRegistro() {
   ocultarError('reg-error');
   document.getElementById('reg-success').classList.remove('visible');
-  const nombre = (document.getElementById('reg-nombre').value || '').trim();
-  const correo = (document.getElementById('reg-correo').value || '').trim();
-  const pass   = document.getElementById('reg-pass').value  || '';
-  const pass2  = document.getElementById('reg-pass2').value || '';
+
+  const correo = (document.getElementById('modal-reg-correo').value || '').trim();
+  const pass   =  document.getElementById('modal-reg-pass').value   || '';
+  const pass2  =  document.getElementById('modal-reg-pass2').value  || '';
   const nit    = (document.getElementById('modal-reg-nit')   ? document.getElementById('modal-reg-nit').value.trim()   : '');
   const razon  = (document.getElementById('modal-reg-razon') ? document.getElementById('modal-reg-razon').value.trim() : '');
 
-  if (!nombre) { mostrarError('reg-error','El nombre es requerido.'); return; }
-  if (!correo) { mostrarError('reg-error','El correo es requerido.'); return; }
+  // El nombre puede ser explícito o se toma de la parte local del correo
+  let nombre = (document.getElementById('modal-reg-nombre').value || '').trim();
+  if (!nombre && correo) nombre = correo.split('@')[0];
+
+  if (!correo)               { mostrarError('reg-error','El correo es requerido.'); return; }
   if (!correo.includes('@')) { mostrarError('reg-error','Ingresa un correo válido.'); return; }
-  if (!pass)   { mostrarError('reg-error','La contraseña es requerida.'); return; }
-  if (pass.length < 8) { mostrarError('reg-error','La contraseña debe tener al menos 8 caracteres.'); return; }
-  if (pass !== pass2)  { mostrarError('reg-error','Las contraseñas no coinciden.'); return; }
+  if (!pass)                 { mostrarError('reg-error','La contraseña es requerida.'); return; }
+  if (pass.length < 8)       { mostrarError('reg-error','La contraseña debe tener al menos 8 caracteres.'); return; }
+  if (pass !== pass2)        { mostrarError('reg-error','Las contraseñas no coinciden.'); return; }
   if (regTipoCliente === 'juridica' && !nit) { mostrarError('reg-error','El NIT es requerido para empresas.'); return; }
 
   setBtnLoading('btn-registro', true, 'Crear cuenta →');
