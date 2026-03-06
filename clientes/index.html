@@ -746,11 +746,11 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
         <div class="mlogin-tipo-btn selected" id="reg-tipo-natural" onclick="selRegTipo('natural')">Persona natural</div>
         <div class="mlogin-tipo-btn" id="reg-tipo-juridica" onclick="selRegTipo('juridica')">Empresa</div>
       </div>
-      <div class="mlogin-nit-wrap" id="reg-nit-wrap" style="display:none">
+      <div class="mlogin-nit-wrap" id="modal-nit-wrap" style="display:none">
         <span class="mlogin-label">NIT de la empresa</span>
-        <input class="mlogin-input" id="reg-nit" placeholder="900.123.456-7">
+        <input class="mlogin-input" id="modal-reg-nit" placeholder="900.123.456-7">
         <span class="mlogin-label">Razón social</span>
-        <input class="mlogin-input" id="reg-razon" placeholder="Empresa S.A.S.">
+        <input class="mlogin-input" id="modal-reg-razon" placeholder="Empresa S.A.S.">
       </div>
       <span class="mlogin-label">Nombre completo</span>
       <input class="mlogin-input" id="reg-nombre" placeholder="Tu nombre completo">
@@ -1383,7 +1383,7 @@ function selRegTipo(tipo) {
   regTipoCliente = tipo;
   document.getElementById('reg-tipo-natural').classList.toggle('selected', tipo==='natural');
   document.getElementById('reg-tipo-juridica').classList.toggle('selected', tipo==='juridica');
-  document.getElementById('reg-nit-wrap').style.display = tipo==='juridica' ? 'block' : 'none';
+  document.getElementById('modal-nit-wrap').style.display = tipo==='juridica' ? 'block' : 'none';
 }
 
 function setBtnLoading(btnId, loading, textoOriginal) {
@@ -1439,8 +1439,8 @@ async function ejecutarRegistro() {
   const correo = (document.getElementById('reg-correo').value || '').trim();
   const pass   = document.getElementById('reg-pass').value  || '';
   const pass2  = document.getElementById('reg-pass2').value || '';
-  const nit    = (document.getElementById('reg-nit')   ? document.getElementById('reg-nit').value.trim()   : '');
-  const razon  = (document.getElementById('reg-razon') ? document.getElementById('reg-razon').value.trim() : '');
+  const nit    = (document.getElementById('modal-reg-nit')   ? document.getElementById('modal-reg-nit').value.trim()   : '');
+  const razon  = (document.getElementById('modal-reg-razon') ? document.getElementById('modal-reg-razon').value.trim() : '');
 
   if (!nombre) { mostrarError('reg-error','El nombre es requerido.'); return; }
   if (!correo) { mostrarError('reg-error','El correo es requerido.'); return; }
