@@ -36,7 +36,6 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 
 /* HOME */
 .home-hero{padding:56px 0 36px}
-/* home-tag eliminado */
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .home-hero h1{font-family:'Syne',sans-serif;font-size:3.6rem;font-weight:800;line-height:1.02;letter-spacing:-.05em;margin-bottom:16px}
 .home-hero h1 .azul{color:var(--blue-light)}
@@ -337,14 +336,90 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 
 /* ── NAV USUARIO LOGUEADO ── */
 .nav-user{display:flex;align-items:center;gap:10px}
-.nav-user-avatar{width:34px;height:34px;border-radius:10px;background:var(--blue-soft);border:1px solid rgba(26,86,212,.3);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.8rem;color:var(--blue-light)}
+.nav-user-avatar{width:34px;height:34px;border-radius:10px;background:var(--blue-soft);border:1px solid rgba(26,86,212,.3);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:.8rem;color:var(--blue-light);cursor:pointer}
 .nav-user-name{font-size:.84rem;font-weight:500;color:var(--text);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .nav-user-menu{position:relative}
-.nav-user-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:14px;min-width:180px;padding:6px;box-shadow:0 16px 40px rgba(0,0,0,.4);z-index:200;display:none}
+.nav-user-dropdown{position:absolute;top:calc(100% + 8px);right:0;background:var(--surface);border:1px solid var(--border2);border-radius:14px;min-width:200px;padding:6px;box-shadow:0 16px 40px rgba(0,0,0,.4);z-index:200;display:none}
 .nav-user-dropdown.visible{display:block}
 .nav-dd-item{padding:10px 14px;border-radius:9px;font-size:.84rem;color:var(--muted);cursor:pointer;transition:.15s;display:flex;align-items:center;gap:10px}
 .nav-dd-item:hover{background:var(--surface2);color:var(--text)}
 .nav-dd-item.danger:hover{color:var(--orange)}
+
+/* ═══ PANEL DE USUARIO ═══ */
+.panel-header{padding:32px 0 0}
+.panel-saludo{display:flex;align-items:center;gap:16px;margin-bottom:28px}
+.panel-avatar{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--blue),var(--blue-light));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:1.3rem;color:#fff;flex:0 0 auto}
+.panel-saludo-text h2{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:2px}
+.panel-saludo-text p{font-size:.84rem;color:var(--muted)}
+.panel-saludo-text p span{color:var(--blue-light);font-weight:500}
+.panel-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+@media(max-width:600px){.panel-stats{grid-template-columns:1fr}}
+.panel-stat{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:22px 18px;position:relative;overflow:hidden}
+.panel-stat::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;border-radius:50%;opacity:.08}
+.panel-stat.blue::before{background:var(--blue)}.panel-stat.orange::before{background:var(--orange)}.panel-stat.green::before{background:var(--green)}
+.panel-stat-icon{font-size:1.3rem;margin-bottom:10px}
+.panel-stat-value{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-.03em}
+.panel-stat.blue .panel-stat-value{color:var(--blue-light)}.panel-stat.orange .panel-stat-value{color:var(--orange)}.panel-stat.green .panel-stat-value{color:var(--green)}
+.panel-stat-label{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-top:4px}
+.panel-acciones{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:28px}
+@media(max-width:600px){.panel-acciones{grid-template-columns:1fr}}
+.panel-accion{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 16px;cursor:pointer;transition:.25s;text-align:center}
+.panel-accion:hover{transform:translateY(-3px);border-color:var(--blue)}
+.panel-accion-icon{font-size:1.5rem;margin-bottom:8px}
+.panel-accion-label{font-family:'Syne',sans-serif;font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:3px}
+.panel-accion-desc{font-size:.72rem;color:var(--muted);line-height:1.4}
+.panel-section-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;letter-spacing:-.02em;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.panel-section-title .badge-count{background:var(--blue-soft);border:1px solid rgba(26,86,212,.2);color:var(--blue-light);font-size:.7rem;font-weight:700;padding:3px 10px;border-radius:999px}
+.panel-filtros{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+.panel-filtro{background:var(--surface2);border:1px solid var(--border2);border-radius:999px;padding:6px 14px;font-size:.76rem;color:var(--muted);cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif}
+.panel-filtro:hover{border-color:var(--muted2);color:var(--text)}
+.panel-filtro.active{background:var(--blue-soft);border-color:var(--blue);color:var(--blue-light)}
+.panel-tabla-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:16px;background:var(--surface)}
+.panel-tabla{width:100%;border-collapse:collapse;min-width:640px}
+.panel-tabla th{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);padding:14px;text-align:left;border-bottom:1px solid var(--border);background:var(--surface2)}
+.panel-tabla th:first-child{border-radius:16px 0 0 0}.panel-tabla th:last-child{border-radius:0 16px 0 0}
+.panel-tabla td{font-size:.84rem;padding:13px 14px;border-bottom:1px solid var(--border);color:var(--text)}
+.panel-tabla tr:last-child td{border-bottom:none}
+.panel-tabla tr:hover td{background:rgba(26,86,212,.03)}
+.estado-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:999px;font-size:.72rem;font-weight:600}
+.estado-badge.completado{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.25);color:var(--green)}
+.estado-badge.en_curso{background:var(--blue-soft);border:1px solid rgba(26,86,212,.25);color:var(--blue-light)}
+.estado-badge.cancelado{background:rgba(240,90,40,.1);border:1px solid rgba(240,90,40,.25);color:var(--orange)}
+.estado-badge.pendiente{background:rgba(107,107,138,.1);border:1px solid rgba(107,107,138,.25);color:var(--muted)}
+.estado-dot{width:6px;height:6px;border-radius:50%}
+.estado-badge.completado .estado-dot{background:var(--green)}.estado-badge.en_curso .estado-dot{background:var(--blue-light)}.estado-badge.cancelado .estado-dot{background:var(--orange)}.estado-badge.pendiente .estado-dot{background:var(--muted)}
+.btn-factura{background:transparent;border:1px solid var(--border2);border-radius:8px;padding:5px 10px;font-size:.74rem;color:var(--muted);cursor:pointer;transition:.2s;font-family:'DM Sans',sans-serif;display:inline-flex;align-items:center;gap:4px;text-decoration:none}
+.btn-factura:hover{border-color:var(--blue);color:var(--blue-light)}
+.btn-factura.disabled{opacity:.35;cursor:default}.btn-factura.disabled:hover{border-color:var(--border2);color:var(--muted)}
+.panel-empty{text-align:center;padding:48px 20px;color:var(--muted)}
+.panel-empty-icon{font-size:2.5rem;margin-bottom:14px}
+.panel-empty-text{font-size:.9rem;margin-bottom:6px}
+.panel-empty-sub{font-size:.8rem;color:var(--muted2)}
+.panel-loading{text-align:center;padding:40px;color:var(--muted);font-size:.87rem}
+/* Modal Recarga */
+.recarga-overlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:3000;display:none;align-items:center;justify-content:center;padding:20px}
+.recarga-overlay.visible{display:flex}
+.recarga-card{background:var(--surface);border:1px solid var(--border2);border-radius:24px;padding:36px 32px;max-width:420px;width:100%;position:relative;box-shadow:0 32px 80px rgba(0,0,0,.5)}
+.recarga-close{position:absolute;top:16px;right:16px;width:32px;height:32px;background:var(--surface2);border:1px solid var(--border2);border-radius:8px;cursor:pointer;color:var(--muted);font-size:1rem;display:flex;align-items:center;justify-content:center;transition:.2s}
+.recarga-close:hover{border-color:var(--orange);color:var(--orange)}
+.recarga-titulo{font-family:'Syne',sans-serif;font-size:1.15rem;font-weight:700;margin-bottom:6px}
+.recarga-sub{font-size:.83rem;color:var(--muted);margin-bottom:22px;line-height:1.5}
+.recarga-montos{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:18px}
+.recarga-monto{background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:14px 8px;text-align:center;cursor:pointer;transition:.2s;font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:var(--muted)}
+.recarga-monto:hover{border-color:var(--blue);color:var(--text)}
+.recarga-monto.selected{background:var(--blue-soft);border-color:var(--blue);color:var(--blue-light)}
+.recarga-custom-wrap{margin-bottom:18px}
+.recarga-custom-label{font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);margin-bottom:7px;display:block}
+.recarga-custom-input{width:100%;background:var(--surface2);border:1px solid var(--border2);border-radius:11px;padding:12px 14px;color:var(--text);font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;outline:none;transition:.2s}
+.recarga-custom-input:focus{border-color:var(--blue);background:var(--surface)}.recarga-custom-input::placeholder{color:var(--muted2);font-weight:400}
+.recarga-metodo{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px}
+.recarga-met-btn{background:var(--surface2);border:1px solid var(--border2);border-radius:12px;padding:12px 10px;text-align:center;cursor:pointer;transition:.2s;font-size:.8rem;color:var(--muted)}
+.recarga-met-btn:hover{border-color:var(--muted2)}.recarga-met-btn.selected{background:var(--blue-soft);border-color:var(--blue);color:var(--blue-light)}
+.recarga-met-icon{font-size:1.2rem;margin-bottom:4px}
+.recarga-success{text-align:center;display:none}.recarga-success.visible{display:block}
+.recarga-success-icon{font-size:3rem;margin-bottom:14px}
+.recarga-success-msg{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.recarga-success-detail{font-size:.85rem;color:var(--muted);margin-bottom:20px}
 </style>
 </head>
 <body>
@@ -405,8 +480,6 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
     </div>
     <div class="mens-layout">
       <div class="mens-col-left">
-
-        <!-- Ciudad -->
         <div class="form-block">
           <span class="form-label">Ciudad del servicio</span>
           <div class="ciudad-selector">
@@ -417,118 +490,50 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
             <div class="ciudad-btn" onclick="selCiudad(this,'Pereira',4.8133,-75.6961)">Pereira</div>
           </div>
         </div>
-
-        <!-- Tipo de envío -->
         <div class="form-block">
           <span class="form-label">¿Qué vas a enviar?</span>
           <div class="tipo-envio">
-            <div class="tipo-btn selected" onclick="selTipo(this,'documentos')">
-              <div class="tipo-btn-icon">📄</div>
-              <div class="tipo-btn-label">Documentos</div>
-              <div class="tipo-btn-desc">Sobres y carpetas</div>
-            </div>
-            <div class="tipo-btn" onclick="selTipo(this,'paquete_pequeno')">
-              <div class="tipo-btn-icon">📦</div>
-              <div class="tipo-btn-label">Paq. pequeño</div>
-              <div class="tipo-btn-desc">Hasta 10 kg</div>
-            </div>
-            <div class="tipo-btn" onclick="selTipo(this,'paquete_grande')">
-              <div class="tipo-btn-icon">🗃️</div>
-              <div class="tipo-btn-label">Paq. grande</div>
-              <div class="tipo-btn-desc">+10 kg o varios</div>
-            </div>
+            <div class="tipo-btn selected" onclick="selTipo(this,'documentos')"><div class="tipo-btn-icon">📄</div><div class="tipo-btn-label">Documentos</div><div class="tipo-btn-desc">Sobres y carpetas</div></div>
+            <div class="tipo-btn" onclick="selTipo(this,'paquete_pequeno')"><div class="tipo-btn-icon">📦</div><div class="tipo-btn-label">Paq. pequeño</div><div class="tipo-btn-desc">Hasta 10 kg</div></div>
+            <div class="tipo-btn" onclick="selTipo(this,'paquete_grande')"><div class="tipo-btn-icon">🗃️</div><div class="tipo-btn-label">Paq. grande</div><div class="tipo-btn-desc">+10 kg o varios</div></div>
           </div>
         </div>
-
-        <!-- Horario -->
         <div class="form-block">
           <span class="form-label">¿Cuándo necesitas el servicio?</span>
           <div class="horario-tabs">
-            <div class="horario-tab selected" id="tab-ahora" onclick="selHorario('ahora')">
-              <div class="horario-tab-icon">⚡</div>
-              <div class="horario-tab-label">Lo antes posible</div>
-            </div>
-            <div class="horario-tab" id="tab-programar" onclick="selHorario('programar')">
-              <div class="horario-tab-icon">🕐</div>
-              <div class="horario-tab-label">Programar hora</div>
-            </div>
+            <div class="horario-tab selected" id="tab-ahora" onclick="selHorario('ahora')"><div class="horario-tab-icon">⚡</div><div class="horario-tab-label">Lo antes posible</div></div>
+            <div class="horario-tab" id="tab-programar" onclick="selHorario('programar')"><div class="horario-tab-icon">🕐</div><div class="horario-tab-label">Programar hora</div></div>
           </div>
-          <div class="horario-hora" id="horario-hora-wrap">
-            <input type="time" class="form-input" id="hora-recogida" value="08:00">
-          </div>
+          <div class="horario-hora" id="horario-hora-wrap"><input type="time" class="form-input" id="hora-recogida" value="08:00"></div>
         </div>
-
-        <!-- Paradas -->
         <div class="form-block">
           <span class="form-label">Puntos del recorrido</span>
           <div class="paradas-wrap" id="paradas-wrap">
-            <div class="parada-item">
-              <div class="parada-dot origen">A</div>
-              <div class="parada-field">
-                <input class="parada-input" id="origen-input" placeholder="📍 Dirección de recogida (origen)" autocomplete="off" disabled onfocus="buscarDir(this,0)">
-                <input class="parada-complemento" id="origen-comp" placeholder="Edificio, oficina, apartamento, piso..." disabled>
-              </div>
-            </div>
-            <div class="parada-item">
-              <div class="parada-dot destino">B</div>
-              <div class="parada-field">
-                <input class="parada-input" id="destino-input" placeholder="📍 Dirección de entrega (destino)" autocomplete="off" disabled onfocus="buscarDir(this,1)">
-                <input class="parada-complemento" id="destino-comp" placeholder="Edificio, oficina, apartamento, piso..." disabled>
-              </div>
-            </div>
+            <div class="parada-item"><div class="parada-dot origen">A</div><div class="parada-field"><input class="parada-input" id="origen-input" placeholder="📍 Dirección de recogida (origen)" autocomplete="off" disabled onfocus="buscarDir(this,0)"><input class="parada-complemento" id="origen-comp" placeholder="Edificio, oficina, apartamento, piso..." disabled></div></div>
+            <div class="parada-item"><div class="parada-dot destino">B</div><div class="parada-field"><input class="parada-input" id="destino-input" placeholder="📍 Dirección de entrega (destino)" autocomplete="off" disabled onfocus="buscarDir(this,1)"><input class="parada-complemento" id="destino-comp" placeholder="Edificio, oficina, apartamento, piso..." disabled></div></div>
           </div>
           <button class="btn-add-parada" onclick="agregarParada()" id="btn-add-parada" disabled>+ Agregar parada intermedia</button>
-          <div class="check-row" onclick="toggleRegreso()">
-            <div class="check-box" id="check-regreso"></div>
-            <div class="check-label">🔄 Incluir regreso al punto de origen</div>
-          </div>
+          <div class="check-row" onclick="toggleRegreso()"><div class="check-box" id="check-regreso"></div><div class="check-label">🔄 Incluir regreso al punto de origen</div></div>
         </div>
-
-        <!-- Indicaciones del servicio -->
         <div class="form-block">
           <span class="form-label">Indicaciones para el mensajero (detalles)</span>
           <textarea class="form-input" id="indicaciones-mens" rows="3" placeholder="Ej: El paquete debe entregarse en recepción, llamar antes de llegar, frágil..." style="resize:none;line-height:1.6"></textarea>
         </div>
-
-        <!-- Propina -->
         <div class="form-block">
           <span class="form-label">Propina para el mensajero</span>
-          <div class="propina-wrap">
-            <div class="propina-row">
-              <div class="propina-icon">🤝</div>
-              <div class="propina-text">
-                <div class="propina-title">Su propina es voluntaria</div>
-                <div class="propina-sub">El 70% va al mensajero y el 30% al personal administrativo</div>
-              </div>
-              <div class="propina-input-wrap">
-                <span class="propina-currency">$</span>
-                <input type="number" class="propina-input" id="propina-mens" placeholder="0" min="0" step="1000">
-              </div>
-            </div>
-          </div>
+          <div class="propina-wrap"><div class="propina-row"><div class="propina-icon">🤝</div><div class="propina-text"><div class="propina-title">Su propina es voluntaria</div><div class="propina-sub">El 70% va al mensajero y el 30% al personal administrativo</div></div><div class="propina-input-wrap"><span class="propina-currency">$</span><input type="number" class="propina-input" id="propina-mens" placeholder="0" min="0" step="1000"></div></div></div>
         </div>
-
         <button class="btn-cotizar" onclick="cotizarMensajeria()" id="btn-cotizar-mens">Calcular cotización →</button>
         <div class="loading" id="loading-mens"><span class="spinner"></span> Calculando...</div>
         <div class="cotizacion-result" id="result-mens">
           <div class="cotiz-titulo">Detalle de la cotización</div>
           <div id="detalle-mens"></div>
-          <div class="cotiz-total">
-            <div class="cotiz-total-label">Total a pagar</div>
-            <div class="cotiz-total-value" id="total-mens-valor">$0</div>
-          </div>
+          <div class="cotiz-total"><div class="cotiz-total-label">Total a pagar</div><div class="cotiz-total-value" id="total-mens-valor">$0</div></div>
           <button class="btn-continuar" onclick="irARegistro('mensajeria')">Continuar con el pago →</button>
           <button class="btn-nueva-cotiz" onclick="reiniciarMensajeria()">↩ Nueva cotización</button>
         </div>
       </div>
-
-      <!-- Mapa -->
-      <div class="mens-col-right">
-        <div class="mapa-wrap">
-          <div class="mapa-instruccion" id="mapa-instruccion">Selecciona una ciudad para comenzar</div>
-          <div id="mapa"></div>
-        </div>
-      </div>
+      <div class="mens-col-right"><div class="mapa-wrap"><div class="mapa-instruccion" id="mapa-instruccion">Selecciona una ciudad para comenzar</div><div id="mapa"></div></div></div>
     </div>
   </div>
 </div>
@@ -536,80 +541,18 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 <!-- DOMICILIARIO -->
 <div class="vista" id="vista-domiciliario">
   <div class="page-wrap">
-    <div class="vista-header">
-      <div class="btn-back" onclick="mostrarVista('home')">←</div>
-      <div class="vista-titulo">Domiciliario por días</div>
-    </div>
+    <div class="vista-header"><div class="btn-back" onclick="mostrarVista('home')">←</div><div class="vista-titulo">Domiciliario por días</div></div>
     <div class="dom-layout">
-      <div class="form-block" style="margin-top:0">
-        <span class="form-label">¿Cuántos días necesitas?</span>
-        <div class="dias-selector">
-          <button class="dias-btn" onclick="cambiarDias(-1)">−</button>
-          <div><div class="dias-num" id="dias-num">1</div><div class="dias-label">día(s)</div></div>
-          <button class="dias-btn" onclick="cambiarDias(1)">+</button>
-        </div>
-      </div>
-      <div class="form-block">
-        <div class="grid-2">
-          <div><span class="form-label">Fecha inicio</span><input type="date" class="form-input" id="fecha-inicio" onchange="actualizarFechaFin()"></div>
-          <div><span class="form-label">Fecha fin</span><input type="date" class="form-input" id="fecha-fin" readonly style="opacity:.6"></div>
-        </div>
-      </div>
-      <div class="form-block">
-        <span class="form-label">Ciudad de operación</span>
-        <input type="text" class="form-input" id="ciudad-op" placeholder="Ej: Bogotá, Medellín, Cali...">
-      </div>
-      <div class="form-block">
-        <span class="form-label">Equipamiento del motorizado</span>
-        <div class="tipo-moto-grid">
-          <div class="moto-btn selected" onclick="selMoto(this,'estandar')"><div class="moto-btn-icon">🏍️</div><div class="moto-btn-label">Con maleta estándar</div></div>
-          <div class="moto-btn" onclick="selMoto(this,'maletero')"><div class="moto-btn-icon">📦</div><div class="moto-btn-label">Con maletero rígido</div></div>
-          <div class="moto-btn" onclick="selMoto(this,'termica')"><div class="moto-btn-icon">🧊</div><div class="moto-btn-label">Con caja térmica</div></div>
-        </div>
-      </div>
-      <div class="form-block">
-        <span class="form-label">Jornada o turno</span>
-        <div class="grid-2">
-          <div><span class="form-label" style="font-size:.7rem;margin-bottom:6px;display:block">Hora inicio</span><input type="time" class="form-input" id="hora-inicio" value="08:00" onchange="validarJornada()"></div>
-          <div><span class="form-label" style="font-size:.7rem;margin-bottom:6px;display:block">Hora fin</span><input type="time" class="form-input" id="hora-fin" value="16:00" onchange="validarJornada()"></div>
-        </div>
-        <div class="jornada-aviso" id="jornada-aviso" style="display:none">⚠️ La jornada no puede superar 8 horas (Ley laboral colombiana)</div>
-      </div>
-      <div class="form-block">
-        <span class="form-label">Descripción del trabajo</span>
-        <textarea class="form-input" id="desc-trabajo" rows="3" placeholder="Describe brevemente el tipo de trabajo a realizar..." style="resize:none;line-height:1.6"></textarea>
-      </div>
-      <div class="form-block">
-        <span class="form-label">Incentivo o bonificación</span>
-        <div class="propina-wrap">
-          <div class="propina-row">
-            <div class="propina-icon">⭐</div>
-            <div class="propina-text">
-              <div class="propina-title">Bono diario</div>
-              <div class="propina-sub">El 70% va al domiciliario y el 30% al personal administrativo</div>
-            </div>
-            <div class="propina-input-wrap">
-              <span class="propina-currency">$</span>
-              <input type="number" class="propina-input" id="propina-dom" placeholder="0" min="0" step="1000" oninput="actualizarBonoDom()">
-            </div>
-          </div>
-          <div class="bono-total-row" id="bono-total-row" style="display:none">
-            <span class="bono-total-label">Total bono (<span id="bono-dias-label">1</span> día(s))</span>
-            <span class="bono-total-valor" id="bono-total-valor">$ 0</span>
-          </div>
-        </div>
-      </div>
+      <div class="form-block" style="margin-top:0"><span class="form-label">¿Cuántos días necesitas?</span><div class="dias-selector"><button class="dias-btn" onclick="cambiarDias(-1)">−</button><div><div class="dias-num" id="dias-num">1</div><div class="dias-label">día(s)</div></div><button class="dias-btn" onclick="cambiarDias(1)">+</button></div></div>
+      <div class="form-block"><div class="grid-2"><div><span class="form-label">Fecha inicio</span><input type="date" class="form-input" id="fecha-inicio" onchange="actualizarFechaFin()"></div><div><span class="form-label">Fecha fin</span><input type="date" class="form-input" id="fecha-fin" readonly style="opacity:.6"></div></div></div>
+      <div class="form-block"><span class="form-label">Ciudad de operación</span><input type="text" class="form-input" id="ciudad-op" placeholder="Ej: Bogotá, Medellín, Cali..."></div>
+      <div class="form-block"><span class="form-label">Equipamiento del motorizado</span><div class="tipo-moto-grid"><div class="moto-btn selected" onclick="selMoto(this,'estandar')"><div class="moto-btn-icon">🏍️</div><div class="moto-btn-label">Con maleta estándar</div></div><div class="moto-btn" onclick="selMoto(this,'maletero')"><div class="moto-btn-icon">📦</div><div class="moto-btn-label">Con maletero rígido</div></div><div class="moto-btn" onclick="selMoto(this,'termica')"><div class="moto-btn-icon">🧊</div><div class="moto-btn-label">Con caja térmica</div></div></div></div>
+      <div class="form-block"><span class="form-label">Jornada o turno</span><div class="grid-2"><div><span class="form-label" style="font-size:.7rem;margin-bottom:6px;display:block">Hora inicio</span><input type="time" class="form-input" id="hora-inicio" value="08:00" onchange="validarJornada()"></div><div><span class="form-label" style="font-size:.7rem;margin-bottom:6px;display:block">Hora fin</span><input type="time" class="form-input" id="hora-fin" value="16:00" onchange="validarJornada()"></div></div><div class="jornada-aviso" id="jornada-aviso" style="display:none">⚠️ La jornada no puede superar 8 horas (Ley laboral colombiana)</div></div>
+      <div class="form-block"><span class="form-label">Descripción del trabajo</span><textarea class="form-input" id="desc-trabajo" rows="3" placeholder="Describe brevemente el tipo de trabajo a realizar..." style="resize:none;line-height:1.6"></textarea></div>
+      <div class="form-block"><span class="form-label">Incentivo o bonificación</span><div class="propina-wrap"><div class="propina-row"><div class="propina-icon">⭐</div><div class="propina-text"><div class="propina-title">Bono diario</div><div class="propina-sub">El 70% va al domiciliario y el 30% al personal administrativo</div></div><div class="propina-input-wrap"><span class="propina-currency">$</span><input type="number" class="propina-input" id="propina-dom" placeholder="0" min="0" step="1000" oninput="actualizarBonoDom()"></div></div><div class="bono-total-row" id="bono-total-row" style="display:none"><span class="bono-total-label">Total bono (<span id="bono-dias-label">1</span> día(s))</span><span class="bono-total-valor" id="bono-total-valor">$ 0</span></div></div></div>
       <button class="btn-cotizar naranja" onclick="mostrarTerminosDom()" id="btn-cotizar-dom">Calcular cotización →</button>
       <div class="loading" id="loading-dom"><span class="spinner"></span> Calculando...</div>
-      <div class="cotizacion-result" id="result-dom">
-        <div class="cotiz-titulo">Detalle de la cotización</div>
-        <div id="detalle-dom"></div>
-        <div class="cotiz-total naranja">
-          <div class="cotiz-total-label">Total a pagar</div>
-          <div class="cotiz-total-value" id="total-dom-valor">$0</div>
-        </div>
-        <button class="btn-continuar naranja" onclick="irARegistro('domiciliario')">Continuar con el pago →</button>
-      </div>
+      <div class="cotizacion-result" id="result-dom"><div class="cotiz-titulo">Detalle de la cotización</div><div id="detalle-dom"></div><div class="cotiz-total naranja"><div class="cotiz-total-label">Total a pagar</div><div class="cotiz-total-value" id="total-dom-valor">$0</div></div><button class="btn-continuar naranja" onclick="irARegistro('domiciliario')">Continuar con el pago →</button></div>
     </div>
   </div>
 </div>
@@ -617,10 +560,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 <!-- MODAL TÉRMINOS DOMICILIARIO -->
 <div class="modal-overlay" id="modal-terminos" onclick="cerrarModalTerminos(event)">
   <div class="modal-card">
-    <div class="modal-header">
-      <div class="modal-titulo">Términos y condiciones</div>
-      <button class="modal-close" onclick="cerrarModalTerminos()">×</button>
-    </div>
+    <div class="modal-header"><div class="modal-titulo">Términos y condiciones</div><button class="modal-close" onclick="cerrarModalTerminos()">×</button></div>
     <div class="modal-sub">Lee y acepta antes de continuar con tu solicitud de domiciliario.</div>
     <div class="modal-reglas">
       <div class="modal-regla"><span class="regla-num">1</span><span>Al aceptar, usted firmará un contrato por prestación de servicios legalmente válido en Colombia.</span></div>
@@ -632,10 +572,7 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
       <div class="modal-regla"><span class="regla-num">7</span><span>El domiciliario es responsable de pagar y mantener al día su ARL.</span></div>
     </div>
     <a class="modal-pdf-link" href="#" target="_blank">📄 Ver contrato completo en PDF →</a>
-    <div class="modal-check-row" onclick="toggleTerminos()">
-      <div class="check-box" id="check-terminos"></div>
-      <div class="check-label">He leído y acepto los términos y condiciones</div>
-    </div>
+    <div class="modal-check-row" onclick="toggleTerminos()"><div class="check-box" id="check-terminos"></div><div class="check-label">He leído y acepto los términos y condiciones</div></div>
     <button class="btn-cotizar naranja" id="btn-aceptar-terminos" onclick="aceptarTerminosYCotizar()" disabled style="opacity:.4;margin-top:16px">Aceptar y calcular cotización →</button>
   </div>
 </div>
@@ -643,64 +580,77 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 <!-- REGISTRO -->
 <div class="vista" id="vista-registro">
   <div class="page-wrap">
-    <div class="vista-header">
-      <div class="btn-back" onclick="volverDesdePago()">←</div>
-      <div class="vista-titulo">Datos del cliente</div>
-    </div>
-    <div class="registro-wrap">
-      <div class="reg-card">
-        <div class="reg-titulo">Resumen del servicio</div>
-        <div class="reg-resumen" id="reg-resumen"></div>
-        <span class="reg-label">Tipo de cliente</span>
-        <div class="reg-tipo">
-          <div class="reg-tipo-btn selected" id="btn-natural" onclick="selTipoCliente('natural')">👤 Persona natural</div>
-          <div class="reg-tipo-btn" id="btn-juridica" onclick="selTipoCliente('juridica')">🏢 Empresa</div>
-        </div>
-        <span class="reg-label">Nombre completo</span>
-        <input class="reg-input" id="reg-nombre" placeholder="Tu nombre completo">
-        <span class="reg-label">Teléfono</span>
-        <input class="reg-input" id="reg-telefono" type="tel" placeholder="3XX XXX XXXX">
-        <span class="reg-label">Correo electrónico</span>
-        <input class="reg-input" id="reg-correo" type="email" placeholder="correo@ejemplo.com">
-        <div class="reg-nit-wrap" id="reg-nit-wrap">
-          <span class="reg-label">NIT de la empresa</span>
-          <input class="reg-input" id="reg-nit" placeholder="900.123.456-7">
-          <span class="reg-label">Razón social</span>
-          <input class="reg-input" id="reg-razon" placeholder="Nombre de la empresa S.A.S.">
-        </div>
-        <button class="btn-pagar" onclick="procesarPago()">🔒 Confirmar y buscar mensajero →</button>
-        <div class="reg-disclaimer">No se realizará ningún cobro hasta que un mensajero acepte el servicio. Al continuar aceptas los <u style="cursor:pointer">términos y condiciones</u>.</div>
-      </div>
-    </div>
+    <div class="vista-header"><div class="btn-back" onclick="volverDesdePago()">←</div><div class="vista-titulo">Datos del cliente</div></div>
+    <div class="registro-wrap"><div class="reg-card">
+      <div class="reg-titulo">Resumen del servicio</div>
+      <div class="reg-resumen" id="reg-resumen"></div>
+      <span class="reg-label">Tipo de cliente</span>
+      <div class="reg-tipo"><div class="reg-tipo-btn selected" id="btn-natural" onclick="selTipoCliente('natural')">👤 Persona natural</div><div class="reg-tipo-btn" id="btn-juridica" onclick="selTipoCliente('juridica')">🏢 Empresa</div></div>
+      <span class="reg-label">Nombre completo</span><input class="reg-input" id="reg-nombre" placeholder="Tu nombre completo">
+      <span class="reg-label">Teléfono</span><input class="reg-input" id="reg-telefono" type="tel" placeholder="3XX XXX XXXX">
+      <span class="reg-label">Correo electrónico</span><input class="reg-input" id="reg-correo" type="email" placeholder="correo@ejemplo.com">
+      <div class="reg-nit-wrap" id="reg-nit-wrap"><span class="reg-label">NIT de la empresa</span><input class="reg-input" id="reg-nit" placeholder="900.123.456-7"><span class="reg-label">Razón social</span><input class="reg-input" id="reg-razon" placeholder="Nombre de la empresa S.A.S."></div>
+      <button class="btn-pagar" onclick="procesarPago()">🔒 Confirmar y buscar mensajero →</button>
+      <div class="reg-disclaimer">No se realizará ningún cobro hasta que un mensajero acepte el servicio. Al continuar aceptas los <u style="cursor:pointer">términos y condiciones</u>.</div>
+    </div></div>
   </div>
 </div>
 
 <!-- BUSCANDO MENSAJERO -->
 <div class="vista" id="vista-buscando">
-  <div class="page-wrap">
-    <div class="buscando-wrap">
-      <div class="buscando-card" id="buscando-card-activo">
-        <div class="buscando-anim">
-          <div class="buscando-ring"></div>
-          <div class="buscando-icon">🏍️</div>
-        </div>
-        <div class="buscando-titulo">Buscando un mensajero</div>
-        <div class="buscando-sub">Estamos conectando tu servicio con un mensajero disponible cerca de ti.</div>
-        <div class="buscando-timer-wrap">
-          <div class="buscando-timer-bar"><div class="buscando-timer-fill" id="timer-fill"></div></div>
-          <div class="buscando-timer-label" id="timer-label">5:00</div>
-        </div>
-        <button class="btn-cancelar-busqueda" onclick="cancelarBusqueda()">Cancelar búsqueda</button>
-      </div>
+  <div class="page-wrap"><div class="buscando-wrap">
+    <div class="buscando-card" id="buscando-card-activo"><div class="buscando-anim"><div class="buscando-ring"></div><div class="buscando-icon">🏍️</div></div><div class="buscando-titulo">Buscando un mensajero</div><div class="buscando-sub">Estamos conectando tu servicio con un mensajero disponible cerca de ti.</div><div class="buscando-timer-wrap"><div class="buscando-timer-bar"><div class="buscando-timer-fill" id="timer-fill"></div></div><div class="buscando-timer-label" id="timer-label">5:00</div></div><button class="btn-cancelar-busqueda" onclick="cancelarBusqueda()">Cancelar búsqueda</button></div>
+    <div class="buscando-card" id="buscando-card-notfound" style="display:none"><div class="buscando-icon-sad">😔</div><div class="buscando-titulo">No encontramos mensajero</div><div class="buscando-sub">En este momento no hay mensajeros disponibles cerca de ti. Puedes reintentar o cancelar.</div><button class="btn-cotizar" style="margin-top:20px" onclick="reiniciarBusqueda()">🔄 Reiniciar búsqueda</button><button class="btn-nueva-cotiz" style="margin-top:10px" onclick="mostrarVista('home')">Cancelar y volver al inicio</button></div>
+  </div></div>
+</div>
 
-      <div class="buscando-card" id="buscando-card-notfound" style="display:none">
-        <div class="buscando-icon-sad">😔</div>
-        <div class="buscando-titulo">No encontramos mensajero</div>
-        <div class="buscando-sub">En este momento no hay mensajeros disponibles cerca de ti. Puedes reintentar o cancelar.</div>
-        <button class="btn-cotizar" style="margin-top:20px" onclick="reiniciarBusqueda()">🔄 Reiniciar búsqueda</button>
-        <button class="btn-nueva-cotiz" style="margin-top:10px" onclick="mostrarVista('home')">Cancelar y volver al inicio</button>
+<!-- ═══ PANEL DE USUARIO ═══ -->
+<div class="vista" id="vista-panel">
+  <div class="page-wrap">
+    <div class="panel-header">
+      <div class="panel-saludo">
+        <div class="panel-avatar" id="panel-avatar">LT</div>
+        <div class="panel-saludo-text"><h2 id="panel-nombre">Hola, Usuario</h2><p id="panel-info">Cuenta <span>personal</span> · correo@ejemplo.com</p></div>
       </div>
     </div>
+    <div class="panel-stats">
+      <div class="panel-stat blue"><div class="panel-stat-icon">💰</div><div class="panel-stat-value" id="panel-saldo">$ 0</div><div class="panel-stat-label">Saldo disponible</div></div>
+      <div class="panel-stat orange"><div class="panel-stat-icon">📦</div><div class="panel-stat-value" id="panel-total-servicios">0</div><div class="panel-stat-label">Total servicios</div></div>
+      <div class="panel-stat green"><div class="panel-stat-icon">✅</div><div class="panel-stat-value" id="panel-completados">0</div><div class="panel-stat-label">Completados</div></div>
+    </div>
+    <div class="panel-acciones">
+      <div class="panel-accion" onclick="mostrarVista('mensajeria')"><div class="panel-accion-icon">📦</div><div class="panel-accion-label">Solicitar mensajería</div><div class="panel-accion-desc">Envío punto a punto</div></div>
+      <div class="panel-accion" onclick="mostrarVista('domiciliario')"><div class="panel-accion-icon">🏍️</div><div class="panel-accion-label">Domiciliario por días</div><div class="panel-accion-desc">Motorizado dedicado</div></div>
+      <div class="panel-accion" onclick="abrirModalRecarga()"><div class="panel-accion-icon">💳</div><div class="panel-accion-label">Recargar cuenta</div><div class="panel-accion-desc">Agrega saldo para pagar</div></div>
+    </div>
+    <div class="panel-section-title">Historial de servicios <span class="badge-count" id="panel-hist-count">0</span></div>
+    <div class="panel-filtros">
+      <div class="panel-filtro active" onclick="filtrarServicios('todos',this)">Todos</div>
+      <div class="panel-filtro" onclick="filtrarServicios('completado',this)">Completados</div>
+      <div class="panel-filtro" onclick="filtrarServicios('en_curso',this)">En curso</div>
+      <div class="panel-filtro" onclick="filtrarServicios('pendiente',this)">Pendientes</div>
+      <div class="panel-filtro" onclick="filtrarServicios('cancelado',this)">Cancelados</div>
+    </div>
+    <div class="panel-loading" id="panel-hist-loading"><span class="spinner"></span> Cargando historial...</div>
+    <div class="panel-tabla-wrap" id="panel-tabla-wrap" style="display:none"><table class="panel-tabla"><thead><tr><th>ID</th><th>Tipo</th><th>Ciudad</th><th>Fecha</th><th>Estado</th><th>Total</th><th>Factura</th></tr></thead><tbody id="panel-tabla-body"></tbody></table></div>
+    <div class="panel-empty" id="panel-empty" style="display:none"><div class="panel-empty-icon">📭</div><div class="panel-empty-text">Aún no tienes servicios</div><div class="panel-empty-sub">Solicita tu primer envío y aparecerá aquí</div></div>
+  </div>
+</div>
+
+<!-- ═══ MODAL RECARGA ═══ -->
+<div class="recarga-overlay" id="modal-recarga" onclick="cerrarModalRecargaOverlay(event)">
+  <div class="recarga-card">
+    <button class="recarga-close" onclick="cerrarModalRecarga()">×</button>
+    <div id="recarga-form-view">
+      <div class="recarga-titulo">Recargar cuenta</div>
+      <div class="recarga-sub">Selecciona un monto o escribe uno personalizado para agregar saldo.</div>
+      <div class="recarga-montos"><div class="recarga-monto" onclick="selRecargaMonto(this,50000)">$ 50.000</div><div class="recarga-monto" onclick="selRecargaMonto(this,100000)">$ 100.000</div><div class="recarga-monto" onclick="selRecargaMonto(this,200000)">$ 200.000</div><div class="recarga-monto" onclick="selRecargaMonto(this,300000)">$ 300.000</div><div class="recarga-monto" onclick="selRecargaMonto(this,500000)">$ 500.000</div><div class="recarga-monto" onclick="selRecargaMonto(this,0)">Otro</div></div>
+      <div class="recarga-custom-wrap" id="recarga-custom-wrap" style="display:none"><span class="recarga-custom-label">Monto personalizado</span><input type="number" class="recarga-custom-input" id="recarga-custom" placeholder="Ej: 150000" min="10000" step="1000"></div>
+      <span class="recarga-custom-label">Método de pago</span>
+      <div class="recarga-metodo"><div class="recarga-met-btn selected" onclick="selRecargaMetodo(this,'transferencia')"><div class="recarga-met-icon">🏦</div>Transferencia</div><div class="recarga-met-btn" onclick="selRecargaMetodo(this,'nequi')"><div class="recarga-met-icon">📱</div>Nequi / Daviplata</div></div>
+      <button class="mlogin-btn" onclick="procesarRecarga()">Confirmar recarga →</button>
+    </div>
+    <div class="recarga-success" id="recarga-success-view"><div class="recarga-success-icon">✅</div><div class="recarga-success-msg">Recarga simulada exitosa</div><div class="recarga-success-detail" id="recarga-success-detail">Se agregaron $ 100.000 a tu cuenta.</div><button class="mlogin-btn" onclick="cerrarModalRecarga()">Volver al panel →</button></div>
   </div>
 </div>
 
@@ -708,75 +658,35 @@ nav{border-bottom:1px solid var(--border);background:rgba(8,8,16,.9);backdrop-fi
 <div class="mlogin-overlay" id="modal-login" onclick="cerrarModalLoginOverlay(event)">
   <div class="mlogin-card">
     <button class="mlogin-close" onclick="cerrarModalLogin()">×</button>
-    <div class="mlogin-logo">
-      <div class="mlogin-logomark">R</div>
-      <div class="mlogin-logoname">RADI<em>Z</em></div>
-    </div>
-
-    <!-- PANEL: LOGIN -->
+    <div class="mlogin-logo"><div class="mlogin-logomark">R</div><div class="mlogin-logoname">RADI<em>Z</em></div></div>
     <div id="panel-login">
-      <div class="mlogin-tabs">
-        <div class="mlogin-tab active" onclick="switchTab('login')">Iniciar sesión</div>
-        <div class="mlogin-tab" onclick="switchTab('registro')">Crear cuenta</div>
-      </div>
+      <div class="mlogin-tabs"><div class="mlogin-tab active" onclick="switchTab('login')">Iniciar sesión</div><div class="mlogin-tab" onclick="switchTab('registro')">Crear cuenta</div></div>
       <div class="mlogin-titulo">Bienvenido de vuelta</div>
       <div class="mlogin-sub">Ingresa con tu correo y contraseña para acceder a tu panel.</div>
-      <span class="mlogin-label">Correo electrónico</span>
-      <input class="mlogin-input" id="login-correo" type="email" placeholder="correo@ejemplo.com" onkeydown="if(event.key==='Enter')ejecutarLogin()">
-      <span class="mlogin-label">Contraseña</span>
-      <div class="mlogin-pass-wrap">
-        <input class="mlogin-input" id="login-pass" type="password" placeholder="Tu contraseña" onkeydown="if(event.key==='Enter')ejecutarLogin()">
-        <button class="mlogin-pass-toggle" type="button" onclick="togglePass('login-pass',this)">Ver</button>
-      </div>
+      <span class="mlogin-label">Correo electrónico</span><input class="mlogin-input" id="login-correo" type="email" placeholder="correo@ejemplo.com" onkeydown="if(event.key==='Enter')ejecutarLogin()">
+      <span class="mlogin-label">Contraseña</span><div class="mlogin-pass-wrap"><input class="mlogin-input" id="login-pass" type="password" placeholder="Tu contraseña" onkeydown="if(event.key==='Enter')ejecutarLogin()"><button class="mlogin-pass-toggle" type="button" onclick="togglePass('login-pass',this)">Ver</button></div>
       <div class="mlogin-forgot"><a onclick="switchTab('recuperar')">¿Olvidaste tu contraseña?</a></div>
       <div class="mlogin-error-msg" id="login-error"></div>
       <button class="mlogin-btn" id="btn-login" onclick="ejecutarLogin()">Entrar →</button>
     </div>
-
-    <!-- PANEL: REGISTRO -->
     <div id="panel-registro" style="display:none">
-      <div class="mlogin-tabs">
-        <div class="mlogin-tab" onclick="switchTab('login')">Iniciar sesión</div>
-        <div class="mlogin-tab active" onclick="switchTab('registro')">Crear cuenta</div>
-      </div>
+      <div class="mlogin-tabs"><div class="mlogin-tab" onclick="switchTab('login')">Iniciar sesión</div><div class="mlogin-tab active" onclick="switchTab('registro')">Crear cuenta</div></div>
       <div class="mlogin-titulo">Crea tu cuenta</div>
       <div class="mlogin-sub">Regístrate para gestionar tus servicios, facturas y domiciliarios.</div>
-      <span class="mlogin-label">Tipo de cuenta</span>
-      <div class="mlogin-tipo">
-        <div class="mlogin-tipo-btn selected" id="reg-tipo-natural" onclick="selRegTipo('natural')">Persona natural</div>
-        <div class="mlogin-tipo-btn" id="reg-tipo-juridica" onclick="selRegTipo('juridica')">Empresa</div>
-      </div>
-      <div class="mlogin-nit-wrap" id="modal-nit-wrap" style="display:none">
-        <span class="mlogin-label">NIT de la empresa</span>
-        <input class="mlogin-input" id="modal-reg-nit" placeholder="900.123.456-7">
-        <span class="mlogin-label">Razón social</span>
-        <input class="mlogin-input" id="modal-reg-razon" placeholder="Empresa S.A.S.">
-      </div>
-      <span class="mlogin-label">Nombre completo</span>
-      <input class="mlogin-input" id="modal-reg-nombre" placeholder="Tu nombre completo">
-      <span class="mlogin-label">Correo electrónico</span>
-      <input class="mlogin-input" id="modal-reg-correo" type="email" placeholder="correo@ejemplo.com">
-      <span class="mlogin-label">Contraseña</span>
-      <div class="mlogin-pass-wrap">
-        <input class="mlogin-input" id="modal-reg-pass" type="password" placeholder="Mínimo 8 caracteres">
-        <button class="mlogin-pass-toggle" type="button" onclick="togglePass('modal-reg-pass',this)">Ver</button>
-      </div>
-      <span class="mlogin-label">Confirmar contraseña</span>
-      <div class="mlogin-pass-wrap">
-        <input class="mlogin-input" id="modal-reg-pass2" type="password" placeholder="Repite la contraseña">
-        <button class="mlogin-pass-toggle" type="button" onclick="togglePass('modal-reg-pass2',this)">Ver</button>
-      </div>
+      <span class="mlogin-label">Tipo de cuenta</span><div class="mlogin-tipo"><div class="mlogin-tipo-btn selected" id="reg-tipo-natural" onclick="selRegTipo('natural')">Persona natural</div><div class="mlogin-tipo-btn" id="reg-tipo-juridica" onclick="selRegTipo('juridica')">Empresa</div></div>
+      <div class="mlogin-nit-wrap" id="modal-nit-wrap" style="display:none"><span class="mlogin-label">NIT de la empresa</span><input class="mlogin-input" id="modal-reg-nit" placeholder="900.123.456-7"><span class="mlogin-label">Razón social</span><input class="mlogin-input" id="modal-reg-razon" placeholder="Empresa S.A.S."></div>
+      <span class="mlogin-label">Nombre completo</span><input class="mlogin-input" id="modal-reg-nombre" placeholder="Tu nombre completo">
+      <span class="mlogin-label">Correo electrónico</span><input class="mlogin-input" id="modal-reg-correo" type="email" placeholder="correo@ejemplo.com">
+      <span class="mlogin-label">Contraseña</span><div class="mlogin-pass-wrap"><input class="mlogin-input" id="modal-reg-pass" type="password" placeholder="Mínimo 8 caracteres"><button class="mlogin-pass-toggle" type="button" onclick="togglePass('modal-reg-pass',this)">Ver</button></div>
+      <span class="mlogin-label">Confirmar contraseña</span><div class="mlogin-pass-wrap"><input class="mlogin-input" id="modal-reg-pass2" type="password" placeholder="Repite la contraseña"><button class="mlogin-pass-toggle" type="button" onclick="togglePass('modal-reg-pass2',this)">Ver</button></div>
       <div class="mlogin-error-msg" id="reg-error"></div>
       <div class="mlogin-success-msg" id="reg-success"></div>
       <button class="mlogin-btn" id="btn-registro" onclick="ejecutarRegistro()">Crear cuenta →</button>
     </div>
-
-    <!-- PANEL: RECUPERAR CONTRASEÑA -->
     <div id="panel-recuperar" style="display:none">
       <div class="mlogin-titulo">Recuperar contraseña</div>
       <div class="mlogin-sub">Escribe tu correo y te enviaremos un enlace para restablecer tu contraseña.</div>
-      <span class="mlogin-label">Correo electrónico</span>
-      <input class="mlogin-input" id="rec-correo" type="email" placeholder="correo@ejemplo.com" onkeydown="if(event.key==='Enter')ejecutarRecuperar()">
+      <span class="mlogin-label">Correo electrónico</span><input class="mlogin-input" id="rec-correo" type="email" placeholder="correo@ejemplo.com" onkeydown="if(event.key==='Enter')ejecutarRecuperar()">
       <div class="mlogin-error-msg" id="rec-error"></div>
       <div class="mlogin-success-msg" id="rec-success"></div>
       <button class="mlogin-btn" id="btn-recuperar" onclick="ejecutarRecuperar()">Enviar enlace →</button>
@@ -809,816 +719,321 @@ let tipoCliente = 'natural';
 let acTimers    = {};
 let geocoder, directionsService, directionsRenderer;
 
+// ── PANEL DE USUARIO: estado ──
+let saldoUsuario = 0;
+let serviciosUsuario = [];
+let filtroActual = 'todos';
+
 function mostrarVista(id) {
   document.querySelectorAll('.vista').forEach(v => v.classList.remove('activa'));
   const el = document.getElementById('vista-' + id);
   if (el) { el.classList.add('activa'); window.scrollTo({top:0,behavior:'smooth'}); }
   if (id === 'mensajeria' && !mapaIniciado) iniciarMapa();
+  if (id === 'panel') cargarPanel();
 }
 function irARegistro(s) { servicioActivo = s; poblarResumen(); mostrarVista('registro'); }
 function volverDesdePago() { mostrarVista(servicioActivo); }
 
 function reiniciarMensajeria() {
-  // Estado
   Object.keys(marcadores).forEach(k => marcadores[k].setMap(null));
   marcadores = {}; coordenadas = {}; distanciaRutaMetros = 0;
   acInstances = {}; numParadas = 2; conRegreso = false;
   ultimaCotizacionMens = null;
-
-  // Inputs direcciones
-  ['origen-input','destino-input','origen-comp','destino-comp'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) { el.value = ''; el.disabled = true; }
-  });
-
-  // Paradas extra
+  ['origen-input','destino-input','origen-comp','destino-comp'].forEach(id => { const el = document.getElementById(id); if (el) { el.value = ''; el.disabled = true; } });
   document.querySelectorAll('[id^="parada-extra-"]').forEach(el => el.remove());
   document.getElementById('btn-add-parada').style.display = 'flex';
   document.getElementById('btn-add-parada').disabled = true;
-
-  // Mapa y ruta
   if (directionsRenderer) directionsRenderer.setDirections({routes:[]});
-
-  // Formulario
   document.getElementById('propina-mens').value = '';
   document.getElementById('indicaciones-mens').value = '';
   document.getElementById('result-mens').classList.remove('visible');
-
-  // Ciudad
   document.querySelectorAll('.ciudad-btn').forEach(b => b.classList.remove('selected'));
   ciudadSeleccionada = null;
   document.getElementById('check-regreso').classList.remove('checked');
   document.getElementById('mapa-instruccion').textContent = 'Selecciona una ciudad para comenzar';
   document.getElementById('mapa-instruccion').style.display = 'block';
   if (mapaIniciado) { mapa.setCenter({lat:4.7110, lng:-74.0721}); mapa.setZoom(5); }
-
-  // Scroll arriba
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-// ── TOAST ──
-function showToast(msg, tipo='') {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'toast visible ' + tipo;
-  setTimeout(() => t.className = 'toast', 3500);
-}
+function showToast(msg, tipo='') { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast visible ' + tipo; setTimeout(() => t.className = 'toast', 3500); }
+function selTipo(el, tipo) { document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); tipoEnvio = tipo; }
+function selMoto(el, tipo) { document.querySelectorAll('.moto-btn').forEach(b => b.classList.remove('selected')); el.classList.add('selected'); tipoMoto = tipo; }
+function selHorario(modo) { modoHorario = modo; document.getElementById('tab-ahora').classList.toggle('selected', modo==='ahora'); document.getElementById('tab-programar').classList.toggle('selected', modo==='programar'); document.getElementById('horario-hora-wrap').classList.toggle('visible', modo==='programar'); }
 
-// ── TIPO ENVÍO / MOTO / HORARIO ──
-function selTipo(el, tipo) {
-  document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected'); tipoEnvio = tipo;
-}
-function selMoto(el, tipo) {
-  document.querySelectorAll('.moto-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected'); tipoMoto = tipo;
-}
-function selHorario(modo) {
-  modoHorario = modo;
-  document.getElementById('tab-ahora').classList.toggle('selected', modo==='ahora');
-  document.getElementById('tab-programar').classList.toggle('selected', modo==='programar');
-  document.getElementById('horario-hora-wrap').classList.toggle('visible', modo==='programar');
-}
-
-// ── SELECTOR DE CIUDAD ──
 function selCiudad(el, nombre, lat, lon) {
   document.querySelectorAll('.ciudad-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected');
-  ciudadSeleccionada = { nombre, lat, lon };
-  habilitarDirecciones(true);
-  if (mapaIniciado) {
-    mapa.setCenter({lat, lng: lon});
-    mapa.setZoom(13);
-    document.getElementById('mapa-instruccion').textContent = `${nombre} — escribe la dirección`;
-    document.getElementById('mapa-instruccion').style.display = 'block';
-  }
+  el.classList.add('selected'); ciudadSeleccionada = { nombre, lat, lon }; habilitarDirecciones(true);
+  if (mapaIniciado) { mapa.setCenter({lat, lng: lon}); mapa.setZoom(13); document.getElementById('mapa-instruccion').textContent = `${nombre} — escribe la dirección`; document.getElementById('mapa-instruccion').style.display = 'block'; }
 }
+function habilitarDirecciones(ok) { ['origen-input','destino-input','origen-comp','destino-comp'].forEach(id => { const el = document.getElementById(id); if (el) el.disabled = !ok; }); document.getElementById('btn-add-parada').disabled = !ok; }
 
-function habilitarDirecciones(ok) {
-  ['origen-input','destino-input','origen-comp','destino-comp'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.disabled = !ok;
-  });
-  document.getElementById('btn-add-parada').disabled = !ok;
-}
-
-// ── AUTOCOMPLETE GOOGLE PLACES ──
 let acInstances = {};
+function buscarDir(input, idx) { if (window.google && !acInstances[idx]) iniciarAutocomplete(input, idx); }
+document.addEventListener('click', e => { if (!e.target.classList.contains('parada-input') && !e.target.classList.contains('form-input')) document.querySelectorAll('.ac-list').forEach(l => l.style.display='none'); });
 
-function buscarDir(input, idx) {
-  if (window.google && !acInstances[idx]) iniciarAutocomplete(input, idx);
-}
-
-document.addEventListener('click', e => {
-  if (!e.target.classList.contains('parada-input') && !e.target.classList.contains('form-input'))
-    document.querySelectorAll('.ac-list').forEach(l => l.style.display='none');
-});
-
-// ── PARADAS ──
 function agregarParada() {
   if (!ciudadSeleccionada) { showToast('Selecciona primero la ciudad','error'); return; }
   if (numParadas >= 6) { showToast('Máximo 5 paradas permitidas','error'); return; }
-  numParadas++;
-  const idx  = numParadas - 1;
-  const wrap = document.getElementById('paradas-wrap');
-  const div  = document.createElement('div');
-  div.className = 'parada-item'; div.id = 'parada-extra-' + idx;
-  const letra = String.fromCharCode(65 + idx); // A=65, B=66, C=67...
-  div.innerHTML = `
-    <div class="parada-dot parada">${letra}</div>
-    <div class="parada-field">
-      <input class="parada-input" placeholder="📍 Parada ${letra}" autocomplete="off" onfocus="iniciarAutocomplete(this,${idx})">
-      <input class="parada-complemento" placeholder="Edificio, oficina, apartamento, piso...">
-    </div>
-    <button class="btn-remove" onclick="eliminarParada(${idx})">×</button>`;
+  numParadas++; const idx = numParadas - 1; const wrap = document.getElementById('paradas-wrap'); const div = document.createElement('div');
+  div.className = 'parada-item'; div.id = 'parada-extra-' + idx; const letra = String.fromCharCode(65 + idx);
+  div.innerHTML = `<div class="parada-dot parada">${letra}</div><div class="parada-field"><input class="parada-input" placeholder="📍 Parada ${letra}" autocomplete="off" onfocus="iniciarAutocomplete(this,${idx})"><input class="parada-complemento" placeholder="Edificio, oficina, apartamento, piso..."></div><button class="btn-remove" onclick="eliminarParada(${idx})">×</button>`;
   wrap.insertBefore(div, wrap.lastElementChild);
   if (numParadas >= 6) document.getElementById('btn-add-parada').style.display='none';
-  // Iniciar autocomplete en el nuevo input
-  setTimeout(() => {
-    const newInput = div.querySelector('.parada-input');
-    if (newInput) iniciarAutocomplete(newInput, idx);
-  }, 100);
+  setTimeout(() => { const newInput = div.querySelector('.parada-input'); if (newInput) iniciarAutocomplete(newInput, idx); }, 100);
 }
+function eliminarParada(idx) { const el = document.getElementById('parada-extra-'+idx); if (el) el.remove(); if (marcadores[idx]) { marcadores[idx].setMap(null); delete marcadores[idx]; } delete coordenadas[idx]; delete acInstances[idx]; numParadas--; document.getElementById('btn-add-parada').style.display='flex'; if (Object.keys(coordenadas).length >= 2) calcularRutaReal(); }
+function toggleRegreso() { conRegreso = !conRegreso; document.getElementById('check-regreso').classList.toggle('checked', conRegreso); if (Object.keys(coordenadas).length >= 2) calcularRutaReal(); }
 
-function eliminarParada(idx) {
-  const el = document.getElementById('parada-extra-'+idx);
-  if (el) el.remove();
-  if (marcadores[idx]) { marcadores[idx].setMap(null); delete marcadores[idx]; }
-  delete coordenadas[idx];
-  delete acInstances[idx];
-  numParadas--;
-  document.getElementById('btn-add-parada').style.display='flex';
-  if (Object.keys(coordenadas).length >= 2) calcularRutaReal();
-}
-
-function toggleRegreso() {
-  conRegreso = !conRegreso;
-  document.getElementById('check-regreso').classList.toggle('checked', conRegreso);
-  // Recalcular ruta inmediatamente si ya hay coordenadas
-  if (Object.keys(coordenadas).length >= 2) calcularRutaReal();
-}
-
-// ── MAPA GOOGLE MAPS (nueva API v: weekly) ──
 async function iniciarMapa() {
-  const { Map } = await google.maps.importLibrary("maps");
-  const { DirectionsService, DirectionsRenderer } = await google.maps.importLibrary("routes");
-  const { Geocoder } = await google.maps.importLibrary("geocoding");
-
-  mapa = new Map(document.getElementById('mapa'), {
-    center: { lat: 4.7110, lng: -74.0721 },
-    zoom: 5,
-    mapId: 'radiz_dark',
-    styles: [
-      {elementType:'geometry',stylers:[{color:'#1a1a2e'}]},
-      {elementType:'labels.text.stroke',stylers:[{color:'#1a1a2e'}]},
-      {elementType:'labels.text.fill',stylers:[{color:'#6b6b8a'}]},
-      {featureType:'road',elementType:'geometry',stylers:[{color:'#2a2a40'}]},
-      {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#1e1e30'}]},
-      {featureType:'road',elementType:'labels.text.fill',stylers:[{color:'#6b6b8a'}]},
-      {featureType:'water',elementType:'geometry',stylers:[{color:'#0d0d1a'}]},
-      {featureType:'poi',stylers:[{visibility:'off'}]},
-      {featureType:'transit',stylers:[{visibility:'off'}]},
-    ],
-    disableDefaultUI: false,
-    zoomControl: true,
-    mapTypeControl: false,
-    streetViewControl: false,
-    fullscreenControl: false,
-  });
-
-  geocoder = new Geocoder();
-  directionsService = new DirectionsService();
-  directionsRenderer = new DirectionsRenderer({
-    map: mapa,
-    suppressMarkers: true,
-    polylineOptions: { strokeColor: '#1A56D4', strokeWeight: 4, strokeOpacity: 0.8 }
-  });
+  const { Map } = await google.maps.importLibrary("maps"); const { DirectionsService, DirectionsRenderer } = await google.maps.importLibrary("routes"); const { Geocoder } = await google.maps.importLibrary("geocoding");
+  mapa = new Map(document.getElementById('mapa'), { center: { lat: 4.7110, lng: -74.0721 }, zoom: 5, mapId: 'radiz_dark', styles: [{elementType:'geometry',stylers:[{color:'#1a1a2e'}]},{elementType:'labels.text.stroke',stylers:[{color:'#1a1a2e'}]},{elementType:'labels.text.fill',stylers:[{color:'#6b6b8a'}]},{featureType:'road',elementType:'geometry',stylers:[{color:'#2a2a40'}]},{featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#1e1e30'}]},{featureType:'road',elementType:'labels.text.fill',stylers:[{color:'#6b6b8a'}]},{featureType:'water',elementType:'geometry',stylers:[{color:'#0d0d1a'}]},{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]}], disableDefaultUI: false, zoomControl: true, mapTypeControl: false, streetViewControl: false, fullscreenControl: false });
+  geocoder = new Geocoder(); directionsService = new DirectionsService();
+  directionsRenderer = new DirectionsRenderer({ map: mapa, suppressMarkers: true, polylineOptions: { strokeColor: '#1A56D4', strokeWeight: 4, strokeOpacity: 0.8 } });
   mapaIniciado = true;
-
-  // Iniciar autocomplete en inputs existentes
-  setTimeout(() => {
-    const oi = document.getElementById('origen-input');
-    const di = document.getElementById('destino-input');
-    if (oi) iniciarAutocomplete(oi, 0);
-    if (di) iniciarAutocomplete(di, 1);
-  }, 300);
+  setTimeout(() => { const oi = document.getElementById('origen-input'); const di = document.getElementById('destino-input'); if (oi) iniciarAutocomplete(oi, 0); if (di) iniciarAutocomplete(di, 1); }, 300);
 }
 
 async function iniciarAutocomplete(input, idx) {
-  if (acInstances[idx]) return;
-  const { Autocomplete } = await google.maps.importLibrary("places");
-  const opts = {
-    componentRestrictions: { country: 'co' },
-    fields: ['geometry','name','formatted_address']
-  };
-  if (ciudadSeleccionada) {
-    const { LatLngBounds, Circle } = await google.maps.importLibrary("core");
-    opts.bounds = new google.maps.Circle({
-      center: { lat: ciudadSeleccionada.lat, lng: ciudadSeleccionada.lon },
-      radius: 30000
-    }).getBounds();
-    opts.strictBounds = false;
-  }
+  if (acInstances[idx]) return; const { Autocomplete } = await google.maps.importLibrary("places");
+  const opts = { componentRestrictions: { country: 'co' }, fields: ['geometry','name','formatted_address'] };
+  if (ciudadSeleccionada) { await google.maps.importLibrary("core"); opts.bounds = new google.maps.Circle({ center: { lat: ciudadSeleccionada.lat, lng: ciudadSeleccionada.lon }, radius: 30000 }).getBounds(); opts.strictBounds = false; }
   const ac = new Autocomplete(input, opts);
-  ac.addListener('place_changed', () => {
-    const place = ac.getPlace();
-    if (!place.geometry) return;
-    const lat = place.geometry.location.lat();
-    const lon = place.geometry.location.lng();
-    coordenadas[idx] = [lat, lon];
-    ponerMarcador(idx, lat, lon);
-    document.getElementById('mapa-instruccion').style.display = 'none';
-    if (Object.keys(coordenadas).length >= 2) calcularRutaReal();
-  });
+  ac.addListener('place_changed', () => { const place = ac.getPlace(); if (!place.geometry) return; const lat = place.geometry.location.lat(); const lon = place.geometry.location.lng(); coordenadas[idx] = [lat, lon]; ponerMarcador(idx, lat, lon); document.getElementById('mapa-instruccion').style.display = 'none'; if (Object.keys(coordenadas).length >= 2) calcularRutaReal(); });
   acInstances[idx] = ac;
 }
 
 function ponerMarcador(idx, lat, lon) {
-  if (!mapaIniciado) return;
-  if (marcadores[idx]) marcadores[idx].setMap(null);
-  const colors = {0:'#22c55e', 1:'#F05A28'};
-  const color  = colors[idx] || '#1A56D4';
-  marcadores[idx] = new google.maps.Marker({
-    position: { lat, lng: lon },
-    map: mapa,
-    icon: {
-      path: google.maps.SymbolPath.CIRCLE,
-      scale: 8,
-      fillColor: color,
-      fillOpacity: 1,
-      strokeColor: '#ffffff',
-      strokeWeight: 2.5
-    }
-  });
-  mapa.panTo({ lat, lng: lon });
-  mapa.setZoom(14);
+  if (!mapaIniciado) return; if (marcadores[idx]) marcadores[idx].setMap(null);
+  const colors = {0:'#22c55e', 1:'#F05A28'}; const color = colors[idx] || '#1A56D4';
+  marcadores[idx] = new google.maps.Marker({ position: { lat, lng: lon }, map: mapa, icon: { path: google.maps.SymbolPath.CIRCLE, scale: 8, fillColor: color, fillOpacity: 1, strokeColor: '#ffffff', strokeWeight: 2.5 } });
+  mapa.panTo({ lat, lng: lon }); mapa.setZoom(14);
 }
 
 let distanciaRutaMetros = 0;
-
 function calcularRutaReal() {
-  if (!mapaIniciado || !directionsService) return;
-  const keys  = Object.keys(coordenadas).sort((a,b)=>a-b).map(Number);
-  if (keys.length < 2) return;
-  const puntos = keys.map(k => coordenadas[k]);
-  const origen = { lat: puntos[0][0], lng: puntos[0][1] };
-  const destino = { lat: puntos[puntos.length-1][0], lng: puntos[puntos.length-1][1] };
-
-  // Waypoints: paradas intermedias (sin origen ni destino final)
-  const waypoints = puntos.slice(1, -1).map(p => ({
-    location: { lat: p[0], lng: p[1] }, stopover: true
-  }));
-
-  // Si hay regreso, el destino final vuelve al origen
-  // y el destino original se convierte en waypoint intermedio
-  const destinoFinal = conRegreso ? origen : destino;
-  if (conRegreso) {
-    waypoints.push({ location: destino, stopover: true });
-  }
-
-  directionsService.route({
-    origin: origen,
-    destination: destinoFinal,
-    waypoints,
-    travelMode: google.maps.TravelMode.DRIVING,
-    region: 'CO'
-  }, (result, status) => {
-    if (status === 'OK') {
-      directionsRenderer.setDirections(result);
-      let metros = 0;
-      result.routes[0].legs.forEach(leg => metros += leg.distance.value);
-      distanciaRutaMetros = metros;
-      document.getElementById('mapa-instruccion').style.display = 'none';
-    }
-  });
+  if (!mapaIniciado || !directionsService) return; const keys = Object.keys(coordenadas).sort((a,b)=>a-b).map(Number); if (keys.length < 2) return;
+  const puntos = keys.map(k => coordenadas[k]); const origen = { lat: puntos[0][0], lng: puntos[0][1] }; const destino = { lat: puntos[puntos.length-1][0], lng: puntos[puntos.length-1][1] };
+  const waypoints = puntos.slice(1, -1).map(p => ({ location: { lat: p[0], lng: p[1] }, stopover: true }));
+  const destinoFinal = conRegreso ? origen : destino; if (conRegreso) { waypoints.push({ location: destino, stopover: true }); }
+  directionsService.route({ origin: origen, destination: destinoFinal, waypoints, travelMode: google.maps.TravelMode.DRIVING, region: 'CO' }, (result, status) => { if (status === 'OK') { directionsRenderer.setDirections(result); let metros = 0; result.routes[0].legs.forEach(leg => metros += leg.distance.value); distanciaRutaMetros = metros; document.getElementById('mapa-instruccion').style.display = 'none'; } });
 }
 
-// ── COTIZADOR MENSAJERÍA ──
 async function cotizarMensajeria() {
   if (!ciudadSeleccionada) { showToast('Selecciona primero la ciudad','error'); return; }
   const keys = Object.keys(coordenadas).sort((a,b)=>a-b).map(Number);
   if (keys.length < 2) { showToast('Escribe al menos origen y destino','error'); return; }
   if (distanciaRutaMetros === 0) { showToast('Espera a que se calcule la ruta en el mapa','error'); return; }
-
-  document.getElementById('btn-cotizar-mens').disabled = true;
-  document.getElementById('loading-mens').classList.add('visible');
-  document.getElementById('result-mens').classList.remove('visible');
+  document.getElementById('btn-cotizar-mens').disabled = true; document.getElementById('loading-mens').classList.add('visible'); document.getElementById('result-mens').classList.remove('visible');
   try {
-    const distKm = (distanciaRutaMetros / 1000).toFixed(2);
-    const r    = await fetch(`${API_URL}?accion=cotizar&km=${distKm}`);
-    const data = await r.json();
+    const distKm = (distanciaRutaMetros / 1000).toFixed(2); const r = await fetch(`${API_URL}?accion=cotizar&km=${distKm}`); const data = await r.json();
     if (!data.ok) { showToast(data.error||'Error al cotizar','error'); return; }
-
-    const propina  = parseInt(document.getElementById('propina-mens').value)||0;
-    const recargo  = tipoEnvio === 'paquete_grande' ? RECARGO_GRANDE : 0;
-    data._propina   = propina;
-    data._recargo   = recargo;
-    data._distTotal = distKm;
-    data._ciudad    = ciudadSeleccionada.nombre;
-    data._horario   = modoHorario==='ahora' ? 'Lo antes posible' : document.getElementById('hora-recogida').value;
-    ultimaCotizacionMens = data;
-    mostrarResultadoMens(data, distKm, propina, recargo);
-  } catch(e) {
-    showToast('Error de conexión. Intenta de nuevo.','error');
-  } finally {
-    document.getElementById('btn-cotizar-mens').disabled = false;
-    document.getElementById('loading-mens').classList.remove('visible');
-  }
+    const propina = parseInt(document.getElementById('propina-mens').value)||0; const recargo = tipoEnvio === 'paquete_grande' ? RECARGO_GRANDE : 0;
+    data._propina = propina; data._recargo = recargo; data._distTotal = distKm; data._ciudad = ciudadSeleccionada.nombre;
+    data._horario = modoHorario==='ahora' ? 'Lo antes posible' : document.getElementById('hora-recogida').value;
+    ultimaCotizacionMens = data; mostrarResultadoMens(data, distKm, propina, recargo);
+  } catch(e) { showToast('Error de conexión. Intenta de nuevo.','error'); }
+  finally { document.getElementById('btn-cotizar-mens').disabled = false; document.getElementById('loading-mens').classList.remove('visible'); }
 }
 
 function mostrarResultadoMens(data, distKm, propina, recargo) {
   const totalFinal = data.totalCliente + propina + recargo;
-  let html = `
-    <div class="cotiz-row"><span class="cotiz-row-label">Ciudad</span><span class="cotiz-row-value">📍 ${data._ciudad}</span></div>
-    <div class="cotiz-row"><span class="cotiz-row-label">Distancia por ruta</span><span class="cotiz-row-value">${parseFloat(distKm).toFixed(1)} km</span></div>
-    <div class="cotiz-row"><span class="cotiz-row-label">Subtotal por distancia</span><span class="cotiz-row-value">${data.fmt.subtotalKm}</span></div>
-    <div class="cotiz-row"><span class="cotiz-row-label">Tarifa de servicio</span><span class="cotiz-row-value">${data.fmt.tarifaServicio}</span></div>
-    <div class="cotiz-row"><span class="cotiz-row-label">Tarifa de gestión</span><span class="cotiz-row-value">${data.fmt.comisionCliente}</span></div>
-    <div class="cotiz-row"><span class="cotiz-row-label">Hora de recogida</span><span class="cotiz-row-value">⏰ ${data._horario}</span></div>
-    <div class="cotiz-row"><span class="cotiz-row-label">Tiempo estimado</span><span class="cotiz-row-value">⏱ ${data.tiempoEstimadoTexto}</span></div>`;
+  let html = `<div class="cotiz-row"><span class="cotiz-row-label">Ciudad</span><span class="cotiz-row-value">📍 ${data._ciudad}</span></div><div class="cotiz-row"><span class="cotiz-row-label">Distancia por ruta</span><span class="cotiz-row-value">${parseFloat(distKm).toFixed(1)} km</span></div><div class="cotiz-row"><span class="cotiz-row-label">Subtotal por distancia</span><span class="cotiz-row-value">${data.fmt.subtotalKm}</span></div><div class="cotiz-row"><span class="cotiz-row-label">Tarifa de servicio</span><span class="cotiz-row-value">${data.fmt.tarifaServicio}</span></div><div class="cotiz-row"><span class="cotiz-row-label">Tarifa de gestión</span><span class="cotiz-row-value">${data.fmt.comisionCliente}</span></div><div class="cotiz-row"><span class="cotiz-row-label">Hora de recogida</span><span class="cotiz-row-value">⏰ ${data._horario}</span></div><div class="cotiz-row"><span class="cotiz-row-label">Tiempo estimado</span><span class="cotiz-row-value">⏱ ${data.tiempoEstimadoTexto}</span></div>`;
   if (recargo>0) html+=`<div class="cotiz-row"><span class="cotiz-row-label">📦 Recargo paquete grande</span><span class="cotiz-row-value">+ ${fmtCOP(recargo)}</span></div>`;
   if (propina>0) html+=`<div class="cotiz-row"><span class="cotiz-row-label">🤝 Propina mensajero</span><span class="cotiz-row-value" style="color:var(--green)">+ ${fmtCOP(propina)}</span></div>`;
   if (data.aplicaTarifaMinima) html+=`<div class="cotiz-row"><span class="cotiz-row-label" style="color:var(--orange)">⚠ Tarifa mínima aplicada</span><span class="cotiz-row-value" style="color:var(--orange)">$3.450</span></div>`;
-  document.getElementById('detalle-mens').innerHTML = html;
-  document.getElementById('total-mens-valor').textContent = fmtCOP(totalFinal);
-  document.getElementById('result-mens').classList.add('visible');
+  document.getElementById('detalle-mens').innerHTML = html; document.getElementById('total-mens-valor').textContent = fmtCOP(totalFinal); document.getElementById('result-mens').classList.add('visible');
 }
 
-// ── COTIZADOR DOMICILIARIO ──
 let diasDomiciliario = 1;
-function cambiarDias(d) {
-  diasDomiciliario = Math.max(1, diasDomiciliario+d);
-  document.getElementById('dias-num').textContent = diasDomiciliario;
-  actualizarFechaFin();
-  actualizarBonoDom(); // actualizar total bono al cambiar días
-}
-function actualizarFechaFin() {
-  const inicio = document.getElementById('fecha-inicio').value;
-  if (!inicio) return;
-  const d = new Date(inicio+'T12:00:00');
-  d.setDate(d.getDate()+diasDomiciliario-1);
-  document.getElementById('fecha-fin').value = d.toISOString().split('T')[0];
-}
+function cambiarDias(d) { diasDomiciliario = Math.max(1, diasDomiciliario+d); document.getElementById('dias-num').textContent = diasDomiciliario; actualizarFechaFin(); actualizarBonoDom(); }
+function actualizarFechaFin() { const inicio = document.getElementById('fecha-inicio').value; if (!inicio) return; const d = new Date(inicio+'T12:00:00'); d.setDate(d.getDate()+diasDomiciliario-1); document.getElementById('fecha-fin').value = d.toISOString().split('T')[0]; }
 
 async function cotizarDomiciliario() {
-  document.getElementById('btn-cotizar-dom').disabled = true;
-  document.getElementById('loading-dom').classList.add('visible');
-  document.getElementById('result-dom').classList.remove('visible');
+  document.getElementById('btn-cotizar-dom').disabled = true; document.getElementById('loading-dom').classList.add('visible'); document.getElementById('result-dom').classList.remove('visible');
   try {
-    const r    = await fetch(`${API_URL}?accion=cotizar_domiciliario&dias=${diasDomiciliario}`);
-    const data = await r.json();
+    const r = await fetch(`${API_URL}?accion=cotizar_domiciliario&dias=${diasDomiciliario}`); const data = await r.json();
     if (!data.ok) { showToast(data.error||'Error al cotizar','error'); return; }
-    const bonoDiario  = parseInt(document.getElementById('propina-dom').value)||0;
-    const bonoTotal   = bonoDiario * diasDomiciliario;
-    data._propina     = bonoTotal;
-    data._bonoDiario  = bonoDiario;
-    ultimaCotizacionDom = data;
-    const totalFinal  = data.totalCliente + bonoTotal;
-    let html = `
-      <div class="cotiz-row"><span class="cotiz-row-label">Días contratados</span><span class="cotiz-row-value">${data.dias} día(s)</span></div>
-      <div class="cotiz-row"><span class="cotiz-row-label">Tarifa del domiciliario</span><span class="cotiz-row-value">${data.fmt.tarifaTotal}</span></div>
-      <div class="cotiz-row"><span class="cotiz-row-label">Tarifa de gestión Radiz</span><span class="cotiz-row-value">${data.fmt.comisionRadiz}</span></div>
-      <div class="cotiz-row"><span class="cotiz-row-label">Bono rodamiento y desempeño</span><span class="cotiz-row-value">${data.fmt.bonoRodamiento}</span></div>`;
-    if (bonoDiario>0) html+=`
-      <div class="cotiz-row"><span class="cotiz-row-label">⭐ Bono diario × ${diasDomiciliario} día(s)</span><span class="cotiz-row-value" style="color:var(--green)">+ ${fmtCOP(bonoTotal)}</span></div>`;
-    document.getElementById('detalle-dom').innerHTML = html;
-    document.getElementById('total-dom-valor').textContent = fmtCOP(totalFinal);
-    document.getElementById('result-dom').classList.add('visible');
-  } catch(e) {
-    showToast('Error de conexión. Intenta de nuevo.','error');
-  } finally {
-    document.getElementById('btn-cotizar-dom').disabled = false;
-    document.getElementById('loading-dom').classList.remove('visible');
-  }
+    const bonoDiario = parseInt(document.getElementById('propina-dom').value)||0; const bonoTotal = bonoDiario * diasDomiciliario;
+    data._propina = bonoTotal; data._bonoDiario = bonoDiario; ultimaCotizacionDom = data; const totalFinal = data.totalCliente + bonoTotal;
+    let html = `<div class="cotiz-row"><span class="cotiz-row-label">Días contratados</span><span class="cotiz-row-value">${data.dias} día(s)</span></div><div class="cotiz-row"><span class="cotiz-row-label">Tarifa del domiciliario</span><span class="cotiz-row-value">${data.fmt.tarifaTotal}</span></div><div class="cotiz-row"><span class="cotiz-row-label">Tarifa de gestión Radiz</span><span class="cotiz-row-value">${data.fmt.comisionRadiz}</span></div><div class="cotiz-row"><span class="cotiz-row-label">Bono rodamiento y desempeño</span><span class="cotiz-row-value">${data.fmt.bonoRodamiento}</span></div>`;
+    if (bonoDiario>0) html+=`<div class="cotiz-row"><span class="cotiz-row-label">⭐ Bono diario × ${diasDomiciliario} día(s)</span><span class="cotiz-row-value" style="color:var(--green)">+ ${fmtCOP(bonoTotal)}</span></div>`;
+    document.getElementById('detalle-dom').innerHTML = html; document.getElementById('total-dom-valor').textContent = fmtCOP(totalFinal); document.getElementById('result-dom').classList.add('visible');
+  } catch(e) { showToast('Error de conexión. Intenta de nuevo.','error'); }
+  finally { document.getElementById('btn-cotizar-dom').disabled = false; document.getElementById('loading-dom').classList.remove('visible'); }
 }
 
-// ── REGISTRO ──
-function selTipoCliente(tipo) {
-  tipoCliente = tipo;
-  document.getElementById('btn-natural').classList.toggle('selected', tipo==='natural');
-  document.getElementById('btn-juridica').classList.toggle('selected', tipo==='juridica');
-  document.getElementById('reg-nit-wrap').classList.toggle('visible', tipo==='juridica');
-}
+function selTipoCliente(tipo) { tipoCliente = tipo; document.getElementById('btn-natural').classList.toggle('selected', tipo==='natural'); document.getElementById('btn-juridica').classList.toggle('selected', tipo==='juridica'); document.getElementById('reg-nit-wrap').classList.toggle('visible', tipo==='juridica'); }
 
 function poblarResumen() {
   let html = '';
-  if (servicioActivo==='mensajeria' && ultimaCotizacionMens) {
-    const d=ultimaCotizacionMens, p=d._propina||0, rec=d._recargo||0, total=d.totalCliente+p+rec;
-    html=`
-      <div class="reg-resumen-row"><span>Servicio</span><span>Mensajería punto a punto</span></div>
-      <div class="reg-resumen-row"><span>Ciudad</span><span>${d._ciudad||''}</span></div>
-      <div class="reg-resumen-row"><span>Distancia por ruta</span><span>${parseFloat(d._distTotal).toFixed(1)} km</span></div>
-      <div class="reg-resumen-row"><span>Recogida</span><span>${d._horario||'Ahora mismo'}</span></div>
-      ${p>0?`<div class="reg-resumen-row"><span>Propina</span><span>${fmtCOP(p)}</span></div>`:''}
-      <div class="reg-resumen-row total"><span>Total</span><span class="val" style="color:var(--blue-light)">${fmtCOP(total)}</span></div>`;
-  } else if (servicioActivo==='domiciliario' && ultimaCotizacionDom) {
-    const d=ultimaCotizacionDom, p=d._propina||0, total=d.totalCliente+p;
-    html=`
-      <div class="reg-resumen-row"><span>Servicio</span><span>Domiciliario por días</span></div>
-      <div class="reg-resumen-row"><span>Días</span><span>${d.dias} día(s)</span></div>
-      <div class="reg-resumen-row"><span>Tipo de moto</span><span>${tipoMoto}</span></div>
-      ${p>0?`<div class="reg-resumen-row"><span>Propina</span><span>${fmtCOP(p)}</span></div>`:''}
-      <div class="reg-resumen-row total"><span>Total</span><span class="val" style="color:var(--orange)">${fmtCOP(total)}</span></div>`;
-  }
+  if (servicioActivo==='mensajeria' && ultimaCotizacionMens) { const d=ultimaCotizacionMens, p=d._propina||0, rec=d._recargo||0, total=d.totalCliente+p+rec; html=`<div class="reg-resumen-row"><span>Servicio</span><span>Mensajería punto a punto</span></div><div class="reg-resumen-row"><span>Ciudad</span><span>${d._ciudad||''}</span></div><div class="reg-resumen-row"><span>Distancia por ruta</span><span>${parseFloat(d._distTotal).toFixed(1)} km</span></div><div class="reg-resumen-row"><span>Recogida</span><span>${d._horario||'Ahora mismo'}</span></div>${p>0?`<div class="reg-resumen-row"><span>Propina</span><span>${fmtCOP(p)}</span></div>`:''}<div class="reg-resumen-row total"><span>Total</span><span class="val" style="color:var(--blue-light)">${fmtCOP(total)}</span></div>`; }
+  else if (servicioActivo==='domiciliario' && ultimaCotizacionDom) { const d=ultimaCotizacionDom, p=d._propina||0, total=d.totalCliente+p; html=`<div class="reg-resumen-row"><span>Servicio</span><span>Domiciliario por días</span></div><div class="reg-resumen-row"><span>Días</span><span>${d.dias} día(s)</span></div><div class="reg-resumen-row"><span>Tipo de moto</span><span>${tipoMoto}</span></div>${p>0?`<div class="reg-resumen-row"><span>Propina</span><span>${fmtCOP(p)}</span></div>`:''}<div class="reg-resumen-row total"><span>Total</span><span class="val" style="color:var(--orange)">${fmtCOP(total)}</span></div>`; }
   document.getElementById('reg-resumen').innerHTML = html;
 }
 
-// ── VALIDACIÓN JORNADA (máx 8h) ──
-function validarJornada() {
-  const ini = document.getElementById('hora-inicio').value;
-  const fin = document.getElementById('hora-fin').value;
-  if (!ini || !fin) return;
-  const [hI, mI] = ini.split(':').map(Number);
-  const [hF, mF] = fin.split(':').map(Number);
-  const mins = (hF * 60 + mF) - (hI * 60 + mI);
-  const aviso = document.getElementById('jornada-aviso');
-  const btnCot = document.getElementById('btn-cotizar-dom');
-  if (mins > 480 || mins <= 0) {
-    aviso.style.display = 'block';
-    btnCot.disabled = true; btnCot.style.opacity = '.4';
-  } else {
-    aviso.style.display = 'none';
-    btnCot.disabled = false; btnCot.style.opacity = '1';
-  }
-}
+function validarJornada() { const ini = document.getElementById('hora-inicio').value; const fin = document.getElementById('hora-fin').value; if (!ini || !fin) return; const [hI, mI] = ini.split(':').map(Number); const [hF, mF] = fin.split(':').map(Number); const mins = (hF * 60 + mF) - (hI * 60 + mI); const aviso = document.getElementById('jornada-aviso'); const btnCot = document.getElementById('btn-cotizar-dom'); if (mins > 480 || mins <= 0) { aviso.style.display = 'block'; btnCot.disabled = true; btnCot.style.opacity = '.4'; } else { aviso.style.display = 'none'; btnCot.disabled = false; btnCot.style.opacity = '1'; } }
+function actualizarBonoDom() { const bono = parseInt(document.getElementById('propina-dom').value) || 0; const filaTotal = document.getElementById('bono-total-row'); if (bono > 0) { filaTotal.style.display = 'flex'; document.getElementById('bono-dias-label').textContent = diasDomiciliario; document.getElementById('bono-total-valor').textContent = fmtCOP(bono * diasDomiciliario); } else { filaTotal.style.display = 'none'; } }
 
-// ── BONO DIARIO DOM ──
-function actualizarBonoDom() {
-  const bono = parseInt(document.getElementById('propina-dom').value) || 0;
-  const filaTotal = document.getElementById('bono-total-row');
-  if (bono > 0) {
-    filaTotal.style.display = 'flex';
-    document.getElementById('bono-dias-label').textContent = diasDomiciliario;
-    document.getElementById('bono-total-valor').textContent = fmtCOP(bono * diasDomiciliario);
-  } else {
-    filaTotal.style.display = 'none';
-  }
-}
-
-// ── MODAL TÉRMINOS DOM ──
 let terminosAceptados = false;
-function mostrarTerminosDom() {
-  document.getElementById('modal-terminos').classList.add('visible');
-}
-function cerrarModalTerminos(e) {
-  if (!e || e.target === document.getElementById('modal-terminos'))
-    document.getElementById('modal-terminos').classList.remove('visible');
-}
-function toggleTerminos() {
-  terminosAceptados = !terminosAceptados;
-  document.getElementById('check-terminos').classList.toggle('checked', terminosAceptados);
-  const btn = document.getElementById('btn-aceptar-terminos');
-  btn.disabled = !terminosAceptados;
-  btn.style.opacity = terminosAceptados ? '1' : '.4';
-}
-function aceptarTerminosYCotizar() {
-  document.getElementById('modal-terminos').classList.remove('visible');
-  cotizarDomiciliario();
-}
+function mostrarTerminosDom() { document.getElementById('modal-terminos').classList.add('visible'); }
+function cerrarModalTerminos(e) { if (!e || e.target === document.getElementById('modal-terminos')) document.getElementById('modal-terminos').classList.remove('visible'); }
+function toggleTerminos() { terminosAceptados = !terminosAceptados; document.getElementById('check-terminos').classList.toggle('checked', terminosAceptados); const btn = document.getElementById('btn-aceptar-terminos'); btn.disabled = !terminosAceptados; btn.style.opacity = terminosAceptados ? '1' : '.4'; }
+function aceptarTerminosYCotizar() { document.getElementById('modal-terminos').classList.remove('visible'); cotizarDomiciliario(); }
 
-let timerBusqueda = null;
-let segundosBusqueda = 300; // 5 minutos
+let timerBusqueda = null; let segundosBusqueda = 300;
+function procesarPago() { const nombre = document.getElementById('reg-nombre').value.trim(); const tel = document.getElementById('reg-telefono').value.trim(); const correo = document.getElementById('reg-correo').value.trim(); if (!nombre||!tel||!correo) { showToast('Completa todos los campos requeridos','error'); return; } if (!correo.includes('@')) { showToast('Ingresa un correo válido','error'); return; } iniciarBusquedaMensajero(); }
+function iniciarBusquedaMensajero() { mostrarVista('buscando'); document.getElementById('buscando-card-activo').style.display = 'block'; document.getElementById('buscando-card-notfound').style.display = 'none'; segundosBusqueda = 300; actualizarTimer(); clearInterval(timerBusqueda); timerBusqueda = setInterval(() => { segundosBusqueda--; actualizarTimer(); if (segundosBusqueda <= 0) { clearInterval(timerBusqueda); mostrarNoEncontrado(); } }, 1000); }
+function actualizarTimer() { const mins = Math.floor(segundosBusqueda / 60); const segs = segundosBusqueda % 60; document.getElementById('timer-label').textContent = `${mins}:${segs.toString().padStart(2,'0')}`; const pct = (segundosBusqueda / 300) * 100; document.getElementById('timer-fill').style.width = pct + '%'; if (segundosBusqueda <= 60) { document.getElementById('timer-fill').style.background = 'linear-gradient(90deg,var(--orange),#ff8c5a)'; document.getElementById('timer-label').style.color = 'var(--orange)'; } }
+function mostrarNoEncontrado() { document.getElementById('buscando-card-activo').style.display = 'none'; document.getElementById('buscando-card-notfound').style.display = 'block'; }
+function cancelarBusqueda() { clearInterval(timerBusqueda); mostrarVista('registro'); }
+function reiniciarBusqueda() { iniciarBusquedaMensajero(); }
 
-function procesarPago() {
-  const nombre = document.getElementById('reg-nombre').value.trim();
-  const tel    = document.getElementById('reg-telefono').value.trim();
-  const correo = document.getElementById('reg-correo').value.trim();
-  if (!nombre||!tel||!correo) { showToast('Completa todos los campos requeridos','error'); return; }
-  if (!correo.includes('@')) { showToast('Ingresa un correo válido','error'); return; }
-  iniciarBusquedaMensajero();
-}
-
-function iniciarBusquedaMensajero() {
-  mostrarVista('buscando');
-  document.getElementById('buscando-card-activo').style.display = 'block';
-  document.getElementById('buscando-card-notfound').style.display = 'none';
-  segundosBusqueda = 300;
-  actualizarTimer();
-  clearInterval(timerBusqueda);
-  timerBusqueda = setInterval(() => {
-    segundosBusqueda--;
-    actualizarTimer();
-    if (segundosBusqueda <= 0) {
-      clearInterval(timerBusqueda);
-      mostrarNoEncontrado();
-    }
-  }, 1000);
-}
-
-function actualizarTimer() {
-  const mins = Math.floor(segundosBusqueda / 60);
-  const segs = segundosBusqueda % 60;
-  document.getElementById('timer-label').textContent = `${mins}:${segs.toString().padStart(2,'0')}`;
-  const pct = (segundosBusqueda / 300) * 100;
-  document.getElementById('timer-fill').style.width = pct + '%';
-  // Cambiar color cuando queda poco tiempo
-  if (segundosBusqueda <= 60) {
-    document.getElementById('timer-fill').style.background = 'linear-gradient(90deg,var(--orange),#ff8c5a)';
-    document.getElementById('timer-label').style.color = 'var(--orange)';
-  }
-}
-
-function mostrarNoEncontrado() {
-  document.getElementById('buscando-card-activo').style.display = 'none';
-  document.getElementById('buscando-card-notfound').style.display = 'block';
-}
-
-function cancelarBusqueda() {
-  clearInterval(timerBusqueda);
-  mostrarVista('registro');
-}
-
-function reiniciarBusqueda() {
-  iniciarBusquedaMensajero();
-}
-
-// ── UTILIDADES ──
 function fmtCOP(n) { return '$ '+Math.round(n).toLocaleString('es-CO'); }
 
-// INIT
 const hoy = new Date().toISOString().split('T')[0];
 document.getElementById('fecha-inicio').min = hoy;
 document.getElementById('fecha-inicio').value = hoy;
 actualizarFechaFin();
 
-// ── SISTEMA DE AUTENTICACIÓN ──
-let usuarioActual = null;
-let regTipoCliente = 'natural';
+// ══════════════════════════════════════════
+// AUTENTICACIÓN
+// ══════════════════════════════════════════
+let usuarioActual = null; let regTipoCliente = 'natural';
+async function hashPass(pass) { const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pass)); return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join(''); }
+function abrirModalLogin() { document.getElementById('modal-login').classList.add('visible'); switchTab('login'); }
+function cerrarModalLogin() { document.getElementById('modal-login').classList.remove('visible'); }
+function cerrarModalLoginOverlay(e) { if (e.target === document.getElementById('modal-login')) cerrarModalLogin(); }
+function switchTab(tab) { ['login','registro','recuperar'].forEach(p => { document.getElementById('panel-'+p).style.display = p===tab ? 'block' : 'none'; }); ['login-error','reg-error','rec-error'].forEach(id => { const el = document.getElementById(id); if(el) el.classList.remove('visible'); }); }
+function togglePass(inputId, btn) { const input = document.getElementById(inputId); const isPass = input.type === 'password'; input.type = isPass ? 'text' : 'password'; btn.textContent = isPass ? 'Ocultar' : 'Ver'; }
+function selRegTipo(tipo) { regTipoCliente = tipo; document.getElementById('reg-tipo-natural').classList.toggle('selected', tipo==='natural'); document.getElementById('reg-tipo-juridica').classList.toggle('selected', tipo==='juridica'); document.getElementById('modal-nit-wrap').style.display = tipo==='juridica' ? 'block' : 'none'; }
+function setBtnLoading(btnId, loading, textoOriginal) { const btn = document.getElementById(btnId); if (loading) { btn.innerHTML = '<span class="btn-spinner"></span> Procesando...'; btn.disabled = true; } else { btn.innerHTML = textoOriginal; btn.disabled = false; } }
+function mostrarError(elId, msg) { const el = document.getElementById(elId); el.textContent = msg; el.classList.add('visible'); }
+function ocultarError(elId) { document.getElementById(elId).classList.remove('visible'); }
 
-// Hashear contraseña con SHA-256 (nativa del browser)
-async function hashPass(pass) {
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pass));
-  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
-}
-
-function abrirModalLogin() {
-  document.getElementById('modal-login').classList.add('visible');
-  switchTab('login');
-}
-function cerrarModalLogin() {
-  document.getElementById('modal-login').classList.remove('visible');
-}
-function cerrarModalLoginOverlay(e) {
-  if (e.target === document.getElementById('modal-login')) cerrarModalLogin();
-}
-
-function switchTab(tab) {
-  ['login','registro','recuperar'].forEach(p => {
-    document.getElementById('panel-'+p).style.display = p===tab ? 'block' : 'none';
-  });
-  // Limpiar errores al cambiar
-  ['login-error','reg-error','rec-error'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.classList.remove('visible');
-  });
-}
-
-function togglePass(inputId, btn) {
-  const input = document.getElementById(inputId);
-  const isPass = input.type === 'password';
-  input.type = isPass ? 'text' : 'password';
-  btn.textContent = isPass ? 'Ocultar' : 'Ver';
-}
-
-function selRegTipo(tipo) {
-  regTipoCliente = tipo;
-  document.getElementById('reg-tipo-natural').classList.toggle('selected', tipo==='natural');
-  document.getElementById('reg-tipo-juridica').classList.toggle('selected', tipo==='juridica');
-  document.getElementById('modal-nit-wrap').style.display = tipo==='juridica' ? 'block' : 'none';
-}
-
-function setBtnLoading(btnId, loading, textoOriginal) {
-  const btn = document.getElementById(btnId);
-  if (loading) {
-    btn.innerHTML = '<span class="btn-spinner"></span> Procesando...';
-    btn.disabled = true;
-  } else {
-    btn.innerHTML = textoOriginal;
-    btn.disabled = false;
-  }
-}
-
-function mostrarError(elId, msg) {
-  const el = document.getElementById(elId);
-  el.textContent = msg;
-  el.classList.add('visible');
-}
-function ocultarError(elId) {
-  document.getElementById(elId).classList.remove('visible');
-}
-
-// ── LOGIN ──
 async function ejecutarLogin() {
-  ocultarError('login-error');
-  const correo = document.getElementById('login-correo').value.trim();
-  const pass   = document.getElementById('login-pass').value;
-  if (!correo || !pass) { mostrarError('login-error','Completa todos los campos.'); return; }
-  if (!correo.includes('@')) { mostrarError('login-error','Correo no válido.'); return; }
-
+  ocultarError('login-error'); const correo = document.getElementById('login-correo').value.trim(); const pass = document.getElementById('login-pass').value;
+  if (!correo || !pass) { mostrarError('login-error','Completa todos los campos.'); return; } if (!correo.includes('@')) { mostrarError('login-error','Correo no válido.'); return; }
   setBtnLoading('btn-login', true, 'Entrar →');
-  try {
-    const hash = await hashPass(pass);
-    const r = await fetch(`${API_URL}?accion=login&correo=${encodeURIComponent(correo)}&hash=${hash}`);
-    const data = await r.json();
+  try { const hash = await hashPass(pass); const r = await fetch(`${API_URL}?accion=login&correo=${encodeURIComponent(correo)}&hash=${hash}`); const data = await r.json();
     if (!data.ok) { mostrarError('login-error', data.error || 'Correo o contraseña incorrectos.'); return; }
-    usuarioActual = data.usuario;
-    cerrarModalLogin();
-    actualizarNavUsuario();
-    showToast(`Bienvenido, ${usuarioActual.nombre.split(' ')[0]}`, 'success');
-  } catch(e) {
-    mostrarError('login-error','Error de conexión. Intenta de nuevo.');
-  } finally {
-    setBtnLoading('btn-login', false, 'Entrar →');
-  }
+    usuarioActual = data.usuario; cerrarModalLogin(); actualizarNavUsuario(); showToast(`Bienvenido, ${usuarioActual.nombre.split(' ')[0]}`, 'success'); mostrarVista('panel');
+  } catch(e) { mostrarError('login-error','Error de conexión. Intenta de nuevo.'); } finally { setBtnLoading('btn-login', false, 'Entrar →'); }
 }
 
-// ── REGISTRO ──
 async function ejecutarRegistro() {
-  ocultarError('reg-error');
-  document.getElementById('reg-success').classList.remove('visible');
-
-  const correo = (document.getElementById('modal-reg-correo').value || '').trim();
-  const pass   =  document.getElementById('modal-reg-pass').value   || '';
-  const pass2  =  document.getElementById('modal-reg-pass2').value  || '';
-  const nit    = (document.getElementById('modal-reg-nit')   ? document.getElementById('modal-reg-nit').value.trim()   : '');
-  const razon  = (document.getElementById('modal-reg-razon') ? document.getElementById('modal-reg-razon').value.trim() : '');
-
-  // El nombre puede ser explícito o se toma de la parte local del correo
-  let nombre = (document.getElementById('modal-reg-nombre').value || '').trim();
-  if (!nombre && correo) nombre = correo.split('@')[0];
-
-  if (!correo)               { mostrarError('reg-error','El correo es requerido.'); return; }
-  if (!correo.includes('@')) { mostrarError('reg-error','Ingresa un correo válido.'); return; }
-  if (!pass)                 { mostrarError('reg-error','La contraseña es requerida.'); return; }
-  if (pass.length < 8)       { mostrarError('reg-error','La contraseña debe tener al menos 8 caracteres.'); return; }
-  if (pass !== pass2)        { mostrarError('reg-error','Las contraseñas no coinciden.'); return; }
-  if (regTipoCliente === 'juridica' && !nit) { mostrarError('reg-error','El NIT es requerido para empresas.'); return; }
-
+  ocultarError('reg-error'); document.getElementById('reg-success').classList.remove('visible');
+  const correo = (document.getElementById('modal-reg-correo').value || '').trim(); const pass = document.getElementById('modal-reg-pass').value || ''; const pass2 = document.getElementById('modal-reg-pass2').value || '';
+  const nit = (document.getElementById('modal-reg-nit') ? document.getElementById('modal-reg-nit').value.trim() : ''); const razon = (document.getElementById('modal-reg-razon') ? document.getElementById('modal-reg-razon').value.trim() : '');
+  let nombre = (document.getElementById('modal-reg-nombre').value || '').trim(); if (!nombre && correo) nombre = correo.split('@')[0];
+  if (!correo) { mostrarError('reg-error','El correo es requerido.'); return; } if (!correo.includes('@')) { mostrarError('reg-error','Ingresa un correo válido.'); return; }
+  if (!pass) { mostrarError('reg-error','La contraseña es requerida.'); return; } if (pass.length < 8) { mostrarError('reg-error','La contraseña debe tener al menos 8 caracteres.'); return; }
+  if (pass !== pass2) { mostrarError('reg-error','Las contraseñas no coinciden.'); return; } if (regTipoCliente === 'juridica' && !nit) { mostrarError('reg-error','El NIT es requerido para empresas.'); return; }
   setBtnLoading('btn-registro', true, 'Crear cuenta →');
-  try {
-    const hash = await hashPass(pass);
-    const params = new URLSearchParams({
-      accion:'registrar', nombre, correo, hash,
-      tipo: regTipoCliente, nit, razon
-    });
-    const r = await fetch(`${API_URL}?${params}`);
-    const data = await r.json();
+  try { const hash = await hashPass(pass); const params = new URLSearchParams({ accion:'registrar', nombre, correo, hash, tipo: regTipoCliente, nit, razon }); const r = await fetch(`${API_URL}?${params}`); const data = await r.json();
     if (!data.ok) { mostrarError('reg-error', data.error || 'Error al crear la cuenta.'); return; }
-    document.getElementById('btn-registro').style.display = 'none';
-    const suc = document.getElementById('reg-success');
-    suc.innerHTML = `Te enviamos un correo a <strong>${correo}</strong>.<br>Haz clic en "Activar cuenta" para completar tu registro.`;
-    suc.classList.add('visible');
-  } catch(e) {
-    mostrarError('reg-error','Error de conexión. Intenta de nuevo.');
-  } finally {
-    setBtnLoading('btn-registro', false, 'Crear cuenta →');
-  }
+    document.getElementById('btn-registro').style.display = 'none'; const suc = document.getElementById('reg-success');
+    suc.innerHTML = `Te enviamos un correo a <strong>${correo}</strong>.<br>Haz clic en "Activar cuenta" para completar tu registro.`; suc.classList.add('visible');
+  } catch(e) { mostrarError('reg-error','Error de conexión. Intenta de nuevo.'); } finally { setBtnLoading('btn-registro', false, 'Crear cuenta →'); }
 }
 
-// ── RECUPERAR CONTRASEÑA ──
 async function ejecutarRecuperar() {
-  ocultarError('rec-error');
-  document.getElementById('rec-success').classList.remove('visible');
-  const correo = document.getElementById('rec-correo').value.trim();
+  ocultarError('rec-error'); document.getElementById('rec-success').classList.remove('visible'); const correo = document.getElementById('rec-correo').value.trim();
   if (!correo || !correo.includes('@')) { mostrarError('rec-error','Ingresa un correo válido.'); return; }
-
   setBtnLoading('btn-recuperar', true, 'Enviar enlace →');
-  try {
-    const r = await fetch(`${API_URL}?accion=recuperar&correo=${encodeURIComponent(correo)}`);
-    const data = await r.json();
-    // Siempre mostramos éxito por seguridad (no revelar si el correo existe)
-    const suc = document.getElementById('rec-success');
-    suc.innerHTML = `Si <strong>${correo}</strong> está registrado, recibirás un enlace para restablecer tu contraseña en los próximos minutos.`;
-    suc.classList.add('visible');
-    document.getElementById('btn-recuperar').style.display = 'none';
-  } catch(e) {
-    mostrarError('rec-error','Error de conexión. Intenta de nuevo.');
-  } finally {
-    setBtnLoading('btn-recuperar', false, 'Enviar enlace →');
-  }
+  try { const r = await fetch(`${API_URL}?accion=recuperar&correo=${encodeURIComponent(correo)}`); const suc = document.getElementById('rec-success');
+    suc.innerHTML = `Si <strong>${correo}</strong> está registrado, recibirás un enlace para restablecer tu contraseña en los próximos minutos.`; suc.classList.add('visible'); document.getElementById('btn-recuperar').style.display = 'none';
+  } catch(e) { mostrarError('rec-error','Error de conexión. Intenta de nuevo.'); } finally { setBtnLoading('btn-recuperar', false, 'Enviar enlace →'); }
 }
 
-// ── ACTIVACIÓN POR TOKEN EN URL ──
-// Si la URL tiene ?token=xxx, activar automáticamente
 (async function verificarTokenActivacion() {
-  const params = new URLSearchParams(window.location.search);
-  const token  = params.get('token');
-  const accion = params.get('accion');
-  if (!token) return;
-
-  if (accion === 'activar') {
-    try {
-      const r = await fetch(`${API_URL}?accion=activar&token=${encodeURIComponent(token)}`);
-      const data = await r.json();
-      if (data.ok) {
-        showToast('Cuenta activada. Ya puedes iniciar sesión.', 'success');
-        setTimeout(() => abrirModalLogin(), 800);
-      } else {
-        showToast('Enlace inválido o ya utilizado.', 'error');
-      }
-    } catch(e) {}
-    // Limpiar URL
-    window.history.replaceState({}, '', window.location.pathname);
-  }
-
-  if (accion === 'reset') {
-    // Abrir modal con panel de nueva contraseña
-    abrirModalLogin();
-    switchTab('recuperar');
-    document.getElementById('panel-recuperar').innerHTML = `
-      <div class="mlogin-titulo">Nueva contraseña</div>
-      <div class="mlogin-sub">Escribe tu nueva contraseña para acceder.</div>
-      <span class="mlogin-label">Nueva contraseña</span>
-      <div class="mlogin-pass-wrap">
-        <input class="mlogin-input" id="reset-pass" type="password" placeholder="Mínimo 8 caracteres">
-        <button class="mlogin-pass-toggle" type="button" onclick="togglePass('reset-pass',this)">Ver</button>
-      </div>
-      <span class="mlogin-label">Confirmar contraseña</span>
-      <div class="mlogin-pass-wrap">
-        <input class="mlogin-input" id="reset-pass2" type="password" placeholder="Repite la contraseña">
-        <button class="mlogin-pass-toggle" type="button" onclick="togglePass('reset-pass2',this)">Ver</button>
-      </div>
-      <div class="mlogin-error-msg" id="reset-error"></div>
-      <div class="mlogin-success-msg" id="reset-success"></div>
-      <button class="mlogin-btn" id="btn-reset" onclick="ejecutarReset('${token}')">Guardar nueva contraseña →</button>`;
-    window.history.replaceState({}, '', window.location.pathname);
-  }
+  const params = new URLSearchParams(window.location.search); const token = params.get('token'); const accion = params.get('accion'); if (!token) return;
+  if (accion === 'activar') { try { const r = await fetch(`${API_URL}?accion=activar&token=${encodeURIComponent(token)}`); const data = await r.json(); if (data.ok) { showToast('Cuenta activada. Ya puedes iniciar sesión.', 'success'); setTimeout(() => abrirModalLogin(), 800); } else { showToast('Enlace inválido o ya utilizado.', 'error'); } } catch(e) {} window.history.replaceState({}, '', window.location.pathname); }
+  if (accion === 'reset') { abrirModalLogin(); switchTab('recuperar');
+    document.getElementById('panel-recuperar').innerHTML = `<div class="mlogin-titulo">Nueva contraseña</div><div class="mlogin-sub">Escribe tu nueva contraseña para acceder.</div><span class="mlogin-label">Nueva contraseña</span><div class="mlogin-pass-wrap"><input class="mlogin-input" id="reset-pass" type="password" placeholder="Mínimo 8 caracteres"><button class="mlogin-pass-toggle" type="button" onclick="togglePass('reset-pass',this)">Ver</button></div><span class="mlogin-label">Confirmar contraseña</span><div class="mlogin-pass-wrap"><input class="mlogin-input" id="reset-pass2" type="password" placeholder="Repite la contraseña"><button class="mlogin-pass-toggle" type="button" onclick="togglePass('reset-pass2',this)">Ver</button></div><div class="mlogin-error-msg" id="reset-error"></div><div class="mlogin-success-msg" id="reset-success"></div><button class="mlogin-btn" id="btn-reset" onclick="ejecutarReset('${token}')">Guardar nueva contraseña →</button>`;
+    window.history.replaceState({}, '', window.location.pathname); }
 })();
 
 async function ejecutarReset(token) {
-  ocultarError('reset-error');
-  const pass  = document.getElementById('reset-pass').value;
-  const pass2 = document.getElementById('reset-pass2').value;
-  if (pass.length < 8) { mostrarError('reset-error','Mínimo 8 caracteres.'); return; }
-  if (pass !== pass2)  { mostrarError('reset-error','Las contraseñas no coinciden.'); return; }
-
+  ocultarError('reset-error'); const pass = document.getElementById('reset-pass').value; const pass2 = document.getElementById('reset-pass2').value;
+  if (pass.length < 8) { mostrarError('reset-error','Mínimo 8 caracteres.'); return; } if (pass !== pass2) { mostrarError('reset-error','Las contraseñas no coinciden.'); return; }
   setBtnLoading('btn-reset', true, 'Guardar nueva contraseña →');
-  try {
-    const hash = await hashPass(pass);
-    const r = await fetch(`${API_URL}?accion=reset_pass&token=${encodeURIComponent(token)}&hash=${hash}`);
-    const data = await r.json();
+  try { const hash = await hashPass(pass); const r = await fetch(`${API_URL}?accion=reset_pass&token=${encodeURIComponent(token)}&hash=${hash}`); const data = await r.json();
     if (!data.ok) { mostrarError('reset-error', data.error || 'Enlace inválido o expirado.'); return; }
-    document.getElementById('reset-success').innerHTML = 'Contraseña actualizada. Ya puedes iniciar sesión.';
-    document.getElementById('reset-success').classList.add('visible');
-    document.getElementById('btn-reset').style.display = 'none';
-    setTimeout(() => switchTab('login'), 2500);
-  } catch(e) {
-    mostrarError('reset-error','Error de conexión.');
-  } finally {
-    setBtnLoading('btn-reset', false, 'Guardar nueva contraseña →');
-  }
+    document.getElementById('reset-success').innerHTML = 'Contraseña actualizada. Ya puedes iniciar sesión.'; document.getElementById('reset-success').classList.add('visible'); document.getElementById('btn-reset').style.display = 'none'; setTimeout(() => switchTab('login'), 2500);
+  } catch(e) { mostrarError('reset-error','Error de conexión.'); } finally { setBtnLoading('btn-reset', false, 'Guardar nueva contraseña →'); }
 }
 
-// ── NAV ACTUALIZADO SEGÚN SESIÓN ──
+// ══════════════════════════════════════════
+// NAV USUARIO
+// ══════════════════════════════════════════
 function actualizarNavUsuario() {
-  const navWrap = document.getElementById('nav-btn-login').parentElement;
+  const navInner = document.querySelector('.nav-inner');
   if (usuarioActual) {
     const iniciales = usuarioActual.nombre.split(' ').map(p=>p[0]).join('').substring(0,2).toUpperCase();
-    navWrap.innerHTML = `
-      <div class="nav-user nav-user-menu">
-        <div class="nav-user-avatar" onclick="toggleUserDropdown()">${iniciales}</div>
-        <div class="nav-user-name" onclick="toggleUserDropdown()" style="cursor:pointer">${usuarioActual.nombre.split(' ')[0]}</div>
-        <div class="nav-user-dropdown" id="nav-dropdown">
-          <div class="nav-dd-item" onclick="mostrarPanel()">Mi panel</div>
-          <div class="nav-dd-item" onclick="mostrarVista('mensajeria');cerrarDropdown()">Solicitar mensajería</div>
-          <div class="nav-dd-item" onclick="mostrarVista('domiciliario');cerrarDropdown()">Domiciliario por días</div>
-          <div class="nav-dd-item danger" onclick="cerrarSesion()">Cerrar sesión</div>
-        </div>
-      </div>`;
+    navInner.innerHTML = `<div class="nav-logo" onclick="mostrarVista('panel')"><div class="nav-logomark">R</div><div class="nav-name">RADI<em>Z</em></div></div><div class="nav-user nav-user-menu"><div class="nav-user-avatar" onclick="toggleUserDropdown()">${iniciales}</div><div class="nav-user-name" onclick="toggleUserDropdown()" style="cursor:pointer">${usuarioActual.nombre.split(' ')[0]}</div><div class="nav-user-dropdown" id="nav-dropdown"><div class="nav-dd-item" onclick="mostrarVista('panel');cerrarDropdown()">📊 Mi panel</div><div class="nav-dd-item" onclick="mostrarVista('mensajeria');cerrarDropdown()">📦 Solicitar mensajería</div><div class="nav-dd-item" onclick="mostrarVista('domiciliario');cerrarDropdown()">🏍️ Domiciliario por días</div><div class="nav-dd-item" onclick="abrirModalRecarga();cerrarDropdown()">💳 Recargar cuenta</div><div class="nav-dd-item danger" onclick="cerrarSesion()">🚪 Cerrar sesión</div></div></div>`;
   }
 }
-
-function toggleUserDropdown() {
-  document.getElementById('nav-dropdown')?.classList.toggle('visible');
-}
-function cerrarDropdown() {
-  document.getElementById('nav-dropdown')?.classList.remove('visible');
-}
-document.addEventListener('click', e => {
-  if (!e.target.closest('.nav-user-menu')) cerrarDropdown();
-});
+function toggleUserDropdown() { document.getElementById('nav-dropdown')?.classList.toggle('visible'); }
+function cerrarDropdown() { document.getElementById('nav-dropdown')?.classList.remove('visible'); }
+document.addEventListener('click', e => { if (!e.target.closest('.nav-user-menu')) cerrarDropdown(); });
 
 function cerrarSesion() {
-  usuarioActual = null;
-  const navWrap = document.querySelector('.nav-inner');
-  // Restaurar botón original
-  const btnExistente = navWrap.querySelector('.nav-user');
-  if (btnExistente) btnExistente.remove();
-  const btn = document.createElement('button');
-  btn.className = 'nav-btn';
-  btn.id = 'nav-btn-login';
-  btn.textContent = 'Iniciar sesión';
-  btn.onclick = abrirModalLogin;
-  navWrap.appendChild(btn);
-  mostrarVista('home');
-  showToast('Sesión cerrada', '');
+  usuarioActual = null; saldoUsuario = 0; serviciosUsuario = [];
+  const navInner = document.querySelector('.nav-inner');
+  navInner.innerHTML = `<div class="nav-logo" onclick="mostrarVista('home')"><div class="nav-logomark">R</div><div class="nav-name">RADI<em>Z</em></div></div><button class="nav-btn" id="nav-btn-login" onclick="abrirModalLogin()">Iniciar sesión</button>`;
+  mostrarVista('home'); showToast('Sesión cerrada', '');
 }
 
-function mostrarPanel() {
-  cerrarDropdown();
-  // Panel de usuario — próxima sesión
-  showToast('Panel de usuario — próximamente', '');
+// ══════════════════════════════════════════
+// PANEL DE USUARIO — LÓGICA
+// ══════════════════════════════════════════
+async function cargarPanel() {
+  if (!usuarioActual) { mostrarVista('home'); abrirModalLogin(); return; }
+  const iniciales = usuarioActual.nombre.split(' ').map(p=>p[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('panel-avatar').textContent = iniciales;
+  document.getElementById('panel-nombre').textContent = `Hola, ${usuarioActual.nombre.split(' ')[0]}`;
+  const tipoTexto = usuarioActual.tipo === 'juridica' ? 'empresarial' : 'personal';
+  document.getElementById('panel-info').innerHTML = `Cuenta <span>${tipoTexto}</span> · ${usuarioActual.correo}`;
+  document.getElementById('panel-saldo').textContent = fmtCOP(saldoUsuario);
+  document.getElementById('panel-hist-loading').style.display = 'block'; document.getElementById('panel-tabla-wrap').style.display = 'none'; document.getElementById('panel-empty').style.display = 'none';
+  try { const r = await fetch(`${API_URL}?accion=mis_servicios&correo=${encodeURIComponent(usuarioActual.correo)}`); const data = await r.json(); serviciosUsuario = data.ok ? (data.servicios || []) : []; } catch(e) { serviciosUsuario = []; }
+  document.getElementById('panel-hist-loading').style.display = 'none';
+  const completados = serviciosUsuario.filter(s => normalizarEstado(s.estado) === 'completado').length;
+  document.getElementById('panel-total-servicios').textContent = serviciosUsuario.length;
+  document.getElementById('panel-completados').textContent = completados;
+  document.getElementById('panel-hist-count').textContent = serviciosUsuario.length;
+  filtroActual = 'todos'; document.querySelectorAll('.panel-filtro').forEach(f => f.classList.remove('active')); document.querySelector('.panel-filtro').classList.add('active');
+  renderizarTablaServicios(serviciosUsuario);
 }
 
+function filtrarServicios(filtro, el) { filtroActual = filtro; document.querySelectorAll('.panel-filtro').forEach(f => f.classList.remove('active')); if (el) el.classList.add('active'); let filtrados = serviciosUsuario; if (filtro !== 'todos') filtrados = serviciosUsuario.filter(s => normalizarEstado(s.estado) === filtro); renderizarTablaServicios(filtrados); }
+function normalizarEstado(estado) { if (!estado) return 'pendiente'; const e = estado.toString().toLowerCase().trim(); if (e.includes('complet') || e.includes('entregado')) return 'completado'; if (e.includes('curso') || e.includes('activo') || e.includes('asignado')) return 'en_curso'; if (e.includes('cancel')) return 'cancelado'; return 'pendiente'; }
+function textoEstado(estadoNorm) { const map = { completado:'Completado', en_curso:'En curso', cancelado:'Cancelado', pendiente:'Pendiente' }; return map[estadoNorm] || 'Pendiente'; }
+function formatFecha(f) { if (!f) return '—'; try { const d = new Date(f); if (isNaN(d.getTime())) return f.toString().substring(0,10); return d.toLocaleDateString('es-CO', { day:'2-digit', month:'short', year:'numeric' }); } catch(e) { return f; } }
+
+function renderizarTablaServicios(lista) {
+  const tbody = document.getElementById('panel-tabla-body'); const wrap = document.getElementById('panel-tabla-wrap'); const empty = document.getElementById('panel-empty');
+  if (!lista.length) { wrap.style.display='none'; empty.style.display='block'; return; }
+  wrap.style.display='block'; empty.style.display='none';
+  tbody.innerHTML = lista.map(s => {
+    const estadoNorm = normalizarEstado(s.estado); const total = s.total ? fmtCOP(Number(s.total)) : '—';
+    const facturaUrl = s.factura_url || '';
+    const facturaHtml = facturaUrl ? `<a href="${facturaUrl}" target="_blank" class="btn-factura">📄 Ver</a>` : `<span class="btn-factura disabled">Pendiente</span>`;
+    return `<tr><td style="font-family:'Syne',sans-serif;font-weight:600;font-size:.8rem;color:var(--muted)">${s.id||'—'}</td><td>${s.tipo_servicio||'—'}</td><td>${s.ciudad||'—'}</td><td>${formatFecha(s.fecha)}</td><td><span class="estado-badge ${estadoNorm}"><span class="estado-dot"></span>${textoEstado(estadoNorm)}</span></td><td style="font-family:'Syne',sans-serif;font-weight:700">${total}</td><td>${facturaHtml}</td></tr>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════
+// MODAL RECARGA (simulación)
+// ══════════════════════════════════════════
+let recargaMontoSel = 0; let recargaMetodo = 'transferencia';
+function abrirModalRecarga() { if (!usuarioActual) { abrirModalLogin(); return; } document.getElementById('modal-recarga').classList.add('visible'); document.getElementById('recarga-form-view').style.display = 'block'; document.getElementById('recarga-success-view').classList.remove('visible'); recargaMontoSel = 0; document.querySelectorAll('.recarga-monto').forEach(m => m.classList.remove('selected')); document.getElementById('recarga-custom-wrap').style.display = 'none'; }
+function cerrarModalRecarga() { document.getElementById('modal-recarga').classList.remove('visible'); if (document.getElementById('vista-panel').classList.contains('activa')) { document.getElementById('panel-saldo').textContent = fmtCOP(saldoUsuario); } }
+function cerrarModalRecargaOverlay(e) { if (e.target === document.getElementById('modal-recarga')) cerrarModalRecarga(); }
+function selRecargaMonto(el, monto) { document.querySelectorAll('.recarga-monto').forEach(m => m.classList.remove('selected')); el.classList.add('selected'); recargaMontoSel = monto; document.getElementById('recarga-custom-wrap').style.display = monto === 0 ? 'block' : 'none'; if (monto === 0) document.getElementById('recarga-custom').focus(); }
+function selRecargaMetodo(el, metodo) { document.querySelectorAll('.recarga-met-btn').forEach(m => m.classList.remove('selected')); el.classList.add('selected'); recargaMetodo = metodo; }
+function procesarRecarga() { let monto = recargaMontoSel; if (monto === 0) monto = parseInt(document.getElementById('recarga-custom').value) || 0; if (monto < 10000) { showToast('El monto mínimo de recarga es $10.000', 'error'); return; } saldoUsuario += monto; document.getElementById('recarga-form-view').style.display = 'none'; document.getElementById('recarga-success-detail').textContent = `Se agregaron ${fmtCOP(monto)} a tu cuenta vía ${recargaMetodo === 'transferencia' ? 'transferencia bancaria' : 'Nequi / Daviplata'}.`; document.getElementById('recarga-success-view').classList.add('visible'); showToast(`Recarga de ${fmtCOP(monto)} exitosa`, 'success'); }
 </script>
 </body>
 </html>
