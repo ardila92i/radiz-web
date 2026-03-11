@@ -540,8 +540,8 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
     <div class="vista-header">
       <div class="btn-back" onclick="mostrarVista('home')">←</div>
       <div>
-        <div class="vista-titulo">Domiciliario por días</div>
-        <div class="vista-subtitulo">Solicita motorizado dedicado con una configuración clara de jornada, ciudad y duración.</div>
+        <div class="vista-titulo">Mensajero dedicado por días</div>
+        <div class="vista-subtitulo">Configure la jornada de trabajo del motorizado</div>
       </div>
     </div>
 
@@ -581,7 +581,7 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
         </div>
 
         <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
-          <span class="form-label">Ciudad de operación</span>
+          <span class="form-label">Ciudad principal de operación</span>
           <input type="text" class="form-input" id="ciudad-op" placeholder="Ejemplo: Bogotá, Medellín, Cali">
         </div>
 
@@ -604,14 +604,14 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
         </div>
 
         <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
-          <span class="form-label">Jornada</span>
+          <span class="form-label">Horario de la Jornada</span>
           <div class="grid-2">
             <div>
-              <span class="form-label" style="font-size:.68rem;margin-bottom:8px">Hora de inicio</span>
+              <span class="form-label" style="font-size:.68rem;margin-bottom:8px">Inicio</span>
               <input type="time" class="form-input" id="hora-inicio" value="08:00" onchange="validarJornada()">
             </div>
             <div>
-              <span class="form-label" style="font-size:.68rem;margin-bottom:8px">Hora de cierre</span>
+              <span class="form-label" style="font-size:.68rem;margin-bottom:8px">Cierre</span>
               <input type="time" class="form-input" id="hora-fin" value="16:00" onchange="validarJornada()">
             </div>
           </div>
@@ -619,8 +619,8 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
         </div>
 
         <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
-          <span class="form-label">Descripción del trabajo</span>
-          <textarea class="form-input" id="desc-trabajo" rows="3" placeholder="Describe el tipo de servicio requerido, frecuencia y detalles importantes..." style="resize:none;line-height:1.6"></textarea>
+          <span class="form-label">Descripción de las actividades</span>
+          <textarea class="form-input" id="desc-trabajo" rows="3" placeholder="Describa con claridad los detalles del servicio requerido..." style="resize:none;line-height:1.6"></textarea>
         </div>
 
         <div class="form-block" style="background:none;border:none;box-shadow:none;padding:0;margin-bottom:16px">
@@ -629,8 +629,8 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
             <div class="propina-row">
               <div class="propina-icon">B</div>
               <div class="propina-text">
-                <div class="propina-title">Bono diario</div>
-                <div class="propina-sub">El 70% va al domiciliario y el 30% al personal administrativo.</div>
+                <div class="propina-title">Ellos y sus familias lo valoran</div>
+                <div class="propina-sub">El 80% va al domiciliario y el 20% al personal administrativo.</div>
               </div>
               <div class="propina-input-wrap">
                 <span class="propina-currency">$</span>
