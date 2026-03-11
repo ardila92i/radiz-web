@@ -399,7 +399,7 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
       <div class="btn-back" onclick="mostrarVista('home')">←</div>
       <div>
         <div class="vista-titulo">Mensajería</div>
-        <div class="vista-subtitulo">Configura la ruta, revisa la cotización y continúa con la solicitud.</div>
+        <div class="vista-subtitulo">Configure la ruta, cotice y solicite el servicio</div>
       </div>
     </div>
 
@@ -414,7 +414,7 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
     <div class="mens-layout">
       <div class="mens-col-left">
         <div class="form-block">
-          <span class="form-label">Ciudad del servicio</span>
+          <span class="form-label">Ciudad</span>
           <div class="ciudad-selector">
             <div class="ciudad-btn" onclick="selCiudad(this,'Bogotá',4.7110,-74.0721)">Bogotá</div>
             <div class="ciudad-btn" onclick="selCiudad(this,'Medellín',6.2442,-75.5812)">Medellín</div>
@@ -425,7 +425,7 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
         </div>
 
         <div class="form-block">
-          <span class="form-label">Tipo de envío</span>
+          <span class="form-label">Tipo de paquetería</span>
           <div class="tipo-envio">
             <div class="tipo-btn selected" onclick="selTipo(this,'documentos')">
               <div class="tipo-btn-icon">D</div>
@@ -435,22 +435,22 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
             <div class="tipo-btn" onclick="selTipo(this,'paquete_pequeno')">
               <div class="tipo-btn-icon">P</div>
               <div class="tipo-btn-label">Paquete pequeño</div>
-              <div class="tipo-btn-desc">Hasta 10 kg</div>
+              <div class="tipo-btn-desc">Hasta 5 kg</div>
             </div>
             <div class="tipo-btn" onclick="selTipo(this,'paquete_grande')">
               <div class="tipo-btn-icon">G</div>
               <div class="tipo-btn-label">Paquete grande</div>
-              <div class="tipo-btn-desc">Más de 10 kg</div>
+              <div class="tipo-btn-desc">o varios</div>
             </div>
           </div>
         </div>
 
         <div class="form-block">
-          <span class="form-label">Modalidad del servicio</span>
+          <span class="form-label">Programación</span>
           <div class="horario-tabs">
             <div class="horario-tab selected" id="tab-ahora" onclick="selHorario('ahora')">
               <div class="horario-tab-icon">A</div>
-              <div class="horario-tab-label">Inmediato</div>
+              <div class="horario-tab-label">Lo antes posible</div>
             </div>
             <div class="horario-tab" id="tab-programar" onclick="selHorario('programar')">
               <div class="horario-tab-icon">P</div>
@@ -483,7 +483,7 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
           <button class="btn-add-parada" onclick="agregarParada()" id="btn-add-parada" disabled>Agregar parada intermedia</button>
           <div class="check-row" onclick="toggleRegreso()" style="margin-top:12px">
             <div class="check-box" id="check-regreso"></div>
-            <div class="check-label">Incluir regreso al punto de origen</div>
+            <div class="check-label">⚠️Regresar al punto de origen</div>
           </div>
         </div>
 
@@ -493,13 +493,13 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
         </div>
 
         <div class="form-block">
-          <span class="form-label">Propina opcional</span>
+          <span class="form-label">Incentivo opcional</span>
           <div class="propina-wrap">
             <div class="propina-row">
               <div class="propina-icon">+</div>
               <div class="propina-text">
-                <div class="propina-title">Aporte voluntario</div>
-                <div class="propina-sub">El 70% va al mensajero y el 30% al personal administrativo.</div>
+                <div class="propina-title">Ellos lo valoran</div>
+                <div class="propina-sub">80% va al mensajero y 20% al personal administrativo.</div>
               </div>
               <div class="propina-input-wrap">
                 <span class="propina-currency">$</span>
