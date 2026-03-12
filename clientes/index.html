@@ -176,10 +176,14 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
 .bono-total-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:14px;background:var(--green-soft);border:1px solid rgba(22,163,74,.16);margin-top:12px}
 .bono-total-label{font-size:.82rem;color:var(--muted)}
 .bono-total-valor{font-size:.95rem;font-weight:800;color:var(--green)}
-.qty-inline{display:inline-flex;align-items:center;gap:8px;margin-left:12px;vertical-align:middle}
-.qty-inline-btn{width:28px;height:28px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.82rem;font-weight:800;transition:.15s}
-.qty-inline-btn:hover{border-color:var(--border-strong);background:var(--orange-soft);color:var(--orange)}
-.qty-inline-val{font-size:.92rem;font-weight:800;min-width:18px;text-align:center}
+.dom-qty-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.dom-qty-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px 16px;text-align:center;box-shadow:var(--panel-shadow)}
+.dom-qty-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:14px}
+.dom-qty-row{display:flex;align-items:center;justify-content:center;gap:16px}
+.dom-qty-btn{width:36px;height:36px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;transition:.15s}
+.dom-qty-btn:hover{border-color:var(--border-strong);background:var(--orange-soft);color:var(--orange)}
+.dom-qty-val{font-size:1.8rem;font-weight:800;letter-spacing:-.04em;min-width:40px}
+.dom-qty-unit{font-size:.76rem;color:var(--muted);margin-top:4px}
 .modal-overlay,.mlogin-overlay,.recarga-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);z-index:900}
 .modal-overlay.visible,.mlogin-overlay.visible,.recarga-overlay.visible{display:flex}
 .modal-card,.mlogin-card,.recarga-card{width:100%;max-width:540px;background:var(--surface);border:1px solid var(--border);border-radius:28px;padding:30px;box-shadow:var(--shadow);position:relative}
@@ -287,7 +291,7 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
 .toast.error{border-color:rgba(240,90,40,.26);color:var(--orange)}
 .toast.success{border-color:rgba(22,163,74,.22);color:var(--green)}
 @media(max-width:1180px){.mens-layout{grid-template-columns:1fr}.mens-col-right{position:static}.mapa-wrap{min-height:360px}}
-@media(max-width:900px){.home-cards,.home-stats,.panel-stats,.panel-acciones,.grid-2{grid-template-columns:1fr}.ciudad-selector{grid-template-columns:repeat(2,1fr)}.tipo-envio,.tipo-moto-grid,.recarga-montos{grid-template-columns:1fr}.page-wrap{padding:0 18px}}
+@media(max-width:900px){.home-cards,.home-stats,.panel-stats,.panel-acciones,.grid-2{grid-template-columns:1fr}.ciudad-selector{grid-template-columns:repeat(2,1fr)}.tipo-envio,.tipo-moto-grid,.recarga-montos{grid-template-columns:1fr}.page-wrap{padding:0 18px}.dom-qty-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:640px){.nav-inner{padding:12px 16px}.nav-right{gap:8px}.theme-btn{padding:8px 10px;font-size:.74rem}.nav-user-name{display:none}.home-hero{padding:34px 0 18px}.home-hero p{font-size:.94rem}.vista-header{padding-top:22px}.vista-titulo{font-size:1.24rem}.propina-row{align-items:flex-start;flex-direction:column}.mapa-wrap{min-height:250px}.modal-card,.mlogin-card,.recarga-card,.reg-card,.buscando-card{padding:22px}.cotiz-total{flex-direction:column;align-items:flex-start}.panel-tabla{min-width:620px}.vista{padding-bottom:36px}}
 </style>
 </head>
@@ -412,13 +416,21 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
     </div>
     <div class="registro-wrap" style="max-width:760px;margin:0">
       <div class="reg-card">
-        <div class="form-block" style="margin-bottom:18px;background:none;border:none;box-shadow:none;padding:0">
-          <span class="form-label">Cantidad de días <span class="qty-inline"><button class="qty-inline-btn" type="button" onclick="cambiarMotorizados(-1)">−</button><span class="qty-inline-val" id="num-motorizados">1</span><button class="qty-inline-btn" type="button" onclick="cambiarMotorizados(1)">+</button><span style="font-size:.72rem;font-weight:500;color:var(--muted2);text-transform:none;letter-spacing:0">motorizado(s)</span></span></span>
-          <div class="propina-wrap" style="padding:20px">
-            <div class="propina-row" style="align-items:center;justify-content:center">
-              <button class="btn-back" type="button" onclick="cambiarDias(-1)" style="flex:0 0 auto">−</button>
-              <div style="text-align:center;min-width:120px"><div style="font-size:2.4rem;font-weight:800;letter-spacing:-.04em" id="dias-num">1</div><div style="font-size:.8rem;color:var(--muted)">día(s)</div></div>
-              <button class="btn-back" type="button" onclick="cambiarDias(1)" style="flex:0 0 auto">+</button>
+        <div class="dom-qty-grid">
+          <div class="dom-qty-box">
+            <div class="dom-qty-label">Días contratados</div>
+            <div class="dom-qty-row">
+              <button class="dom-qty-btn" type="button" onclick="cambiarDias(-1)">−</button>
+              <div><div class="dom-qty-val" id="dias-num">1</div><div class="dom-qty-unit">día(s)</div></div>
+              <button class="dom-qty-btn" type="button" onclick="cambiarDias(1)">+</button>
+            </div>
+          </div>
+          <div class="dom-qty-box">
+            <div class="dom-qty-label">Motorizados</div>
+            <div class="dom-qty-row">
+              <button class="dom-qty-btn" type="button" onclick="cambiarMotorizados(-1)">−</button>
+              <div><div class="dom-qty-val" id="num-motorizados">1</div><div class="dom-qty-unit">motorizado(s)</div></div>
+              <button class="dom-qty-btn" type="button" onclick="cambiarMotorizados(1)">+</button>
             </div>
           </div>
         </div>
@@ -428,7 +440,7 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
         </div>
         <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
           <span class="form-label">Ciudad principal de operación</span>
-          <input type="text" class="form-input" id="ciudad-op" placeholder="Ejemplo: Bogotá, Medellín, Cali">
+          <input type="text" class="form-input" id="ciudad-op" placeholder="Escribe la ciudad de operación..." autocomplete="off" onfocus="iniciarAutocompleteCiudadDom()">
         </div>
         <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
           <span class="form-label">Equipamiento del motorizado</span>
@@ -634,7 +646,7 @@ let tipoEnvio='documentos',tipoMoto='estandar',modoHorario='ahora',tipoCliente='
 let geocoder,directionsService,directionsRenderer,acInstances={},distanciaRutaMetros=0;
 let saldoUsuario=0,serviciosUsuario=[],filtroActual='todos',usuarioActual=null;
 let regTipoCliente='natural',terminosAceptados=false,timerBusqueda=null,segundosBusqueda=300;
-let recargaMontoSel=0,recargaMetodo='transferencia',diasDomiciliario=1,cantMotorizados=1,otraCiudadAC=null;
+let recargaMontoSel=0,recargaMetodo='transferencia',diasDomiciliario=1,cantMotorizados=1,otraCiudadAC=null,ciudadDomAC=null;
 
 function fmtCOP(n){return '$ '+Math.round(Number(n||0)).toLocaleString('es-CO')}
 function showToast(msg,tipo){const t=document.getElementById('toast');t.textContent=msg;t.className='toast visible '+(tipo||'');setTimeout(()=>t.className='toast',3500)}
@@ -657,7 +669,7 @@ function renderNav(){
 document.addEventListener('click',e=>{if(!e.target.closest('.nav-user-menu'))cerrarDropdown()});
 function toggleUserDropdown(){document.getElementById('nav-dropdown')?.classList.toggle('visible')}
 function cerrarDropdown(){document.getElementById('nav-dropdown')?.classList.remove('visible')}
-function mostrarVista(id){document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));const el=document.getElementById('vista-'+id);if(el){el.classList.add('activa');window.scrollTo({top:0,behavior:'smooth'})}if(id==='mensajeria'&&!mapaIniciado)iniciarMapa();if(id==='panel')cargarPanel()}
+function mostrarVista(id){document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));const el=document.getElementById('vista-'+id);if(el){el.classList.add('activa');window.scrollTo({top:0,behavior:'smooth'})}if(id==='mensajeria'&&!mapaIniciado)iniciarMapa();if(id==='domiciliario'&&window.google)google.maps.importLibrary("places");if(id==='panel')cargarPanel()}
 function irARegistro(s){servicioActivo=s;poblarResumen();mostrarVista('registro')}
 function volverDesdePago(){mostrarVista(servicioActivo)}
 function selTipo(el,t){document.querySelectorAll('.tipo-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');tipoEnvio=t}
@@ -668,6 +680,7 @@ function selRegTipo(t){regTipoCliente=t;document.getElementById('reg-tipo-natura
 function selCiudad(el,nombre,lat,lon){document.querySelectorAll('.ciudad-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');ciudadSeleccionada={nombre,lat,lon};document.getElementById('otra-ciudad-wrap').classList.remove('visible');habilitarDirecciones(true);if(mapaIniciado){mapa.setCenter({lat,lng:lon});mapa.setZoom(13);document.getElementById('mapa-instruccion').textContent=nombre+': ahora define el origen y el destino del servicio.'}}
 async function activarOtraCiudad(el){document.querySelectorAll('.ciudad-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');ciudadSeleccionada=null;habilitarDirecciones(false);const w=document.getElementById('otra-ciudad-wrap');w.classList.add('visible');const inp=document.getElementById('otra-ciudad-input');inp.value='';inp.focus();if(!otraCiudadAC&&window.google){const{Autocomplete}=await google.maps.importLibrary("places");otraCiudadAC=new Autocomplete(inp,{types:['(cities)'],componentRestrictions:{country:'co'},fields:['geometry','name']});otraCiudadAC.addListener('place_changed',()=>{const p=otraCiudadAC.getPlace();if(!p.geometry)return;const la=p.geometry.location.lat(),lo=p.geometry.location.lng(),nm=p.name||inp.value;ciudadSeleccionada={nombre:nm,lat:la,lon:lo};habilitarDirecciones(true);if(mapaIniciado){mapa.setCenter({lat:la,lng:lo});mapa.setZoom(13);document.getElementById('mapa-instruccion').textContent=nm+': ahora define el origen y el destino del servicio.'}})}}
 function habilitarDirecciones(ok){['origen-input','destino-input','origen-comp','destino-comp'].forEach(id=>{const e=document.getElementById(id);if(e)e.disabled=!ok});document.getElementById('btn-add-parada').disabled=!ok}
+async function iniciarAutocompleteCiudadDom(){if(ciudadDomAC)return;if(!window.google)return;const{Autocomplete}=await google.maps.importLibrary("places");const inp=document.getElementById('ciudad-op');ciudadDomAC=new Autocomplete(inp,{types:['(cities)'],componentRestrictions:{country:'co'},fields:['geometry','name']});ciudadDomAC.addListener('place_changed',()=>{const p=ciudadDomAC.getPlace();if(p&&p.name)inp.value=p.name})}
 function buscarDir(input,idx){if(window.google&&!acInstances[idx])iniciarAutocomplete(input,idx)}
 async function iniciarMapa(){try{const ml=await google.maps.importLibrary("maps"),rl=await google.maps.importLibrary("routes"),gl=await google.maps.importLibrary("geocoding");mapa=new ml.Map(document.getElementById('mapa'),{center:{lat:4.7110,lng:-74.0721},zoom:5,disableDefaultUI:false,zoomControl:true,mapTypeControl:false,streetViewControl:false,fullscreenControl:false});geocoder=new gl.Geocoder();directionsService=new rl.DirectionsService();directionsRenderer=new rl.DirectionsRenderer({map:mapa,suppressMarkers:true,polylineOptions:{strokeColor:'#2563eb',strokeWeight:4,strokeOpacity:.92}});mapaIniciado=true;actualizarMapaTema();setTimeout(()=>{const o=document.getElementById('origen-input'),d=document.getElementById('destino-input');if(o)iniciarAutocomplete(o,0);if(d)iniciarAutocomplete(d,1)},300)}catch(err){console.error('Error mapa:',err)}}
 async function iniciarAutocomplete(input,idx){if(acInstances[idx])return;const{Autocomplete}=await google.maps.importLibrary("places");const opts={componentRestrictions:{country:'co'},fields:['geometry','name','formatted_address']};if(ciudadSeleccionada){opts.bounds=new google.maps.LatLngBounds(new google.maps.LatLng(ciudadSeleccionada.lat-0.25,ciudadSeleccionada.lon-0.25),new google.maps.LatLng(ciudadSeleccionada.lat+0.25,ciudadSeleccionada.lon+0.25));opts.strictBounds=false}const ac=new Autocomplete(input,opts);ac.addListener('place_changed',()=>{const p=ac.getPlace();if(!p.geometry)return;const la=p.geometry.location.lat(),lo=p.geometry.location.lng();coordenadas[idx]=[la,lo];ponerMarcador(idx,la,lo);document.getElementById('mapa-instruccion').style.display='none';if(Object.keys(coordenadas).length>=2)calcularRutaReal()});acInstances[idx]=ac}
