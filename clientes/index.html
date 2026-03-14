@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm0PzoGphUs1a3TME47zPorau74ubFuic&libraries=places,geocoding&language=es&region=CO"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm0PzoGphUs1a3TME47zPorau74ubFuic&libraries=places,geocoding&language=es&region=CO"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -544,7 +544,7 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
 </div>
 <div class="vista" id="vista-panel">
   <div class="page-wrap">
-    <div class="panel-header"><div class="panel-saludo"><div class="panel-avatar" id="panel-avatar">LT</div><div class="panel-saludo-text"><h2 id="panel-nombre">Hola, Usuario</h2><p id="panel-info">Cuenta <span>personal</span> · correo@ejemplo.com</p></div></div></div>
+    <div class="panel-header"><div class="panel-saludo"><div class="panel-avatar" id="panel-avatar">LT</div><div class="panel-saludo-text"><h2 id="panel-nombre">Hola, Usuario</h2><p id="panel-info">Cuenta <span>personal</span> · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9ffcf0ededfaf0dffaf5faf2eff3f0b1fcf0f2">[email&#160;protected]</a></p></div></div></div>
     <div class="panel-stats">
       <div class="panel-stat blue"><div class="panel-stat-icon">S</div><div class="panel-stat-value" id="panel-saldo">$ 0</div><div class="panel-stat-label">Saldo disponible</div></div>
       <div class="panel-stat orange"><div class="panel-stat-icon">T</div><div class="panel-stat-value" id="panel-total-servicios">0</div><div class="panel-stat-label">Total servicios</div></div>
@@ -636,7 +636,7 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
   </div>
 </div>
 <div class="toast" id="toast"></div>
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 const API_URL='https://script.google.com/macros/s/AKfycbw-Lvhh4Fv9XHhp4taCgc5czNlSn_z483g_Ocpr16AIqbBPGyfm5_vnwPFx5FmIoYen/exec';
 const GMAPS_KEY='AIzaSyCm0PzoGphUs1a3TME47zPorau74ubFuic';
 const RECARGO_GRANDE=5000;
@@ -669,10 +669,7 @@ function renderNav(){
 document.addEventListener('click',e=>{if(!e.target.closest('.nav-user-menu'))cerrarDropdown()});
 function toggleUserDropdown(){document.getElementById('nav-dropdown')?.classList.toggle('visible')}
 function cerrarDropdown(){document.getElementById('nav-dropdown')?.classList.remove('visible')}
-function mostrarVista(id){document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));const el=document.getElementById('vista-'+id);if(el){el.classList.add('activa');window.scrollTo({top:0,behavior:'smooth'})}if(id==='mensajeria'&&!mapaIniciado)iniciarMapa();if(id==='domiciliario'&&window.google)google.maps.importLibrary("places");if(id==='panel')cargarPanel()}
-function irARegistro(s){servicioActivo=s;poblarResumen();mostrarVista('registro')}
-function volverDesdePago(){mostrarVista(servicioActivo)}
-function selTipo(el,t){document.querySelectorAll('.tipo-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');tipoEnvio=t}
+function mostrarVista(id){document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));const el=document.getElementById('vista-'+id);if(el){el.classList.add('activa');window.scrollTo({top:0,behavior:'smooth'})}if(id==='mensajeria'&&!mapaIniciado)iniciarMapa();if(id==='domiciliario'&&window.google)google.maps.importLibrary("places");if(id=rEach(b=>b.classList.remove('selected'));el.classList.add('selected');tipoEnvio=t}
 function selMoto(el,t){document.querySelectorAll('.moto-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');tipoMoto=t}
 function selHorario(m){modoHorario=m;document.getElementById('tab-ahora').classList.toggle('selected',m==='ahora');document.getElementById('tab-programar').classList.toggle('selected',m==='programar');document.getElementById('horario-hora-wrap').classList.toggle('visible',m==='programar')}
 function selTipoCliente(t){tipoCliente=t;document.getElementById('btn-natural').classList.toggle('selected',t==='natural');document.getElementById('btn-juridica').classList.toggle('selected',t==='juridica');document.getElementById('reg-nit-wrap').classList.toggle('visible',t==='juridica')}
@@ -682,7 +679,7 @@ async function activarOtraCiudad(el){document.querySelectorAll('.ciudad-btn').fo
 function habilitarDirecciones(ok){['origen-input','destino-input','origen-comp','destino-comp'].forEach(id=>{const e=document.getElementById(id);if(e)e.disabled=!ok});document.getElementById('btn-add-parada').disabled=!ok}
 async function iniciarAutocompleteCiudadDom(){if(ciudadDomAC)return;if(!window.google)return;const{Autocomplete}=await google.maps.importLibrary("places");const inp=document.getElementById('ciudad-op');ciudadDomAC=new Autocomplete(inp,{types:['(cities)'],componentRestrictions:{country:'co'},fields:['geometry','name']});ciudadDomAC.addListener('place_changed',()=>{const p=ciudadDomAC.getPlace();if(p&&p.name)inp.value=p.name})}
 function buscarDir(input,idx){if(window.google&&!acInstances[idx])iniciarAutocomplete(input,idx)}
-async function iniciarMapa(){try{const ml=await google.maps.importLibrary("maps"),gl=await google.maps.importLibrary("geocoding");const rl=ml;mapa=new ml.Map(document.getElementById('mapa'),{center:{lat:4.7110,lng:-74.0721},zoom:5,disableDefaultUI:false,zoomControl:true,mapTypeControl:false,streetViewControl:false,fullscreenControl:false});geocoder=new gl.Geocoder();directionsService=new ml.DirectionsService();directionsRenderer=new ml.DirectionsRenderer({map:mapa,suppressMarkers:true,polylineOptions:{strokeColor:'#2563eb',strokeWeight:4,strokeOpacity:.92}});mapaIniciado=true;actualizarMapaTema();setTimeout(()=>{const o=document.getElementById('origen-input'),d=document.getElementById('destino-input');if(o)iniciarAutocomplete(o,0);if(d)iniciarAutocomplete(d,1)},300)}catch(err){console.error('Error mapa:',err)}}
+async function iniciarMapa(){try{mapa=new google.maps.Map(document.getElementById('mapa'),{center:{lat:4.7110,lng:-74.0721},zoom:5,disableDefaultUI:false,zoomControl:true,mapTypeControl:false,streetViewControl:false,fullscreenControl:false});geocoder=new google.maps.Geocoder();directionsService=new google.maps.DirectionsService();directionsRenderer=new google.maps.DirectionsRenderer({map:mapa,suppressMarkers:true,polylineOptions:{strokeColor:'#2563eb',strokeWeight:4,strokeOpacity:.92}});mapaIniciado=true;actualizarMapaTema();setTimeout(()=>{const o=document.getElementById('origen-input'),d=document.getElementById('destino-input');if(o)iniciarAutocomplete(o,0);if(d)iniciarAutocomplete(d,1)},300)}catch(err){console.error('Error mapa:',err)}}
 async function iniciarAutocomplete(input,idx){if(acInstances[idx])return;const{Autocomplete}=await google.maps.importLibrary("places");const opts={componentRestrictions:{country:'co'},fields:['geometry','name','formatted_address']};if(ciudadSeleccionada){opts.bounds=new google.maps.LatLngBounds(new google.maps.LatLng(ciudadSeleccionada.lat-0.25,ciudadSeleccionada.lon-0.25),new google.maps.LatLng(ciudadSeleccionada.lat+0.25,ciudadSeleccionada.lon+0.25));opts.strictBounds=false}const ac=new Autocomplete(input,opts);ac.addListener('place_changed',()=>{const p=ac.getPlace();if(!p.geometry)return;const la=p.geometry.location.lat(),lo=p.geometry.location.lng();coordenadas[idx]=[la,lo];ponerMarcador(idx,la,lo);document.getElementById('mapa-instruccion').style.display='none';if(Object.keys(coordenadas).length>=2)calcularRutaReal()});acInstances[idx]=ac}
 function ponerMarcador(idx,lat,lon){if(!mapaIniciado)return;if(marcadores[idx])marcadores[idx].setMap(null);const c={0:'#2563eb',1:'#f05a28'}[idx]||'#0f172a';marcadores[idx]=new google.maps.Marker({position:{lat,lng:lon},map:mapa,icon:{path:google.maps.SymbolPath.CIRCLE,scale:8,fillColor:c,fillOpacity:1,strokeColor:'#fff',strokeWeight:2.2},label:{text:String(idx+1),color:'#fff',fontSize:'11px',fontWeight:'700'}});mapa.panTo({lat,lng:lon});mapa.setZoom(14)}
 function calcularRutaReal(){if(!mapaIniciado||!directionsService)return;const keys=Object.keys(coordenadas).sort((a,b)=>a-b).map(Number);if(keys.length<2)return;const pts=keys.map(k=>coordenadas[k]),ori={lat:pts[0][0],lng:pts[0][1]},dest={lat:pts[pts.length-1][0],lng:pts[pts.length-1][1]},wp=pts.slice(1,-1).map(p=>({location:{lat:p[0],lng:p[1]},stopover:true})),df=conRegreso?ori:dest;if(conRegreso)wp.push({location:dest,stopover:true});directionsService.route({origin:ori,destination:df,waypoints:wp,travelMode:google.maps.TravelMode.DRIVING,region:'CO'},(r,s)=>{if(s==='OK'){directionsRenderer.setDirections(r);let m=0;r.routes[0].legs.forEach(l=>m+=l.distance.value);distanciaRutaMetros=m;document.getElementById('mapa-instruccion').style.display='none'}})}
