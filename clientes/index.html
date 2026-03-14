@@ -395,7 +395,7 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
           <div class="cotiz-titulo">Resumen de cotización</div>
           <div id="detalle-mens"></div>
           <div class="cotiz-total"><div class="cotiz-total-label">Total estimado</div><div class="cotiz-total-value" id="total-mens-valor">$0</div></div>
-          <button class="btn-continuar" onclick="irARegistro('mensajeria')">Continuar con la solicitud</button>
+          <button class="btn-continuar" onclick="irARegistro('mensajeria')">Buscar mensajero</button>
           <button class="btn-nueva-cotiz" onclick="reiniciarMensajeria()">Nueva cotización</button>
         </div>
       </div>
@@ -479,7 +479,7 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
           <div class="cotiz-titulo">Resumen de cotización</div>
           <div id="detalle-dom"></div>
           <div class="cotiz-total naranja"><div class="cotiz-total-label">Total estimado</div><div class="cotiz-total-value" id="total-dom-valor">$0</div></div>
-          <button class="btn-continuar naranja" onclick="irARegistro('domiciliario')">Continuar con la solicitud</button>
+          <button class="btn-continuar naranja" onclick="irARegistro('domiciliario')">Buscar mensajero</button>
         </div>
       </div>
     </div>
@@ -531,6 +531,20 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
         <div class="buscando-sub">Estamos conectando tu solicitud con un mensajero cercano. Este proceso puede tardar algunos minutos.</div>
         <div class="buscando-timer-wrap"><div class="buscando-timer-bar"><div class="buscando-timer-fill" id="timer-fill"></div></div><div class="buscando-timer-label" id="timer-label">5:00</div></div>
         <button class="btn-cancelar-busqueda" onclick="cancelarBusqueda()">Cancelar búsqueda</button>
+      </div>
+      <div class="buscando-card" id="buscando-card-found" style="display:none">
+        <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-2));margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:#fff;box-shadow:0 12px 28px rgba(37,99,235,.28)" id="mensajero-avatar">M</div>
+        <div class="buscando-titulo" id="mensajero-nombre">Carlos Rodríguez</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px">
+          <span style="font-size:.84rem;color:var(--muted)" id="mensajero-moto">Honda CB 125 · 2022</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:20px">
+          <span style="color:#f59e0b;font-size:1rem">★★★★★</span>
+          <span style="font-size:.84rem;font-weight:700;color:var(--text)" id="mensajero-rating">4.9</span>
+          <span style="font-size:.78rem;color:var(--muted)">(127 servicios)</span>
+        </div>
+        <div style="padding:12px 16px;background:var(--green-soft);border:1px solid rgba(22,163,74,.16);border-radius:14px;font-size:.84rem;color:var(--green);font-weight:600;margin-bottom:20px">¡Mensajero encontrado! Procede al pago para confirmar.</div>
+        <div id="wompi-btn-wrap"></div>
       </div>
       <div class="buscando-card" id="buscando-card-notfound" style="display:none">
         <div class="buscando-icon-sad">0</div>
@@ -702,9 +716,46 @@ function toggleTerminos(){terminosAceptados=!terminosAceptados;document.getEleme
 function aceptarTerminosYCotizar(){document.getElementById('modal-terminos').classList.remove('visible');cotizarDomiciliario()}
 function poblarResumen(){let h='';if(servicioActivo==='mensajeria'&&ultimaCotizacionMens){const d=ultimaCotizacionMens,p=d._propina||0,r=d._recargo||0,t=d.totalCliente+p+r;h='<div class="reg-resumen-row"><span>Servicio</span><span>Mensajería punto a punto</span></div><div class="reg-resumen-row"><span>Ciudad</span><span>'+(d._ciudad||'')+'</span></div><div class="reg-resumen-row"><span>Distancia</span><span>'+parseFloat(d._distTotal).toFixed(1)+' km</span></div><div class="reg-resumen-row"><span>Modalidad</span><span>'+(d._horario||'Inmediato')+'</span></div>'+(p>0?'<div class="reg-resumen-row"><span>Propina</span><span>'+fmtCOP(p)+'</span></div>':'')+'<div class="reg-resumen-row total"><span>Total</span><span style="color:var(--blue-2)">'+fmtCOP(t)+'</span></div>'}else if(servicioActivo==='domiciliario'&&ultimaCotizacionDom){const d=ultimaCotizacionDom,p=d._propina||0,t=d.totalCliente*cantMotorizados+p;h='<div class="reg-resumen-row"><span>Servicio</span><span>Domiciliario por días</span></div>'+(cantMotorizados>1?'<div class="reg-resumen-row"><span>Motorizados</span><span>'+cantMotorizados+'</span></div>':'')+'<div class="reg-resumen-row"><span>Días</span><span>'+d.dias+' día(s)</span></div><div class="reg-resumen-row"><span>Equipamiento</span><span>'+tipoMoto+'</span></div>'+(p>0?'<div class="reg-resumen-row"><span>Bono</span><span>'+fmtCOP(p)+'</span></div>':'')+'<div class="reg-resumen-row total"><span>Total</span><span style="color:var(--orange)">'+fmtCOP(t)+'</span></div>'}document.getElementById('reg-resumen').innerHTML=h}
 function procesarPago(){const n=document.getElementById('reg-nombre').value.trim(),t=document.getElementById('reg-telefono').value.trim(),c=document.getElementById('reg-correo').value.trim();if(!n||!t||!c){showToast('Completa todos los campos','error');return}if(!c.includes('@')){showToast('Correo no válido','error');return}iniciarBusquedaMensajero()}
-function iniciarBusquedaMensajero(){mostrarVista('buscando');document.getElementById('buscando-card-activo').style.display='block';document.getElementById('buscando-card-notfound').style.display='none';segundosBusqueda=300;actualizarTimer();clearInterval(timerBusqueda);timerBusqueda=setInterval(()=>{segundosBusqueda--;actualizarTimer();if(segundosBusqueda<=0){clearInterval(timerBusqueda);mostrarNoEncontrado()}},1000)}
+function iniciarBusquedaMensajero(){mostrarVista('buscando');document.getElementById('buscando-card-activo').style.display='block';document.getElementById('buscando-card-notfound').style.display='none';document.getElementById('buscando-card-found').style.display='none';segundosBusqueda=300;actualizarTimer();clearInterval(timerBusqueda);setTimeout(()=>mostrarMensajeroEncontrado(),5000);timerBusqueda=setInterval(()=>{segundosBusqueda--;actualizarTimer();if(segundosBusqueda<=0){clearInterval(timerBusqueda);mostrarNoEncontrado()}},1000)}
 function actualizarTimer(){const m=Math.floor(segundosBusqueda/60),s=segundosBusqueda%60;document.getElementById('timer-label').textContent=m+':'+s.toString().padStart(2,'0');document.getElementById('timer-fill').style.width=((segundosBusqueda/300)*100)+'%';if(segundosBusqueda<=60){document.getElementById('timer-fill').style.background='linear-gradient(90deg,var(--orange),#ff8b5a)';document.getElementById('timer-label').style.color='var(--orange)'}}
 function mostrarNoEncontrado(){document.getElementById('buscando-card-activo').style.display='none';document.getElementById('buscando-card-notfound').style.display='block'}
+function mostrarMensajeroEncontrado(){
+  clearInterval(timerBusqueda);
+  document.getElementById('buscando-card-activo').style.display='none';
+  document.getElementById('buscando-card-found').style.display='block';
+  const mensajeros=[
+    {nombre:'Carlos Rodríguez',moto:'Honda CB 125 · 2022',rating:'4.9',servicios:'127',ini:'CR'},
+    {nombre:'Juan Pérez',moto:'Yamaha FZ 150 · 2021',rating:'4.8',servicios:'98',ini:'JP'},
+    {nombre:'Andrés Torres',moto:'Suzuki GN 125 · 2023',rating:'5.0',servicios:'214',ini:'AT'}
+  ];
+  const m=mensajeros[Math.floor(Math.random()*mensajeros.length)];
+  document.getElementById('mensajero-nombre').textContent=m.nombre;
+  document.getElementById('mensajero-moto').textContent=m.moto;
+  document.getElementById('mensajero-rating').textContent=m.rating;
+  document.getElementById('mensajero-avatar').textContent=m.ini;
+  const totalPagar=ultimaCotizacionMens?Math.round((ultimaCotizacionMens.totalCliente+(ultimaCotizacionMens._propina||0)+(ultimaCotizacionMens._recargo||0))*100):ultimaCotizacionDom?Math.round((ultimaCotizacionDom.totalCliente*cantMotorizados+(ultimaCotizacionDom._propina||0))*100):100000;
+  const wrap=document.getElementById('wompi-btn-wrap');
+  wrap.innerHTML='';
+  const form=document.createElement('form');
+  form.method='GET';
+  form.action='https://checkout.wompi.co/p/';
+  const campos={
+    'public-key':'pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06',
+    'currency':'COP',
+    'amount-in-cents':String(totalPagar),
+    'reference':'RADIZ-'+Date.now(),
+    'signature:integrity':'prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN',
+    'redirect-url':window.location.href
+  };
+  Object.entries(campos).forEach(([k,v])=>{const i=document.createElement('input');i.type='hidden';i.name=k;i.value=v;form.appendChild(i)});
+  const btn=document.createElement('button');
+  btn.type='submit';
+  btn.className='btn-cotizar';
+  btn.style.marginTop='0';
+  btn.textContent='Pagar';
+  form.appendChild(btn);
+  wrap.appendChild(form);
+}
 function cancelarBusqueda(){clearInterval(timerBusqueda);mostrarVista('registro')}
 function reiniciarBusqueda(){iniciarBusquedaMensajero()}
 async function hashPass(p){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
