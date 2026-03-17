@@ -295,19 +295,18 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 <div class="vista activa" id="vista-home">
   <div class="page-wrap">
     <div class="home-hero">
-      <img src="logoradiz.png" alt="Radiz Suministro Vehicular" style="height:64px;width:auto;margin-bottom:22px;display:block">
       <h1>Mensajería<span class="azul"> express</span> y logística <span class="naranja">dedicada</span> de altísima confianza</h1>
       <p>Contrate personas con alta disposición, maneje su presupuesto y descargue su facturación.</p>
     </div>
     <div class="home-cards">
       <div class="hcard azul" onclick="mostrarVista('mensajeria')">
-        <div class="hcard-top"><div class="hcard-icon">M</div><div class="hcard-arrow">→</div></div>
+        <div class="hcard-top"><div class="hcard-icon" style="background:none;padding:0"><img src="mensajeria_express.png" alt="Mensajería" style="width:54px;height:54px;object-fit:contain"></div><div class="hcard-arrow">→</div></div>
         <h2>Mensajería express</h2>
         <p>El precio por kilometro más justo para ellos y para usted</p>
         <div class="hcard-footer"><div class="hcard-badge">Amplia cobertura urbana y metropolitana</div><div class="hcard-price">Desde $6.450</div></div>
       </div>
       <div class="hcard naranja" onclick="mostrarVista('domiciliario')">
-        <div class="hcard-top"><div class="hcard-icon">D</div><div class="hcard-arrow">→</div></div>
+        <div class="hcard-top"><div class="hcard-icon" style="background:none;padding:0"><img src="dedicado.png" alt="Dedicado" style="width:54px;height:54px;object-fit:contain"></div><div class="hcard-arrow">→</div></div>
         <h2>Motorizado dedicado</h2>
         <p>Contrate por días en su horario de necesidad.</p>
         <div class="hcard-footer"><div class="hcard-badge">En su sede o punto</div><div class="hcard-price">Desde $120.000 por día</div></div>
@@ -662,7 +661,7 @@ function ocultarError(id){const e=document.getElementById(id);if(e)e.classList.r
 function actualizarMapaTema(){if(!mapaIniciado||!mapa)return;mapa.setOptions({styles:[{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]}]})}
 function renderNav(){
   const nav=document.getElementById('nav-inner');
-  const logoHtml='<div class="nav-logo" onclick="mostrarVista(\'home\')" style="cursor:pointer"><img src="logoradiz.png" alt="Radiz" style="height:38px;width:auto;display:block"></div>';
+  const logoHtml='<div class="nav-logo" onclick="mostrarVista(\'home\')" style="cursor:pointer"><img src="icon-512.png" alt="Radiz" style="height:40px;width:40px;border-radius:10px;display:block"></div>';
   if(usuarioActual){
     const ini=usuarioActual.nombre.split(' ').map(p=>p[0]).join('').substring(0,2).toUpperCase();
     nav.innerHTML=logoHtml+'<div class="nav-right"><div class="nav-user nav-user-menu"><div class="nav-user-avatar" onclick="toggleUserDropdown()">'+ini+'</div><div class="nav-user-name" onclick="toggleUserDropdown()">'+usuarioActual.nombre.split(' ')[0]+'</div><div class="nav-user-dropdown" id="nav-dropdown"><div class="nav-dd-item" onclick="mostrarVista(\'panel\');cerrarDropdown()">Mi panel</div><div class="nav-dd-item" onclick="mostrarVista(\'mensajeria\');cerrarDropdown()">Solicitar mensajería</div><div class="nav-dd-item" onclick="mostrarVista(\'domiciliario\');cerrarDropdown()">Solicitar domiciliario</div><div class="nav-dd-item" onclick="abrirModalRecarga();cerrarDropdown()">Recargar cuenta</div><div class="nav-dd-item danger" onclick="cerrarSesion()">Cerrar sesión</div></div></div></div>';
