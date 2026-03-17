@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Radiz — </title>
+<title>Radiz — Mensajería y logística</title>
+<link rel="icon" type="image/png" href="icon-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -17,27 +18,18 @@
   --radius:20px;--radius-sm:14px;--radius-xs:10px;
   --max-w:1320px;
 }
-body[data-theme="dark"]{
-  --bg:#0b1220;--bg-soft:#0f172a;--surface:#111827;--surface2:#172132;--surface3:#1e2a3d;
-  --border:rgba(148,163,184,.16);--border-strong:rgba(148,163,184,.26);
-  --text:#edf4ff;--muted:#9aa9be;--muted2:#708098;--shadow:0 22px 48px rgba(0,0,0,.32);
-  --panel-shadow:0 12px 30px rgba(0,0,0,.28);--ring:0 0 0 3px rgba(37,99,235,.14)
-}
-body[data-theme="light"]{
+body{
   --bg:#f3f6fb;--bg-soft:#eaf0f8;--surface:#ffffff;--surface2:#f7faff;--surface3:#eef3fb;
   --border:rgba(15,23,42,.08);--border-strong:rgba(15,23,42,.14);
   --text:#0f172a;--muted:#5b6980;--muted2:#8391a6;--shadow:0 18px 42px rgba(15,23,42,.08);
   --panel-shadow:0 10px 24px rgba(15,23,42,.06);--ring:0 0 0 3px rgba(37,99,235,.12)
 }
+
 html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden}
 body{position:relative}
 a{text-decoration:none;color:inherit}
 button,input,textarea,select{font:inherit}
-.bg-orb{position:fixed;border-radius:50%;pointer-events:none;z-index:0;filter:blur(10px)}
-.orb-a{width:420px;height:420px;top:-140px;right:-60px;background:radial-gradient(circle,rgba(37,99,235,.12),transparent 65%)}
-.orb-b{width:360px;height:360px;left:-100px;bottom:-140px;background:radial-gradient(circle,rgba(240,90,40,.08),transparent 68%)}
-nav{position:sticky;top:0;z-index:300;background:rgba(11,18,32,.7);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
-body[data-theme="light"] nav{background:rgba(243,246,251,.85)}
+nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
 .nav-inner{max-width:var(--max-w);margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px}
 .nav-logo{display:flex;align-items:center;gap:14px;cursor:pointer;min-width:0}
 .nav-logomark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--blue-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1rem;box-shadow:0 10px 24px rgba(37,99,235,.24)}
@@ -93,8 +85,10 @@ body[data-theme="light"] nav{background:rgba(243,246,251,.85)}
 .btn-back{width:42px;height:42px;border-radius:14px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:1rem;box-shadow:var(--panel-shadow)}
 .vista-titulo{font-size:1.48rem;font-weight:800;letter-spacing:-.03em}
 .vista-subtitulo{font-size:.9rem;color:var(--muted);margin-top:4px}
-.mens-layout{display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:22px;align-items:start}
-.mens-col-right{position:sticky;top:90px}
+.mens-layout{display:grid;grid-template-columns:minmax(0,480px) minmax(0,1fr);gap:22px;align-items:start}
+.mens-col-right{position:sticky;top:80px}
+.mens-col-left{order:2}
+.mens-col-right{order:1}
 .form-block{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:18px;box-shadow:var(--panel-shadow);margin-bottom:16px}
 .form-label,.reg-label,.mlogin-label,.recarga-custom-label{display:block;font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px}
 .form-input,.reg-input,.mlogin-input,.recarga-custom-input,.parada-input,.parada-complemento{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:13px 14px;color:var(--text);outline:none;transition:.2s}
@@ -146,9 +140,8 @@ body[data-theme="light"] nav{background:rgba(243,246,251,.85)}
 .propina-input{width:96px;padding:12px 0;border:none;background:transparent;color:var(--text);outline:none;font-size:1rem;font-weight:700;text-align:right}
 .propina-input::placeholder{color:var(--muted2)}
 .mapa-wrap{height:100%;min-height:680px;border-radius:24px;overflow:hidden;border:1px solid var(--border);background:var(--surface);box-shadow:var(--panel-shadow);position:relative}
-#mapa{width:100%;height:680px}
-.mapa-instruccion{position:absolute;top:16px;left:16px;right:16px;padding:12px 14px;background:rgba(17,24,39,.85);border:1px solid rgba(148,163,184,.14);border-radius:14px;color:#dce7f9;font-size:.8rem;z-index:100}
-body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color:#334155;border-color:rgba(15,23,42,.1)}
+#mapa{width:100%;height:720px}
+.mapa-instruccion{position:absolute;top:16px;left:16px;right:16px;padding:12px 14px;background:rgba(255,255,255,.92);border:1px solid rgba(15,23,42,.1);border-radius:14px;color:#334155;font-size:.8rem;z-index:100;box-shadow:0 4px 12px rgba(15,23,42,.08)}
 .btn-cotizar,.btn-continuar,.btn-pagar,.mlogin-btn{width:100%;border:none;border-radius:16px;padding:15px 18px;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;font-size:.94rem;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 14px 28px rgba(37,99,235,.22)}
 .btn-cotizar:hover,.btn-continuar:hover,.btn-pagar:hover,.mlogin-btn:hover{transform:translateY(-1px)}
 .btn-cotizar:disabled,.mlogin-btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
@@ -290,20 +283,19 @@ body[data-theme="light"] .mapa-instruccion{background:rgba(255,255,255,.9);color
 .toast.visible{transform:translateX(-50%) translateY(0);opacity:1}
 .toast.error{border-color:rgba(240,90,40,.26);color:var(--orange)}
 .toast.success{border-color:rgba(22,163,74,.22);color:var(--green)}
-@media(max-width:1180px){.mens-layout{grid-template-columns:1fr}.mens-col-right{position:static}.mapa-wrap{min-height:360px}}
+@media(max-width:1180px){.mens-layout{grid-template-columns:1fr}.mens-col-right{position:static;order:1}.mens-col-left{order:2}.mapa-wrap{min-height:420px}#mapa{height:420px}}
 @media(max-width:900px){.home-cards,.home-stats,.panel-stats,.panel-acciones,.grid-2{grid-template-columns:1fr}.ciudad-selector{grid-template-columns:repeat(2,1fr)}.tipo-envio,.tipo-moto-grid,.recarga-montos{grid-template-columns:1fr}.page-wrap{padding:0 18px}.dom-qty-grid{grid-template-columns:1fr 1fr}}
-@media(max-width:640px){.nav-inner{padding:12px 16px}.nav-right{gap:8px}.theme-btn{padding:8px 10px;font-size:.74rem}.nav-user-name{display:none}.home-hero{padding:34px 0 18px}.home-hero p{font-size:.94rem}.vista-header{padding-top:22px}.vista-titulo{font-size:1.24rem}.propina-row{align-items:flex-start;flex-direction:column}.mapa-wrap{min-height:250px}.modal-card,.mlogin-card,.recarga-card,.reg-card,.buscando-card{padding:22px}.cotiz-total{flex-direction:column;align-items:flex-start}.panel-tabla{min-width:620px}.vista{padding-bottom:36px}}
+@media(max-width:640px){.nav-inner{padding:12px 16px}.nav-right{gap:8px}.nav-user-name{display:none}.home-hero{padding:34px 0 18px}.home-hero p{font-size:.94rem}.vista-header{padding-top:22px}.vista-titulo{font-size:1.24rem}.propina-row{align-items:flex-start;flex-direction:column}.mapa-wrap{min-height:320px}#mapa{height:320px}.modal-card,.mlogin-card,.recarga-card,.reg-card,.buscando-card{padding:22px}.cotiz-total{flex-direction:column;align-items:flex-start}.panel-tabla{min-width:620px}.vista{padding-bottom:36px}}
 </style>
 </head>
-<body data-theme="dark">
-<div class="bg-orb orb-a"></div>
-<div class="bg-orb orb-b"></div>
+<body data-theme="light">
 <nav>
   <div class="nav-inner" id="nav-inner"></div>
 </nav>
 <div class="vista activa" id="vista-home">
   <div class="page-wrap">
     <div class="home-hero">
+      <img src="logoradiz.png" alt="Radiz Suministro Vehicular" style="height:64px;width:auto;margin-bottom:22px;display:block">
       <h1>Mensajería<span class="azul"> express</span> y logística <span class="naranja">dedicada</span> de altísima confianza</h1>
       <p>Contrate personas con alta disposición, maneje su presupuesto y descargue su facturación.</p>
     </div>
@@ -667,17 +659,15 @@ function showToast(msg,tipo){const t=document.getElementById('toast');t.textCont
 function setBtnLoading(id,on,txt){const b=document.getElementById(id);if(!b)return;if(on){b.innerHTML='<span class="btn-spinner"></span> Procesando...';b.disabled=true}else{b.innerHTML=txt;b.disabled=false}}
 function mostrarError(id,msg){const e=document.getElementById(id);if(e){e.textContent=msg;e.classList.add('visible')}}
 function ocultarError(id){const e=document.getElementById(id);if(e)e.classList.remove('visible')}
-function getTheme(){return localStorage.getItem('radiz_theme')||'dark'}
-function setTheme(t){document.body.setAttribute('data-theme',t);localStorage.setItem('radiz_theme',t);renderNav();actualizarMapaTema()}
-function actualizarMapaTema(){if(!mapaIniciado||!mapa)return;const s=[{elementType:'geometry',stylers:[{color:'#142033'}]},{elementType:'labels.text.stroke',stylers:[{color:'#142033'}]},{elementType:'labels.text.fill',stylers:[{color:'#94a3b8'}]},{featureType:'road',elementType:'geometry',stylers:[{color:'#21314a'}]},{featureType:'road',elementType:'labels.text.fill',stylers:[{color:'#94a3b8'}]},{featureType:'water',elementType:'geometry',stylers:[{color:'#0b1220'}]},{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]}];mapa.setOptions({styles:getTheme()==='dark'?s:null})}
+function actualizarMapaTema(){if(!mapaIniciado||!mapa)return;mapa.setOptions({styles:[{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]}]})}
 function renderNav(){
-  const nav=document.getElementById('nav-inner'),theme=getTheme();
-  const toggle='<div class="theme-toggle"><button class="theme-btn '+(theme==='light'?'active':'')+'" onclick="setTheme(\'light\')">Claro</button><button class="theme-btn '+(theme==='dark'?'active':'')+'" onclick="setTheme(\'dark\')">Oscuro</button></div>';
+  const nav=document.getElementById('nav-inner');
+  const logoHtml='<div class="nav-logo" onclick="mostrarVista(\'home\')" style="cursor:pointer"><img src="logoradiz.png" alt="Radiz" style="height:38px;width:auto;display:block"></div>';
   if(usuarioActual){
     const ini=usuarioActual.nombre.split(' ').map(p=>p[0]).join('').substring(0,2).toUpperCase();
-    nav.innerHTML='<div class="nav-logo" onclick="mostrarVista(\'panel\')"><div class="nav-logomark">R</div><div class="nav-brand"><div class="nav-name">RADIZ</div><div class="nav-sub">Portal de clientes</div></div></div><div class="nav-right">'+toggle+'<div class="nav-user nav-user-menu"><div class="nav-user-avatar" onclick="toggleUserDropdown()">'+ini+'</div><div class="nav-user-name" onclick="toggleUserDropdown()">'+usuarioActual.nombre.split(' ')[0]+'</div><div class="nav-user-dropdown" id="nav-dropdown"><div class="nav-dd-item" onclick="mostrarVista(\'panel\');cerrarDropdown()">Mi panel</div><div class="nav-dd-item" onclick="mostrarVista(\'mensajeria\');cerrarDropdown()">Solicitar mensajería</div><div class="nav-dd-item" onclick="mostrarVista(\'domiciliario\');cerrarDropdown()">Solicitar domiciliario</div><div class="nav-dd-item" onclick="abrirModalRecarga();cerrarDropdown()">Recargar cuenta</div><div class="nav-dd-item danger" onclick="cerrarSesion()">Cerrar sesión</div></div></div></div>';
+    nav.innerHTML=logoHtml+'<div class="nav-right"><div class="nav-user nav-user-menu"><div class="nav-user-avatar" onclick="toggleUserDropdown()">'+ini+'</div><div class="nav-user-name" onclick="toggleUserDropdown()">'+usuarioActual.nombre.split(' ')[0]+'</div><div class="nav-user-dropdown" id="nav-dropdown"><div class="nav-dd-item" onclick="mostrarVista(\'panel\');cerrarDropdown()">Mi panel</div><div class="nav-dd-item" onclick="mostrarVista(\'mensajeria\');cerrarDropdown()">Solicitar mensajería</div><div class="nav-dd-item" onclick="mostrarVista(\'domiciliario\');cerrarDropdown()">Solicitar domiciliario</div><div class="nav-dd-item" onclick="abrirModalRecarga();cerrarDropdown()">Recargar cuenta</div><div class="nav-dd-item danger" onclick="cerrarSesion()">Cerrar sesión</div></div></div></div>';
   }else{
-    nav.innerHTML='<div class="nav-logo" onclick="mostrarVista(\'home\')"><div class="nav-logomark">R</div><div class="nav-brand"><div class="nav-name">RADIZ</div><div class="nav-sub">Mensajería y logística</div></div></div><div class="nav-right">'+toggle+'<button class="nav-btn" onclick="abrirModalLogin()">Iniciar sesión</button></div>';
+    nav.innerHTML=logoHtml+'<div class="nav-right"><button class="nav-btn" onclick="abrirModalLogin()">Iniciar sesión</button></div>';
   }
 }
 document.addEventListener('click',e=>{if(!e.target.closest('.nav-user-menu'))cerrarDropdown()});
