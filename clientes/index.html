@@ -121,13 +121,14 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 .parada-field{flex:1;position:relative}
 .btn-remove{width:34px;height:34px;border-radius:12px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .btn-remove:hover{background:var(--orange-soft);border-color:rgba(240,90,40,.24);color:var(--orange)}
-.btn-add-parada{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:16px;background:var(--surface2);border:1px dashed var(--border-strong);color:var(--muted);cursor:pointer;transition:.2s}
-.btn-add-parada:hover{border-color:rgba(37,99,235,.35);color:var(--blue-2)}
+.btn-add-parada{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:0;background:none;border:none;border-top:1px dashed var(--border-strong);color:var(--muted);cursor:pointer;transition:.2s;margin-top:12px}
+.btn-add-parada:hover{color:var(--blue-2)}
 .btn-add-parada:disabled{opacity:.48;cursor:not-allowed}
-.check-row,.modal-check-row{display:flex;align-items:center;gap:10px;padding:14px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:16px;cursor:pointer}
-.check-box{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--border-strong);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-.check-box.checked{background:var(--blue);border-color:var(--blue)}
-.check-box.checked::after{content:'✓';font-size:.72rem;color:#fff;font-weight:800}
+.check-row,.modal-check-row{display:flex;align-items:center;gap:10px;padding:10px 0;background:none;border:none;border-radius:0;cursor:pointer}
+.check-box{width:40px;height:22px;border-radius:999px;background:var(--border-strong);border:none;flex:0 0 40px;position:relative;transition:.25s}
+.check-box::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.25s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.check-box.checked{background:var(--blue-2)}
+.check-box.checked::after{left:21px}
 .check-label{font-size:.86rem;color:var(--muted)}
 .propina-wrap{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:14px}
 .propina-row{display:flex;align-items:center;gap:14px}
@@ -151,7 +152,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 .spinner,.btn-spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(148,163,184,.24);border-top-color:var(--blue);border-radius:50%;animation:spin .65s linear infinite;vertical-align:middle}
 .btn-spinner{margin-right:8px;border-color:rgba(255,255,255,.28);border-top-color:#fff}
 @keyframes spin{to{transform:rotate(360deg)}}
-.cotizacion-result{display:none;background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:22px;box-shadow:var(--panel-shadow)}
+.cotizacion-result{display:none;background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:22px;box-shadow:var(--panel-shadow);margin-top:24px}
 .cotizacion-result.visible{display:block}
 .cotiz-titulo{font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
 .cotiz-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)}
