@@ -296,8 +296,9 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 .flatpickr-months .flatpickr-month{color:var(--text)!important}
 .flatpickr-current-month,.flatpickr-monthDropdown-months{color:var(--text)!important;font-weight:700!important}
 .mens-layout{grid-template-columns:1fr}.mens-col-right{position:static;order:1}.mens-col-left{order:2}.mapa-wrap{min-height:420px}#mapa{height:420px}}
-@media(max-width:900px){.home-cards,.home-stats,.panel-stats,.panel-acciones,.grid-2{grid-template-columns:1fr}.ciudad-selector{grid-template-columns:repeat(2,1fr)}.tipo-envio,.tipo-moto-grid,.recarga-montos{grid-template-columns:1fr}.page-wrap{padding:0 18px}.dom-qty-grid{grid-template-columns:1fr 1fr}.dom-fechas-grid{grid-template-columns:1fr!important}}
-@media(max-width:640px){.nav-inner{padding:12px 16px}.nav-right{gap:8px}.nav-user-name{display:none}.home-hero{padding:34px 0 18px}.home-hero p{font-size:.94rem}.vista-header{padding-top:22px}.vista-titulo{font-size:1.24rem}.propina-row{align-items:flex-start;flex-direction:column}.mapa-wrap{min-height:320px}#mapa{height:320px}.modal-card,.mlogin-card,.recarga-card,.reg-card,.buscando-card{padding:22px}.cotiz-total{flex-direction:column;align-items:flex-start}.panel-tabla{min-width:620px}.vista{padding-bottom:36px}}
+@media(max-width:900px){.panel-stats,.panel-acciones,.grid-2{grid-template-columns:1fr}.ciudad-selector{grid-template-columns:repeat(2,1fr)}.tipo-envio,.tipo-moto-grid,.recarga-montos{grid-template-columns:1fr}.page-wrap{padding:0 18px}.dom-qty-grid{grid-template-columns:1fr 1fr}.dom-fechas-grid{grid-template-columns:1fr!important}.grid-2.horario-grid{grid-template-columns:1fr 1fr!important}}
+@media(max-width:760px){.home-cards{grid-template-columns:1fr!important;gap:12px}.home-stats{grid-template-columns:1fr 1fr!important;gap:10px}.home-stats .stat-chip:last-child{grid-column:span 2}}
+@media(max-width:640px){.nav-inner{padding:12px 16px}.nav-right{gap:8px}.nav-user-name{display:none}.home-hero{padding:24px 0 14px}.home-hero h1{font-size:1.9rem;letter-spacing:-.03em}.home-hero p{font-size:.9rem}.vista-header{padding-top:22px}.vista-titulo{font-size:1.24rem}.propina-row{align-items:flex-start;flex-direction:column}.mapa-wrap{min-height:320px}#mapa{height:320px}.modal-card,.mlogin-card,.recarga-card,.buscando-card{padding:22px}.cotiz-total{flex-direction:column;align-items:flex-start}.panel-tabla{min-width:620px}.vista{padding-bottom:36px}}
 </style>
 </head>
 <body data-theme="light">
@@ -433,7 +434,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
         </div>
         <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
           <span class="form-label">Horario de la Jornada</span>
-          <div class="grid-2">
+          <div class="grid-2 horario-grid">
             <div><span class="form-label" style="font-size:.68rem;margin-bottom:8px">Inicio</span><input type="time" class="form-input" id="hora-inicio" value="08:00" onchange="validarJornada()"></div>
             <div><span class="form-label" style="font-size:.68rem;margin-bottom:8px">Cierre</span><input type="time" class="form-input" id="hora-fin" value="17:00" onchange="validarJornada()"></div>
           </div>
