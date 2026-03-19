@@ -287,7 +287,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 .toast.error{border-color:rgba(240,90,40,.26);color:var(--orange)}
 .toast.success{border-color:rgba(22,163,74,.22);color:var(--green)}
 @media(max-width:1180px){.mens-layout{grid-template-columns:1fr}.mens-col-right{position:static;order:1}.mens-col-left{order:2}.mapa-wrap{min-height:420px}#mapa{height:420px}}
-@media(max-width:900px){.home-cards,.home-stats,.panel-stats,.panel-acciones,.grid-2{grid-template-columns:1fr}.ciudad-selector{grid-template-columns:repeat(2,1fr)}.tipo-envio,.tipo-moto-grid,.recarga-montos{grid-template-columns:1fr}.page-wrap{padding:0 18px}.dom-qty-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:900px){.home-cards,.home-stats,.panel-stats,.panel-acciones,.grid-2{grid-template-columns:1fr}.ciudad-selector{grid-template-columns:repeat(2,1fr)}.tipo-envio,.tipo-moto-grid,.recarga-montos{grid-template-columns:1fr}.page-wrap{padding:0 18px}.dom-qty-grid{grid-template-columns:1fr 1fr}.dom-fechas-grid{grid-template-columns:1fr!important}}
 @media(max-width:640px){.nav-inner{padding:12px 16px}.nav-right{gap:8px}.nav-user-name{display:none}.home-hero{padding:34px 0 18px}.home-hero p{font-size:.94rem}.vista-header{padding-top:22px}.vista-titulo{font-size:1.24rem}.propina-row{align-items:flex-start;flex-direction:column}.mapa-wrap{min-height:320px}#mapa{height:320px}.modal-card,.mlogin-card,.recarga-card,.reg-card,.buscando-card{padding:22px}.cotiz-total{flex-direction:column;align-items:flex-start}.panel-tabla{min-width:620px}.vista{padding-bottom:36px}}
 </style>
 </head>
@@ -365,9 +365,9 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
           <div class="paradas-wrap" id="paradas-wrap">
             <div class="parada-item"><div class="parada-dot origen">1</div><div class="parada-field"><input class="parada-input" id="origen-input" placeholder="Dirección de recogida" autocomplete="off" disabled onfocus="buscarDir(this,0)"><input class="parada-complemento" id="origen-comp" placeholder="Complemento: edificio, oficina, apartamento..." disabled></div></div>
             <div class="parada-item"><div class="parada-dot destino">2</div><div class="parada-field"><input class="parada-input" id="destino-input" placeholder="Dirección de entrega" autocomplete="off" disabled onfocus="buscarDir(this,1)"><input class="parada-complemento" id="destino-comp" placeholder="Complemento: clínica, recepción, casa..." disabled></div></div>
+            <button class="btn-add-parada" onclick="agregarParada()" id="btn-add-parada" disabled>+ Agregar parada intermedia</button>
+            <div class="check-row" onclick="toggleRegreso()" style="justify-content:center;margin-top:4px"><div class="check-box" id="check-regreso"></div><div class="check-label">⚠️ Regresar al punto de origen</div></div>
           </div>
-          <button class="btn-add-parada" onclick="agregarParada()" id="btn-add-parada" disabled>Agregar parada intermedia</button>
-          <div class="check-row" onclick="toggleRegreso()" style="margin-top:12px"><div class="check-box" id="check-regreso"></div><div class="check-label">⚠️Regresar al punto de origen</div></div>
         </div>
         <div class="form-block">
           <span class="form-label">Indicaciones para el mensajero</span>
@@ -410,25 +410,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
     </div>
     <div class="registro-wrap" style="max-width:760px;margin:0">
       <div class="reg-card">
-        <div class="dom-qty-grid">
-          <div class="dom-qty-box">
-            <div class="dom-qty-label">Días contratados</div>
-            <div class="dom-qty-row">
-              <button class="dom-qty-btn" type="button" onclick="cambiarDias(-1)">−</button>
-              <div><div class="dom-qty-val" id="dias-num">1</div><div class="dom-qty-unit">día(s)</div></div>
-              <button class="dom-qty-btn" type="button" onclick="cambiarDias(1)">+</button>
-            </div>
-          </div>
-          <div class="dom-qty-box">
-            <div class="dom-qty-label">Motorizados</div>
-            <div class="dom-qty-row">
-              <button class="dom-qty-btn" type="button" onclick="cambiarMotorizados(-1)">−</button>
-              <div><div class="dom-qty-val" id="num-motorizados">1</div><div class="dom-qty-unit">motorizado(s)</div></div>
-              <button class="dom-qty-btn" type="button" onclick="cambiarMotorizados(1)">+</button>
-            </div>
-          </div>
-        </div>
-        <div class="grid-2" style="margin-bottom:16px">
+        <div class="dom-fechas-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px">
           <div><span class="form-label">Fecha de inicio</span><input type="date" class="form-input" id="fecha-inicio" onchange="actualizarFechaFin()"></div>
           <div><span class="form-label">Fecha de finalización</span><input type="date" class="form-input" id="fecha-fin" readonly style="opacity:.7"></div>
         </div>
@@ -451,6 +433,13 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
             <div><span class="form-label" style="font-size:.68rem;margin-bottom:8px">Cierre</span><input type="time" class="form-input" id="hora-fin" value="17:00" onchange="validarJornada()"></div>
           </div>
           <div class="jornada-aviso" id="jornada-aviso" style="display:none">La jornada no puede superar 9 horas (incluye 1h de almuerzo no laboral).</div>
+        </div>
+        <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
+          <span class="form-label">Horas extras por jornada</span>
+          <div style="display:flex;align-items:center;gap:12px">
+            <input type="number" class="form-input" id="horas-extras" placeholder="0" min="0" max="4" step="1" style="max-width:120px" oninput="actualizarBonoDom()">
+            <span style="font-size:.84rem;color:var(--muted)">horas adicionales por día (máx. 4)</span>
+          </div>
         </div>
         <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
           <span class="form-label">Descripción de las actividades</span>
@@ -698,8 +687,8 @@ function mostrarResultadoMens(data,km,prop,rec){const tot=data.totalCliente+prop
 function reiniciarMensajeria(){Object.keys(marcadores).forEach(k=>marcadores[k].setMap(null));marcadores={};coordenadas={};distanciaRutaMetros=0;acInstances={};numParadas=2;conRegreso=false;ultimaCotizacionMens=null;['origen-input','destino-input','origen-comp','destino-comp'].forEach(id=>{const e=document.getElementById(id);if(e){e.value='';e.disabled=true}});document.querySelectorAll('[id^="parada-extra-"]').forEach(e=>e.remove());document.getElementById('btn-add-parada').style.display='flex';document.getElementById('btn-add-parada').disabled=true;if(directionsRenderer)directionsRenderer.setDirections({routes:[]});document.getElementById('propina-mens').value='';document.getElementById('indicaciones-mens').value='';document.getElementById('result-mens').classList.remove('visible');document.querySelectorAll('.ciudad-btn').forEach(b=>b.classList.remove('selected'));ciudadSeleccionada=null;document.getElementById('check-regreso').classList.remove('checked');document.getElementById('otra-ciudad-wrap').classList.remove('visible');document.getElementById('otra-ciudad-input').value='';const mi=document.getElementById('mapa-instruccion');mi.textContent='Selecciona una ciudad para comenzar y luego define origen y destino.';mi.style.display='block';if(mapaIniciado){mapa.setCenter({lat:4.7110,lng:-74.0721});mapa.setZoom(5)}window.scrollTo({top:0,behavior:'smooth'})}
 function cambiarDias(d){diasDomiciliario=Math.max(1,diasDomiciliario+d);document.getElementById('dias-num').textContent=diasDomiciliario;actualizarFechaFin();actualizarBonoDom()}
 function cambiarMotorizados(d){cantMotorizados=Math.max(1,Math.min(10,cantMotorizados+d));document.getElementById('num-motorizados').textContent=cantMotorizados}
-function actualizarFechaFin(){const i=document.getElementById('fecha-inicio').value;if(!i)return;const d=new Date(i+'T12:00:00');d.setDate(d.getDate()+diasDomiciliario-1);document.getElementById('fecha-fin').value=d.toISOString().split('T')[0]}
-async function cotizarDomiciliario(){document.getElementById('btn-cotizar-dom').disabled=true;document.getElementById('loading-dom').classList.add('visible');document.getElementById('result-dom').classList.remove('visible');try{const r=await fetch(API_URL+'?accion=cotizar_domiciliario&dias='+diasDomiciliario),data=await r.json();if(!data.ok){showToast(data.error||'Error','error');return}const bd=parseInt(document.getElementById('propina-dom').value)||0,bt=bd*diasDomiciliario*cantMotorizados;data._propina=bt;data._bonoDiario=bd;data._cantMotorizados=cantMotorizados;ultimaCotizacionDom=data;const tb=data.totalCliente*cantMotorizados,tf=tb+bt;let h='';if(cantMotorizados>1)h+='<div class="cotiz-row"><span class="cotiz-row-label">Motorizados</span><span class="cotiz-row-value">'+cantMotorizados+'</span></div>';h+='<div class="cotiz-row"><span class="cotiz-row-label">Días contratados</span><span class="cotiz-row-value">'+data.dias+' día(s)</span></div><div class="cotiz-row"><span class="cotiz-row-label">Tarifa del domiciliario</span><span class="cotiz-row-value">'+fmtCOP(data.tarifaTotal*cantMotorizados)+'</span></div><div class="cotiz-row"><span class="cotiz-row-label">Tarifa de gestión Radiz</span><span class="cotiz-row-value">'+fmtCOP(data.comisionRadiz*cantMotorizados)+'</span></div><div class="cotiz-row"><span class="cotiz-row-label">Bono rodamiento</span><span class="cotiz-row-value">'+fmtCOP(data.bonoRodamiento*cantMotorizados)+'</span></div>';if(bd>0)h+='<div class="cotiz-row"><span class="cotiz-row-label">Bonificación</span><span class="cotiz-row-value" style="color:var(--green)">+ '+fmtCOP(bt)+'</span></div>';document.getElementById('detalle-dom').innerHTML=h;document.getElementById('total-dom-valor').textContent=fmtCOP(tf);document.getElementById('result-dom').classList.add('visible')}catch(e){showToast('Error de conexión','error')}finally{document.getElementById('btn-cotizar-dom').disabled=false;document.getElementById('loading-dom').classList.remove('visible')}}
+function actualizarFechaFin(){const i=document.getElementById('fecha-inicio').value,f=document.getElementById('fecha-fin').value;if(i&&f){const d1=new Date(i+'T12:00:00'),d2=new Date(f+'T12:00:00');const diff=Math.round((d2-d1)/(1000*60*60*24))+1;diasDomiciliario=Math.max(1,diff)}else if(i){const d=new Date(i+'T12:00:00');d.setDate(d.getDate()+diasDomiciliario-1);document.getElementById('fecha-fin').value=d.toISOString().split('T')[0]}}
+async function cotizarDomiciliario(){document.getElementById('btn-cotizar-dom').disabled=true;document.getElementById('loading-dom').classList.add('visible');document.getElementById('result-dom').classList.remove('visible');try{const horasExtras=parseInt(document.getElementById('horas-extras').value)||0;const r=await fetch(API_URL+'?accion=cotizar_domiciliario&dias='+diasDomiciliario),data=await r.json();if(!data.ok){showToast(data.error||'Error','error');return}const bd=parseInt(document.getElementById('propina-dom').value)||0,bt=bd*diasDomiciliario*cantMotorizados;data._propina=bt;data._bonoDiario=bd;data._cantMotorizados=cantMotorizados;data._horasExtras=horasExtras;ultimaCotizacionDom=data;const tb=data.totalCliente*cantMotorizados,tf=tb+bt;let h='';h+='<div class="cotiz-row"><span class="cotiz-row-label">Días contratados</span><span class="cotiz-row-value">'+data.dias+' día(s)</span></div><div class="cotiz-row"><span class="cotiz-row-label">Tarifa del domiciliario</span><span class="cotiz-row-value">'+fmtCOP(data.tarifaTotal*cantMotorizados)+'</span></div><div class="cotiz-row"><span class="cotiz-row-label">Tarifa de gestión Radiz</span><span class="cotiz-row-value">'+fmtCOP(data.comisionRadiz*cantMotorizados)+'</span></div><div class="cotiz-row"><span class="cotiz-row-label">Bono rodamiento</span><span class="cotiz-row-value">'+fmtCOP(data.bonoRodamiento*cantMotorizados)+'</span></div>';if(horasExtras>0)h+='<div class="cotiz-row"><span class="cotiz-row-label">Horas extras ('+horasExtras+'h × '+data.dias+' días)</span><span class="cotiz-row-value">A confirmar</span></div>';if(bd>0)h+='<div class="cotiz-row"><span class="cotiz-row-label">Bonificación</span><span class="cotiz-row-value" style="color:var(--green)">+ '+fmtCOP(bt)+'</span></div>';document.getElementById('detalle-dom').innerHTML=h;document.getElementById('total-dom-valor').textContent=fmtCOP(tf);document.getElementById('result-dom').classList.add('visible')}catch(e){showToast('Error de conexión','error')}finally{document.getElementById('btn-cotizar-dom').disabled=false;document.getElementById('loading-dom').classList.remove('visible')}}
 function validarJornada(){const i=document.getElementById('hora-inicio').value,f=document.getElementById('hora-fin').value;if(!i||!f)return;const[hI,mI]=i.split(':').map(Number),[hF,mF]=f.split(':').map(Number),mins=(hF*60+mF)-(hI*60+mI),av=document.getElementById('jornada-aviso'),btn=document.getElementById('btn-cotizar-dom');if(mins>540||mins<=0){av.style.display='block';btn.disabled=true;btn.style.opacity='.4'}else{av.style.display='none';btn.disabled=false;btn.style.opacity='1'}}
 function actualizarBonoDom(){const b=parseInt(document.getElementById('propina-dom').value)||0,f=document.getElementById('bono-total-row');if(b>0){f.style.display='flex';document.getElementById('bono-dias-label').textContent=diasDomiciliario;document.getElementById('bono-total-valor').textContent=fmtCOP(b*diasDomiciliario*cantMotorizados)}else f.style.display='none'}
 function mostrarTerminosDom(){document.getElementById('modal-terminos').classList.add('visible')}
