@@ -123,26 +123,6 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
 .small-note{font-size:.78rem;color:#6b7280;margin-top:6px}
 @media(max-width:900px){.main-grid{grid-template-columns:1fr}.brand-card{min-height:260px}}
 @media(max-width:640px){.container{padding:22px 18px 24px;border-radius:18px}.portal-header{flex-direction:column;align-items:flex-start}.fab-menu{top:16px;right:16px}#montoPago,#idContrato{width:100%}}
-/* ── EXPRESS ── */
-.express-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
-.express-titulo{font-size:1.05rem;font-weight:700;color:#111827}
-.express-badge{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px;background:#dbeafe;color:#1d4ed8}
-.express-notif{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;background:#f0fdf4;border:1px solid #bbf7d0;margin-bottom:10px;font-size:.83rem;color:#166534}
-.express-notif.denegado{background:#fff7ed;border-color:#fed7aa;color:#9a3412}
-.express-notif.activo{background:#eff6ff;border-color:#bfdbfe;color:#1e40af}
-.express-notif-btn{padding:6px 13px;border-radius:999px;font-size:.79rem;font-weight:700;border:none;cursor:pointer;background:#2563eb;color:#fff;box-shadow:none;white-space:nowrap;flex-shrink:0}
-.express-notif-btn:hover{background:#1d4ed8}
-.express-lista{display:flex;flex-direction:column;gap:10px}
-.express-card{border:1px solid #e5e7eb;border-radius:14px;padding:13px 14px;background:#f9fbff;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-.express-card:hover{border-color:#2563eb;background:#eff6ff}
-.express-info p{margin:2px 0;font-size:.87rem;color:#374151}
-.express-info strong{font-weight:700;color:#111827}
-.express-tarifa{font-size:1rem;font-weight:800;color:#2563eb;white-space:nowrap}
-.express-aceptar{margin-top:8px;padding:7px 15px;font-size:.83rem;border-radius:999px;background:#2563eb;color:#fff;border:none;cursor:pointer;font-weight:700;box-shadow:0 8px 18px rgba(37,99,235,.3)}
-.express-aceptar:hover{background:#1d4ed8}
-.express-aceptar:disabled{opacity:.55;cursor:default}
-.express-empty{font-size:.87rem;color:#6b7280;padding:12px 0;text-align:center}
-.express-loading{font-size:.84rem;color:#6b7280;padding:10px 0;text-align:center}
 </style>
 </head><body>
 <div id="splash" aria-label="Cargando"><div class="box"><img src="icon-512.png" alt="RADIZ"><div class="spin"></div></div></div>
@@ -210,21 +190,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
         <div class="welcome-banner"><div class="welcome-icon"></div><div><p class="welcome-text-title">¡Bienvenido a Radiz Vehicular!</p><p class="welcome-text-sub">Consulte su contrato, realice pagos y descargue su historial.</p></div></div>
         <header class="portal-header"><div><h1></h1></div></header>
 
-        <div class="card card-consulta" id="modulo-express" style="display:none">
-          <div class="express-header">
-            <span class="express-titulo">⚡ Express</span>
-            <span class="express-badge" id="express-badge">0</span>
-          </div>
-          <div id="express-notif" class="express-notif" style="display:none">
-            <span id="express-notif-txt"></span>
-            <button class="express-notif-btn" id="express-notif-btn" onclick="__solicitarNotif()">Activar</button>
-          </div>
-          <div class="express-lista" id="express-lista">
-            <div class="express-loading">Cargando pedidos...</div>
-          </div>
-        </div>
-
-        <div class="card card-consulta" id="card-consulta-original">
+        <div class="card card-consulta">
           <div class="section-title"><div class="section-icon section-icon-search"></div><span>Consulta de contrato</span></div>
           <label for="idContrato">ID</label>
           <div class="row-consulta">
@@ -322,7 +288,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
   <label for="invPassword">Contraseña</label><input type="password" id="invPassword" placeholder="Tu contraseña">
   <p id="invLoginMsg" class="status"></p>
   <div class="modal-actions"><button type="button" onclick="cerrarModal('modalInversiones')">Cerrar</button><button type="button" onclick="loginInversiones()">Entrar</button></div>
-  <p style="font-size:.8rem;margin-top:8px;color:#6b7280;">¿Olvidó su contraseña? Escríbanos a <a href="/cdn-cgi/l/email-protection#fe90918a9798979d9f9d9791909b8d8e97cacbbe99939f9792d09d9193"><span class="__cf_email__" data-cfemail="ff91908b9699969c9e9c9690919a8c8f96cbcabf98929e9693d19c9092">[email&#160;protected]</span></a> con el asunto "Reasignar contraseña".</p>
+  <p style="font-size:.8rem;margin-top:8px;color:#6b7280;">¿Olvidó su contraseña? Escríbanos a <a href="mailto:notificacionespi45@gmail.com">notificacionespi45@gmail.com</a> con el asunto "Reasignar contraseña".</p>
 </div></div>
 
 <div class="modal-backdrop" id="modalFechaPagosAfiliado"><div class="modal"><div class="modal-header"><h3>Fecha de pagos al afiliado</h3><button class="modal-close" type="button" onclick="cerrarModal('modalFechaPagosAfiliado')">&times;</button></div><p id="modalFechaPagosTexto">Dato no disponible.</p></div></div>
@@ -361,7 +327,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
   <p id="linkAfiliadoMsg" class="copy-msg"></p>
 </div></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const API_URL='https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
 const WOMPI_PUBLIC_KEY='pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06';
 const WOMPI_INTEGRITY_KEY='prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN';
@@ -987,7 +953,6 @@ async function loginInversiones(origen){
       msg.className=useLogin?'login-msg ok':'status ok';
       msg.textContent='Acceso concedido. Abriendo tu panel...';
       if(!useLogin) cerrarModal('modalInversiones');
-      __iniciarExpress(idFinal);
       window.location.href=URL_LOGISTICA+encodeURIComponent(idFinal);
     }else if(tipo==='AFILIADO'){
       msg.className=useLogin?'login-msg ok':'status ok';
@@ -995,7 +960,8 @@ async function loginInversiones(origen){
       if(!useLogin) cerrarModal('modalInversiones');
       window.location.href=URL_INVERSIONES+encodeURIComponent(idFinal);
     }else{
-      g.textContent='Tipo de usuario no reconocido para este ID.';
+      msg.className=useLogin?'login-msg error':'status error';
+      msg.textContent='Tipo de usuario no reconocido para este ID.';
     }
   }catch(e){
     console.error(e);
@@ -1003,78 +969,5 @@ async function loginInversiones(origen){
     msg.textContent='Error al iniciar sesión. Intenta de nuevo.';
   }
 }
-
-// ── EXPRESS ──────────────────────────────────────────────────────
-let __expTimer=null,__expIds=new Set();
-
-function __iniciarExpress(idMotor){
-  const mod=document.getElementById('modulo-express'),con=document.getElementById('card-consulta-original');
-  if(mod) mod.style.display='block';
-  if(con) con.style.display='none';
-  __actualizarBannerNotif();
-  __cargarExpress(idMotor);
-  if(__expTimer) clearInterval(__expTimer);
-  __expTimer=setInterval(()=>__cargarExpress(idMotor),30000);
-}
-
-async function __cargarExpress(idMotor){
-  const lista=document.getElementById('express-lista'),badge=document.getElementById('express-badge');
-  if(!lista) return;
-  try{
-    const resp=await fetch(API_URL+'?accion=pedidos_disponibles');
-    const data=await resp.json();
-    if(!data.ok){lista.innerHTML='<div class="express-empty">No se pudo cargar la lista.</div>';return;}
-    const pedidos=data.pedidos||[];
-    if(badge) badge.textContent=pedidos.length;
-    const nuevos=pedidos.filter(p=>!__expIds.has(String(p.id)));
-    if(nuevos.length&&__expIds.size>0) nuevos.forEach(p=>__notifPush('⚡ Nuevo pedido Express',p.ciudad+' · '+__fmtExp(p.tarifa)));
-    __expIds=new Set(pedidos.map(p=>String(p.id)));
-    if(!pedidos.length){lista.innerHTML='<div class="express-empty">No hay pedidos disponibles en este momento.</div>';return;}
-    lista.innerHTML=pedidos.map(p=>'<div class="express-card"><div class="express-info"><p><strong>'+__esc(p.tipo||'Mensajería')+'</strong> · '+(p.ciudad||'')+'</p><p>📍 '+(p.origen||'')+'</p><p>🏁 '+(p.destino||'')+'</p>'+(Number(p.propina||0)>0?'<p><strong>Propina:</strong> '+__fmtExp(p.propina)+'</p>':'')+'<button class="express-aceptar" id="exp-btn-'+__esc(p.id)+'" onclick="__tomarPedido(\''+__esc(p.id)+'\'  ,\''+encodeURIComponent(idMotor)+'\')">Aceptar</button></div><div class="express-tarifa">'+__fmtExp(p.tarifa)+'</div></div>').join('');
-  }catch(e){if(lista) lista.innerHTML='<div class="express-empty">Error al cargar. Reintentando...</div>';}
-}
-
-function __fmtExp(n){return Number(n||0).toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});}
-function __esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
-
-async function __tomarPedido(idPedido,idMotorEnc){
-  const idMotor=decodeURIComponent(idMotorEnc);
-  const btn=document.getElementById('exp-btn-'+idPedido);
-  if(btn){btn.disabled=true;btn.textContent='Aceptando...';}
-  try{
-    const resp=await fetch(API_URL+'?accion=aceptar_pedido&idPedido='+encodeURIComponent(idPedido)+'&idMotor='+encodeURIComponent(idMotor));
-    const data=await resp.json();
-    if(data.ok){__cargarExpress(idMotor);}
-    else{if(btn){btn.disabled=false;btn.textContent='Aceptar';}alert(data.error||'No fue posible aceptar el pedido.');}
-  }catch(e){if(btn){btn.disabled=false;btn.textContent='Aceptar';}}
-}
-
-function __actualizarBannerNotif(){
-  const row=document.getElementById('express-notif'),txt=document.getElementById('express-notif-txt'),btn=document.getElementById('express-notif-btn');
-  if(!row) return;
-  if(!('Notification' in window)){row.style.display='none';return;}
-  row.style.display='flex';
-  const p=Notification.permission;
-  if(p==='granted'){row.className='express-notif activo';txt.textContent='Notificaciones activas. Recibirás alertas de nuevos pedidos.';btn.style.display='none';}
-  else if(p==='denied'){row.className='express-notif denegado';txt.textContent='Notificaciones bloqueadas. Actívalas desde ajustes del navegador.';btn.style.display='none';}
-  else{row.className='express-notif';txt.textContent='Activa las notificaciones para recibir pedidos al instante.';btn.style.display='inline-flex';}
-}
-
-async function __solicitarNotif(){
-  if(!('Notification' in window)){alert('Tu navegador no soporta notificaciones.');return;}
-  const btn=document.getElementById('express-notif-btn');
-  if(btn){btn.disabled=true;btn.textContent='Activando...';}
-  try{await Notification.requestPermission();}catch(_){}
-  __actualizarBannerNotif();
-  if(btn) btn.disabled=false;
-}
-
-function __notifPush(titulo,cuerpo){
-  if(!('Notification' in window)||Notification.permission!=='granted') return;
-  if('serviceWorker' in navigator){
-    navigator.serviceWorker.ready.then(reg=>reg.showNotification(titulo,{body:cuerpo,icon:'/icon-192.png',badge:'/icon-192.png',vibrate:[200,100,200],tag:'express',renotify:true})).catch(()=>{try{new Notification(titulo,{body:cuerpo});}catch(_){}});
-  }else{try{new Notification(titulo,{body:cuerpo});}catch(_){}}
-}
-// ────────────────────────────────────────────────────────────────
 </script>
 </body></html>
