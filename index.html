@@ -121,6 +121,16 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
 .copy-msg{font-size:.8rem;margin-top:6px;color:#6b7280}
 .img-beneficios-renting{max-width:100%;height:auto;border-radius:12px;display:block;margin:4px auto}
 .small-note{font-size:.78rem;color:#6b7280;margin-top:6px}
+/* ── MÓDULO EXPRESS (pedidos) ── */
+#modulo-express{margin-bottom:18px}
+#modulo-express .exp-header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:14px}
+#modulo-express .exp-titulo{font-size:1.12rem;font-weight:800;color:#111827;letter-spacing:-.01em}
+#modulo-express .exp-badge{font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px;background:#dbeafe;color:#1d4ed8}
+#modulo-express .exp-notif-row{display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:12px;background:#f0fdf4;border:1px solid #bbf7d0;margin-bottom:12px;font-size:.84rem;color:#166534}
+#modulo-express .exp-notif-row.denegado{background:#fff7ed;border-color:#fed7aa;color:#9a3412}
+#modulo-express .exp-notif-row.activo{background:#eff6ff;border-color:#bfdbfe;color:#1e40af}
+#modulo-express .btn-notif{padding:6px 14px;border-radius:999px;font-size:.8rem;font-weight:700;border:none;cursor:pointer;background:#2563eb;color:#fff;box-shadow:none;white-space:nowrap;flex-shrink:0}
+#modulo-express .btn-notif:hover{background:#1d4ed8}
 /* ── PEDIDOS DISPONIBLES ── */
 #pedidos-disponibles{margin-bottom:18px;display:none}
 #pedidos-disponibles .pd-titulo{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
@@ -171,6 +181,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
           <div class="menu-item" id="menuDescargaApp" onclick="manejarDescargaApp()">Descarga la App</div>
         </div>
         <div id="menuRenting" style="display:none;">
+          <div class="menu-item" onclick="abrirModal('modalContrato')">Contrato</div>
           <div class="menu-item" onclick="abrirModal('modalBeneficios')">Beneficios</div>
           <div class="menu-item" onclick="solicitarGrua()">Solicitar grúa</div>
           <div class="menu-item" onclick="abrirModal('modalActualizarKm')">Actualizar kilometraje</div>
@@ -206,27 +217,22 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
         <div class="welcome-banner"><div class="welcome-icon"></div><div><p class="welcome-text-title">¡Bienvenido a Radiz Vehicular!</p><p class="welcome-text-sub">Consulte su contrato, realice pagos y descargue su historial.</p></div></div>
         <header class="portal-header"><div><h1></h1></div></header>
 
-        <!-- PANEL DE PEDIDOS DISPONIBLES — solo visible para RENTING tras login -->
-        <div id="pedidos-disponibles">
-          <div class="pd-titulo">
-            <span>Pedidos disponibles</span>
-            <span class="pd-badge" id="pd-badge">0</span>
+        <!-- MÓDULO EXPRESS — solicitudes de clientes para motorizados RENTING -->
+        <div id="modulo-express" style="display:none">
+          <div class="exp-header">
+            <span class="exp-titulo">⚡ Express</span>
+            <span class="exp-badge" id="pd-badge">0</span>
+          </div>
+          <div id="exp-notif-row" class="exp-notif-row" style="display:none">
+            <span id="exp-notif-txt">Activa las notificaciones para recibir pedidos al instante.</span>
+            <button class="btn-notif" id="exp-notif-btn" onclick="__solicitarPermisoPush()">Activar</button>
           </div>
           <div class="pd-lista" id="pd-lista">
             <div class="pd-loading">Cargando pedidos...</div>
           </div>
         </div>
 
-        <div class="card card-consulta">
-          <div class="section-title"><div class="section-icon section-icon-search"></div><span>Consulta de contrato</span></div>
-          <label for="idContrato">ID</label>
-          <div class="row-consulta">
-            <input type="text" id="idContrato" placeholder="Ejemplo: R4523">
-            <button id="btnConsultar" class="btn-main" onclick="consultar()">Consultar</button>
-          </div>
-          <div id="status" class="status"></div>
-        </div>
-
+        <!-- SECCIÓN PAGO — se mantiene igual -->
         <div class="card card-pago" id="seccionPago">
           <div class="section-title"><div class="section-icon section-icon-money"></div><span>Realizar pago</span></div>
           <p>Ingresa el monto a pagar y completa el proceso con Wompi.</p>
@@ -240,13 +246,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
           <p id="pagoContratoError">Digita tu ID antes de pagar.</p>
         </div>
 
-        <div class="affiliate-row"><button type="button" class="btn-app" onclick="abrirModal('modalInversiones')">Iniciar sesión</button></div>
-
-        <div class="grid" id="resultados" style="display:none;">
-          <div class="card card-contrato" id="cardContrato"></div>
-          <div class="card card-pagos" id="cardPagos"></div>
-          <div class="card card-mantenimientos" id="cardMantenimientos"></div>
-        </div>
+        <div class="affiliate-row" id="affiliate-row-logistica" style="display:none"><button type="button" class="btn-app" onclick="abrirModal('modalInversiones')">Iniciar sesión</button></div>
 
         <footer>Versión interna • RADIZ Suministro Vehicular</footer>
       </div>
@@ -354,6 +354,24 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
   <p id="linkAfiliadoMsg" class="copy-msg"></p>
 </div></div>
 
+<div class="modal-backdrop" id="modalContrato"><div class="modal" style="max-width:560px">
+  <div class="modal-header"><h3>Mi contrato</h3><button class="modal-close" type="button" onclick="cerrarModal('modalContrato')">&times;</button></div>
+  <label for="idContratoModal">ID de contrato</label>
+  <div style="display:flex;gap:8px;margin-top:6px;margin-bottom:10px">
+    <input type="text" id="idContratoModal" placeholder="Ejemplo: R4523" style="flex:1">
+    <button type="button" onclick="consultarDesdeModal()" id="btnConsultarModal">Consultar</button>
+  </div>
+  <div id="statusModal" class="status"></div>
+  <div id="resultadosModal" style="display:none">
+    <div class="grid" style="margin-top:8px;margin-bottom:0">
+      <div class="card card-contrato" id="cardContratoModal"></div>
+      <div class="card card-pagos" id="cardPagosModal"></div>
+      <div class="card card-mantenimientos" id="cardMantenimientosModal"></div>
+    </div>
+  </div>
+  <div class="modal-actions"><button type="button" onclick="cerrarModal('modalContrato')">Cerrar</button></div>
+</div></div>
+
 <script>
 const API_URL='https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
 const WOMPI_PUBLIC_KEY='pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06';
@@ -394,7 +412,13 @@ function __getSesionGuardada(){
 function __autoEntrarSiHaySesion(){
   const s=__getSesionGuardada();
   if(!s.id||!s.tipo) return;
-  if(s.tipo==='RENTING'){window.location.replace(URL_LOGISTICA+encodeURIComponent(s.id));return;}
+  if(s.tipo==='RENTING'){
+    document.querySelector('.login-screen').style.display='none';
+    const page=document.querySelector('.page'); if(page) page.style.display='flex';
+    const iCM=el('idContratoModal'); if(iCM) iCM.value=s.id;
+    setTimeout(()=>__iniciarPanelPedidos(s.id),200);
+    return;
+  }
   if(s.tipo==='AFILIADO'){window.location.replace(URL_INVERSIONES+encodeURIComponent(s.id));return;}
 }
 
@@ -595,13 +619,17 @@ async function consultar(){
   }
 }
 
-// ── PEDIDOS DISPONIBLES ──────────────────────────────────────────
+// ── MÓDULO EXPRESS ───────────────────────────────────────────────
 let __pedidosPollingTimer=null;
+let __ultimosPedidosIds=new Set();
 
 function __iniciarPanelPedidos(idMotor){
-  const panel=el('pedidos-disponibles');
-  if(!panel) return;
-  panel.style.display='block';
+  const modulo=el('modulo-express');
+  if(!modulo) return;
+  modulo.style.display='block';
+  // Ocultar botón login anónimo
+  const af=el('affiliate-row-logistica'); if(af) af.style.display='none';
+  __actualizarBannerNotif();
   __cargarPedidosDisponibles(idMotor);
   if(__pedidosPollingTimer) clearInterval(__pedidosPollingTimer);
   __pedidosPollingTimer=setInterval(()=>__cargarPedidosDisponibles(idMotor),30000);
@@ -616,11 +644,19 @@ async function __cargarPedidosDisponibles(idMotor){
     if(!data.ok){lista.innerHTML='<div class="pd-empty">No se pudo cargar la lista.</div>';return;}
     const pedidos=data.pedidos||[];
     if(badge) badge.textContent=pedidos.length;
+
+    // Detectar pedidos nuevos para push
+    const nuevos=pedidos.filter(p=>!__ultimosPedidosIds.has(String(p.id)));
+    if(nuevos.length&&__ultimosPedidosIds.size>0){
+      nuevos.forEach(p=>__enviarNotifPush('⚡ Nuevo pedido Express',p.ciudad+' · '+__fmtCOP(p.tarifa)));
+    }
+    __ultimosPedidosIds=new Set(pedidos.map(p=>String(p.id)));
+
     if(!pedidos.length){lista.innerHTML='<div class="pd-empty">No hay pedidos disponibles en este momento.</div>';return;}
     lista.innerHTML=pedidos.map(p=>{
-      const tarifa=Number(p.tarifa||0).toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
+      const tarifa=__fmtCOP(p.tarifa);
       const propina=Number(p.propina||0);
-      const propinaHtml=propina>0?'<p><strong>Propina:</strong> '+propina.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0})+'</p>':'';
+      const propinaHtml=propina>0?'<p><strong>Propina:</strong> '+__fmtCOP(propina)+'</p>':'';
       return '<div class="pd-card">'+
         '<div class="pd-info">'+
           '<p><strong>'+escapeHtml(p.tipo||'Mensajería')+'</strong> · '+(p.ciudad||'')+'</p>'+
@@ -638,6 +674,8 @@ async function __cargarPedidosDisponibles(idMotor){
   }
 }
 
+function __fmtCOP(n){return Number(n||0).toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});}
+
 async function __aceptarPedido(idPedido,idMotorEnc){
   const idMotor=decodeURIComponent(idMotorEnc);
   const btn=el('pd-btn-'+idPedido);
@@ -645,20 +683,121 @@ async function __aceptarPedido(idPedido,idMotorEnc){
   try{
     const resp=await fetch(API_URL+'?accion=aceptar_pedido&idPedido='+encodeURIComponent(idPedido)+'&idMotor='+encodeURIComponent(idMotor));
     const data=await resp.json();
-    if(data.ok){
-      __cargarPedidosDisponibles(idMotor);
-    }else{
-      if(btn){btn.disabled=false;btn.textContent='Aceptar';}
-      alert(data.error||'No fue posible aceptar el pedido.');
-    }
+    if(data.ok){__cargarPedidosDisponibles(idMotor);}
+    else{if(btn){btn.disabled=false;btn.textContent='Aceptar';}alert(data.error||'No fue posible aceptar el pedido.');}
   }catch(e){
     console.error(e);
     if(btn){btn.disabled=false;btn.textContent='Aceptar';}
   }
 }
 
-function escapeHtml(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+// ── NOTIFICACIONES PUSH ──────────────────────────────────────────
+function __permisoNotif(){
+  if(!('Notification' in window)) return 'no-soportado';
+  return Notification.permission; // 'default' | 'granted' | 'denied'
+}
+
+function __actualizarBannerNotif(){
+  const row=el('exp-notif-row'),txt=el('exp-notif-txt'),btn=el('exp-notif-btn');
+  if(!row) return;
+  const p=__permisoNotif();
+  if(p==='no-soportado'){row.style.display='none';return;}
+  row.style.display='flex';
+  if(p==='granted'){
+    row.className='exp-notif-row activo';
+    txt.textContent='Notificaciones activas. Recibirás alertas de nuevos pedidos.';
+    btn.style.display='none';
+  }else if(p==='denied'){
+    row.className='exp-notif-row denegado';
+    txt.textContent='Notificaciones bloqueadas. Actívalas desde la configuración del navegador.';
+    btn.style.display='none';
+  }else{
+    row.className='exp-notif-row';
+    txt.textContent='Activa las notificaciones para recibir pedidos al instante.';
+    btn.style.display='inline-flex';
+    btn.textContent='Activar';
+  }
+}
+
+async function __solicitarPermisoPush(){
+  if(!('Notification' in window)){alert('Tu navegador no soporta notificaciones.');return;}
+  const btn=el('exp-notif-btn');
+  if(btn){btn.disabled=true;btn.textContent='Activando...';}
+  try{
+    const result=await Notification.requestPermission();
+    __actualizarBannerNotif();
+    if(result==='granted'){
+      // Registrar SW para push si está disponible
+      if('serviceWorker' in navigator){
+        const reg=await navigator.serviceWorker.ready;
+        // Suscribir si el SW soporta pushManager
+        if(reg.pushManager){
+          try{
+            await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:null});
+          }catch(_){}
+        }
+      }
+    }
+  }catch(e){
+    console.error('Push error',e);
+    __actualizarBannerNotif();
+  }finally{
+    if(btn) btn.disabled=false;
+  }
+}
+
+function __enviarNotifPush(titulo,cuerpo){
+  if(__permisoNotif()!=='granted') return;
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.ready.then(reg=>{
+      reg.showNotification(titulo,{
+        body:cuerpo,
+        icon:'/icon-192.png',
+        badge:'/icon-192.png',
+        vibrate:[200,100,200],
+        tag:'pedido-express',
+        renotify:true
+      });
+    }).catch(()=>{
+      new Notification(titulo,{body:cuerpo,icon:'/icon-192.png'});
+    });
+  }else{
+    try{new Notification(titulo,{body:cuerpo,icon:'/icon-192.png'});}catch(_){}
+  }
+}
 // ────────────────────────────────────────────────────────────────
+
+// ── CONSULTA DESDE MODAL CONTRATO ────────────────────────────────
+async function consultarDesdeModal(){
+  const id=(el('idContratoModal').value||'').trim().toUpperCase();
+  const status=el('statusModal'),btn=el('btnConsultarModal'),res=el('resultadosModal');
+  const cC=el('cardContratoModal'),cP=el('cardPagosModal'),cM=el('cardMantenimientosModal');
+  status.className='status';status.textContent='';res.style.display='none';
+  if(!id){status.classList.add('error');status.textContent='Por favor ingresa un ID.';return;}
+  btn.disabled=true;status.textContent='Consultando...';
+  try{
+    const resp=await fetch(API_URL+'?id='+encodeURIComponent(id));
+    const data=await resp.json();
+    if(!data.ok){status.className='status error';status.textContent=data.error||'No se encontró información para ese ID.';return;}
+    const c=data.contrato||{};
+    const pagos=data.pagos||[];
+    const mtsList=Array.isArray(data.mantenimientos)?data.mantenimientos:[];
+    const resumenMtos=data.mantenimientosResumen||{};
+    const estado=(c['ESTADO']||'').toString().toUpperCase();
+    const beneficiosTexto=c['BENEFICIOS']||'Información no disponible';
+    cC.innerHTML='<h2>Contrato</h2><p><strong>ID:</strong> '+(c['ID CONTRATO']||'')+'</p><p><strong>Tipo usuario:</strong> '+(c['TIPO USUARIO']||'')+'</p><p><strong>Vehículo:</strong> '+(c['ID VEHÍCULO']||c['ID VEHICULO']||'')+'</p><p><strong>Inicio:</strong> '+formatearFecha(c['INICIO'])+'</p><p><strong>Fin:</strong> '+formatearFecha(c['FIN'])+'</p><p><strong>Tarifa semanal:</strong> '+formatearNumero(c['TARIFA SEMANAL'])+'</p><p><strong>Beneficios:</strong> '+beneficiosTexto+'</p><p><span class="badge '+(estado==='ACTIVO'?'badge-activo':'badge-inactivo')+'">'+(estado||'SIN ESTADO')+'</span></p>';
+    if(pagos.length===0){cP.innerHTML='<h2>Pagos</h2><p>No hay pagos registrados.</p>';}
+    else{const p=pagos[0];const tv=p['TARIFAS VENCIDAS']||'0';const tc=p['TARIFAS COMPLETADAS']||'0';const mora=Number(c['TARIFA SEMANAL']||0)*Number(tv||0);cP.innerHTML='<h2>Pagos</h2><p><strong>Día de corte:</strong> '+(p['DÍAS DE CORTE']||p['DIAS DE CORTE']||'')+'</p><p><strong>Completadas:</strong> '+tc+'</p><p><strong>Vencidas:</strong> '+tv+'</p>'+(mora>0?'<p><strong>Mora estimada:</strong> '+formatearNumero(mora)+'</p>':'');}
+    if(!mtsList.length){cM.innerHTML='<h2>Mantenimientos</h2><p>Sin registros.</p>';}
+    else{const rm=resumenMtos;cM.innerHTML='<h2>Mantenimientos</h2><p><strong>Placa:</strong> '+(rm.placa||'')+'</p><p><strong>Cambios de aceite:</strong> '+aNumeroCO(rm.cambiosAceite)+'</p><p><strong>Pastillas:</strong> '+aNumeroCO(rm.pastillas)+'</p><p><strong>Kit arrastre:</strong> '+aNumeroCO(rm.kitArrastre||rm.kitsArrastre)+'</p><p><strong>Último:</strong> '+formatearFecha(rm.ultimoMantenimiento)+'</p><p><strong>Taller:</strong> '+(rm.taller||'')+'</p>';}
+    res.style.display='block';
+    status.className='status ok';status.textContent='Información cargada.';
+  }catch(e){status.className='status error';status.textContent='Error al consultar. Intenta de nuevo.';}
+  finally{btn.disabled=false;}
+}
+// ────────────────────────────────────────────────────────────────
+
+function escapeHtml(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
 
 function aNumeroCO(v){
   if(v===null||v===undefined) return 0;
@@ -1043,11 +1182,14 @@ async function loginInversiones(origen){
     try{localStorage.setItem(RADIZ_SES_ID,idFinal);localStorage.setItem(RADIZ_SES_TIPO,tipo);}catch(e){}
     if(tipo==='RENTING'){
       msg.className=useLogin?'login-msg ok':'status ok';
-      msg.textContent='Acceso concedido. Abriendo tu panel...';
+      msg.textContent='Acceso concedido. Cargando pedidos...';
       if(!useLogin) cerrarModal('modalInversiones');
-      // Iniciar panel de pedidos antes de redirigir
+      // Pre-rellenar campo de contrato en modal
+      const iCM=el('idContratoModal'); if(iCM) iCM.value=idFinal;
+      // Mostrar página principal y lanzar módulo Express
+      document.querySelector('.login-screen').style.display='none';
+      const page=document.querySelector('.page'); if(page) page.style.display='flex';
       __iniciarPanelPedidos(idFinal);
-      setTimeout(()=>{window.location.href=URL_LOGISTICA+encodeURIComponent(idFinal);},1200);
     }else if(tipo==='AFILIADO'){
       msg.className=useLogin?'login-msg ok':'status ok';
       msg.textContent='Acceso concedido. Abriendo tu portal de inversiones...';
