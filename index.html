@@ -121,6 +121,22 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
 .copy-msg{font-size:.8rem;margin-top:6px;color:#6b7280}
 .img-beneficios-renting{max-width:100%;height:auto;border-radius:12px;display:block;margin:4px auto}
 .small-note{font-size:.78rem;color:#6b7280;margin-top:6px}
+/* ── PEDIDOS DISPONIBLES ── */
+#pedidos-disponibles{margin-bottom:18px;display:none}
+#pedidos-disponibles .pd-titulo{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+#pedidos-disponibles .pd-titulo span{font-size:1.05rem;font-weight:700;color:#111827}
+#pedidos-disponibles .pd-titulo .pd-badge{font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:999px;background:#dbeafe;color:#1d4ed8}
+#pedidos-disponibles .pd-lista{display:flex;flex-direction:column;gap:10px}
+#pedidos-disponibles .pd-card{border:1px solid #e5e7eb;border-radius:14px;padding:13px 14px;background:#f9fbff;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+#pedidos-disponibles .pd-card:hover{border-color:#2563eb;background:#eff6ff}
+#pedidos-disponibles .pd-info p{margin:2px 0;font-size:.88rem;color:#374151}
+#pedidos-disponibles .pd-info strong{font-weight:700;color:#111827}
+#pedidos-disponibles .pd-tarifa{font-size:1rem;font-weight:800;color:#2563eb;white-space:nowrap}
+#pedidos-disponibles .pd-btn{margin-top:8px;padding:7px 16px;font-size:.84rem;border-radius:999px;background:#2563eb;color:#fff;border:none;cursor:pointer;font-weight:700;box-shadow:0 8px 18px rgba(37,99,235,.35)}
+#pedidos-disponibles .pd-btn:hover{background:#1d4ed8}
+#pedidos-disponibles .pd-btn:disabled{opacity:.55;cursor:default}
+#pedidos-disponibles .pd-empty{font-size:.88rem;color:#6b7280;padding:12px 0;text-align:center}
+#pedidos-disponibles .pd-loading{font-size:.85rem;color:#6b7280;padding:10px 0;text-align:center}
 @media(max-width:900px){.main-grid{grid-template-columns:1fr}.brand-card{min-height:260px}}
 @media(max-width:640px){.container{padding:22px 18px 24px;border-radius:18px}.portal-header{flex-direction:column;align-items:flex-start}.fab-menu{top:16px;right:16px}#montoPago,#idContrato{width:100%}}
 </style>
@@ -189,6 +205,17 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
       <div class="panel-main">
         <div class="welcome-banner"><div class="welcome-icon"></div><div><p class="welcome-text-title">¡Bienvenido a Radiz Vehicular!</p><p class="welcome-text-sub">Consulte su contrato, realice pagos y descargue su historial.</p></div></div>
         <header class="portal-header"><div><h1></h1></div></header>
+
+        <!-- PANEL DE PEDIDOS DISPONIBLES — solo visible para RENTING tras login -->
+        <div id="pedidos-disponibles">
+          <div class="pd-titulo">
+            <span>Pedidos disponibles</span>
+            <span class="pd-badge" id="pd-badge">0</span>
+          </div>
+          <div class="pd-lista" id="pd-lista">
+            <div class="pd-loading">Cargando pedidos...</div>
+          </div>
+        </div>
 
         <div class="card card-consulta">
           <div class="section-title"><div class="section-icon section-icon-search"></div><span>Consulta de contrato</span></div>
@@ -567,6 +594,71 @@ async function consultar(){
     btn.disabled=false;
   }
 }
+
+// ── PEDIDOS DISPONIBLES ──────────────────────────────────────────
+let __pedidosPollingTimer=null;
+
+function __iniciarPanelPedidos(idMotor){
+  const panel=el('pedidos-disponibles');
+  if(!panel) return;
+  panel.style.display='block';
+  __cargarPedidosDisponibles(idMotor);
+  if(__pedidosPollingTimer) clearInterval(__pedidosPollingTimer);
+  __pedidosPollingTimer=setInterval(()=>__cargarPedidosDisponibles(idMotor),30000);
+}
+
+async function __cargarPedidosDisponibles(idMotor){
+  const lista=el('pd-lista'),badge=el('pd-badge');
+  if(!lista) return;
+  try{
+    const resp=await fetch(API_URL+'?accion=pedidos_disponibles');
+    const data=await resp.json();
+    if(!data.ok){lista.innerHTML='<div class="pd-empty">No se pudo cargar la lista.</div>';return;}
+    const pedidos=data.pedidos||[];
+    if(badge) badge.textContent=pedidos.length;
+    if(!pedidos.length){lista.innerHTML='<div class="pd-empty">No hay pedidos disponibles en este momento.</div>';return;}
+    lista.innerHTML=pedidos.map(p=>{
+      const tarifa=Number(p.tarifa||0).toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0});
+      const propina=Number(p.propina||0);
+      const propinaHtml=propina>0?'<p><strong>Propina:</strong> '+propina.toLocaleString('es-CO',{style:'currency',currency:'COP',maximumFractionDigits:0})+'</p>':'';
+      return '<div class="pd-card">'+
+        '<div class="pd-info">'+
+          '<p><strong>'+escapeHtml(p.tipo||'Mensajería')+'</strong> · '+(p.ciudad||'')+'</p>'+
+          '<p>📍 '+(p.origen||'')+'</p>'+
+          '<p>🏁 '+(p.destino||'')+'</p>'+
+          propinaHtml+
+          '<button class="pd-btn" id="pd-btn-'+escapeHtml(p.id)+'" onclick="__aceptarPedido(\''+escapeHtml(p.id)+'\',\''+encodeURIComponent(idMotor)+'\')">Aceptar</button>'+
+        '</div>'+
+        '<div class="pd-tarifa">'+tarifa+'</div>'+
+      '</div>';
+    }).join('');
+  }catch(e){
+    console.error('Error pedidos',e);
+    if(lista) lista.innerHTML='<div class="pd-empty">Error al cargar. Reintentando...</div>';
+  }
+}
+
+async function __aceptarPedido(idPedido,idMotorEnc){
+  const idMotor=decodeURIComponent(idMotorEnc);
+  const btn=el('pd-btn-'+idPedido);
+  if(btn){btn.disabled=true;btn.textContent='Aceptando...';}
+  try{
+    const resp=await fetch(API_URL+'?accion=aceptar_pedido&idPedido='+encodeURIComponent(idPedido)+'&idMotor='+encodeURIComponent(idMotor));
+    const data=await resp.json();
+    if(data.ok){
+      __cargarPedidosDisponibles(idMotor);
+    }else{
+      if(btn){btn.disabled=false;btn.textContent='Aceptar';}
+      alert(data.error||'No fue posible aceptar el pedido.');
+    }
+  }catch(e){
+    console.error(e);
+    if(btn){btn.disabled=false;btn.textContent='Aceptar';}
+  }
+}
+
+function escapeHtml(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+// ────────────────────────────────────────────────────────────────
 
 function aNumeroCO(v){
   if(v===null||v===undefined) return 0;
@@ -953,7 +1045,9 @@ async function loginInversiones(origen){
       msg.className=useLogin?'login-msg ok':'status ok';
       msg.textContent='Acceso concedido. Abriendo tu panel...';
       if(!useLogin) cerrarModal('modalInversiones');
-      window.location.href=URL_LOGISTICA+encodeURIComponent(idFinal);
+      // Iniciar panel de pedidos antes de redirigir
+      __iniciarPanelPedidos(idFinal);
+      setTimeout(()=>{window.location.href=URL_LOGISTICA+encodeURIComponent(idFinal);},1200);
     }else if(tipo==='AFILIADO'){
       msg.className=useLogin?'login-msg ok':'status ok';
       msg.textContent='Acceso concedido. Abriendo tu portal de inversiones...';
