@@ -18,7 +18,7 @@
 @keyframes sp{to{transform:rotate(360deg)}}
 #splash.hide{opacity:0;pointer-events:none;transition:opacity .18s ease-out}
 .login-screen{position:relative;height:100dvh;min-height:100vh;width:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:24px 16px;background:#0f172a}
-.login-bg{position:absolute;inset:0;background-image:url('radiz-driver.jpg.jpg');background-size:cover;background-position:center;transform:scale(1.02);filter:saturate(1.02) contrast(1.02)}
+.login-bg{position:absolute;inset:0;background-image:url('/radiz-driver.jpg.jpg');background-size:cover;background-position:center;transform:scale(1.02);filter:saturate(1.02) contrast(1.02)}
 .login-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,.35) 0%,rgba(15,23,42,.65) 55%,rgba(15,23,42,.85) 100%)}
 .login-content{position:relative;z-index:2;width:100%;max-width:460px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;padding:18px 14px 16px}
 .login-logo{margin-top:-10px;margin-bottom:0;display:flex;justify-content:center}
@@ -61,9 +61,9 @@ h1{margin:0 0 4px;font-size:1.9rem;letter-spacing:.03em}
 .card:hover{border-color:#2563eb;box-shadow:0 16px 34px rgba(37,99,235,.18);background:#f9fbff;transform:translateY(-1px)}
 .card-consulta,.card-pago{margin-bottom:18px}
 .card-contrato::before,.card-pagos::before,.card-mantenimientos::before{content:"";position:absolute;top:18px;left:18px;width:26px;height:26px;background-size:contain;background-repeat:no-repeat;background-position:center}
-.card-contrato::before{background-image:url('ícono_contrato1.svg')}
-.card-pagos::before{background-image:url('ícono_pagos.svg')}
-.card-mantenimientos::before{background-image:url('ícono_mantenimientos.svg')}
+.card-contrato::before{background-image:url('/ícono_contrato1.svg')}
+.card-pagos::before{background-image:url('/ícono_pagos.svg')}
+.card-mantenimientos::before{background-image:url('/ícono_mantenimientos.svg')}
 .card-contrato h2,.card-pagos h2,.card-mantenimientos h2{margin-left:40px}
 .card-mantenimientos:hover{background:#fff7ed;border-color:#f97316;box-shadow:0 18px 38px rgba(249,115,22,.22)}
 .section-title{display:flex;align-items:center;gap:8px;margin-bottom:6px}
@@ -145,12 +145,12 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
 .exp-loading{font-size:.84rem;color:#6b7280;padding:10px 0;text-align:center}
 </style>
 </head><body>
-<div id="splash" aria-label="Cargando"><div class="box"><img src="icon-512.png" alt="RADIZ"><div class="spin"></div></div></div>
+<div id="splash" aria-label="Cargando"><div class="box"><img src="/icon-512.png" alt="RADIZ"><div class="spin"></div></div></div>
 
 <section class="login-screen">
   <div class="login-bg"></div><div class="login-overlay"></div>
   <div class="login-content">
-    <div class="login-logo"><img src="icon-512.png" alt="RADIZ"></div>
+    <div class="login-logo"><img src="/icon-512.png" alt="RADIZ"></div>
     <h1 class="login-welcome">¡Buenas buenas!</h1>
     <form class="login-form" onsubmit="event.preventDefault();loginInversiones('login');">
       <input class="login-input" type="text" id="loginId" placeholder="Usuario (Ej: R4523)" autocomplete="username">
@@ -164,7 +164,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
 
 <div class="page">
   <div class="container">
-    <div class="logo-top"><img src="logoradiz.png" alt="Logo RADIZ" id="logo-radiz"></div>
+    <div class="logo-top"><img src="/logoradiz.png" alt="Logo RADIZ" id="logo-radiz"></div>
 
     <div class="fab-menu" id="fabMenu">
       <button class="fab-btn" type="button" onclick="toggleMenu()"><span></span></button>
@@ -201,7 +201,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
 
     <div class="main-grid">
       <div class="brand-card">
-        <div class="brand-image"><img src="radiz-driver.jpg.jpg" alt="Conductor Radiz frente a vehículos de carga"></div>
+        <div class="brand-image"><img src="/radiz-driver.jpg.jpg" alt="Conductor Radiz frente a vehículos de carga"></div>
         <div class="brand-overlay"></div>
         <div class="brand-copy"><p class="brand-kicker">Una marca de Proyecto I45 S.A.S.</p><h2>Vehículos que dignifican</h2></div>
       </div>
@@ -296,7 +296,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
 <div class="modal-backdrop" id="modalQR"><div class="modal">
   <div class="modal-header"><h3>Pagar con código QR</h3><button class="modal-close" type="button" onclick="cerrarModal('modalQR')">&times;</button></div>
   <p>Escanea este código con la app de tu banco o billetera para realizar el pago:</p>
-  <img src="QRRADIZ-38.png" alt="Código QR de pago RADIZ" style="max-width:100%;height:auto;border-radius:12px;display:block;margin:8px auto;">
+  <img src="/QRRADIZ-38.png" alt="Código QR de pago RADIZ" style="max-width:100%;height:auto;border-radius:12px;display:block;margin:8px auto;">
   <p style="font-size:.8rem;color:#6b7280;margin-top:4px;">Recuerda incluir tu ID de contrato en la referencia del pago.</p>
   <div class="modal-actions"><button type="button" onclick="cerrarModal('modalQR')">Cerrar</button></div>
 </div></div>
@@ -322,7 +322,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
   <label for="invPassword">Contraseña</label><input type="password" id="invPassword" placeholder="Tu contraseña">
   <p id="invLoginMsg" class="status"></p>
   <div class="modal-actions"><button type="button" onclick="cerrarModal('modalInversiones')">Cerrar</button><button type="button" onclick="loginInversiones()">Entrar</button></div>
-  <p style="font-size:.8rem;margin-top:8px;color:#6b7280;">¿Olvidó su contraseña? Escríbanos a <a href="/cdn-cgi/l/email-protection#365859425f505f5557555f59585345465f020376515b575f5a1855595b"><span class="__cf_email__" data-cfemail="9ff1f0ebf6f9f6fcfefcf6f0f1faeceff6abaadff8f2fef6f3b1fcf0f2">[email&#160;protected]</span></a> con el asunto "Reasignar contraseña".</p>
+  <p style="font-size:.8rem;margin-top:8px;color:#6b7280;">¿Olvidó su contraseña? Escríbanos a <a href="mailto:notificacionespi45@gmail.com">notificacionespi45@gmail.com</a> con el asunto "Reasignar contraseña".</p>
 </div></div>
 
 <div class="modal-backdrop" id="modalFechaPagosAfiliado"><div class="modal"><div class="modal-header"><h3>Fecha de pagos al afiliado</h3><button class="modal-close" type="button" onclick="cerrarModal('modalFechaPagosAfiliado')">&times;</button></div><p id="modalFechaPagosTexto">Dato no disponible.</p></div></div>
@@ -351,7 +351,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
 </div></div>
 
 <div class="modal-backdrop" id="modalMiFlotaAfiliado"><div class="modal"><div class="modal-header"><h3>Mi flota</h3><button class="modal-close" type="button" onclick="cerrarModal('modalMiFlotaAfiliado')">&times;</button></div><p id="miFlotaTexto">Información no disponible.</p></div></div>
-<div class="modal-backdrop" id="modalInvertirAfiliado"><div class="modal"><div class="modal-header"><h3>Invertir</h3><button class="modal-close" type="button" onclick="cerrarModal('modalInvertirAfiliado')">&times;</button></div><p>Pronto podrás conocer nuevas oportunidades de inversión con Radiz.</p><img src="invertir_afiliado.png" alt="Oportunidades de inversión Radiz" style="max-width:100%;border-radius:12px;margin-top:8px;"></div></div>
+<div class="modal-backdrop" id="modalInvertirAfiliado"><div class="modal"><div class="modal-header"><h3>Invertir</h3><button class="modal-close" type="button" onclick="cerrarModal('modalInvertirAfiliado')">&times;</button></div><p>Pronto podrás conocer nuevas oportunidades de inversión con Radiz.</p><img src="/invertir_afiliado.png" alt="Oportunidades de inversión Radiz" style="max-width:100%;border-radius:12px;margin-top:8px;"></div></div>
 
 <div class="modal-backdrop" id="modalAfiliado"><div class="modal">
   <div class="modal-header"><h3>Link de afiliado</h3><button class="modal-close" type="button" onclick="cerrarModal('modalAfiliado')">&times;</button></div>
@@ -361,7 +361,7 @@ footer{margin-top:10px;font-size:.75rem;color:#9ca3af;text-align:center}
   <p id="linkAfiliadoMsg" class="copy-msg"></p>
 </div></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 const API_URL='https://script.google.com/macros/s/AKfycbxNiAZCMVvaagzFjYQgIsQkGEWJPui9baIHcO_-JjeJ6HvDYdDU5BdH8R6zzD3zDUw/exec';
 const WOMPI_PUBLIC_KEY='pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06';
 const WOMPI_INTEGRITY_KEY='prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN';
@@ -386,7 +386,7 @@ const el=(id)=>document.getElementById(id);
 const SPLASH_MIN_MS=3000,SPLASH_MAX_MS=7000;
 const __preloadImg=(src)=>new Promise(r=>{const i=new Image();i.onload=()=>r(true);i.onerror=()=>r(false);i.src=src;});
 function __hideSplash(){const s=el('splash');if(!s)return;s.classList.add('hide');setTimeout(()=>{try{s.remove()}catch(e){}},260);}
-function __initSplash(){const s=el('splash');if(!s)return;const min=new Promise(r=>setTimeout(r,SPLASH_MIN_MS));const img=__preloadImg('radiz-driver.jpg.jpg');const max=setTimeout(__hideSplash,SPLASH_MAX_MS);Promise.all([min,img]).then(()=>{clearTimeout(max);__hideSplash();});}
+function __initSplash(){const s=el('splash');if(!s)return;const min=new Promise(r=>setTimeout(r,SPLASH_MIN_MS));const imgSrc=location.pathname.includes('/logistica')?'/radiz-driver.jpg.jpg':'radiz-driver.jpg.jpg';const img=__preloadImg(imgSrc);const max=setTimeout(__hideSplash,SPLASH_MAX_MS);Promise.all([min,img]).then(()=>{clearTimeout(max);__hideSplash();});}
 
 document.addEventListener('touchmove',__touchBlocker,{passive:false});
 document.addEventListener('wheel',__wheelBlocker,{passive:false});
@@ -406,6 +406,15 @@ function __autoEntrarSiHaySesion(){
 }
 
 document.addEventListener('DOMContentLoaded',()=>{
+  // Leer ?id= de URL (viene del portal raíz tras login exitoso de RENTING)
+  const _urlId=(new URLSearchParams(location.search)).get('id');
+  if(_urlId){
+    const _id=_urlId.trim().toUpperCase();
+    try{localStorage.setItem(RADIZ_SES_ID,_id);localStorage.setItem(RADIZ_SES_TIPO,'RENTING');}catch(e){}
+    __initSplash();
+    mostrarPanelConId(_id);
+    return;
+  }
   __autoEntrarSiHaySesion();
   const fab=el('fabMenu'),ini=el('menuInicial'),ren=el('menuRenting'),afi=el('menuAfiliado');
   if(fab) fab.style.display='block';
@@ -577,7 +586,7 @@ async function consultar(){
       const esRentingId=idContratoActual.startsWith('R');
       const b=el('modalBeneficiosTexto');
       if(b){
-        if(esRentingId) b.innerHTML='<img src="../beneficios_renting.png" alt="Beneficios Renting Radiz" class="img-beneficios-renting">';
+        if(esRentingId) b.innerHTML='<img src="/beneficios_renting.png" alt="Beneficios Renting Radiz" class="img-beneficios-renting">';
         else b.textContent=beneficiosTexto||'Información no disponible.';
       }
       const modalT=el('modalTallerTexto');
@@ -940,22 +949,6 @@ window.addEventListener('appinstalled',()=>{
 });
 document.addEventListener('DOMContentLoaded',()=>{__setTextoInstalacion();});
 
-async function manejarDescargaApp(){
-  if(estaEnModoApp()){alert('La app RADIZ ya está instalada en este dispositivo.');return;}
-  if(esIOS()){mostrarInstruccionesIOS();return;}
-  if(deferredInstallPrompt){
-    try{deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;}catch(e){}
-    deferredInstallPrompt=null;
-    __setTextoInstalacion();
-    return;
-  }
-  if(esAndroid()){
-    alert('Para instalar RADIZ:\n\n1. Abre el menú (⋮)\n2. "Instalar aplicación" / "Añadir a pantalla de inicio"\n3. Confirmar');
-    return;
-  }
-  alert('Usa "Instalar aplicación" o "Añadir a pantalla de inicio" en el navegador.');
-}
-
 async function loginInversiones(origen){
   const useLogin=(origen==='login');
   const idLogin=el('loginId'),passLogin=el('loginPassword'),msgLogin=el('loginMsg');
@@ -987,7 +980,6 @@ async function loginInversiones(origen){
       msg.className=useLogin?'login-msg ok':'status ok';
       msg.textContent='Acceso concedido. Abriendo tu panel...';
       if(!useLogin) cerrarModal('modalInversiones');
-      __iniciarExpress(idFinal);
       window.location.href=URL_LOGISTICA+encodeURIComponent(idFinal);
     }else if(tipo==='AFILIADO'){
       msg.className=useLogin?'login-msg ok':'status ok';
@@ -995,7 +987,8 @@ async function loginInversiones(origen){
       if(!useLogin) cerrarModal('modalInversiones');
       window.location.href=URL_INVERSIONES+encodeURIComponent(idFinal);
     }else{
-      g.textContent='Tipo de usuario no reconocido para este ID.';
+      msg.className=useLogin?'login-msg error':'status error';
+      msg.textContent='Tipo de usuario no reconocido para este ID.';
     }
   }catch(e){
     console.error(e);
@@ -1004,6 +997,24 @@ async function loginInversiones(origen){
   }
 }
 
+// ── AUTO-LOGIN POR URL ───────────────────────────────────────────
+function mostrarPanelConId(id){
+  // Splash corto: máximo 1.2s cuando viene de ?id= para no bloquear el panel
+  const s=el('splash');
+  if(s) setTimeout(()=>__hideSplash(),1200);
+  const ls=document.querySelector('.login-screen'),pg=document.querySelector('.page');
+  if(ls) ls.style.display='none';
+  if(pg) pg.style.display='flex';
+  const fab=el('fabMenu'),ini=el('menuInicial'),ren=el('menuRenting'),afi=el('menuAfiliado');
+  if(fab) fab.style.display='block';
+  if(ini) ini.style.display='none';
+  if(ren) ren.style.display='block';
+  if(afi) afi.style.display='none';
+  const idInput=el('idContrato');
+  if(idInput) idInput.value=id;
+  consultar();
+  __iniciarExpress(id);
+}
 // ── EXPRESS ─────────────────────────────────────────────────────
 let __expTimer=null,__expIds=new Set();
 function __iniciarExpress(idMotor){
