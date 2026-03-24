@@ -987,7 +987,6 @@ async function loginInversiones(origen){
       msg.className=useLogin?'login-msg ok':'status ok';
       msg.textContent='Acceso concedido. Abriendo tu panel...';
       if(!useLogin) cerrarModal('modalInversiones');
-      __iniciarExpress(idFinal);
       window.location.href=URL_LOGISTICA+encodeURIComponent(idFinal);
     }else if(tipo==='AFILIADO'){
       msg.className=useLogin?'login-msg ok':'status ok';
