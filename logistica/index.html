@@ -994,7 +994,8 @@ async function loginInversiones(origen){
       if(!useLogin) cerrarModal('modalInversiones');
       window.location.href=URL_INVERSIONES+encodeURIComponent(idFinal);
     }else{
-      g.textContent='Tipo de usuario no reconocido para este ID.';
+      msg.className=useLogin?'login-msg error':'status error';
+      msg.textContent='Tipo de usuario no reconocido para este ID.';
     }
   }catch(e){
     console.error(e);
