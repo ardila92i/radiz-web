@@ -734,12 +734,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
         <div class="recarga-monto" onclick="selRecargaMonto(this,0)">Otro valor</div>
       </div>
       <div class="recarga-custom-wrap" id="recarga-custom-wrap" style="display:none"><span class="recarga-custom-label">Monto personalizado</span><input type="number" class="recarga-custom-input" id="recarga-custom" placeholder="Ej: 150000" min="10000" step="1000"></div>
-      <span class="recarga-custom-label" style="margin-top:14px">Método de pago</span>
-      <div class="recarga-metodo">
-        <div class="recarga-met-btn selected" onclick="selRecargaMetodo(this,'transferencia')"><div class="recarga-met-icon">T</div>Transferencia</div>
-        <div class="recarga-met-btn" onclick="selRecargaMetodo(this,'nequi')"><div class="recarga-met-icon">N</div>Nequi / Daviplata</div>
-      </div>
-      <button class="mlogin-btn" onclick="procesarRecarga()">Confirmar recarga</button>
+      <button class="mlogin-btn" onclick="procesarRecarga()">Pagar con Wompi</button>
     </div>
     <div class="recarga-success" id="recarga-success-view"><div class="recarga-success-icon">OK</div><div class="recarga-success-msg">Recarga simulada exitosa</div><div class="recarga-success-detail" id="recarga-success-detail">Se agregaron $ 100.000 a tu cuenta.</div><button class="mlogin-btn" onclick="cerrarModalRecarga()">Volver al panel</button></div>
   </div>
@@ -955,7 +950,28 @@ function cerrarModalRecarga(){document.getElementById('modal-recarga').classList
 function cerrarModalRecargaOverlay(e){if(e.target===document.getElementById('modal-recarga'))cerrarModalRecarga()}
 function selRecargaMonto(el,m){document.querySelectorAll('.recarga-monto').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');recargaMontoSel=m;document.getElementById('recarga-custom-wrap').style.display=m===0?'block':'none';if(m===0)document.getElementById('recarga-custom').focus()}
 function selRecargaMetodo(el,m){document.querySelectorAll('.recarga-met-btn').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');recargaMetodo=m}
-function procesarRecarga(){let m=recargaMontoSel;if(m===0)m=parseInt(document.getElementById('recarga-custom').value)||0;if(m<10000){showToast('Mínimo $10.000','error');return}saldoUsuario+=m;document.getElementById('recarga-form-view').style.display='none';document.getElementById('recarga-success-detail').textContent='Se agregaron '+fmtCOP(m)+' a tu cuenta.';document.getElementById('recarga-success-view').classList.add('visible');showToast('Recarga de '+fmtCOP(m)+' exitosa','success')}
+function procesarRecarga(){
+  let m=recargaMontoSel;
+  if(m===0)m=parseInt(document.getElementById('recarga-custom').value)||0;
+  if(m<10000){showToast('Mínimo $10.000','error');return}
+  const referencia='RECARGA-'+Date.now();
+  const centavos=m*100;
+  const form=document.createElement('form');
+  form.method='GET';
+  form.action='https://checkout.wompi.co/p/';
+  const campos={
+    'public-key':'pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06',
+    'currency':'COP',
+    'amount-in-cents':String(centavos),
+    'reference':referencia,
+    'signature:integrity':'prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN',
+    'redirect-url':window.location.href
+  };
+  Object.entries(campos).forEach(([k,v])=>{const i=document.createElement('input');i.type='hidden';i.name=k;i.value=v;form.appendChild(i)});
+  document.body.appendChild(form);
+  registrarPagoEnSheet(referencia,m,'','recarga');
+  form.submit();
+}
 async function registrarPagoEnSheet(referencia,monto,idContrato,correo){
   try{
     const formData=new URLSearchParams();
