@@ -918,7 +918,15 @@ function mostrarTerminosDom(){document.getElementById('modal-terminos').classLis
 function cerrarModalTerminos(e){if(!e||e.target===document.getElementById('modal-terminos'))document.getElementById('modal-terminos').classList.remove('visible')}
 function toggleTerminos(){terminosAceptados=!terminosAceptados;document.getElementById('check-terminos').classList.toggle('checked',terminosAceptados);const b=document.getElementById('btn-aceptar-terminos');b.disabled=!terminosAceptados;b.style.opacity=terminosAceptados?'1':'.4'}
 function aceptarTerminosYCotizar(){document.getElementById('modal-terminos').classList.remove('visible');cotizarDomiciliario()}
-function irARegistro(s){servicioActivo=s;poblarResumen();mostrarVista('registro')}
+function irARegistro(s){
+  servicioActivo=s;
+  if(usuarioActual){
+    iniciarBusquedaMensajero();
+  }else{
+    poblarResumen();
+    mostrarVista('registro');
+  }
+}
 function volverDesdePago(){mostrarVista(servicioActivo)}
 function poblarResumen(){let h='';if(servicioActivo==='mensajeria'&&ultimaCotizacionMens){const d=ultimaCotizacionMens,p=d._propina||0,r=d._recargo||0,t=d.totalCliente+p+r;h='<div class="reg-resumen-row"><span>Servicio</span><span>Mensajería punto a punto</span></div><div class="reg-resumen-row"><span>Ciudad</span><span>'+(d._ciudad||'')+'</span></div><div class="reg-resumen-row"><span>Distancia</span><span>'+parseFloat(d._distTotal).toFixed(1)+' km</span></div><div class="reg-resumen-row"><span>Modalidad</span><span>'+(d._horario||'Inmediato')+'</span></div>'+(p>0?'<div class="reg-resumen-row"><span>Propina</span><span>'+fmtCOP(p)+'</span></div>':'')+'<div class="reg-resumen-row total"><span>Total</span><span style="color:var(--blue-2)">'+fmtCOP(t)+'</span></div>'}else if(servicioActivo==='domiciliario'&&ultimaCotizacionDom){const d=ultimaCotizacionDom,p=d._propina||0,t=d.totalCliente*cantMotorizados+p;h='<div class="reg-resumen-row"><span>Servicio</span><span>Domiciliario por días</span></div>'+(cantMotorizados>1?'<div class="reg-resumen-row"><span>Motorizados</span><span>'+cantMotorizados+'</span></div>':'')+'<div class="reg-resumen-row"><span>Días</span><span>'+d.dias+' día(s)</span></div><div class="reg-resumen-row"><span>Equipamiento</span><span>'+tipoMoto+'</span></div>'+(p>0?'<div class="reg-resumen-row"><span>Bono</span><span>'+fmtCOP(p)+'</span></div>':'')+'<div class="reg-resumen-row total"><span>Total</span><span style="color:var(--orange)">'+fmtCOP(t)+'</span></div>'}document.getElementById('reg-resumen').innerHTML=h}
 function procesarPago(){const n=document.getElementById('reg-nombre').value.trim(),t=document.getElementById('reg-telefono').value.trim(),c=document.getElementById('reg-correo').value.trim();if(!n||!t||!c){showToast('Completa todos los campos','error');return}if(!c.includes('@')){showToast('Correo no válido','error');return}iniciarBusquedaMensajero()}
@@ -939,7 +947,7 @@ function mostrarMensajeroEncontrado(){
   document.getElementById('mensajero-moto').textContent=m.moto;
   document.getElementById('mensajero-rating').textContent=m.rating;
   document.getElementById('mensajero-avatar').textContent=m.ini;
-  const correoCliente=document.getElementById('reg-correo')?.value||'';
+  const correoCliente=usuarioActual?usuarioActual.correo:(document.getElementById('reg-correo')?.value||'');
   const totalPagar=ultimaCotizacionMens?Math.round((ultimaCotizacionMens.totalCliente+(ultimaCotizacionMens._propina||0)+(ultimaCotizacionMens._recargo||0))*100):ultimaCotizacionDom?Math.round((ultimaCotizacionDom.totalCliente*cantMotorizados+(ultimaCotizacionDom._propina||0))*100):100000;
   const wrap=document.getElementById('wompi-btn-wrap');
   wrap.innerHTML='';
@@ -962,7 +970,7 @@ function mostrarMensajeroEncontrado(){
   btn.style.marginTop='0';
   btn.textContent='Pagar';
   btn.addEventListener('click',()=>{
-    registrarPagoEnSheet(referencia,Math.round(totalPagar/100),document.getElementById('reg-nit')?.value||'',correoCliente);
+    registrarPagoEnSheet(referencia,Math.round(totalPagar/100),usuarioActual?.nit||document.getElementById('reg-nit')?.value||'',correoCliente);
   });
   form.appendChild(btn);
   wrap.appendChild(form);
