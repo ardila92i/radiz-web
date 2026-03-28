@@ -295,7 +295,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 .flatpickr-day:hover{background:var(--surface2)!important}
 .flatpickr-months .flatpickr-month{color:var(--text)!important}
 .flatpickr-current-month,.flatpickr-monthDropdown-months{color:var(--text)!important;font-weight:700!important}
-.mens-layout{grid-template-columns:1fr}.mens-col-right{position:static;order:1}.mens-col-left{order:2}.mapa-wrap{min-height:420px}#mapa{height:420px}}
+@media(max-width:1100px){.mens-layout{grid-template-columns:1fr}.mens-col-right{position:static;order:1}.mens-col-left{order:2}.mapa-wrap{min-height:420px}#mapa{height:420px}}
 @media(max-width:900px){.panel-stats,.panel-acciones,.grid-2{grid-template-columns:1fr}.ciudad-selector{grid-template-columns:repeat(2,1fr)}.tipo-envio,.tipo-moto-grid,.recarga-montos{grid-template-columns:1fr}.page-wrap{padding:0 18px}.dom-qty-grid{grid-template-columns:1fr 1fr}.dom-fechas-grid{grid-template-columns:1fr!important}.grid-2.horario-grid{grid-template-columns:1fr 1fr!important}}
 @media(max-width:760px){.home-cards{grid-template-columns:1fr!important;gap:12px}.home-stats{grid-template-columns:1fr 1fr!important;gap:10px}.home-stats .stat-chip:last-child{grid-column:span 2}}
 @media(max-width:640px){.nav-inner{padding:12px 16px}.nav-right{gap:8px}.nav-user-name{display:none}.home-hero{padding:24px 0 14px}.home-hero h1{font-size:1.9rem;letter-spacing:-.03em}.home-hero p{font-size:.9rem}.vista-header{padding-top:22px}.vista-titulo{font-size:1.24rem}.propina-row{align-items:flex-start;flex-direction:column}.mapa-wrap{min-height:320px}#mapa{height:320px}.modal-card,.mlogin-card,.recarga-card,.buscando-card{padding:22px}.cotiz-total{flex-direction:column;align-items:flex-start}.panel-tabla{min-width:620px}.vista{padding-bottom:36px}}
@@ -305,7 +305,27 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 <nav>
   <div class="nav-inner" id="nav-inner"></div>
 </nav>
-<div class="vista activa" id="vista-home">
+<div class="vista activa" id="vista-selector">
+  <div class="page-wrap">
+    <div class="home-hero" style="text-align:center;padding:80px 0 30px">
+      <h1 style="margin:0 auto">¿Cómo quieres usar <span class="azul">Radiz</span>?</h1>
+      <p style="margin:10px auto 0">Selecciona tu perfil para continuar</p>
+    </div>
+    <div class="home-cards" style="max-width:700px;margin:0 auto">
+      <div class="hcard azul" onclick="seleccionarRol('cliente')">
+        <div class="hcard-top"><div class="hcard-icon" style="background:var(--blue-soft);color:var(--blue-2);font-size:1.4rem">📦</div><div class="hcard-arrow">→</div></div>
+        <h2>Necesito un mensajero</h2>
+        <p>Envíe paquetes, documentos o contrate un motorizado dedicado para su operación.</p>
+      </div>
+      <div class="hcard naranja" onclick="seleccionarRol('mensajero')">
+        <div class="hcard-top"><div class="hcard-icon" style="background:var(--orange-soft);color:var(--orange);font-size:1.4rem">🏍️</div><div class="hcard-arrow">→</div></div>
+        <h2>Soy mensajero</h2>
+        <p>Reciba solicitudes de servicio, acepte pedidos y gestione sus entregas.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="vista" id="vista-home">
   <div class="page-wrap">
     <div class="home-hero">
       <h1>Mensajería<span class="azul"> express</span> y logística <span class="naranja">dedicada</span> de altísima confianza</h1>
@@ -585,11 +605,11 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
       <div class="recarga-titulo">Recargar cuenta</div>
       <div class="recarga-sub">Selecciona un monto o ingresa un valor personalizado para agregar saldo a tu cuenta.</div>
       <div class="recarga-montos">
-        <div class="recarga-monto" onclick="selRecargaMonto(this,50000)">$ 240.000</div>
-        <div class="recarga-monto" onclick="selRecargaMonto(this,100000)">$ 480.000</div>
-        <div class="recarga-monto" onclick="selRecargaMonto(this,200000)">$ 720.000</div>
-        <div class="recarga-monto" onclick="selRecargaMonto(this,300000)">$ 960.000</div>
-        <div class="recarga-monto" onclick="selRecargaMonto(this,500000)">$ 1.800.000</div>
+        <div class="recarga-monto" onclick="selRecargaMonto(this,240000)">$ 240.000</div>
+        <div class="recarga-monto" onclick="selRecargaMonto(this,480000)">$ 480.000</div>
+        <div class="recarga-monto" onclick="selRecargaMonto(this,720000)">$ 720.000</div>
+        <div class="recarga-monto" onclick="selRecargaMonto(this,960000)">$ 960.000</div>
+        <div class="recarga-monto" onclick="selRecargaMonto(this,1800000)">$ 1.800.000</div>
         <div class="recarga-monto" onclick="selRecargaMonto(this,0)">Otro valor</div>
       </div>
       <div class="recarga-custom-wrap" id="recarga-custom-wrap" style="display:none"><span class="recarga-custom-label">Monto personalizado</span><input type="number" class="recarga-custom-input" id="recarga-custom" placeholder="Ej: 150000" min="10000" step="1000"></div>
@@ -622,6 +642,38 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
       <div class="mlogin-tabs"><div class="mlogin-tab" onclick="switchTab('login')">Iniciar sesión</div><div class="mlogin-tab active" onclick="switchTab('registro')">Crear cuenta</div></div>
       <div class="mlogin-titulo">Crear cuenta</div>
       <div class="mlogin-sub">Regístrate para gestionar tus servicios, facturas y solicitudes desde un solo lugar.</div>
+      <span class="mlogin-label">¿Qué tipo de cuenta necesitas?</span>
+<div class="mlogin-tipo" style="margin-bottom:14px">
+  <div class="mlogin-tipo-btn selected" id="reg-rol-cliente" onclick="selRegRol('cliente')">Soy cliente</div>
+  <div class="mlogin-tipo-btn" id="reg-rol-mensajero" onclick="selRegRol('mensajero')">Soy mensajero</div>
+</div>
+<div id="reg-campos-mensajero" style="display:none">
+  <div style="display:flex;gap:4px;margin-bottom:20px">
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--blue-2)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+  </div>
+  <div id="mreg-screen" style="min-height:160px"></div>
+  <div class="mlogin-error-msg" id="mreg-error"></div>
+  <div class="mlogin-success-msg" id="mreg-success"></div>
+  <div style="display:flex;gap:10px;margin-top:18px">
+    <button class="mlogin-btn" id="mreg-btn-atras" style="background:var(--surface2);color:var(--text);box-shadow:none;border:1px solid var(--border);display:none" onclick="mregNav(-1)">Atrás</button>
+    <button class="mlogin-btn" id="mreg-btn-next" onclick="mregNav(1)">Continuar</button>
+  </div>
+</div>
       <span class="mlogin-label">Tipo de cuenta</span>
       <div class="mlogin-tipo"><div class="mlogin-tipo-btn selected" id="reg-tipo-natural" onclick="selRegTipo('natural')">Persona natural</div><div class="mlogin-tipo-btn" id="reg-tipo-juridica" onclick="selRegTipo('juridica')">Empresa</div></div>
       <div class="mlogin-nit-wrap" id="modal-nit-wrap"><span class="mlogin-label" style="margin-top:14px">NIT de la empresa</span><input class="mlogin-input" id="modal-reg-nit" placeholder="900.123.456-7"><span class="mlogin-label" style="margin-top:14px">Razón social</span><input class="mlogin-input" id="modal-reg-razon" placeholder="Empresa S.A.S."></div>
@@ -647,7 +699,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 <script>
 // ── CONFIGURACIÓN ──
 const API_BASE='https://script.google.com/macros/s/AKfycbw-Lvhh4Fv9XHhp4taCgc5czNlSn_z483g_Ocpr16AIqbBPGyfm5_vnwPFx5FmIoYen/exec';
-const APP_TOKEN='__REEMPLAZAR_CON_TOKEN_DE_CONFIG_TARIFAS__';
+const APP_TOKEN='radiz_v2_2026_seguro';
 function apiUrl(params){return API_BASE+'?'+new URLSearchParams({appToken:APP_TOKEN,...params})}
 
 const GMAPS_KEY='AIzaSyCm0PzoGphUs1a3TME47zPorau74ubFuic';
@@ -700,9 +752,7 @@ function toggleRegreso(){conRegreso=!conRegreso;document.getElementById('check-r
 async function cotizarMensajeria(){if(!ciudadSeleccionada){showToast('Selecciona primero la ciudad','error');return}if(Object.keys(coordenadas).length<2){showToast('Define al menos origen y destino','error');return}if(distanciaRutaMetros===0){showToast('Espera a que se calcule la ruta','error');return}document.getElementById('btn-cotizar-mens').disabled=true;document.getElementById('loading-mens').classList.add('visible');document.getElementById('result-mens').classList.remove('visible');try{const km=(distanciaRutaMetros/1000).toFixed(2),r=await fetch(apiUrl({accion:'cotizar',km})),data=await r.json();if(!data.ok){showToast(data.error||'Error','error');return}const prop=parseInt(document.getElementById('propina-mens').value)||0,rec=tipoEnvio==='paquete_grande'?RECARGO_GRANDE:0;data._propina=prop;data._recargo=rec;data._distTotal=km;data._ciudad=ciudadSeleccionada.nombre;data._horario=modoHorario==='ahora'?'Inmediato':document.getElementById('hora-recogida').value;ultimaCotizacionMens=data;mostrarResultadoMens(data,km,prop,rec)}catch(e){showToast('Error de conexión','error')}finally{document.getElementById('btn-cotizar-mens').disabled=false;document.getElementById('loading-mens').classList.remove('visible')}}
 function mostrarResultadoMens(data,km,prop,rec){const tot=data.totalCliente+prop+rec,sub=data.subtotal+data.comisionCliente;let h='<div class="cotiz-row"><span class="cotiz-row-label">Ciudad</span><span class="cotiz-row-value">'+data._ciudad+'</span></div><div class="cotiz-row"><span class="cotiz-row-label">Distancia estimada</span><span class="cotiz-row-value">'+parseFloat(km).toFixed(1)+' km</span></div><div class="cotiz-row"><span class="cotiz-row-label">Subtotal por distancia</span><span class="cotiz-row-value">'+fmtCOP(sub)+'</span></div><div class="cotiz-row"><span class="cotiz-row-label">Horario</span><span class="cotiz-row-value">'+data._horario+'</span></div>';if(rec>0)h+='<div class="cotiz-row"><span class="cotiz-row-label">Recargo paquete grande</span><span class="cotiz-row-value">+ '+fmtCOP(rec)+'</span></div>';if(prop>0)h+='<div class="cotiz-row"><span class="cotiz-row-label">Propina</span><span class="cotiz-row-value" style="color:var(--green)">+ '+fmtCOP(prop)+'</span></div>';document.getElementById('detalle-mens').innerHTML=h;document.getElementById('total-mens-valor').textContent=fmtCOP(tot);document.getElementById('result-mens').classList.add('visible')}
 function reiniciarMensajeria(){Object.keys(marcadores).forEach(k=>marcadores[k].setMap(null));marcadores={};coordenadas={};distanciaRutaMetros=0;acInstances={};numParadas=2;conRegreso=false;ultimaCotizacionMens=null;['origen-input','destino-input','origen-comp','destino-comp'].forEach(id=>{const e=document.getElementById(id);if(e){e.value='';e.disabled=true}});document.querySelectorAll('[id^="parada-extra-"]').forEach(e=>e.remove());document.getElementById('btn-add-parada').style.display='flex';document.getElementById('btn-add-parada').disabled=true;if(directionsRenderer)directionsRenderer.setDirections({routes:[]});document.getElementById('propina-mens').value='';document.getElementById('indicaciones-mens').value='';document.getElementById('result-mens').classList.remove('visible');document.querySelectorAll('.ciudad-btn').forEach(b=>b.classList.remove('selected'));ciudadSeleccionada=null;document.getElementById('check-regreso').classList.remove('checked');document.getElementById('otra-ciudad-wrap').classList.remove('visible');document.getElementById('otra-ciudad-input').value='';const mi=document.getElementById('mapa-instruccion');mi.textContent='Selecciona una ciudad para comenzar y luego define origen y destino.';mi.style.display='block';if(mapaIniciado){mapa.setCenter({lat:4.7110,lng:-74.0721});mapa.setZoom(5)}window.scrollTo({top:0,behavior:'smooth'})}
-function cambiarDias(d){diasDomiciliario=Math.max(1,diasDomiciliario+d);document.getElementById('dias-num').textContent=diasDomiciliario;actualizarFechaFin();actualizarBonoDom()}
-function cambiarMotorizados(d){cantMotorizados=Math.max(1,Math.min(10,cantMotorizados+d));document.getElementById('num-motorizados').textContent=cantMotorizados}
-function calcularDiasRango(){}
+
 async function cotizarDomiciliario(){document.getElementById('btn-cotizar-dom').disabled=true;document.getElementById('loading-dom').classList.add('visible');document.getElementById('result-dom').classList.remove('visible');try{const horasExtras=parseInt(document.getElementById('horas-extras').value)||0;const r=await fetch(apiUrl({accion:'cotizar_domiciliario',dias:diasDomiciliario})),data=await r.json();if(!data.ok){showToast(data.error||'Error','error');return}const bd=parseInt(document.getElementById('propina-dom').value)||0,bt=bd*diasDomiciliario*cantMotorizados;data._propina=bt;data._bonoDiario=bd;data._cantMotorizados=cantMotorizados;data._horasExtras=horasExtras;ultimaCotizacionDom=data;const tb=data.totalCliente*cantMotorizados,tf=tb+bt;let h='';h+='<div class="cotiz-row"><span class="cotiz-row-label">Días contratados</span><span class="cotiz-row-value">'+data.dias+' día(s)</span></div><div class="cotiz-row"><span class="cotiz-row-label">Tarifa del domiciliario</span><span class="cotiz-row-value">'+fmtCOP(data.tarifaTotal*cantMotorizados)+'</span></div><div class="cotiz-row"><span class="cotiz-row-label">Tarifa de gestión Radiz</span><span class="cotiz-row-value">'+fmtCOP(data.comisionRadiz*cantMotorizados)+'</span></div><div class="cotiz-row"><span class="cotiz-row-label">Bono rodamiento</span><span class="cotiz-row-value">'+fmtCOP(data.bonoRodamiento*cantMotorizados)+'</span></div>';if(horasExtras>0)h+='<div class="cotiz-row"><span class="cotiz-row-label">Horas extras ('+horasExtras+'h × '+data.dias+' días)</span><span class="cotiz-row-value">A confirmar</span></div>';if(bd>0)h+='<div class="cotiz-row"><span class="cotiz-row-label">Bonificación</span><span class="cotiz-row-value" style="color:var(--green)">+ '+fmtCOP(bt)+'</span></div>';document.getElementById('detalle-dom').innerHTML=h;document.getElementById('total-dom-valor').textContent=fmtCOP(tf);document.getElementById('result-dom').classList.add('visible');setTimeout(()=>document.getElementById('result-dom').scrollIntoView({behavior:'smooth',block:'start'}),100)}catch(e){showToast('Error de conexión','error')}finally{document.getElementById('btn-cotizar-dom').disabled=false;document.getElementById('loading-dom').classList.remove('visible')}}
 function validarJornada(){const i=document.getElementById('hora-inicio').value,f=document.getElementById('hora-fin').value;if(!i||!f)return;const[hI,mI]=i.split(':').map(Number),[hF,mF]=f.split(':').map(Number),mins=(hF*60+mF)-(hI*60+mI),av=document.getElementById('jornada-aviso'),btn=document.getElementById('btn-cotizar-dom');if(mins>540||mins<=0){av.style.display='block';btn.disabled=true;btn.style.opacity='.4'}else{av.style.display='none';btn.disabled=false;btn.style.opacity='1'}}
 function actualizarBonoDom(){const b=parseInt(document.getElementById('propina-dom').value)||0,f=document.getElementById('bono-total-row');if(b>0){f.style.display='flex';document.getElementById('bono-dias-label').textContent=diasDomiciliario;document.getElementById('bono-total-valor').textContent=fmtCOP(b*diasDomiciliario*cantMotorizados)}else f.style.display='none'}
@@ -816,6 +866,131 @@ document.addEventListener('DOMContentLoaded',()=>{
     }
   });
 });
+function seleccionarRol(rol){
+  sessionStorage.setItem('radiz_rol',rol);
+  if(rol==='cliente'){
+    mostrarVista('home');
+  }else{
+    if(usuarioActual&&usuarioActual.rol==='mensajero'){
+      mostrarVista('panel-mensajero');
+    }else{
+      abrirModalLogin();
+      mostrarVista('home');
+    }
+  }
+}
+let regRolSeleccionado='cliente';
+
+function selRegRol(rol){
+  regRolSeleccionado=rol;
+  document.getElementById('reg-rol-cliente').classList.toggle('selected',rol==='cliente');
+  document.getElementById('reg-rol-mensajero').classList.toggle('selected',rol==='mensajero');
+  document.getElementById('reg-campos-mensajero').style.display=rol==='mensajero'?'block':'none';
+  if(rol==='mensajero'){mregCurrent=0;mregRender()}
+  const clienteFields=document.querySelectorAll('#panel-registro .mlogin-label:not([id]), #panel-registro .mlogin-tipo:not([style*="margin-bottom:14px"]), #panel-registro .mlogin-nit-wrap, #panel-registro .mlogin-pass-wrap, #panel-registro #modal-reg-nombre, #panel-registro #modal-reg-correo, #panel-registro #btn-registro, #panel-registro #reg-error, #panel-registro #reg-success');
+  if(rol==='mensajero'){
+    let el=document.getElementById('reg-campos-mensajero');
+    let sibling=el.nextElementSibling;
+    while(sibling){sibling.style.display='none';sibling=sibling.nextElementSibling}
+  }else{
+    let el=document.getElementById('reg-campos-mensajero');
+    let sibling=el.nextElementSibling;
+    while(sibling){sibling.style.display='';sibling=sibling.nextElementSibling}
+  }
+}
+const mregSteps=[
+  {id:'nombre',label:'Nombre completo',type:'text',placeholder:'Tu nombre completo',required:true},
+  {id:'correo',label:'Correo electrónico',type:'email',placeholder:'correo@ejemplo.com',required:true},
+  {id:'pass',label:'Contraseña',type:'password',placeholder:'Mínimo 8 caracteres',required:true},
+  {id:'pass2',label:'Confirmar contraseña',type:'password',placeholder:'Repite la contraseña',required:true},
+  {id:'telefono',label:'Teléfono',type:'tel',placeholder:'3XX XXX XXXX',required:true},
+  {id:'ciudad',label:'Ciudad donde operará',type:'text',placeholder:'Ej: Bogotá, Medellín...',required:true},
+  {id:'placa',label:'Placa de la moto',type:'text',placeholder:'ABC 123',required:true,style:'text-transform:uppercase'},
+  {id:'moto',label:'Marca y modelo de la moto',type:'text',placeholder:'Ej: Honda CB 125 · 2022',required:true},
+  {id:'cedula-front',label:'Foto cédula (frontal)',type:'file',required:true},
+  {id:'cedula-back',label:'Foto cédula (trasera)',type:'file',required:true},
+  {id:'soat',label:'Foto SOAT vigente',type:'file',required:true},
+  {id:'licencia-front',label:'Foto licencia de conducción (frontal)',type:'file',required:true},
+  {id:'licencia-back',label:'Foto licencia de conducción (trasera)',type:'file',required:true},
+  {id:'tarjeta-front',label:'Foto tarjeta de propiedad (frontal)',type:'file',required:true},
+  {id:'tarjeta-back',label:'Foto tarjeta de propiedad (trasera)',type:'file',required:true},
+  {id:'foto-rostro',label:'Foto de tu rostro',type:'file',required:true,desc:'Sube una foto clara de tu rostro para verificar tu identidad.'}
+];
+let mregCurrent=0;
+const mregData={};
+
+function mregRender(){
+  const s=mregSteps[mregCurrent];
+  const dots=document.querySelectorAll('.mreg-dot');
+  dots.forEach((d,i)=>d.style.background=i<=mregCurrent?'var(--blue-2)':'var(--border)');
+  const screen=document.getElementById('mreg-screen');
+  let h='<span class="mlogin-label">'+s.label+'</span>';
+  if(s.desc)h+='<p style="font-size:.84rem;color:var(--muted);line-height:1.65;margin-bottom:12px">'+s.desc+'</p>';
+  if(s.type==='file'){
+    h+='<input class="mlogin-input" id="mreg-field" type="file" accept="image/*" style="padding:10px">';
+  }else if(s.type==='password'){
+    h+='<div class="mlogin-pass-wrap"><input class="mlogin-input" id="mreg-field" type="password" placeholder="'+s.placeholder+'"><button class="mlogin-pass-toggle" type="button" onclick="togglePass(\'mreg-field\',this)">Ver</button></div>';
+  }else{
+    h+='<input class="mlogin-input" id="mreg-field" type="'+s.type+'" placeholder="'+s.placeholder+'"'+(s.style?' style="'+s.style+'"':'')+'>';
+  }
+  screen.innerHTML=h;
+  const field=document.getElementById('mreg-field');
+  if(s.type!=='file'&&mregData[s.id])field.value=mregData[s.id];
+  if(s.type!=='file')field.focus();
+  field.addEventListener('keydown',e=>{if(e.key==='Enter')mregNav(1)});
+  document.getElementById('mreg-btn-atras').style.display=mregCurrent>0?'':'none';
+  document.getElementById('mreg-btn-next').textContent=mregCurrent===mregSteps.length-1?'Enviar solicitud':'Continuar';
+  ocultarError('mreg-error');
+}
+
+function mregNav(dir){
+  const s=mregSteps[mregCurrent];
+  const field=document.getElementById('mreg-field');
+  if(dir===1){
+    if(s.type==='file'){
+      if(!field.files.length){showToast('Selecciona un archivo','error');return}
+      mregData[s.id]=field.files[0];
+    }else{
+      const v=field.value.trim();
+      if(!v){showToast('Este campo es obligatorio','error');return}
+      if(s.id==='correo'&&!v.includes('@')){showToast('Correo no válido','error');return}
+      if(s.id==='pass'&&v.length<8){showToast('Mínimo 8 caracteres','error');return}
+      if(s.id==='pass2'&&v!==mregData['pass']){showToast('Las contraseñas no coinciden','error');return}
+      mregData[s.id]=v;
+    }
+    if(mregCurrent===mregSteps.length-1){ejecutarRegistroMensajero();return}
+  }
+  mregCurrent=Math.max(0,Math.min(mregSteps.length-1,mregCurrent+dir));
+  mregRender();
+}
+
+async function ejecutarRegistroMensajero(){
+  setBtnLoading('mreg-btn-next',true,'Enviar solicitud');
+  try{
+    const h=await hashPass(mregData['pass']);
+    const formData=new FormData();
+    formData.append('accion','registrar_mensajero');
+    formData.append('nombre',mregData['nombre']);
+    formData.append('correo',mregData['correo']);
+    formData.append('hash',h);
+    formData.append('telefono',mregData['telefono']);
+    formData.append('ciudad',mregData['ciudad']);
+    formData.append('placa',mregData['placa'].toUpperCase());
+    formData.append('moto',mregData['moto']);
+    ['cedula-front','cedula-back','soat','licencia-front','licencia-back','tarjeta-front','tarjeta-back','foto-rostro'].forEach(k=>{
+      if(mregData[k])formData.append(k.replace(/-/g,'_'),mregData[k]);
+    });
+    const r=await fetch(API_BASE,{method:'POST',body:formData});
+    const d=await r.json();
+    if(!d.ok){mostrarError('mreg-error',d.error||'Error');return}
+    document.getElementById('mreg-screen').innerHTML='';
+    document.getElementById('mreg-btn-next').style.display='none';
+    document.getElementById('mreg-btn-atras').style.display='none';
+    document.getElementById('mreg-success').innerHTML='Solicitud enviada. Revisaremos tus documentos y te notificaremos por correo.';
+    document.getElementById('mreg-success').classList.add('visible');
+  }catch(e){mostrarError('mreg-error','Error de conexión.')}
+  finally{setBtnLoading('mreg-btn-next',false,'Enviar solicitud')}
+}
 </script>
 </body>
 </html>
