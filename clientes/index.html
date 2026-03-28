@@ -308,7 +308,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 .go-ring{width:140px;height:140px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--surface);border:3px solid var(--border);box-shadow:0 8px 32px rgba(15,23,42,.06);cursor:pointer;transition:.3s;position:relative}
 .go-ring.activo{border-color:var(--green);box-shadow:0 8px 32px rgba(22,163,74,.18)}
 .go-ring.activo .go-btn{background:linear-gradient(135deg,var(--green),#22c55e);box-shadow:0 12px 28px rgba(22,163,74,.32)}
-.go-btn{width:108px;height:108px;border-radius:50%;background:linear-gradient(135deg,#94a3b8,#64748b);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:900;color:#fff;letter-spacing:.06em;transition:.3s;box-shadow:0 12px 28px rgba(100,116,139,.24)}
+.go-btn{width:108px;height:108px;border-radius:50%;background:linear-gradient(135deg,var(--green),#22c55e);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:900;color:#fff;letter-spacing:.06em;transition:.3s;box-shadow:0 12px 28px rgba(22,163,74,.24)}
 .go-status{margin-top:14px;font-size:.82rem;font-weight:700;color:var(--muted)}
 .go-status.activo{color:var(--green)}
 .go-pulse{position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--green);opacity:0;animation:goPulse 2s ease-out infinite}
@@ -358,6 +358,29 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 .moto-recaudo-amount{font-size:2.4rem;font-weight:900;letter-spacing:-.04em;color:var(--green)}
 .moto-recaudo-label{font-size:.82rem;color:var(--muted);margin-top:6px}
 .moto-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:.86rem}
+.moto-servicio-activo{background:var(--surface);border:1px solid var(--green);border-radius:20px;padding:18px;margin-bottom:18px;box-shadow:0 8px 24px rgba(22,163,74,.1)}
+.moto-servicio-activo-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--green);margin-bottom:12px}
+.moto-servicio-activo-ruta{font-size:.9rem;font-weight:700;line-height:1.5;margin-bottom:8px}
+.moto-servicio-activo-meta{font-size:.78rem;color:var(--muted);margin-bottom:14px}
+.moto-finalizar-wrap{margin-top:14px}
+.moto-finalizar-btn{width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;font-size:.88rem;font-weight:700;cursor:pointer;box-shadow:0 8px 20px rgba(37,99,235,.2)}
+.moto-finalizar-btn.naranja{background:linear-gradient(135deg,var(--orange),#ff8b5a);box-shadow:0 8px 20px rgba(240,90,40,.18)}
+.moto-foto-entrega{width:100%;margin-top:10px;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:14px}
+.moto-calificacion{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-top:12px;text-align:center}
+.moto-estrellas{display:flex;justify-content:center;gap:6px;margin:12px 0}
+.moto-estrella{font-size:1.6rem;cursor:pointer;color:var(--border-strong);transition:.15s}
+.moto-estrella.activa{color:#f59e0b}
+.moto-comentario{width:100%;margin-top:10px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--surface2);resize:none;font-size:.84rem;color:var(--text)}
+.moto-map-wrap{display:none;width:100%;height:280px;border-radius:20px;overflow:hidden;border:1px solid var(--border);margin-bottom:18px;position:relative}
+.moto-map-wrap.visible{display:block}
+#moto-mapa{width:100%;height:100%}
+.go-wrap.minimizado{padding:12px 0 8px}
+.go-wrap.minimizado .go-ring{width:56px;height:56px;border-color:var(--border);box-shadow:0 4px 12px rgba(15,23,42,.06)}
+.go-wrap.minimizado .go-ring.activo{border-color:var(--border);box-shadow:0 4px 12px rgba(15,23,42,.06)}
+.go-wrap.minimizado .go-ring.activo .go-btn{background:linear-gradient(135deg,#94a3b8,#64748b);box-shadow:none}
+.go-wrap.minimizado .go-btn{width:44px;height:44px;font-size:.82rem;font-weight:800;letter-spacing:.04em;background:linear-gradient(135deg,#94a3b8,#64748b);box-shadow:none}
+.go-wrap.minimizado .go-pulse{display:none}
+.go-wrap.minimizado .go-status{font-size:.74rem;margin-top:8px}
 </style>
 </head>
 <body data-theme="light">
@@ -652,7 +675,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
     </div>
     <div class="panel-loading" id="panel-hist-loading"><span class="spinner"></span> Cargando historial...</div>
     <div class="panel-tabla-wrap" id="panel-tabla-wrap" style="display:none">
-      <table class="panel-tabla"><thead><tr><th>ID</th><th>Tipo</th><th>Ciudad</th><th>Fecha</th><th>Estado</th><th>Total</th><th>Factura</th></tr></thead><tbody id="panel-tabla-body"></tbody></table>
+      <table class="panel-tabla"><thead><tr><th>ID</th><th>Tipo</th><th>Ciudad</th><th>Fecha</th><th>Estado</th><th>Total</th><th>Factura</th><th>Valoración</th></tr></thead><tbody id="panel-tabla-body"></tbody></table>
     </div>
     <div class="panel-empty" id="panel-empty" style="display:none"><div class="panel-empty-icon">0</div><div class="panel-empty-text">Aún no tienes servicios registrados</div><div class="panel-empty-sub">Cuando solicites tu primer servicio aparecerá aquí.</div></div>
   </div>
@@ -672,6 +695,8 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
       </div>
       <div class="go-status" id="go-status">Estás desconectado</div>
     </div>
+    <div class="moto-map-wrap" id="moto-map-wrap"><div id="moto-mapa"></div></div>
+    <div id="moto-servicio-activo-wrap"></div>
     <div class="moto-stats">
       <div class="moto-stat"><div class="moto-stat-val blue" id="moto-km">0</div><div class="moto-stat-label">Km este mes</div></div>
       <div class="moto-stat"><div class="moto-stat-val orange" id="moto-entregas">0</div><div class="moto-stat-label">Entregas</div></div>
@@ -811,10 +836,27 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
     </div>
   </div>
 </div>
+<div class="modal-overlay" id="modal-calificacion" onclick="if(event.target===this)this.classList.remove('visible')">
+  <div class="mlogin-card" style="text-align:center">
+    <button class="mlogin-close" onclick="document.getElementById('modal-calificacion').classList.remove('visible')">×</button>
+    <div class="mlogin-titulo" style="margin-bottom:6px">¿Cómo fue tu experiencia?</div>
+    <div class="mlogin-sub">Califica al mensajero para ayudarnos a mejorar.</div>
+    <div class="moto-estrellas" id="calif-estrellas">
+      <span class="moto-estrella" onclick="setCalificacion(1)">★</span>
+      <span class="moto-estrella" onclick="setCalificacion(2)">★</span>
+      <span class="moto-estrella" onclick="setCalificacion(3)">★</span>
+      <span class="moto-estrella" onclick="setCalificacion(4)">★</span>
+      <span class="moto-estrella" onclick="setCalificacion(5)">★</span>
+    </div>
+    <textarea class="moto-comentario" id="calif-comentario" rows="3" placeholder="Comentario opcional..."></textarea>
+    <input type="hidden" id="calif-pedido-id">
+    <button class="mlogin-btn" style="margin-top:14px" onclick="enviarCalificacion()">Enviar calificación</button>
+  </div>
+</div>
 <div class="toast" id="toast"></div>
 <script>
 // ── CONFIGURACIÓN ──
-const API_BASE='https://script.google.com/macros/s/AKfycbwg5by5CCfJB1lvktL4AeYTtdOCLFOAiDiRxcMTQOFVEwqIMc6p_Vv96ybPoBvvhEZ8/exec';
+const API_BASE='https://script.google.com/macros/s/AKfycbyEfaLN5c4s7R42xtQ5IpD-OuHlPpruieXTObmgwu_9H3e2P7PB4NNAxpzzJzIFp7mY/exec';
 const APP_TOKEN='radiz_v2_2026_seguro';
 function apiUrl(params){return API_BASE+'?'+new URLSearchParams({appToken:APP_TOKEN,...params})}
 
@@ -944,7 +986,7 @@ function normalizarEstado(e){if(!e)return'pendiente';const s=e.toString().toLowe
 function textoEstado(e){return{completado:'Completado',en_curso:'En curso',cancelado:'Cancelado',pendiente:'Pendiente'}[e]||'Pendiente'}
 function formatFecha(f){if(!f)return'—';try{const d=new Date(f);return isNaN(d.getTime())?f.toString().substring(0,10):d.toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'})}catch(e){return f}}
 function filtrarServicios(f,el){filtroActual=f;document.querySelectorAll('.panel-filtro').forEach(x=>x.classList.remove('active'));if(el)el.classList.add('active');renderizarTablaServicios(f==='todos'?serviciosUsuario:serviciosUsuario.filter(s=>normalizarEstado(s.estado)===f))}
-function renderizarTablaServicios(l){const tb=document.getElementById('panel-tabla-body'),w=document.getElementById('panel-tabla-wrap'),em=document.getElementById('panel-empty');if(!l.length){w.style.display='none';em.style.display='block';return}w.style.display='block';em.style.display='none';tb.innerHTML=l.map(s=>{const en=normalizarEstado(s.estado),tot=s.total?fmtCOP(Number(s.total)):'—',fu=s.factura_url||'',fh=fu?'<a href="'+fu+'" target="_blank" class="btn-factura">Ver</a>':'<span class="btn-factura disabled">Pendiente</span>';return'<tr><td style="font-weight:700">'+(s.id||'—')+'</td><td>'+(s.tipo_servicio||'—')+'</td><td>'+(s.ciudad||'—')+'</td><td>'+formatFecha(s.fecha)+'</td><td><span class="estado-badge '+en+'"><span class="estado-dot"></span>'+textoEstado(en)+'</span></td><td style="font-weight:800">'+tot+'</td><td>'+fh+'</td></tr>'}).join('')}
+function renderizarTablaServicios(l){const tb=document.getElementById('panel-tabla-body'),w=document.getElementById('panel-tabla-wrap'),em=document.getElementById('panel-empty');if(!l.length){w.style.display='none';em.style.display='block';return}w.style.display='block';em.style.display='none';tb.innerHTML=l.map(s=>{const en=normalizarEstado(s.estado),tot=s.total?fmtCOP(Number(s.total)):'—',fu=s.factura_url||'',fh=fu?'<a href="'+fu+'" target="_blank" class="btn-factura">Ver</a>':'<span class="btn-factura disabled">Pendiente</span>';return'<tr><td style="font-weight:700">'+(s.id||'—')+'</td><td>'+(s.tipo_servicio||'—')+'</td><td>'+(s.ciudad||'—')+'</td><td>'+formatFecha(s.fecha)+'</td><td><span class="estado-badge '+en+'"><span class="estado-dot"></span>'+textoEstado(en)+'</span></td><td style="font-weight:800">'+tot+'</td><td>'+fh+'</td><td>'+(en==='completado'&&!s.calificacion?'<button class="btn-factura" onclick="abrirCalificacion(\''+s.id+'\')">Calificar</button>':en==='completado'&&s.calificacion?'★ '+s.calificacion:'—')+'</td></tr>'}).join('')}
 function abrirModalRecarga(){if(!usuarioActual){abrirModalLogin();return}document.getElementById('modal-recarga').classList.add('visible');document.getElementById('recarga-form-view').style.display='block';document.getElementById('recarga-success-view').classList.remove('visible');recargaMontoSel=0;document.querySelectorAll('.recarga-monto').forEach(m=>m.classList.remove('selected'));document.getElementById('recarga-custom-wrap').style.display='none'}
 function cerrarModalRecarga(){document.getElementById('modal-recarga').classList.remove('visible');if(document.getElementById('vista-panel').classList.contains('activa'))document.getElementById('panel-saldo').textContent=fmtCOP(saldoUsuario)}
 function cerrarModalRecargaOverlay(e){if(e.target===document.getElementById('modal-recarga'))cerrarModalRecarga()}
@@ -974,15 +1016,26 @@ function procesarRecarga(){
 }
 async function registrarPagoEnSheet(referencia,monto,idContrato,correo){
   try{
-    const formData=new URLSearchParams();
-    formData.append('accion','registrar_pago_portal');
-    formData.append('referencia',referencia);
-    formData.append('monto',monto);
-    formData.append('idContrato',idContrato||'');
-    formData.append('correo',correo||'');
-    formData.append('origen','PORTAL_WEB');
-    await fetch(API_BASE,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:formData.toString()});
-  }catch(e){console.error('Error registrando pago',e);}
+    const payload={
+      accion:'publicar_pedido',
+      correo:correo||'',
+      ciudad:ciudadSeleccionada?ciudadSeleccionada.nombre:'',
+      puntos:[
+        document.getElementById('origen-input')?.value||'',
+        document.getElementById('destino-input')?.value||''
+      ],
+      loAntesPosible:modoHorario==='ahora',
+      programado:modoHorario==='programar'?document.getElementById('hora-recogida')?.value:'',
+      tipoPaqueteria:tipoEnvio||'documentos',
+      recorridoKm:distanciaRutaMetros?Math.round(distanciaRutaMetros/1000*100)/100:0,
+      indicaciones:document.getElementById('indicaciones-mens')?.value||'',
+      valorCobro:monto||0,
+      contactoCliente:document.getElementById('reg-telefono')?.value||'',
+      referencia:referencia,
+      idCliente:usuarioActual?usuarioActual.id:correo
+    };
+    await fetch(API_BASE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  }catch(e){console.error('Error publicando pedido',e)}
 }
 document.addEventListener('DOMContentLoaded',()=>{
   renderNav();
@@ -1102,23 +1155,56 @@ function mregNav(dir){
   mregRender();
 }
 
+function comprimirYConvertir(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=function(e){
+      const img=new Image();
+      img.onload=function(){
+        const canvas=document.createElement('canvas');
+        const MAX=800;
+        let w=img.width,h=img.height;
+        if(w>MAX||h>MAX){
+          if(w>h){h=Math.round(h*MAX/w);w=MAX}
+          else{w=Math.round(w*MAX/h);h=MAX}
+        }
+        canvas.width=w;canvas.height=h;
+        const ctx=canvas.getContext('2d');
+        ctx.drawImage(img,0,0,w,h);
+        const b64=canvas.toDataURL('image/jpeg',0.7).split(',')[1];
+        resolve(b64);
+      };
+      img.onerror=reject;
+      img.src=e.target.result;
+    };
+    reader.onerror=reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 async function ejecutarRegistroMensajero(){
   setBtnLoading('mreg-btn-next',true,'Enviar solicitud');
   try{
     const h=await hashPass(mregData['pass']);
-    const formData=new FormData();
-    formData.append('accion','registrar_mensajero');
-    formData.append('nombre',mregData['nombre']);
-    formData.append('correo',mregData['correo']);
-    formData.append('hash',h);
-    formData.append('telefono',mregData['telefono']);
-    formData.append('ciudad',mregData['ciudad']);
-    formData.append('placa',mregData['placa'].toUpperCase());
-    formData.append('moto',mregData['moto']);
-    ['cedula-front','cedula-back','soat','licencia-front','licencia-back','tarjeta-front','tarjeta-back','foto-rostro'].forEach(k=>{
-      if(mregData[k])formData.append(k.replace(/-/g,'_'),mregData[k]);
-    });
-    const r=await fetch(API_BASE,{method:'POST',body:formData});
+    const archivos=['cedula-front','cedula-back','soat','licencia-front','licencia-back','tarjeta-front','tarjeta-back','foto-rostro'];
+    const fotosB64={};
+    for(const key of archivos){
+      if(mregData[key]&&mregData[key] instanceof File){
+        fotosB64[key]=await comprimirYConvertir(mregData[key]);
+      }
+    }
+    const payload={
+      accion:'registrar_mensajero',
+      nombre:mregData['nombre'],
+      correo:mregData['correo'],
+      hash:h,
+      telefono:mregData['telefono'],
+      ciudad:mregData['ciudad'],
+      placa:mregData['placa'].toUpperCase(),
+      moto:mregData['moto'],
+      fotos:fotosB64
+    };
+    const r=await fetch(API_BASE,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     const d=await r.json();
     if(!d.ok){mostrarError('mreg-error',d.error||'Error');return}
     document.getElementById('mreg-screen').innerHTML='';
@@ -1134,17 +1220,48 @@ let goActivo=false,motoUsuario=null,motoPedidos=[],motoHistorial=[];
 
 function toggleGo(){
   goActivo=!goActivo;
-  document.getElementById('go-ring').classList.toggle('activo',goActivo);
-  const status=document.getElementById('go-status');
-  status.textContent=goActivo?'Estás conectado — recibiendo pedidos':'Estás desconectado';
-  status.classList.toggle('activo',goActivo);
   const ring=document.getElementById('go-ring');
-  const pulse=ring.querySelector('.go-pulse');
+  const wrap=document.querySelector('.go-wrap');
+  const status=document.getElementById('go-status');
+  const btn=document.getElementById('go-btn');
+  const mapWrap=document.getElementById('moto-map-wrap');
+  ring.classList.toggle('activo',goActivo);
   if(goActivo){
-    if(!pulse){const p=document.createElement('div');p.className='go-pulse';ring.appendChild(p)}
+    wrap.classList.add('minimizado');
+    btn.textContent='OFF';
+    status.textContent='Conectando...';
+    status.classList.add('activo');
+    const pulse=ring.querySelector('.go-pulse');
+    if(pulse)pulse.remove();
+    mapWrap.classList.add('visible');
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(
+        function(pos){
+          const lat=pos.coords.latitude,lng=pos.coords.longitude;
+          enviarGoBackend(true,lat,lng);
+          iniciarMapaMotoConCoords(lat,lng);
+          status.textContent='Conectado — toca OFF para desconectar';
+        },
+        function(){
+          enviarGoBackend(true,0,0);
+          iniciarMapaMoto();
+          status.textContent='Conectado (sin ubicación) — toca OFF para desconectar';
+        },
+        {enableHighAccuracy:true,timeout:10000}
+      );
+    }else{
+      enviarGoBackend(true,0,0);
+      iniciarMapaMoto();
+      status.textContent='Conectado — toca OFF para desconectar';
+    }
     cargarServiciosDisponibles();
   }else{
-    if(pulse)pulse.remove();
+    wrap.classList.remove('minimizado');
+    btn.textContent='GO';
+    status.textContent='Estás desconectado';
+    status.classList.remove('activo');
+    mapWrap.classList.remove('visible');
+    enviarGoBackend(false,0,0);
   }
 }
 
@@ -1186,15 +1303,6 @@ async function cargarServiciosDisponibles(){
   }catch(e){lista.innerHTML='<div class="moto-empty">Error de conexión</div>'}
 }
 
-async function aceptarServicio(idPedido){
-  if(!motoUsuario)return;
-  try{
-    const r=await fetch(apiUrl({accion:'aceptar_pedido',idPedido:idPedido,idMotor:motoUsuario.id}));
-    const d=await r.json();
-    if(d.ok){showToast('Servicio aceptado','success');cargarServiciosDisponibles();cargarHistorialMoto()}
-    else showToast(d.error||'Error','error');
-  }catch(e){showToast('Error de conexión','error')}
-}
 
 async function cargarHistorialMoto(){
   if(!motoUsuario)return;
@@ -1240,6 +1348,208 @@ function motoSubpanel(panel){
 function motoVolverPanel(){
   document.querySelectorAll('.moto-subpanel').forEach(s=>s.classList.remove('activa'));
   window.scrollTo({top:0,behavior:'smooth'});
+}
+
+let mapaMotor=null,mapaMotorIniciado=false;
+function iniciarMapaMoto(){
+  if(mapaMotorIniciado&&mapaMotor){mapaMotor.setCenter(getCiudadCoords());return}
+  const coords=getCiudadCoords();
+  mapaMotor=new google.maps.Map(document.getElementById('moto-mapa'),{
+    center:coords,
+    zoom:14,
+    disableDefaultUI:true,
+    zoomControl:false,
+    mapTypeControl:false,
+    streetViewControl:false,
+    fullscreenControl:false,
+    styles:[{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]}]
+  });
+  mapaMotorIniciado=true;
+}
+
+function getCiudadCoords(){
+  const ciudad=(motoUsuario&&motoUsuario.ciudad||'').toLowerCase().trim();
+  const ciudades={
+    'bogota':{lat:4.7110,lng:-74.0721},'bogotá':{lat:4.7110,lng:-74.0721},
+    'medellin':{lat:6.2442,lng:-75.5812},'medellín':{lat:6.2442,lng:-75.5812},
+    'cali':{lat:3.4516,lng:-76.5319},
+    'barranquilla':{lat:10.9639,lng:-74.7964},
+    'pereira':{lat:4.8133,lng:-75.6961},
+    'bucaramanga':{lat:7.1254,lng:-73.1198},
+    'cartagena':{lat:10.3910,lng:-75.5144}
+  };
+  return ciudades[ciudad]||{lat:4.7110,lng:-74.0721};
+}
+
+async function enviarGoBackend(activo,lat,lng){
+  if(!motoUsuario)return;
+  try{
+    await fetch(API_BASE,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        accion:'go_toggle',
+        idMotor:motoUsuario.id,
+        activo:activo?'SI':'NO',
+        lat:lat,
+        lng:lng,
+        appToken:APP_TOKEN
+      })
+    });
+  }catch(e){console.log('Error GO:',e)}
+}
+
+function iniciarMapaMotoConCoords(lat,lng){
+  const coords={lat:lat,lng:lng};
+  if(mapaMotorIniciado&&mapaMotor){
+    mapaMotor.setCenter(coords);
+    mapaMotor.setZoom(15);
+    return;
+  }
+  mapaMotor=new google.maps.Map(document.getElementById('moto-mapa'),{
+    center:coords,
+    zoom:15,
+    disableDefaultUI:true,
+    zoomControl:false,
+    mapTypeControl:false,
+    streetViewControl:false,
+    fullscreenControl:false,
+    styles:[{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]}]
+  });
+  mapaMotorIniciado=true;
+  new google.maps.Marker({position:coords,map:mapaMotor,icon:{path:google.maps.SymbolPath.CIRCLE,scale:10,fillColor:'#16a34a',fillOpacity:1,strokeColor:'#fff',strokeWeight:2.5},title:'Tu ubicación'});
+}
+
+let servicioActivoMoto=null;
+let directionsServiceMoto=null,directionsRendererMoto=null;
+
+async function aceptarServicio(idPedido){
+  if(!motoUsuario)return;
+  try{
+    const r=await fetch(apiUrl({accion:'aceptar_pedido',idPedido:idPedido,idMotor:motoUsuario.id}));
+    const d=await r.json();
+    if(d.ok){
+      showToast('Servicio aceptado','success');
+      const pedido=motoPedidos.find(p=>p.id===idPedido);
+      if(pedido){
+        servicioActivoMoto=pedido;
+        mostrarServicioActivo(pedido);
+      }
+      cargarServiciosDisponibles();
+      cargarHistorialMoto();
+    }else showToast(d.error||'Error','error');
+  }catch(e){showToast('Error de conexión','error')}
+}
+
+function mostrarServicioActivo(pedido){
+  const wrap=document.getElementById('moto-servicio-activo-wrap');
+  wrap.innerHTML='<div class="moto-servicio-activo">'+
+    '<div class="moto-servicio-activo-title">Servicio en curso</div>'+
+    '<div class="moto-servicio-activo-ruta">'+pedido.origen+' → '+pedido.destino+'</div>'+
+    '<div class="moto-servicio-activo-meta">'+pedido.ciudad+' · '+fmtCOP(pedido.tarifa)+'</div>'+
+    '<div class="moto-finalizar-wrap">'+
+      '<input type="file" accept="image/*" class="moto-foto-entrega" id="foto-entrega-input">'+
+      '<button class="moto-finalizar-btn" onclick="finalizarServicio(\''+pedido.id+'\')">Confirmar entrega</button>'+
+    '</div>'+
+  '</div>';
+  dibujarRutaMoto(pedido);
+}
+
+function dibujarRutaMoto(pedido){
+  if(!mapaMotor||!mapaMotorIniciado)return;
+  if(!directionsServiceMoto)directionsServiceMoto=new google.maps.DirectionsService();
+  if(!directionsRendererMoto){
+    directionsRendererMoto=new google.maps.DirectionsRenderer({
+      map:mapaMotor,suppressMarkers:false,
+      polylineOptions:{strokeColor:'#2563eb',strokeWeight:4,strokeOpacity:.9}
+    });
+  }else{
+    directionsRendererMoto.setMap(mapaMotor);
+  }
+  const geocoder=new google.maps.Geocoder();
+  geocoder.geocode({address:pedido.origen+', Colombia'},function(resO,statO){
+    if(statO!=='OK')return;
+    geocoder.geocode({address:pedido.destino+', Colombia'},function(resD,statD){
+      if(statD!=='OK')return;
+      directionsServiceMoto.route({
+        origin:resO[0].geometry.location,
+        destination:resD[0].geometry.location,
+        travelMode:google.maps.TravelMode.DRIVING,
+        region:'CO'
+      },function(result,status){
+        if(status==='OK')directionsRendererMoto.setDirections(result);
+      });
+    });
+  });
+}
+
+async function finalizarServicio(idPedido){
+  const fotoInput=document.getElementById('foto-entrega-input');
+  if(!fotoInput||!fotoInput.files.length){showToast('Sube la foto de entrega','error');return}
+  try{
+    const fotoB64=await comprimirYConvertir(fotoInput.files[0]);
+    const r=await fetch(API_BASE,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        accion:'finalizar_pedido',
+        idPedido:idPedido,
+        idMotor:motoUsuario.id,
+        fotoEntrega:fotoB64,
+        appToken:APP_TOKEN
+      })
+    });
+    const d=await r.json();
+    if(d.ok){
+      showToast('Entrega confirmada','success');
+      servicioActivoMoto=null;
+      document.getElementById('moto-servicio-activo-wrap').innerHTML='';
+      if(directionsRendererMoto)directionsRendererMoto.setMap(null);
+      cargarHistorialMoto();
+    }else showToast(d.error||'Error','error');
+  }catch(e){showToast('Error de conexión','error')}
+}
+
+let califEstrellas=0;
+
+function abrirCalificacion(idPedido){
+  califEstrellas=0;
+  document.getElementById('calif-pedido-id').value=idPedido;
+  document.getElementById('calif-comentario').value='';
+  document.querySelectorAll('#calif-estrellas .moto-estrella').forEach(s=>s.classList.remove('activa'));
+  document.getElementById('modal-calificacion').classList.add('visible');
+}
+
+function setCalificacion(n){
+  califEstrellas=n;
+  document.querySelectorAll('#calif-estrellas .moto-estrella').forEach((s,i)=>{
+    s.classList.toggle('activa',i<n);
+  });
+}
+
+async function enviarCalificacion(){
+  if(califEstrellas===0){showToast('Selecciona al menos una estrella','error');return}
+  const idPedido=document.getElementById('calif-pedido-id').value;
+  const comentario=document.getElementById('calif-comentario').value.trim();
+  try{
+    const r=await fetch(API_BASE,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        accion:'calificar_pedido',
+        idPedido:idPedido,
+        calificacion:califEstrellas,
+        comentario:comentario,
+        appToken:APP_TOKEN
+      })
+    });
+    const d=await r.json();
+    if(d.ok){
+      showToast('Gracias por tu calificación','success');
+      document.getElementById('modal-calificacion').classList.remove('visible');
+      cargarPanel();
+    }else showToast(d.error||'Error','error');
+  }catch(e){showToast('Error de conexión','error')}
 }
 </script>
 </body>
