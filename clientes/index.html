@@ -381,6 +381,31 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 .go-wrap.minimizado .go-btn{width:44px;height:44px;font-size:.82rem;font-weight:800;letter-spacing:.04em;background:linear-gradient(135deg,#94a3b8,#64748b);box-shadow:none}
 .go-wrap.minimizado .go-pulse{display:none}
 .go-wrap.minimizado .go-status{font-size:.74rem;margin-top:8px}
+.doc-ruta{padding:0}
+.doc-ruta-title{font-size:.92rem;font-weight:800;margin-bottom:6px}
+.doc-ruta-sub{font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:20px}
+.doc-paso{display:flex;align-items:flex-start;gap:14px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:18px;margin-bottom:10px;position:relative;transition:.2s}
+.doc-paso.bloqueado{opacity:.45;pointer-events:none}
+.doc-paso.activo{border-color:var(--blue-2);box-shadow:0 4px 16px rgba(37,99,235,.1)}
+.doc-paso.completado{border-color:var(--green);background:rgba(22,163,74,.03)}
+.doc-paso.revision{border-color:#f59e0b;background:rgba(245,158,11,.03)}
+.doc-paso.rechazado{border-color:var(--orange);background:var(--orange-soft)}
+.doc-paso-num{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;flex:0 0 auto;background:var(--surface2);color:var(--muted)}
+.doc-paso.activo .doc-paso-num{background:var(--blue-soft);color:var(--blue-2)}
+.doc-paso.completado .doc-paso-num{background:var(--green-soft);color:var(--green)}
+.doc-paso.revision .doc-paso-num{background:rgba(245,158,11,.12);color:#f59e0b}
+.doc-paso.rechazado .doc-paso-num{background:var(--orange-soft);color:var(--orange)}
+.doc-paso-info{flex:1}
+.doc-paso-title{font-size:.86rem;font-weight:700}
+.doc-paso-status{font-size:.72rem;color:var(--muted);margin-top:3px}
+.doc-paso-status.green{color:var(--green)}
+.doc-paso-status.yellow{color:#f59e0b}
+.doc-paso-status.red{color:var(--orange)}
+.doc-paso-upload{margin-top:10px}
+.doc-paso-file{width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;font-size:.82rem}
+.doc-paso-btn{margin-top:8px;width:100%;padding:11px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;font-size:.82rem;font-weight:700;cursor:pointer}
+.doc-paso-btn:disabled{opacity:.5;cursor:not-allowed}
+.doc-line{width:2px;height:10px;background:var(--border);margin:0 0 0 33px}
 </style>
 </head>
 <body data-theme="light">
@@ -696,6 +721,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
       <div class="go-status" id="go-status">Estás desconectado</div>
     </div>
     <div class="moto-map-wrap" id="moto-map-wrap"><div id="moto-mapa"></div></div>
+    <div id="moto-doc-ruta-wrap"></div>
     <div id="moto-servicio-activo-wrap"></div>
     <div class="moto-stats">
       <div class="moto-stat"><div class="moto-stat-val blue" id="moto-km">0</div><div class="moto-stat-label">Km este mes</div></div>
@@ -795,17 +821,6 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
     <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
     <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
     <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
-    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
-    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
-    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
-    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
-    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
-    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
-    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
-    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
-    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
-    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
-    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
   </div>
   <div id="mreg-screen" style="min-height:160px"></div>
   <div class="mlogin-error-msg" id="mreg-error"></div>
@@ -856,7 +871,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 <div class="toast" id="toast"></div>
 <script>
 // ── CONFIGURACIÓN ──
-const API_BASE='https://script.google.com/macros/s/AKfycbyEfaLN5c4s7R42xtQ5IpD-OuHlPpruieXTObmgwu_9H3e2P7PB4NNAxpzzJzIFp7mY/exec';
+const API_BASE='https://script.google.com/macros/s/AKfycbx1IZfZoLw8SyWD6sCLPe-3NeRHdMoYadv6iFOTGlpkusNeqMZrxI3OjLiP9HSCdYZn/exec';
 const APP_TOKEN='radiz_v2_2026_seguro';
 function apiUrl(params){return API_BASE+'?'+new URLSearchParams({appToken:APP_TOKEN,...params})}
 
@@ -1100,20 +1115,9 @@ function selRegRol(rol){
 const mregSteps=[
   {id:'nombre',label:'Nombre completo',type:'text',placeholder:'Tu nombre completo',required:true},
   {id:'correo',label:'Correo electrónico',type:'email',placeholder:'correo@ejemplo.com',required:true},
-  {id:'pass',label:'Contraseña',type:'password',placeholder:'Mínimo 8 caracteres',required:true},
-  {id:'pass2',label:'Confirmar contraseña',type:'password',placeholder:'Repite la contraseña',required:true},
   {id:'telefono',label:'Teléfono',type:'tel',placeholder:'3XX XXX XXXX',required:true},
-  {id:'ciudad',label:'Ciudad donde operará',type:'text',placeholder:'Ej: Bogotá, Medellín...',required:true},
-  {id:'placa',label:'Placa de la moto',type:'text',placeholder:'ABC 123',required:true,style:'text-transform:uppercase'},
-  {id:'moto',label:'Marca y modelo de la moto',type:'text',placeholder:'Ej: Honda CB 125 · 2022',required:true},
-  {id:'cedula-front',label:'Foto cédula (frontal)',type:'file',required:true},
-  {id:'cedula-back',label:'Foto cédula (trasera)',type:'file',required:true},
-  {id:'soat',label:'Foto SOAT vigente',type:'file',required:true},
-  {id:'licencia-front',label:'Foto licencia de conducción (frontal)',type:'file',required:true},
-  {id:'licencia-back',label:'Foto licencia de conducción (trasera)',type:'file',required:true},
-  {id:'tarjeta-front',label:'Foto tarjeta de propiedad (frontal)',type:'file',required:true},
-  {id:'tarjeta-back',label:'Foto tarjeta de propiedad (trasera)',type:'file',required:true},
-  {id:'foto-rostro',label:'Foto de tu rostro',type:'file',required:true,desc:'Sube una foto clara de tu rostro para verificar tu identidad.'}
+  {id:'pass',label:'Contraseña',type:'password',placeholder:'Mínimo 8 caracteres',required:true},
+  {id:'pass2',label:'Confirmar contraseña',type:'password',placeholder:'Repite la contraseña',required:true}
 ];
 let mregCurrent=0;
 const mregData={};
@@ -1194,23 +1198,12 @@ async function ejecutarRegistroMensajero(){
   setBtnLoading('mreg-btn-next',true,'Enviar solicitud');
   try{
     const h=await hashPass(mregData['pass']);
-    const archivos=['cedula-front','cedula-back','soat','licencia-front','licencia-back','tarjeta-front','tarjeta-back','foto-rostro'];
-    const fotosB64={};
-    for(const key of archivos){
-      if(mregData[key]&&mregData[key] instanceof File){
-        fotosB64[key]=await comprimirYConvertir(mregData[key]);
-      }
-    }
     const payload={
       accion:'registrar_mensajero',
       nombre:mregData['nombre'],
       correo:mregData['correo'],
       hash:h,
-      telefono:mregData['telefono'],
-      ciudad:mregData['ciudad'],
-      placa:mregData['placa'].toUpperCase(),
-      moto:mregData['moto'],
-      fotos:fotosB64
+      telefono:mregData['telefono']
     };
     const r=await fetch(API_BASE,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
     const d=await r.json();
@@ -1218,7 +1211,7 @@ async function ejecutarRegistroMensajero(){
     document.getElementById('mreg-screen').innerHTML='';
     document.getElementById('mreg-btn-next').style.display='none';
     document.getElementById('mreg-btn-atras').style.display='none';
-    document.getElementById('mreg-success').innerHTML='Solicitud enviada. Revisaremos tus documentos y te notificaremos por correo.';
+    document.getElementById('mreg-success').innerHTML='Cuenta creada. Revisa tu correo para confirmar y luego completa tu documentación desde tu panel.';
     document.getElementById('mreg-success').classList.add('visible');
   }catch(e){mostrarError('mreg-error','Error de conexión.')}
   finally{setBtnLoading('mreg-btn-next',false,'Enviar solicitud')}
@@ -1235,6 +1228,7 @@ function toggleGo(){
   const mapWrap=document.getElementById('moto-map-wrap');
   ring.classList.toggle('activo',goActivo);
   if(goActivo){
+    if(motoUsuario&&motoUsuario.estado!=='aprobado'){showToast('Completa tu documentación para activarte','error');goActivo=false;return}
     wrap.classList.add('minimizado');
     btn.textContent='OFF';
     status.textContent='Conectando...';
@@ -1280,6 +1274,8 @@ function cargarPanelMensajero(){
   document.getElementById('moto-ciudad').textContent=motoUsuario.ciudad||'Colombia';
   const ini=motoUsuario.nombre.split(' ').map(p=>p[0]).join('').substring(0,2).toUpperCase();
   document.getElementById('moto-avatar').textContent=ini;
+  motoUsuario.pasoDocumentos=motoUsuario.pasoDocumentos||0;
+  renderDocRuta();
   renderMotoChart();
   cargarHistorialMoto();
   renderMotoPerfil();
@@ -1558,6 +1554,78 @@ async function enviarCalificacion(){
       cargarPanel();
     }else showToast(d.error||'Error','error');
   }catch(e){showToast('Error de conexión','error')}
+}
+
+function renderDocRuta(){
+  if(!motoUsuario)return;
+  const estado=motoUsuario.estado||'pendiente';
+  if(estado==='aprobado')return;
+  const paso=parseInt(motoUsuario.pasoDocumentos)||0;
+  const pasos=[
+    {n:1,title:'Cédula de ciudadanía',desc:'Frontal y trasera',archivos:2},
+    {n:2,title:'SOAT vigente',desc:'Foto o documento',archivos:1},
+    {n:3,title:'Tarjeta de propiedad',desc:'Frontal y trasera',archivos:2},
+    {n:4,title:'Foto de rostro',desc:'Foto clara de tu cara',archivos:1}
+  ];
+  let h='<div class="doc-ruta"><div class="doc-ruta-title">Completa tu documentación</div><div class="doc-ruta-sub">Sube tus documentos para activar tu cuenta. Cada paso se valida antes de continuar.</div>';
+  pasos.forEach(function(p,i){
+    let cls='bloqueado',numIcon=p.n,statusTxt='Pendiente',statusCls='';
+    if(p.n<paso+1){cls='completado';numIcon='✓';statusTxt='Aprobado';statusCls='green'}
+    else if(p.n===paso+1){cls='activo';statusTxt='Listo para enviar';statusCls=''}
+    h+='<div class="doc-paso '+cls+'" id="doc-paso-'+p.n+'">';
+    h+='<div class="doc-paso-num">'+numIcon+'</div>';
+    h+='<div class="doc-paso-info"><div class="doc-paso-title">'+p.title+'</div>';
+    h+='<div class="doc-paso-status '+statusCls+'">'+statusTxt+'</div>';
+    if(p.n===paso+1){
+      h+='<div class="doc-paso-upload">';
+      if(p.archivos===2){
+        h+='<input type="file" accept="image/*" class="doc-paso-file" id="doc-file-'+p.n+'-a"'+(p.n<=2?' capture="environment"':'')+'>';
+        h+='<input type="file" accept="image/*" class="doc-paso-file" id="doc-file-'+p.n+'-b" style="margin-top:6px"'+(p.n<=2?' capture="environment"':'')+'>';
+      }else if(p.n===2){
+        h+='<input type="file" accept="image/*,.pdf" class="doc-paso-file" id="doc-file-'+p.n+'-a">';
+      }else{
+        h+='<input type="file" accept="image/*" class="doc-paso-file" id="doc-file-'+p.n+'-a"'+(p.n===4?' capture="user"':'')+'>';
+      }
+      h+='<button class="doc-paso-btn" onclick="enviarDocumento('+p.n+')">Enviar para validación</button>';
+      h+='</div>';
+    }
+    h+='</div></div>';
+    if(i<pasos.length-1)h+='<div class="doc-line"></div>';
+  });
+  h+='</div>';
+  document.getElementById('moto-doc-ruta-wrap').innerHTML=h;
+}
+
+async function enviarDocumento(paso){
+  const fileA=document.getElementById('doc-file-'+paso+'-a');
+  if(!fileA||!fileA.files.length){showToast('Selecciona el archivo','error');return}
+  let b64a='',b64b='';
+  try{
+    b64a=await comprimirYConvertir(fileA.files[0]);
+    const fileB=document.getElementById('doc-file-'+paso+'-b');
+    if(fileB&&fileB.files.length)b64b=await comprimirYConvertir(fileB.files[0]);
+  }catch(e){showToast('Error procesando imagen','error');return}
+  const btn=document.querySelector('#doc-paso-'+paso+' .doc-paso-btn');
+  if(btn){btn.disabled=true;btn.textContent='Enviando...'}
+  try{
+    const r=await fetch(API_BASE,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({
+        accion:'subir_documento',
+        idMotor:motoUsuario.id,
+        paso:paso,
+        archivoA:b64a,
+        archivoB:b64b
+      })
+    });
+    const d=await r.json();
+    if(d.ok){
+      showToast('Documento enviado','success');
+      motoUsuario.pasoDocumentos=paso;
+      renderDocRuta();
+    }else{showToast(d.error||'Error','error');if(btn){btn.disabled=false;btn.textContent='Enviar para validación'}}
+  }catch(e){showToast('Error de conexión','error');if(btn){btn.disabled=false;btn.textContent='Enviar para validación'}}
 }
 </script>
 </body>
