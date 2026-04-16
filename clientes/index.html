@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radiz — Mensajería y logística</title>
+<link rel="icon" type="image/png" href="icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm0PzoGphUs1a3TME47zPorau74ubFuic&libraries=places,geocoding&language=es&region=CO"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#1d4ed8;--blue-2:#2563eb;--blue-soft:rgba(37,99,235,.12);
+  --orange:#f05a28;--orange-soft:rgba(240,90,40,.12);
+  --green:#16a34a;--green-soft:rgba(22,163,74,.12);
+  --radius:20px;--radius-sm:14px;--radius-xs:10px;
+  --max-w:1320px;
+}
+body{
+  --bg:#f3f6fb;--bg-soft:#eaf0f8;--surface:#ffffff;--surface2:#f7faff;--surface3:#eef3fb;
+  --border:rgba(15,23,42,.08);--border-strong:rgba(15,23,42,.14);
+  --text:#0f172a;--muted:#5b6980;--muted2:#8391a6;--shadow:0 18px 42px rgba(15,23,42,.08);
+  --panel-shadow:0 10px 24px rgba(15,23,42,.06);--ring:0 0 0 3px rgba(37,99,235,.12)
+}
+
+html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'Poppins',sans-serif;overflow-x:hidden}
+body{position:relative}
+a{text-decoration:none;color:inherit}
+button,input,textarea,select{font:inherit}
+nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border)}
+.nav-inner{max-width:var(--max-w);margin:0 auto;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.nav-logo{display:flex;align-items:center;gap:14px;cursor:pointer;min-width:0}
+.nav-logomark{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--blue-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1rem;box-shadow:0 10px 24px rgba(37,99,235,.24)}
+.nav-brand{display:flex;flex-direction:column;line-height:1}
+.nav-name{font-weight:800;font-size:1.08rem;letter-spacing:-.02em}
+.nav-sub{font-size:.76rem;color:var(--muted);margin-top:4px}
+.nav-right{display:flex;align-items:center;gap:12px}
+.theme-toggle{display:flex;align-items:center;padding:4px;background:var(--surface);border:1px solid var(--border);border-radius:999px;box-shadow:var(--panel-shadow)}
+.theme-btn{border:none;background:transparent;color:var(--muted);padding:8px 14px;border-radius:999px;font-size:.78rem;font-weight:600;cursor:pointer;transition:.2s}
+.theme-btn.active{background:var(--blue);color:#fff;box-shadow:0 8px 20px rgba(37,99,235,.22)}
+.nav-btn{height:42px;border:none;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;border-radius:12px;padding:0 18px;font-size:.87rem;font-weight:700;cursor:pointer;box-shadow:0 14px 28px rgba(37,99,235,.22);transition:.2s}
+.nav-btn:hover{transform:translateY(-1px)}
+.nav-user{display:flex;align-items:center;gap:10px}
+.nav-user-menu{position:relative}
+.nav-user-avatar{width:40px;height:40px;border-radius:12px;background:var(--blue-soft);border:1px solid rgba(37,99,235,.22);display:flex;align-items:center;justify-content:center;color:var(--blue-2);font-weight:800;font-size:.84rem;cursor:pointer}
+.nav-user-name{font-size:.84rem;font-weight:600;max-width:132px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer}
+.nav-user-dropdown{position:absolute;top:calc(100% + 10px);right:0;min-width:230px;padding:8px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow);display:none}
+.nav-user-dropdown.visible{display:block}
+.nav-dd-item{padding:11px 14px;border-radius:12px;color:var(--muted);font-size:.84rem;font-weight:500;cursor:pointer;transition:.18s}
+.nav-dd-item:hover{background:var(--surface2);color:var(--text)}
+.nav-dd-item.danger:hover{background:var(--orange-soft);color:var(--orange)}
+.page-wrap{max-width:var(--max-w);margin:0 auto;padding:0 24px;position:relative;z-index:1}
+.vista{display:none;padding-bottom:52px}
+.vista.activa{display:block}
+.home-hero{padding:56px 0 22px}
+.home-hero h1{font-size:clamp(2.2rem,5vw,4.3rem);line-height:1.02;letter-spacing:-.05em;font-weight:800;max-width:860px;margin:18px 0 18px}
+.home-hero h1 .azul{color:var(--blue-2)}
+.home-hero h1 .naranja{color:var(--orange)}
+.home-hero p{max-width:720px;color:var(--muted);font-size:1rem;line-height:1.72}
+.home-cards{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:34px}
+.hcard{background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:28px;box-shadow:var(--panel-shadow);transition:.25s;cursor:pointer}
+.hcard:hover{transform:translateY(-4px);border-color:var(--border-strong)}
+.hcard-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px}
+.hcard-icon{width:54px;height:54px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:.96rem;font-weight:800}
+.hcard.azul .hcard-icon{background:var(--blue-soft);color:var(--blue-2)}
+.hcard.naranja .hcard-icon{background:var(--orange-soft);color:var(--orange)}
+.hcard-arrow{width:40px;height:40px;border-radius:14px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:1rem;background:var(--surface2)}
+.hcard h2{font-size:1.14rem;font-weight:700;letter-spacing:-.02em;margin-bottom:10px}
+.hcard p{font-size:.92rem;color:var(--muted);line-height:1.65}
+.hcard-footer{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:22px}
+.hcard-badge{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:var(--surface2);border:1px solid var(--border);font-size:.75rem;color:var(--muted);font-weight:600}
+.hcard-price{font-size:.92rem;font-weight:800}
+.hcard.azul .hcard-price{color:var(--blue-2)}
+.hcard.naranja .hcard-price{color:var(--orange)}
+.home-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.stat-chip{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px 18px;box-shadow:var(--panel-shadow)}
+.stat-num{font-size:1.42rem;font-weight:800;letter-spacing:-.03em}
+.stat-num.azul{color:var(--blue-2)}
+.stat-num.naranja{color:var(--orange)}
+.stat-num.blanco{color:var(--text)}
+.stat-label{margin-top:6px;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.vista-header{display:flex;align-items:center;gap:14px;padding:30px 0 16px}
+.btn-back{width:42px;height:42px;border-radius:14px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:1rem;box-shadow:var(--panel-shadow)}
+.vista-titulo{font-size:1.48rem;font-weight:800;letter-spacing:-.03em}
+.vista-subtitulo{font-size:.9rem;color:var(--muted);margin-top:4px}
+.mens-layout{display:grid;grid-template-columns:minmax(0,480px) minmax(0,1fr);gap:22px;align-items:start}
+.mens-col-right{position:sticky;top:80px}
+.mens-col-left{order:2}
+.mens-col-right{order:1}
+.form-block{background:none;border:none;border-radius:0;padding:0;box-shadow:none;margin-bottom:22px}
+.form-label,.reg-label,.mlogin-label,.recarga-custom-label{display:block;font-size:.73rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px;margin-top:4px}
+.form-input,.reg-input,.mlogin-input,.recarga-custom-input,.parada-input,.parada-complemento{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:13px 14px;color:var(--text);outline:none;transition:.2s}
+.form-input:focus,.reg-input:focus,.mlogin-input:focus,.recarga-custom-input:focus,.parada-input:focus,.parada-complemento:focus{border-color:rgba(37,99,235,.45);box-shadow:var(--ring)}
+.form-input::placeholder,.reg-input::placeholder,.mlogin-input::placeholder,.recarga-custom-input::placeholder,.parada-input::placeholder,.parada-complemento::placeholder{color:var(--muted2)}
+.form-input:disabled,.parada-input:disabled,.parada-complemento:disabled{opacity:.55;cursor:not-allowed}
+.ciudad-selector,.tipo-envio,.horario-tabs,.reg-tipo,.mlogin-tipo,.tipo-moto-grid,.grid-2,.recarga-metodo,.recarga-montos{display:grid;gap:10px}
+.ciudad-selector{grid-template-columns:repeat(3,1fr)}
+.tipo-envio,.tipo-moto-grid,.recarga-montos{grid-template-columns:repeat(3,1fr)}
+.horario-tabs,.reg-tipo,.mlogin-tipo,.recarga-metodo,.grid-2{grid-template-columns:1fr 1fr}
+.ciudad-btn,.tipo-btn,.horario-tab,.moto-btn,.reg-tipo-btn,.mlogin-tipo-btn,.recarga-met-btn,.panel-filtro,.recarga-monto{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:12px 12px;text-align:center;cursor:pointer;transition:.2s;color:var(--muted)}
+.ciudad-btn:hover,.tipo-btn:hover,.horario-tab:hover,.moto-btn:hover,.reg-tipo-btn:hover,.mlogin-tipo-btn:hover,.recarga-met-btn:hover,.panel-filtro:hover,.recarga-monto:hover{border-color:var(--border-strong);color:var(--text)}
+.ciudad-btn.selected,.tipo-btn.selected,.horario-tab.selected,.moto-btn.selected,.reg-tipo-btn.selected,.mlogin-tipo-btn.selected,.recarga-met-btn.selected,.panel-filtro.active,.recarga-monto.selected{background:var(--blue-soft);border-color:rgba(37,99,235,.24);color:var(--blue-2)}
+.tipo-btn-icon,.moto-btn-icon,.panel-accion-icon,.recarga-met-icon{width:34px;height:34px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;background:var(--surface3);font-size:.77rem;font-weight:800}
+.tipo-btn.selected .tipo-btn-icon,.moto-btn.selected .moto-btn-icon,.recarga-met-btn.selected .recarga-met-icon{background:rgba(37,99,235,.18);color:var(--blue-2)}
+.tipo-btn-label,.moto-btn-label,.horario-tab-label{font-size:.8rem;font-weight:600;color:inherit}
+.tipo-btn-desc{font-size:.7rem;color:var(--muted2);margin-top:5px;line-height:1.45}
+.horario-tab-icon{font-size:.74rem;font-weight:800;width:28px;height:28px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;background:var(--surface3)}
+.horario-tab.selected .horario-tab-icon{background:rgba(37,99,235,.18);color:var(--blue-2)}
+.horario-hora{display:none;margin-top:10px}
+.horario-hora.visible{display:block}
+.otra-ciudad-wrap{display:none;margin-top:10px}
+.otra-ciudad-wrap.visible{display:block}
+.paradas-wrap{display:flex;flex-direction:column;gap:10px}
+.parada-item{display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid var(--border);border-radius:18px;background:var(--surface2)}
+.parada-dot{width:34px;height:34px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;background:none}
+.parada-dot.origen{color:var(--blue-2)}
+.parada-dot.destino{color:var(--orange)}
+.parada-dot.parada{color:var(--text)}
+.parada-field{flex:1;position:relative}.parada-input{margin-bottom:8px}
+.btn-remove{width:34px;height:34px;border-radius:12px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.btn-remove:hover{background:var(--orange-soft);border-color:rgba(240,90,40,.24);color:var(--orange)}
+.btn-add-parada{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:0;background:none;border:none;border-top:1px dashed var(--border-strong);color:var(--muted);cursor:pointer;transition:.2s;margin-top:12px}
+.btn-add-parada:hover{color:var(--blue-2)}
+.btn-add-parada:disabled{opacity:.48;cursor:not-allowed}
+.check-row,.modal-check-row{display:flex;align-items:center;gap:10px;padding:10px 0;background:none;border:none;border-radius:0;cursor:pointer}
+.check-box{width:40px;height:22px;border-radius:999px;background:var(--border-strong);border:none;flex:0 0 40px;position:relative;transition:.25s}
+.check-box::after{content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:.25s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.check-box.checked{background:var(--blue-2)}
+.check-box.checked::after{left:21px}
+.check-label{font-size:.86rem;color:var(--muted)}
+.propina-wrap{background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:14px}
+.propina-row{display:flex;align-items:center;gap:14px}
+.propina-icon{width:40px;height:40px;border-radius:14px;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;color:var(--blue-2)}
+.propina-title{font-size:.9rem;font-weight:700}
+.propina-sub{font-size:.77rem;color:var(--muted);line-height:1.55;margin-top:3px}
+.propina-text{flex:1}
+.propina-input-wrap{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:0 12px}
+.propina-currency{font-size:.84rem;font-weight:700;color:var(--muted)}
+.propina-input{width:96px;padding:12px 0;border:none;background:transparent;color:var(--text);outline:none;font-size:1rem;font-weight:700;text-align:right}
+.propina-input::placeholder{color:var(--muted2)}
+.mapa-wrap{height:100%;min-height:680px;border-radius:24px;overflow:hidden;border:1px solid var(--border);background:var(--surface);box-shadow:var(--panel-shadow);position:relative}
+#mapa{width:100%;height:720px}
+.mapa-instruccion{position:absolute;top:16px;left:16px;right:16px;padding:12px 14px;background:rgba(255,255,255,.92);border:1px solid rgba(15,23,42,.1);border-radius:14px;color:#334155;font-size:.8rem;z-index:100;box-shadow:0 4px 12px rgba(15,23,42,.08)}
+.btn-cotizar,.btn-continuar,.btn-pagar,.mlogin-btn{width:100%;border:none;border-radius:16px;padding:15px 18px;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;font-size:.94rem;font-weight:700;cursor:pointer;transition:.2s;box-shadow:0 14px 28px rgba(37,99,235,.22)}
+.btn-cotizar:hover,.btn-continuar:hover,.btn-pagar:hover,.mlogin-btn:hover{transform:translateY(-1px)}
+.btn-cotizar:disabled,.mlogin-btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.btn-cotizar.naranja,.btn-continuar.naranja{background:linear-gradient(135deg,var(--orange),#ff8b5a);box-shadow:0 14px 28px rgba(240,90,40,.18)}
+.loading,.panel-loading{display:none;text-align:center;padding:16px;color:var(--muted);font-size:.86rem}
+.loading.visible{display:block}
+.spinner,.btn-spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(148,163,184,.24);border-top-color:var(--blue);border-radius:50%;animation:spin .65s linear infinite;vertical-align:middle}
+.btn-spinner{margin-right:8px;border-color:rgba(255,255,255,.28);border-top-color:#fff}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cotizacion-result{display:none;background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:22px;box-shadow:var(--panel-shadow);margin-top:24px}
+.cotizacion-result.visible{display:block}
+.cotiz-titulo{font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.cotiz-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--border)}
+.cotiz-row:last-child{border-bottom:none}
+.cotiz-row-label{font-size:.86rem;color:var(--muted)}
+.cotiz-row-value{font-size:.9rem;font-weight:600;color:var(--text);text-align:right}
+.cotiz-total{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:20px;padding:16px 0;border-top:1px solid var(--border);border-radius:0;background:none;border-left:none;border-right:none;border-bottom:none}
+.cotiz-total.naranja{background:none;border-color:var(--border)}
+.cotiz-total-label{font-size:.9rem;font-weight:700}
+.cotiz-total-value{font-size:1.42rem;font-weight:800;letter-spacing:-.03em;color:var(--blue-2)}
+.cotiz-total.naranja .cotiz-total-value{color:var(--orange)}
+.btn-nueva-cotiz{width:100%;margin-top:10px;padding:13px 16px;background:transparent;border:1px solid var(--border);border-radius:16px;color:var(--muted);cursor:pointer}
+.btn-nueva-cotiz:hover{border-color:var(--border-strong);color:var(--text)}
+.btn-continuar{margin-top:20px}
+.jornada-aviso{margin-top:10px;padding:12px 14px;border-radius:14px;background:var(--orange-soft);border:1px solid rgba(240,90,40,.18);font-size:.82rem;color:var(--orange)}
+.bono-total-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border-radius:14px;background:var(--green-soft);border:1px solid rgba(22,163,74,.16);margin-top:12px}
+.bono-total-label{font-size:.82rem;color:var(--muted)}
+.bono-total-valor{font-size:.95rem;font-weight:800;color:var(--green)}
+.dom-qty-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.dom-qty-box{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px 16px;text-align:center;box-shadow:var(--panel-shadow)}
+.dom-qty-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:14px}
+.dom-qty-row{display:flex;align-items:center;justify-content:center;gap:16px}
+.dom-qty-btn{width:36px;height:36px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:800;transition:.15s}
+.dom-qty-btn:hover{border-color:var(--border-strong);background:var(--orange-soft);color:var(--orange)}
+.dom-qty-val{font-size:1.8rem;font-weight:800;letter-spacing:-.04em;min-width:40px}
+.dom-qty-unit{font-size:.76rem;color:var(--muted);margin-top:4px}
+.modal-overlay,.mlogin-overlay,.recarga-overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.55);backdrop-filter:blur(8px);z-index:900}
+.modal-overlay.visible,.mlogin-overlay.visible,.recarga-overlay.visible{display:flex}
+.modal-card,.mlogin-card,.recarga-card{width:100%;max-width:540px;background:var(--surface);border:1px solid var(--border);border-radius:28px;padding:30px;box-shadow:var(--shadow);position:relative}
+.mlogin-card,.recarga-card{max-width:450px}
+.modal-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px}
+.modal-titulo,.mlogin-titulo,.recarga-titulo{font-size:1.2rem;font-weight:800;letter-spacing:-.03em}
+.modal-sub,.mlogin-sub,.recarga-sub{font-size:.86rem;color:var(--muted);line-height:1.65;margin-bottom:22px}
+.modal-close,.mlogin-close,.recarga-close{width:36px;height:36px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);cursor:pointer;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.modal-reglas{display:flex;flex-direction:column;gap:12px;margin-bottom:18px}
+.modal-regla{display:flex;align-items:flex-start;gap:12px;font-size:.86rem;line-height:1.7;color:var(--text)}
+.regla-num{width:28px;height:28px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:var(--orange-soft);color:var(--orange);font-size:.76rem;font-weight:800;flex:0 0 auto}
+.modal-pdf-link{display:block;padding:12px 14px;margin-bottom:16px;text-align:center;border-radius:14px;background:var(--surface2);border:1px solid var(--border);color:var(--blue-2);font-size:.84rem;font-weight:600}
+.mlogin-logo{display:flex;align-items:center;gap:10px;margin-bottom:22px}
+.mlogin-logomark{width:32px;height:32px;border-radius:10px;background:linear-gradient(135deg,var(--blue),var(--blue-2));display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.86rem}
+.mlogin-logoname{font-size:1rem;font-weight:800;letter-spacing:-.03em}
+.mlogin-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:5px;background:var(--surface2);border:1px solid var(--border);border-radius:16px;margin-bottom:22px}
+.mlogin-tab{padding:10px;border-radius:12px;text-align:center;color:var(--muted);font-size:.84rem;font-weight:600;cursor:pointer}
+.mlogin-tab.active{background:var(--surface);color:var(--text);box-shadow:var(--panel-shadow)}
+.mlogin-pass-wrap{position:relative}
+.mlogin-pass-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:.78rem;font-weight:700}
+.mlogin-forgot{text-align:right;margin-top:8px}
+.mlogin-forgot a{font-size:.79rem;color:var(--muted);cursor:pointer}
+.mlogin-error-msg,.mlogin-success-msg{display:none;margin-top:12px;padding:12px 14px;border-radius:14px;font-size:.83rem;line-height:1.6}
+.mlogin-error-msg.visible,.mlogin-success-msg.visible{display:block}
+.mlogin-error-msg{background:var(--orange-soft);border:1px solid rgba(240,90,40,.16);color:var(--orange)}
+.mlogin-success-msg{background:var(--green-soft);border:1px solid rgba(22,163,74,.16);color:var(--green)}
+.mlogin-divider{text-align:center;color:var(--muted);font-size:.76rem;margin:16px 0;position:relative}
+.mlogin-divider::before,.mlogin-divider::after{content:'';position:absolute;top:50%;width:40%;height:1px;background:var(--border)}
+.mlogin-divider::before{left:0}.mlogin-divider::after{right:0}
+.mlogin-nit-wrap,.reg-nit-wrap{display:none}
+.mlogin-nit-wrap.visible,.reg-nit-wrap.visible{display:block}
+.registro-wrap{max-width:560px;margin:20px auto 0}
+.reg-card{background:none;border:none;border-radius:0;padding:0;box-shadow:none}
+.reg-titulo{font-size:1.08rem;font-weight:800;margin-bottom:18px;letter-spacing:-.02em}
+.reg-resumen{background:none;border:none;border-radius:0;padding:0;margin-bottom:18px}
+.reg-resumen-row{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:10px 0;font-size:.88rem;border-bottom:1px solid var(--border)}
+.reg-resumen-row:last-child{border-bottom:none}
+.reg-resumen-row.total{margin-top:6px;padding-top:12px;border-top:2px solid var(--border);border-bottom:none;font-weight:800}
+.reg-disclaimer{margin-top:12px;text-align:center;color:var(--muted);font-size:.77rem;line-height:1.65}
+.buscando-wrap{max-width:500px;margin:60px auto 0}
+.buscando-card{background:var(--surface);border:1px solid var(--border);border-radius:28px;padding:36px;box-shadow:var(--panel-shadow);text-align:center}
+.buscando-anim{width:110px;height:110px;margin:0 auto 22px;position:relative}
+.buscando-ring{position:absolute;inset:0;border-radius:50%;border:3px solid var(--border);border-top-color:var(--blue-2);animation:spin 1.1s linear infinite}
+.buscando-icon,.buscando-icon-sad{width:110px;height:110px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.25rem;font-weight:800;background:var(--surface2);border:1px solid var(--border)}
+.buscando-titulo{font-size:1.28rem;font-weight:800;letter-spacing:-.03em;margin-bottom:10px}
+.buscando-sub{font-size:.88rem;color:var(--muted);line-height:1.7;margin-bottom:24px}
+.buscando-timer-wrap{margin-bottom:20px}
+.buscando-timer-bar{height:8px;background:var(--surface2);border-radius:999px;overflow:hidden;margin-bottom:10px}
+.buscando-timer-fill{height:100%;width:100%;background:linear-gradient(90deg,var(--blue),var(--blue-2));border-radius:999px;transition:width 1s linear}
+.buscando-timer-label{font-size:1.7rem;font-weight:800;color:var(--blue-2)}
+.btn-cancelar-busqueda{width:100%;padding:14px;border-radius:16px;border:1px solid var(--border);background:transparent;color:var(--muted);cursor:pointer}
+.btn-cancelar-busqueda:hover{border-color:var(--border-strong);color:var(--text)}
+.panel-header{padding:30px 0 8px}
+.panel-saludo{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+.panel-avatar{width:58px;height:58px;border-radius:18px;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:800;box-shadow:0 16px 28px rgba(37,99,235,.22)}
+.panel-saludo-text h2{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:4px}
+.panel-saludo-text p{font-size:.86rem;color:var(--muted)}
+.panel-saludo-text p span{color:var(--blue-2);font-weight:700}
+.panel-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.panel-stat{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:22px;box-shadow:var(--panel-shadow)}
+.panel-stat-icon{width:40px;height:40px;border-radius:14px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:800;margin-bottom:14px}
+.panel-stat.blue .panel-stat-icon,.panel-stat.blue .panel-stat-value{color:var(--blue-2);background:var(--blue-soft)}
+.panel-stat.orange .panel-stat-icon,.panel-stat.orange .panel-stat-value{color:var(--orange);background:var(--orange-soft)}
+.panel-stat.green .panel-stat-icon,.panel-stat.green .panel-stat-value{color:var(--green);background:var(--green-soft)}
+.panel-stat-value{font-size:1.56rem;font-weight:800;letter-spacing:-.04em}
+.panel-stat-label{margin-top:6px;font-size:.74rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.panel-acciones{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.panel-accion{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:20px;cursor:pointer;box-shadow:var(--panel-shadow);transition:.2s}
+.panel-accion:hover{transform:translateY(-3px);border-color:var(--border-strong)}
+.panel-accion-label{font-size:.9rem;font-weight:700;margin-bottom:6px}
+.panel-accion-desc{font-size:.78rem;color:var(--muted);line-height:1.55}
+.panel-section-title{display:flex;align-items:center;gap:10px;font-size:1rem;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
+.badge-count{padding:4px 10px;border-radius:999px;background:var(--blue-soft);color:var(--blue-2);font-size:.72rem;font-weight:800}
+.panel-filtros{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.panel-filtro{padding:10px 14px;border-radius:999px;font-size:.78rem;font-weight:600}
+.panel-tabla-wrap{overflow-x:auto;background:var(--surface);border:1px solid var(--border);border-radius:22px;box-shadow:var(--panel-shadow)}
+.panel-tabla{width:100%;border-collapse:collapse;min-width:680px}
+.panel-tabla th{padding:15px 16px;background:var(--surface2);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);text-align:left;border-bottom:1px solid var(--border)}
+.panel-tabla td{padding:15px 16px;border-bottom:1px solid var(--border);font-size:.84rem;color:var(--text)}
+.panel-tabla tr:last-child td{border-bottom:none}
+.panel-tabla tr:hover td{background:var(--surface2)}
+.estado-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;font-size:.72rem;font-weight:700}
+.estado-dot{width:6px;height:6px;border-radius:50%}
+.estado-badge.completado{background:var(--green-soft);border:1px solid rgba(22,163,74,.16);color:var(--green)}
+.estado-badge.completado .estado-dot{background:var(--green)}
+.estado-badge.en_curso{background:var(--blue-soft);border:1px solid rgba(37,99,235,.16);color:var(--blue-2)}
+.estado-badge.en_curso .estado-dot{background:var(--blue-2)}
+.estado-badge.cancelado{background:var(--orange-soft);border:1px solid rgba(240,90,40,.16);color:var(--orange)}
+.estado-badge.cancelado .estado-dot{background:var(--orange)}
+.estado-badge.pendiente{background:var(--surface2);border:1px solid var(--border);color:var(--muted)}
+.estado-badge.pendiente .estado-dot{background:var(--muted)}
+.btn-factura{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);font-size:.74rem;font-weight:700;color:var(--muted)}
+.btn-factura:hover{border-color:var(--border-strong);color:var(--text)}
+.btn-factura.disabled{opacity:.42;cursor:default}
+.panel-empty{display:none;text-align:center;padding:46px 20px;color:var(--muted)}
+.panel-empty-icon{width:58px;height:58px;border-radius:18px;background:var(--surface2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:1rem;font-weight:800}
+.panel-empty-text{font-size:.94rem;font-weight:700;color:var(--text);margin-bottom:4px}
+.panel-empty-sub{font-size:.8rem;color:var(--muted)}
+.recarga-success{text-align:center;display:none}
+.recarga-success.visible{display:block}
+.recarga-success-icon{width:76px;height:76px;border-radius:24px;background:var(--green-soft);border:1px solid rgba(22,163,74,.16);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:1rem;font-weight:800;color:var(--green)}
+.recarga-success-msg{font-size:1.1rem;font-weight:800;margin-bottom:8px}
+.recarga-success-detail{font-size:.85rem;color:var(--muted);line-height:1.65;margin-bottom:20px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);padding:14px 18px;border-radius:16px;background:var(--surface);border:1px solid var(--border);color:var(--text);box-shadow:var(--shadow);z-index:1200;opacity:0;transition:.28s;font-size:.84rem;font-weight:600;white-space:nowrap;max-width:calc(100vw - 32px);overflow:hidden;text-overflow:ellipsis}
+.toast.visible{transform:translateX(-50%) translateY(0);opacity:1}
+.toast.error{border-color:rgba(240,90,40,.26);color:var(--orange)}
+.toast.success{border-color:rgba(22,163,74,.22);color:var(--green)}
+.flatpickr-calendar{border-radius:20px!important;border:1px solid var(--border)!important;box-shadow:var(--shadow)!important;font-family:'Poppins',sans-serif!important}
+.flatpickr-day.selected,.flatpickr-day.startRange,.flatpickr-day.endRange{background:var(--blue-2)!important;border-color:var(--blue-2)!important}
+.flatpickr-day.inRange{background:var(--blue-soft)!important;border-color:transparent!important;box-shadow:none!important}
+.flatpickr-day:hover{background:var(--surface2)!important}
+.flatpickr-months .flatpickr-month{color:var(--text)!important}
+.flatpickr-current-month,.flatpickr-monthDropdown-months{color:var(--text)!important;font-weight:700!important}
+@media(max-width:1100px){.mens-layout{grid-template-columns:1fr}.mens-col-right{position:static;order:1}.mens-col-left{order:2}.mapa-wrap{min-height:420px}#mapa{height:420px}}
+@media(max-width:900px){.panel-stats,.panel-acciones,.grid-2{grid-template-columns:1fr}.ciudad-selector{grid-template-columns:repeat(2,1fr)}.tipo-envio,.tipo-moto-grid,.recarga-montos{grid-template-columns:1fr}.page-wrap{padding:0 18px}.dom-qty-grid{grid-template-columns:1fr 1fr}.dom-fechas-grid{grid-template-columns:1fr!important}.grid-2.horario-grid{grid-template-columns:1fr 1fr!important}}
+@media(max-width:760px){.home-cards{grid-template-columns:1fr!important;gap:12px}.home-stats{grid-template-columns:1fr 1fr!important;gap:10px}.home-stats .stat-chip:last-child{grid-column:span 2}}
+@media(max-width:640px){.nav-inner{padding:12px 16px}.nav-right{gap:8px}.nav-user-name{display:none}.home-hero{padding:24px 0 14px}.home-hero h1{font-size:1.9rem;letter-spacing:-.03em}.home-hero p{font-size:.9rem}.vista-header{padding-top:22px}.vista-titulo{font-size:1.24rem}.propina-row{align-items:flex-start;flex-direction:column}.mapa-wrap{min-height:320px}#mapa{height:320px}.modal-card,.mlogin-card,.recarga-card,.buscando-card{padding:22px}.cotiz-total{flex-direction:column;align-items:flex-start}.panel-tabla{min-width:620px}.vista{padding-bottom:36px}}
+.moto-panel{max-width:480px;margin:0 auto;padding:0 20px 80px}
+.moto-top{display:flex;align-items:center;justify-content:space-between;padding:20px 0 8px}
+.moto-greeting{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+.moto-city{font-size:.78rem;color:var(--muted);margin-top:2px}
+.moto-avatar-sm{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--orange),#ff8b5a);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.82rem}
+.go-wrap{display:flex;flex-direction:column;align-items:center;padding:36px 0 28px}
+.go-ring{width:140px;height:140px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--surface);border:3px solid var(--border);box-shadow:0 8px 32px rgba(15,23,42,.06);cursor:pointer;transition:.3s;position:relative}
+.go-ring.activo{border-color:var(--green);box-shadow:0 8px 32px rgba(22,163,74,.18)}
+.go-ring.activo .go-btn{background:linear-gradient(135deg,var(--green),#22c55e);box-shadow:0 12px 28px rgba(22,163,74,.32)}
+.go-btn{width:108px;height:108px;border-radius:50%;background:linear-gradient(135deg,var(--green),#22c55e);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:900;color:#fff;letter-spacing:.06em;transition:.3s;box-shadow:0 12px 28px rgba(22,163,74,.24)}
+.go-status{margin-top:14px;font-size:.82rem;font-weight:700;color:var(--muted)}
+.go-status.activo{color:var(--green)}
+.go-pulse{position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--green);opacity:0;animation:goPulse 2s ease-out infinite}
+@keyframes goPulse{0%{transform:scale(.95);opacity:.6}100%{transform:scale(1.15);opacity:0}}
+.moto-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+.moto-stat{text-align:center;padding:16px 8px;background:var(--surface);border:1px solid var(--border);border-radius:18px}
+.moto-stat-val{font-size:1.3rem;font-weight:800;letter-spacing:-.03em}
+.moto-stat-val.blue{color:var(--blue-2)}
+.moto-stat-val.orange{color:var(--orange)}
+.moto-stat-val.green{color:var(--green)}
+.moto-stat-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:4px}
+.moto-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
+.moto-action{display:flex;align-items:center;gap:12px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:18px;cursor:pointer;transition:.2s}
+.moto-action:hover{border-color:var(--border-strong);transform:translateY(-2px)}
+.moto-action-icon{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:800;flex:0 0 auto}
+.moto-action-icon.blue{background:var(--blue-soft);color:var(--blue-2)}
+.moto-action-icon.orange{background:var(--orange-soft);color:var(--orange)}
+.moto-action-icon.green{background:var(--green-soft);color:var(--green)}
+.moto-action-icon.gray{background:var(--surface2);color:var(--muted)}
+.moto-action-text{font-size:.84rem;font-weight:700;line-height:1.3}
+.moto-action-sub{font-size:.72rem;color:var(--muted);font-weight:500;margin-top:2px}
+.moto-section-title{font-size:.92rem;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
+.moto-chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px;margin-bottom:22px}
+.moto-chart-bar{display:flex;align-items:flex-end;gap:6px;height:120px;padding-top:10px}
+.moto-chart-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.moto-chart-fill{width:100%;border-radius:8px 8px 4px 4px;background:linear-gradient(180deg,var(--blue-2),rgba(37,99,235,.5));min-height:4px;transition:.4s}
+.moto-chart-label{font-size:.6rem;color:var(--muted);font-weight:600}
+.moto-chart-val{font-size:.62rem;font-weight:800;color:var(--text)}
+.moto-subpanel{display:none;padding-bottom:40px}
+.moto-subpanel.activa{display:block}
+.moto-sub-header{display:flex;align-items:center;gap:12px;padding:16px 0 20px}
+.moto-sub-back{width:38px;height:38px;border-radius:12px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;color:var(--text)}
+.moto-sub-title{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
+.moto-pedido-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:10px;transition:.2s}
+.moto-pedido-card:hover{border-color:var(--border-strong)}
+.moto-pedido-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.moto-pedido-ruta{font-size:.82rem;font-weight:700;line-height:1.5}
+.moto-pedido-meta{font-size:.72rem;color:var(--muted);margin-top:6px}
+.moto-pedido-precio{font-size:1rem;font-weight:800;color:var(--green);white-space:nowrap}
+.moto-pedido-btn{width:100%;margin-top:12px;padding:12px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--green),#22c55e);color:#fff;font-size:.84rem;font-weight:700;cursor:pointer;box-shadow:0 8px 20px rgba(22,163,74,.2)}
+.moto-pedido-btn:hover{transform:translateY(-1px)}
+.moto-pedido-estado{display:inline-flex;padding:4px 10px;border-radius:999px;font-size:.68rem;font-weight:700}
+.moto-perfil-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);font-size:.86rem}
+.moto-perfil-label{color:var(--muted)}
+.moto-perfil-val{font-weight:700;text-align:right;max-width:60%}
+.moto-recaudo-big{text-align:center;padding:30px 0}
+.moto-recaudo-amount{font-size:2.4rem;font-weight:900;letter-spacing:-.04em;color:var(--green)}
+.moto-recaudo-label{font-size:.82rem;color:var(--muted);margin-top:6px}
+.moto-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:.86rem}
+.moto-servicio-activo{background:var(--surface);border:1px solid var(--green);border-radius:20px;padding:18px;margin-bottom:18px;box-shadow:0 8px 24px rgba(22,163,74,.1)}
+.moto-servicio-activo-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--green);margin-bottom:12px}
+.moto-servicio-activo-ruta{font-size:.9rem;font-weight:700;line-height:1.5;margin-bottom:8px}
+.moto-servicio-activo-meta{font-size:.78rem;color:var(--muted);margin-bottom:14px}
+.moto-finalizar-wrap{margin-top:14px}
+.moto-finalizar-btn{width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;font-size:.88rem;font-weight:700;cursor:pointer;box-shadow:0 8px 20px rgba(37,99,235,.2)}
+.moto-finalizar-btn.naranja{background:linear-gradient(135deg,var(--orange),#ff8b5a);box-shadow:0 8px 20px rgba(240,90,40,.18)}
+.moto-foto-entrega{width:100%;margin-top:10px;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:14px}
+.moto-calificacion{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-top:12px;text-align:center}
+.moto-estrellas{display:flex;justify-content:center;gap:6px;margin:12px 0}
+.moto-estrella{font-size:1.6rem;cursor:pointer;color:var(--border-strong);transition:.15s}
+.moto-estrella.activa{color:#f59e0b}
+.moto-comentario{width:100%;margin-top:10px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--surface2);resize:none;font-size:.84rem;color:var(--text)}
+.moto-map-wrap{display:none;width:100%;height:280px;border-radius:20px;overflow:hidden;border:1px solid var(--border);margin-bottom:18px;position:relative}
+.moto-map-wrap.visible{display:block}
+#moto-mapa{width:100%;height:100%}
+.go-wrap.minimizado{padding:12px 0 8px}
+.go-wrap.minimizado .go-ring{width:56px;height:56px;border-color:var(--border);box-shadow:0 4px 12px rgba(15,23,42,.06)}
+.go-wrap.minimizado .go-ring.activo{border-color:var(--border);box-shadow:0 4px 12px rgba(15,23,42,.06)}
+.go-wrap.minimizado .go-ring.activo .go-btn{background:linear-gradient(135deg,#94a3b8,#64748b);box-shadow:none}
+.go-wrap.minimizado .go-btn{width:44px;height:44px;font-size:.82rem;font-weight:800;letter-spacing:.04em;background:linear-gradient(135deg,#94a3b8,#64748b);box-shadow:none}
+.go-wrap.minimizado .go-pulse{display:none}
+.go-wrap.minimizado .go-status{font-size:.74rem;margin-top:8px}
+.doc-ruta{padding:0}
+.doc-ruta-title{font-size:.92rem;font-weight:800;margin-bottom:6px}
+.doc-ruta-sub{font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:20px}
+.doc-paso{display:flex;align-items:flex-start;gap:14px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:18px;margin-bottom:10px;position:relative;transition:.2s}
+.doc-paso.bloqueado{opacity:.45;pointer-events:none}
+.doc-paso.activo{border-color:var(--blue-2);box-shadow:0 4px 16px rgba(37,99,235,.1)}
+.doc-paso.completado{border-color:var(--green);background:rgba(22,163,74,.03)}
+.doc-paso.revision{border-color:#f59e0b;background:rgba(245,158,11,.03)}
+.doc-paso.rechazado{border-color:var(--orange);background:var(--orange-soft)}
+.doc-paso-num{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;flex:0 0 auto;background:var(--surface2);color:var(--muted)}
+.doc-paso.activo .doc-paso-num{background:var(--blue-soft);color:var(--blue-2)}
+.doc-paso.completado .doc-paso-num{background:var(--green-soft);color:var(--green)}
+.doc-paso.revision .doc-paso-num{background:rgba(245,158,11,.12);color:#f59e0b}
+.doc-paso.rechazado .doc-paso-num{background:var(--orange-soft);color:var(--orange)}
+.doc-paso-info{flex:1}
+.doc-paso-title{font-size:.86rem;font-weight:700}
+.doc-paso-status{font-size:.72rem;color:var(--muted);margin-top:3px}
+.doc-paso-status.green{color:var(--green)}
+.doc-paso-status.yellow{color:#f59e0b}
+.doc-paso-status.red{color:var(--orange)}
+.doc-paso-upload{margin-top:10px}
+.doc-paso-file{width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;font-size:.82rem}
+.doc-paso-btn{margin-top:8px;width:100%;padding:11px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;font-size:.82rem;font-weight:700;cursor:pointer}
+.doc-paso-btn:disabled{opacity:.5;cursor:not-allowed}
+.doc-line{width:2px;height:10px;background:var(--border);margin:0 0 0 33px}
+</style>
+</head>
+<body data-theme="light">
+<nav>
+  <div class="nav-inner" id="nav-inner"></div>
+</nav>
+<div class="vista activa" id="vista-selector">
+  <div class="page-wrap">
+    <div class="home-hero" style="text-align:center;padding:80px 0 30px">
+      <h1 style="margin:0 auto">¿Cómo quieres usar <span class="azul">Radiz</span>?</h1>
+    </div>
+    <div class="home-cards" style="max-width:700px;margin:0 auto">
+      <div class="hcard azul" onclick="seleccionarRol('cliente')" style="text-align:center;">
+        <img src="necesito_un_mensajero.png" alt="Necesito un mensajero" width="108" height="108" style="display:block;margin:0 auto 12px;">
+        <h2 style="text-align:center;">Necesito un mensajero</h2>
+        <p>Envíos urbanos o contratación de mensajeros para su operación.</p>
+      </div>
+      <div class="hcard naranja" onclick="seleccionarRol('mensajero')" style="text-align:center;">
+        <img src="soy_mensajero.png" alt="Soy mensajero" width="108" height="108" style="display:block;margin:0 auto 12px;">
+        <h2 style="text-align:center;">Soy mensajero</h2>
+        <p>Reciba solicitudes de servicio, acepte contratos y gestione sus pagos.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="vista" id="vista-home">
+  <div class="page-wrap">
+    <div class="home-hero">
+      <h1>Mensajería<span class="azul"> express</span> y logística <span class="naranja">dedicada</span> de altísima confianza</h1>
+    </div>
+    <div class="home-cards">
+      <div class="hcard azul" onclick="mostrarVista('mensajeria')">
+        <div class="hcard-top"><div class="hcard-icon" style="background:none;padding:0"><img src="mensajeria_express.png" alt="Mensajería" style="width:54px;height:54px;object-fit:contain"></div><div class="hcard-arrow">→</div></div>
+        <h2>Mensajería express</h2>
+        <p>El precio por kilometro más justo para ellos y para usted.</p>
+        <div class="hcard-footer"><div class="hcard-price">Desde $6.450</div></div>
+      </div>
+      <div class="hcard naranja" onclick="mostrarVista('domiciliario')">
+        <div class="hcard-top"><div class="hcard-icon" style="background:none;padding:0"><img src="dedicado.png" alt="Dedicado" style="width:54px;height:54px;object-fit:contain"></div><div class="hcard-arrow">→</div></div>
+        <h2>Motorizado dedicado</h2>
+        <p>Contrate por días en su horario de necesidad.</p>
+        <div class="hcard-footer"><div class="hcard-price">Desde $120.000 por día</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="vista" id="vista-mensajeria">
+  <div class="page-wrap">
+    <div class="vista-header">
+      <div class="btn-back" onclick="mostrarVista('home')">←</div>
+      <div><div class="vista-titulo">Mensajería</div><div class="vista-subtitulo">Configure la ruta, cotice y solicite el servicio</div></div>
+    </div>
+    <div class="mens-layout">
+      <div class="mens-col-left">
+        <div class="form-block">
+          <span class="form-label">Ciudad</span>
+          <div class="ciudad-selector">
+            <div class="ciudad-btn" onclick="selCiudad(this,'Bogotá',4.7110,-74.0721)">Bogotá</div>
+            <div class="ciudad-btn" onclick="selCiudad(this,'Medellín',6.2442,-75.5812)">Medellín</div>
+            <div class="ciudad-btn" onclick="selCiudad(this,'Cali',3.4516,-76.5319)">Cali</div>
+            <div class="ciudad-btn" onclick="selCiudad(this,'Barranquilla',10.9639,-74.7964)">Barranquilla</div>
+            <div class="ciudad-btn" onclick="selCiudad(this,'Pereira',4.8133,-75.6961)">Pereira</div>
+            <div class="ciudad-btn" id="btn-otra-ciudad" onclick="activarOtraCiudad(this)">Otra</div>
+          </div>
+          <div class="otra-ciudad-wrap" id="otra-ciudad-wrap">
+            <input class="form-input" id="otra-ciudad-input" placeholder="Escribe el nombre de la ciudad..." autocomplete="off">
+          </div>
+        </div>
+        <div class="form-block">
+          <span class="form-label">Tipo de paquetería</span>
+          <div class="tipo-envio">
+            <div class="tipo-btn selected" onclick="selTipo(this,'documentos')"><div class="tipo-btn-icon" style="background:none;padding:0"><img src="Documentos.png" alt="Documentos" style="width:34px;height:34px;object-fit:contain"></div><div class="tipo-btn-label">Documentos</div><div class="tipo-btn-desc">Sobres y carpetas</div></div>
+            <div class="tipo-btn" onclick="selTipo(this,'paquete_pequeno')"><div class="tipo-btn-icon" style="background:none;padding:0"><img src="paquete_pequeño.png" alt="Paquete pequeño" style="width:34px;height:34px;object-fit:contain"></div><div class="tipo-btn-label">Paquete pequeño</div><div class="tipo-btn-desc">Hasta 5 kg</div></div>
+            <div class="tipo-btn" onclick="selTipo(this,'paquete_grande')"><div class="tipo-btn-icon" style="background:none;padding:0"><img src="paquete_grande.png" alt="Paquete grande" style="width:34px;height:34px;object-fit:contain"></div><div class="tipo-btn-label">Paquete grande</div><div class="tipo-btn-desc">o varios</div></div>
+          </div>
+        </div>
+        <div class="form-block">
+          <span class="form-label">Programación</span>
+          <div class="horario-tabs">
+            <div class="horario-tab selected" id="tab-ahora" onclick="selHorario('ahora')"><div class="horario-tab-icon" style="background:none;padding:0"><img src="lo_antes_posible.png" alt="Lo antes posible" style="width:28px;height:28px;object-fit:contain"></div><div class="horario-tab-label">Lo antes posible</div></div>
+            <div class="horario-tab" id="tab-programar" onclick="selHorario('programar')"><div class="horario-tab-icon" style="background:none;padding:0"><img src="programado.png" alt="Programado" style="width:28px;height:28px;object-fit:contain"></div><div class="horario-tab-label">Programado</div></div>
+          </div>
+          <div class="horario-hora" id="horario-hora-wrap"><input type="time" class="form-input" id="hora-recogida" value="08:00"></div>
+        </div>
+        <div class="form-block">
+          <span class="form-label">Puntos del recorrido</span>
+          <div class="paradas-wrap" id="paradas-wrap">
+            <div class="parada-item"><div class="parada-dot origen">1</div><div class="parada-field"><input class="parada-input" id="origen-input" placeholder="Dirección de recogida" autocomplete="off" disabled onfocus="buscarDir(this,0)"><input class="parada-complemento" id="origen-comp" placeholder="Complemento: edificio, oficina, apartamento..." disabled></div></div>
+            <div class="parada-item"><div class="parada-dot destino">2</div><div class="parada-field"><input class="parada-input" id="destino-input" placeholder="Dirección de entrega" autocomplete="off" disabled onfocus="buscarDir(this,1)"><input class="parada-complemento" id="destino-comp" placeholder="Complemento: clínica, recepción, casa..." disabled></div></div>
+            <button class="btn-add-parada" onclick="agregarParada()" id="btn-add-parada" disabled>+ Agregar parada intermedia</button>
+            <div class="check-row" onclick="toggleRegreso()" style="justify-content:center;margin-top:4px"><div class="check-box" id="check-regreso"></div><div class="check-label">⚠️ Regresar al punto de origen</div></div>
+          </div>
+        </div>
+        <div class="form-block">
+          <span class="form-label">Indicaciones para el mensajero</span>
+          <textarea class="form-input" id="indicaciones-mens" rows="3" placeholder="Ejemplo: entregar en recepción, llamar antes de llegar, documento sensible..." style="resize:none;line-height:1.6"></textarea>
+        </div>
+        <div class="form-block">
+          <span class="form-label">Incentivo opcional</span>
+          <div class="propina-wrap">
+            <div class="propina-row">
+              <div class="propina-icon">+</div>
+              <div class="propina-text"><div class="propina-title">Ellos y sus familias lo valoran 🫶</div><div class="propina-sub">80% va al mensajero y 20% al personal administrativo.</div></div>
+              <div class="propina-input-wrap"><span class="propina-currency">$</span><input type="number" class="propina-input" id="propina-mens" placeholder="0" min="0" step="1000"></div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-cotizar" onclick="cotizarMensajeria()" id="btn-cotizar-mens">Calcular cotización</button>
+        <div class="loading" id="loading-mens"><span class="spinner"></span> Calculando tarifa y ruta...</div>
+        <div class="cotizacion-result" id="result-mens">
+          <div class="cotiz-titulo">Resumen de cotización</div>
+          <div id="detalle-mens"></div>
+          <div class="cotiz-total"><div class="cotiz-total-label">Total estimado</div><div class="cotiz-total-value" id="total-mens-valor">$0</div></div>
+          <button class="btn-continuar" onclick="irARegistro('mensajeria')">Buscar mensajero</button>
+          <button class="btn-nueva-cotiz" onclick="reiniciarMensajeria()">Nueva cotización</button>
+        </div>
+      </div>
+      <div class="mens-col-right">
+        <div class="mapa-wrap">
+          <div class="mapa-instruccion" id="mapa-instruccion">Selecciona una ciudad para comenzar y luego define origen y destino.</div>
+          <div id="mapa"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="vista" id="vista-domiciliario">
+  <div class="page-wrap">
+    <div class="vista-header">
+      <div class="btn-back" onclick="mostrarVista('home')">←</div>
+      <div><div class="vista-titulo">Mensajero dedicado por días</div><div class="vista-subtitulo">Configure la jornada de trabajo del motorizado</div></div>
+    </div>
+    <div class="registro-wrap" style="max-width:760px;margin:0">
+      <div class="reg-card">
+        <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
+          <span class="form-label">Ciudad de la operación</span>
+          <input type="text" class="form-input" id="ciudad-op" placeholder="Escribe la ciudad de operación..." autocomplete="off" onfocus="iniciarAutocompleteCiudadDom()">
+        </div>
+        <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
+          <span class="form-label">Equipamiento del motorizado</span>
+          <div class="tipo-moto-grid">
+            <div class="moto-btn selected" onclick="selMoto(this,'estandar')"><div class="moto-btn-icon">E</div><div class="moto-btn-label">Maleta estándar</div></div>
+            <div class="moto-btn" onclick="selMoto(this,'maletero')"><div class="moto-btn-icon">R</div><div class="moto-btn-label">Maletero rígido</div></div>
+            <div class="moto-btn" onclick="selMoto(this,'termica')"><div class="moto-btn-icon">T</div><div class="moto-btn-label">Caja térmica</div></div>
+          </div>
+        </div>
+        <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
+          <span class="form-label">Horario de la Jornada</span>
+          <div class="grid-2 horario-grid">
+            <div><span class="form-label" style="font-size:.68rem;margin-bottom:8px">Inicio</span><input type="time" class="form-input" id="hora-inicio" value="08:00" onchange="validarJornada()"></div>
+            <div><span class="form-label" style="font-size:.68rem;margin-bottom:8px">Cierre</span><input type="time" class="form-input" id="hora-fin" value="17:00" onchange="validarJornada()"></div>
+          </div>
+          <div class="jornada-aviso" id="jornada-aviso" style="display:none">La jornada no puede superar 9 horas (incluye 1h de almuerzo no laboral).</div>
+        </div>
+        <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
+          <span class="form-label">Horas extras por jornada</span>
+          <div style="display:flex;align-items:center;gap:12px">
+            <input type="number" class="form-input" id="horas-extras" placeholder="0" min="0" max="4" step="1" style="max-width:120px" oninput="actualizarBonoDom()">
+            <span style="font-size:.84rem;color:var(--muted)">horas adicionales por día (máx. 4)</span>
+          </div>
+        </div>
+        <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
+          <span class="form-label">Período del servicio</span>
+          <input type="text" class="form-input" id="fecha-rango" placeholder="Selecciona las fechas de inicio y fin" readonly style="cursor:pointer">
+          <div id="dias-resumen" style="display:none;margin-top:8px;font-size:.82rem;color:var(--blue-2);font-weight:700"></div>
+        </div>
+        <div class="form-block" style="margin-bottom:16px;background:none;border:none;box-shadow:none;padding:0">
+          <span class="form-label">Descripción de las actividades</span>
+          <textarea class="form-input" id="desc-trabajo" rows="3" placeholder="Describa con claridad los detalles del servicio requerido..." style="resize:none;line-height:1.6"></textarea>
+        </div>
+        <div class="form-block" style="background:none;border:none;box-shadow:none;padding:0;margin-bottom:16px">
+          <span class="form-label">Bonificación opcional</span>
+          <div class="propina-wrap">
+            <div class="propina-row">
+              <div class="propina-icon">B</div>
+              <div class="propina-text"><div class="propina-title">Ellos y sus familias lo valoran 🫶</div><div class="propina-sub">El 80% va al domiciliario y el 20% al personal administrativo.</div></div>
+              <div class="propina-input-wrap"><span class="propina-currency">$</span><input type="number" class="propina-input" id="propina-dom" placeholder="0" min="0" step="1000" oninput="actualizarBonoDom()"></div>
+            </div>
+            <div class="bono-total-row" id="bono-total-row" style="display:none"><span class="bono-total-label">Total bono (<span id="bono-dias-label">1</span> día(s))</span><span class="bono-total-valor" id="bono-total-valor">$ 0</span></div>
+          </div>
+        </div>
+        <button class="btn-cotizar naranja" onclick="mostrarTerminosDom()" id="btn-cotizar-dom">Calcular cotización</button>
+        <div class="loading" id="loading-dom"><span class="spinner"></span> Calculando servicio dedicado...</div>
+        <div class="cotizacion-result" id="result-dom" style="margin-top:24px">
+          <div class="cotiz-titulo">Resumen de cotización</div>
+          <div id="detalle-dom"></div>
+          <div class="cotiz-total naranja"><div class="cotiz-total-label">Total estimado</div><div class="cotiz-total-value" id="total-dom-valor">$0</div></div>
+          <button class="btn-continuar naranja" style="margin-top:20px" onclick="irARegistro('domiciliario')">Buscar mensajero</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-terminos" onclick="cerrarModalTerminos(event)">
+  <div class="modal-card">
+    <div class="modal-header"><div class="modal-titulo">Términos y condiciones</div><button class="modal-close" onclick="cerrarModalTerminos()">×</button></div>
+    <div class="modal-sub">Lee y acepta las condiciones antes de continuar con tu solicitud de domiciliario por días.</div>
+    <div class="modal-reglas">
+      <div class="modal-regla"><span class="regla-num">1</span><span>Al aceptar, se firmará un contrato de prestación de servicios válido en Colombia.</span></div>
+      <div class="modal-regla"><span class="regla-num">2</span><span>El domiciliario cubrirá su zona de influencia y hasta 30 paradas por día.</span></div>
+      <div class="modal-regla"><span class="regla-num">3</span><span>Radiz actúa como intermediario entre las partes y no como empleador.</span></div>
+      <div class="modal-regla"><span class="regla-num">4</span><span>El cobro se realiza anticipadamente y se libera al domiciliario cuando cumpla la misión.</span></div>
+      <div class="modal-regla"><span class="regla-num">5</span><span>Si hay incumplimiento, Radiz intentará conseguir reemplazo; si no es posible, habrá reembolso en 3 días hábiles.</span></div>
+      <div class="modal-regla"><span class="regla-num">6</span><span>El domiciliario es responsable de mantener seguros y pólizas vigentes.</span></div>
+      <div class="modal-regla"><span class="regla-num">7</span><span>El domiciliario debe mantener su ARL al día.</span></div>
+    </div>
+    <a class="modal-pdf-link" href="#" target="_blank">Ver contrato completo en PDF</a>
+    <div class="modal-check-row" onclick="toggleTerminos()"><div class="check-box" id="check-terminos"></div><div class="check-label">He leído y acepto los términos y condiciones</div></div>
+    <button class="btn-cotizar naranja" id="btn-aceptar-terminos" onclick="aceptarTerminosYCotizar()" disabled style="opacity:.4;margin-top:16px">Aceptar y calcular cotización</button>
+  </div>
+</div>
+<div class="vista" id="vista-registro">
+  <div class="page-wrap">
+    <div class="vista-header"><div class="btn-back" onclick="volverDesdePago()">←</div><div><div class="vista-titulo">Resumen y facturación</div><div class="vista-subtitulo">Revise el resumen del servicio y complete la información</div></div></div>
+    <div class="registro-wrap">
+      <div class="reg-card">
+        <div class="reg-titulo">Resumen del servicio</div>
+        <div class="reg-resumen" id="reg-resumen"></div>
+        <span class="reg-label">Tipo de cliente</span>
+        <div class="reg-tipo" style="margin-bottom:8px"><div class="reg-tipo-btn selected" id="btn-natural" onclick="selTipoCliente('natural')">Persona natural</div><div class="reg-tipo-btn" id="btn-juridica" onclick="selTipoCliente('juridica')">Empresa</div></div>
+        <span class="reg-label">Nombre completo</span><input class="reg-input" id="reg-nombre" placeholder="Nombre completo">
+        <span class="reg-label" style="margin-top:16px">Teléfono</span><input class="reg-input" id="reg-telefono" type="tel" placeholder="3XX XXX XXXX">
+        <span class="reg-label" style="margin-top:16px">Correo electrónico</span><input class="reg-input" id="reg-correo" type="email" placeholder="correo@ejemplo.com">
+        <div class="reg-nit-wrap" id="reg-nit-wrap"><span class="reg-label" style="margin-top:16px">NIT de la empresa</span><input class="reg-input" id="reg-nit" placeholder="900.123.456-7"><span class="reg-label" style="margin-top:16px">Razón social</span><input class="reg-input" id="reg-razon" placeholder="Empresa S.A.S."></div>
+        <button class="btn-pagar" onclick="procesarPago()" style="margin-top:20px">Confirmar y buscar mensajero</button>
+        <div class="reg-disclaimer">No se realizará cobro hasta que un mensajero acepte el servicio. Al continuar, aceptas los términos y condiciones.</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="vista" id="vista-buscando">
+  <div class="page-wrap">
+    <div class="buscando-wrap">
+      <div class="buscando-card" id="buscando-card-activo">
+        <div class="buscando-anim"><div class="buscando-ring"></div><div class="buscando-icon">R</div></div>
+        <div class="buscando-titulo">Buscando un mensajero disponible</div>
+        <div class="buscando-sub">Estamos conectando tu solicitud con un mensajero cercano. Este proceso puede tardar algunos minutos.</div>
+        <div class="buscando-timer-wrap"><div class="buscando-timer-bar"><div class="buscando-timer-fill" id="timer-fill"></div></div><div class="buscando-timer-label" id="timer-label">5:00</div></div>
+        <button class="btn-cancelar-busqueda" onclick="cancelarBusqueda()">Cancelar búsqueda</button>
+      </div>
+      <div class="buscando-card" id="buscando-card-found" style="display:none">
+        <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-2));margin:0 auto 16px;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:800;color:#fff;box-shadow:0 12px 28px rgba(37,99,235,.28)" id="mensajero-avatar">M</div>
+        <div class="buscando-titulo" id="mensajero-nombre">Carlos Rodríguez</div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px">
+          <span style="font-size:.84rem;color:var(--muted)" id="mensajero-moto">Honda CB 125 · 2022</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:20px">
+          <span style="color:#f59e0b;font-size:1rem">★★★★★</span>
+          <span style="font-size:.84rem;font-weight:700;color:var(--text)" id="mensajero-rating">4.9</span>
+          <span style="font-size:.78rem;color:var(--muted)">(127 servicios)</span>
+        </div>
+        <div style="padding:12px 16px;background:var(--green-soft);border:1px solid rgba(22,163,74,.16);border-radius:14px;font-size:.84rem;color:var(--green);font-weight:600;margin-bottom:20px">¡Mensajero encontrado! Procede al pago para confirmar.</div>
+        <div id="wompi-btn-wrap"></div>
+      </div>
+      <div class="buscando-card" id="buscando-card-notfound" style="display:none">
+        <div class="buscando-icon-sad">0</div>
+        <div class="buscando-titulo">No encontramos mensajero</div>
+        <div class="buscando-sub">En este momento no hay disponibilidad cerca de tu ubicación. Puedes reintentar o volver al inicio.</div>
+        <button class="btn-cotizar" onclick="reiniciarBusqueda()">Reintentar búsqueda</button>
+        <button class="btn-nueva-cotiz" style="margin-top:10px" onclick="mostrarVista('home')">Volver al inicio</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="vista" id="vista-panel">
+  <div class="page-wrap">
+    <div class="panel-header"><div class="panel-saludo"><div class="panel-avatar" id="panel-avatar">LT</div><div class="panel-saludo-text"><h2 id="panel-nombre">Hola, Usuario</h2><p id="panel-info">Cuenta <span>personal</span> · usuario@radiz.co</p></div></div></div>
+    <div class="panel-stats">
+      <div class="panel-stat blue"><div class="panel-stat-icon">S</div><div class="panel-stat-value" id="panel-saldo">$ 0</div><div class="panel-stat-label">Saldo disponible</div></div>
+      <div class="panel-stat orange"><div class="panel-stat-icon">T</div><div class="panel-stat-value" id="panel-total-servicios">0</div><div class="panel-stat-label">Total servicios</div></div>
+      <div class="panel-stat green"><div class="panel-stat-icon">C</div><div class="panel-stat-value" id="panel-completados">0</div><div class="panel-stat-label">Completados</div></div>
+    </div>
+    <div class="panel-acciones">
+      <div class="panel-accion" onclick="mostrarVista('mensajeria')"><div class="panel-accion-icon">M</div><div class="panel-accion-label">Solicitar mensajería</div><div class="panel-accion-desc">Servicio punto a punto con cotización inmediata.</div></div>
+      <div class="panel-accion" onclick="mostrarVista('domiciliario')"><div class="panel-accion-icon">D</div><div class="panel-accion-label">Solicitar domiciliario</div><div class="panel-accion-desc">Motorizado dedicado por días o jornada.</div></div>
+      <div class="panel-accion" onclick="abrirModalRecarga()"><div class="panel-accion-icon">R</div><div class="panel-accion-label">Recargar cuenta</div><div class="panel-accion-desc">Agrega saldo para operar desde tu panel.</div></div>
+    </div>
+    <div class="panel-section-title">Historial de servicios <span class="badge-count" id="panel-hist-count">0</span></div>
+    <div class="panel-filtros">
+      <div class="panel-filtro active" onclick="filtrarServicios('todos',this)">Todos</div>
+      <div class="panel-filtro" onclick="filtrarServicios('completado',this)">Completados</div>
+      <div class="panel-filtro" onclick="filtrarServicios('en_curso',this)">En curso</div>
+      <div class="panel-filtro" onclick="filtrarServicios('pendiente',this)">Pendientes</div>
+      <div class="panel-filtro" onclick="filtrarServicios('cancelado',this)">Cancelados</div>
+    </div>
+    <div class="panel-loading" id="panel-hist-loading"><span class="spinner"></span> Cargando historial...</div>
+    <div class="panel-tabla-wrap" id="panel-tabla-wrap" style="display:none">
+      <table class="panel-tabla"><thead><tr><th>ID</th><th>Tipo</th><th>Ciudad</th><th>Fecha</th><th>Estado</th><th>Total</th><th>Factura</th><th>Valoración</th></tr></thead><tbody id="panel-tabla-body"></tbody></table>
+    </div>
+    <div class="panel-empty" id="panel-empty" style="display:none"><div class="panel-empty-icon">0</div><div class="panel-empty-text">Aún no tienes servicios registrados</div><div class="panel-empty-sub">Cuando solicites tu primer servicio aparecerá aquí.</div></div>
+  </div>
+</div>
+<div class="vista" id="vista-panel-mensajero">
+  <div class="moto-panel">
+    <div class="moto-top">
+      <div>
+        <div class="moto-greeting" id="moto-nombre">Hola, Mensajero</div>
+        <div class="moto-city" id="moto-ciudad">Ciudad</div>
+      </div>
+      <div class="moto-avatar-sm" id="moto-avatar" onclick="motoSubpanel('perfil')">M</div>
+    </div>
+    <div class="go-wrap">
+      <div class="go-ring" id="go-ring" onclick="toggleGo()">
+        <div class="go-btn" id="go-btn">GO</div>
+      </div>
+      <div class="go-status" id="go-status">Estás desconectado</div>
+    </div>
+    <div class="moto-map-wrap" id="moto-map-wrap"><div id="moto-mapa"></div></div>
+    <div id="moto-doc-ruta-wrap"></div>
+    <div id="moto-servicio-activo-wrap"></div>
+    <div class="moto-stats">
+      <div class="moto-stat"><div class="moto-stat-val blue" id="moto-km">0</div><div class="moto-stat-label">Km este mes</div></div>
+      <div class="moto-stat"><div class="moto-stat-val orange" id="moto-entregas">0</div><div class="moto-stat-label">Entregas</div></div>
+      <div class="moto-stat"><div class="moto-stat-val green" id="moto-dinero">$0</div><div class="moto-stat-label">Generado</div></div>
+    </div>
+    <div class="moto-actions">
+      <div class="moto-action" onclick="motoSubpanel('servicios')">
+        <div class="moto-action-icon blue">⚡</div>
+        <div><div class="moto-action-text">Servicios</div><div class="moto-action-sub">Pedidos activos</div></div>
+      </div>
+      <div class="moto-action" onclick="motoSubpanel('historial')">
+        <div class="moto-action-icon orange">📋</div>
+        <div><div class="moto-action-text">Historial</div><div class="moto-action-sub">Mis entregas</div></div>
+      </div>
+      <div class="moto-action" onclick="motoSubpanel('recaudo')">
+        <div class="moto-action-icon green">💰</div>
+        <div><div class="moto-action-text">Recaudo</div><div class="moto-action-sub">Mi dinero</div></div>
+      </div>
+      <div class="moto-action" onclick="motoSubpanel('perfil')">
+        <div class="moto-action-icon gray">👤</div>
+        <div><div class="moto-action-text">Perfil</div><div class="moto-action-sub">Mis datos</div></div>
+      </div>
+    </div>
+    <div class="moto-section-title">Actividad del mes</div>
+    <div class="moto-chart-wrap">
+      <div class="moto-chart-bar" id="moto-chart"></div>
+    </div>
+    <div id="moto-main-content"></div>
+  </div>
+  <div class="moto-panel moto-subpanel" id="moto-sub-servicios">
+    <div class="moto-sub-header"><div class="moto-sub-back" onclick="motoVolverPanel()">←</div><div class="moto-sub-title">Servicios disponibles</div></div>
+    <div id="moto-servicios-lista"><div class="moto-empty">Cargando servicios...</div></div>
+  </div>
+  <div class="moto-panel moto-subpanel" id="moto-sub-historial">
+    <div class="moto-sub-header"><div class="moto-sub-back" onclick="motoVolverPanel()">←</div><div class="moto-sub-title">Historial de entregas</div></div>
+    <div id="moto-historial-lista"><div class="moto-empty">Cargando historial...</div></div>
+  </div>
+  <div class="moto-panel moto-subpanel" id="moto-sub-recaudo">
+    <div class="moto-sub-header"><div class="moto-sub-back" onclick="motoVolverPanel()">←</div><div class="moto-sub-title">Mi recaudo</div></div>
+    <div class="moto-recaudo-big"><div class="moto-recaudo-amount" id="moto-recaudo-total">$ 0</div><div class="moto-recaudo-label">Disponible para retiro</div></div>
+    <div id="moto-recaudo-detalle"></div>
+  </div>
+  <div class="moto-panel moto-subpanel" id="moto-sub-perfil">
+    <div class="moto-sub-header"><div class="moto-sub-back" onclick="motoVolverPanel()">←</div><div class="moto-sub-title">Mi perfil</div></div>
+    <div id="moto-perfil-datos"></div>
+  </div>
+</div>
+<div class="recarga-overlay" id="modal-recarga" onclick="cerrarModalRecargaOverlay(event)">
+  <div class="recarga-card">
+    <button class="recarga-close" onclick="cerrarModalRecarga()">×</button>
+    <div id="recarga-form-view">
+      <div class="recarga-titulo">Recargar cuenta</div>
+      <div class="recarga-sub">Selecciona un monto o ingresa un valor personalizado para agregar saldo a tu cuenta.</div>
+      <div class="recarga-montos">
+        <div class="recarga-monto" onclick="selRecargaMonto(this,240000)">$ 240.000</div>
+        <div class="recarga-monto" onclick="selRecargaMonto(this,480000)">$ 480.000</div>
+        <div class="recarga-monto" onclick="selRecargaMonto(this,720000)">$ 720.000</div>
+        <div class="recarga-monto" onclick="selRecargaMonto(this,960000)">$ 960.000</div>
+        <div class="recarga-monto" onclick="selRecargaMonto(this,1800000)">$ 1.800.000</div>
+        <div class="recarga-monto" onclick="selRecargaMonto(this,0)">Otro valor</div>
+      </div>
+      <div class="recarga-custom-wrap" id="recarga-custom-wrap" style="display:none"><span class="recarga-custom-label">Monto personalizado</span><input type="number" class="recarga-custom-input" id="recarga-custom" placeholder="Ej: 150000" min="10000" step="1000"></div>
+      <button class="mlogin-btn" onclick="procesarRecarga()">Pagar con Wompi</button>
+    </div>
+    <div class="recarga-success" id="recarga-success-view"><div class="recarga-success-icon">OK</div><div class="recarga-success-msg">Recarga simulada exitosa</div><div class="recarga-success-detail" id="recarga-success-detail">Se agregaron $ 100.000 a tu cuenta.</div><button class="mlogin-btn" onclick="cerrarModalRecarga()">Volver al panel</button></div>
+  </div>
+</div>
+<div class="mlogin-overlay" id="modal-login" onclick="cerrarModalLoginOverlay(event)">
+  <div class="mlogin-card">
+    <button class="mlogin-close" onclick="cerrarModalLogin()">×</button>
+    <div class="mlogin-logo"><div class="mlogin-logomark">R</div><div class="mlogin-logoname">RADIZ</div></div>
+    <div id="panel-login">
+      <div class="mlogin-tabs"><div class="mlogin-tab active" onclick="switchTab('login')">Iniciar sesión</div><div class="mlogin-tab" onclick="switchTab('registro')">Crear cuenta</div></div>
+      <div class="mlogin-titulo">Accede a tu cuenta</div>
+      <div class="mlogin-sub">Ingresa con tu correo y contraseña para gestionar servicios, historial y saldo.</div>
+      <span class="mlogin-label">Correo electrónico</span><input class="mlogin-input" id="login-correo" type="email" placeholder="correo@ejemplo.com" onkeydown="if(event.key==='Enter')ejecutarLogin()">
+      <span class="mlogin-label" style="margin-top:14px">Contraseña</span>
+      <div class="mlogin-pass-wrap"><input class="mlogin-input" id="login-pass" type="password" placeholder="Tu contraseña" onkeydown="if(event.key==='Enter')ejecutarLogin()"><button class="mlogin-pass-toggle" type="button" onclick="togglePass('login-pass',this)">Ver</button></div>
+      <div class="mlogin-forgot"><a onclick="switchTab('recuperar')">¿Olvidaste tu contraseña?</a></div>
+      <div class="mlogin-error-msg" id="login-error"></div>
+      <button class="mlogin-btn" id="btn-login" onclick="ejecutarLogin()">Entrar</button>
+    </div>
+    <div id="panel-registro" style="display:none">
+      <div class="mlogin-tabs"><div class="mlogin-tab" onclick="switchTab('login')">Iniciar sesión</div><div class="mlogin-tab active" onclick="switchTab('registro')">Crear cuenta</div></div>
+      <div class="mlogin-titulo">Crear cuenta</div>
+      <div class="mlogin-sub">Regístrate para gestionar tus servicios, facturas y solicitudes desde un solo lugar.</div>
+      <span class="mlogin-label">¿Qué tipo de cuenta necesitas?</span>
+<div class="mlogin-tipo" style="margin-bottom:14px">
+  <div class="mlogin-tipo-btn selected" id="reg-rol-cliente" onclick="selRegRol('cliente')">Soy cliente</div>
+  <div class="mlogin-tipo-btn" id="reg-rol-mensajero" onclick="selRegRol('mensajero')">Soy mensajero</div>
+</div>
+<div id="reg-campos-mensajero" style="display:none">
+  <div style="display:flex;gap:4px;margin-bottom:20px">
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--blue-2)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+    <div class="mreg-dot" style="flex:1;height:3px;border-radius:99px;background:var(--border)"></div>
+  </div>
+  <div id="mreg-screen" style="min-height:160px"></div>
+  <div class="mlogin-error-msg" id="mreg-error"></div>
+  <div class="mlogin-success-msg" id="mreg-success"></div>
+  <div style="display:flex;gap:10px;margin-top:18px">
+    <button class="mlogin-btn" id="mreg-btn-atras" style="background:var(--surface2);color:var(--text);box-shadow:none;border:1px solid var(--border);display:none" onclick="mregNav(-1)">Atrás</button>
+    <button class="mlogin-btn" id="mreg-btn-next" onclick="mregNav(1)">Continuar</button>
+  </div>
+</div>
+      <span class="mlogin-label">Tipo de cuenta</span>
+      <div class="mlogin-tipo"><div class="mlogin-tipo-btn selected" id="reg-tipo-natural" onclick="selRegTipo('natural')">Persona natural</div><div class="mlogin-tipo-btn" id="reg-tipo-juridica" onclick="selRegTipo('juridica')">Empresa</div></div>
+      <div class="mlogin-nit-wrap" id="modal-nit-wrap"><span class="mlogin-label" style="margin-top:14px">NIT de la empresa</span><input class="mlogin-input" id="modal-reg-nit" placeholder="900.123.456-7"><span class="mlogin-label" style="margin-top:14px">Razón social</span><input class="mlogin-input" id="modal-reg-razon" placeholder="Empresa S.A.S."></div>
+      <span class="mlogin-label" style="margin-top:14px">Nombre completo</span><input class="mlogin-input" id="modal-reg-nombre" placeholder="Tu nombre completo">
+      <span class="mlogin-label" style="margin-top:14px">Correo electrónico</span><input class="mlogin-input" id="modal-reg-correo" type="email" placeholder="correo@ejemplo.com">
+      <span class="mlogin-label" style="margin-top:14px">Contraseña</span><div class="mlogin-pass-wrap"><input class="mlogin-input" id="modal-reg-pass" type="password" placeholder="Mínimo 8 caracteres"><button class="mlogin-pass-toggle" type="button" onclick="togglePass('modal-reg-pass',this)">Ver</button></div>
+      <span class="mlogin-label" style="margin-top:14px">Confirmar contraseña</span><div class="mlogin-pass-wrap"><input class="mlogin-input" id="modal-reg-pass2" type="password" placeholder="Repite la contraseña"><button class="mlogin-pass-toggle" type="button" onclick="togglePass('modal-reg-pass2',this)">Ver</button></div>
+      <div class="mlogin-error-msg" id="reg-error"></div><div class="mlogin-success-msg" id="reg-success"></div>
+      <button class="mlogin-btn" id="btn-registro" onclick="ejecutarRegistro()">Crear cuenta</button>
+    </div>
+    <div id="panel-recuperar" style="display:none">
+      <div class="mlogin-titulo">Recuperar contraseña</div>
+      <div class="mlogin-sub">Escribe tu correo y te enviaremos un enlace para restablecer tu acceso.</div>
+      <span class="mlogin-label">Correo electrónico</span><input class="mlogin-input" id="rec-correo" type="email" placeholder="correo@ejemplo.com" onkeydown="if(event.key==='Enter')ejecutarRecuperar()">
+      <div class="mlogin-error-msg" id="rec-error"></div><div class="mlogin-success-msg" id="rec-success"></div>
+      <button class="mlogin-btn" id="btn-recuperar" onclick="ejecutarRecuperar()">Enviar enlace</button>
+      <div class="mlogin-divider">o</div>
+      <button class="mlogin-btn" style="background:var(--surface2);color:var(--text);box-shadow:none;border:1px solid var(--border)" onclick="switchTab('login')">Volver al inicio de sesión</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="modal-calificacion" onclick="if(event.target===this)this.classList.remove('visible')">
+  <div class="mlogin-card" style="text-align:center">
+    <button class="mlogin-close" onclick="document.getElementById('modal-calificacion').classList.remove('visible')">×</button>
+    <div class="mlogin-titulo" style="margin-bottom:6px">¿Cómo fue tu experiencia?</div>
+    <div class="mlogin-sub">Califica al mensajero para ayudarnos a mejorar.</div>
+    <div class="moto-estrellas" id="calif-estrellas">
+      <span class="moto-estrella" onclick="setCalificacion(1)">★</span>
+      <span class="moto-estrella" onclick="setCalificacion(2)">★</span>
+      <span class="moto-estrella" onclick="setCalificacion(3)">★</span>
+      <span class="moto-estrella" onclick="setCalificacion(4)">★</span>
+      <span class="moto-estrella" onclick="setCalificacion(5)">★</span>
+    </div>
+    <textarea class="moto-comentario" id="calif-comentario" rows="3" placeholder="Comentario opcional..."></textarea>
+    <input type="hidden" id="calif-pedido-id">
+    <button class="mlogin-btn" style="margin-top:14px" onclick="enviarCalificacion()">Enviar calificación</button>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+// ── CONFIGURACIÓN ──
+const API_BASE='https://script.google.com/macros/s/AKfycbx1IZfZoLw8SyWD6sCLPe-3NeRHdMoYadv6iFOTGlpkusNeqMZrxI3OjLiP9HSCdYZn/exec';
+const APP_TOKEN='radiz_v2_2026_seguro';
+function apiUrl(params){return API_BASE+'?'+new URLSearchParams({appToken:APP_TOKEN,...params})}
+
+const GMAPS_KEY='AIzaSyCm0PzoGphUs1a3TME47zPorau74ubFuic';
+const RECARGO_GRANDE=5000;
+let servicioActivo='mensajeria',ultimaCotizacionMens=null,ultimaCotizacionDom=null,ciudadSeleccionada=null;
+let mapa,mapaIniciado=false,marcadores={},coordenadas={},numParadas=2,conRegreso=false;
+let tipoEnvio='documentos',tipoMoto='estandar',modoHorario='ahora',tipoCliente='natural';
+let geocoder,directionsService,directionsRenderer,acInstances={},distanciaRutaMetros=0;
+let saldoUsuario=0,serviciosUsuario=[],filtroActual='todos',usuarioActual=null;
+let regTipoCliente='natural',terminosAceptados=false,timerBusqueda=null,segundosBusqueda=300;
+let recargaMontoSel=0,recargaMetodo='transferencia',diasDomiciliario=1,cantMotorizados=1,otraCiudadAC=null,ciudadDomAC=null;
+
+function fmtCOP(n){return '$ '+Math.round(Number(n||0)).toLocaleString('es-CO')}
+function showToast(msg,tipo){const t=document.getElementById('toast');t.textContent=msg;t.className='toast visible '+(tipo||'');setTimeout(()=>t.className='toast',3500)}
+function setBtnLoading(id,on,txt){const b=document.getElementById(id);if(!b)return;if(on){b.innerHTML='<span class="btn-spinner"></span> Procesando...';b.disabled=true}else{b.innerHTML=txt;b.disabled=false}}
+function mostrarError(id,msg){const e=document.getElementById(id);if(e){e.textContent=msg;e.classList.add('visible')}}
+function ocultarError(id){const e=document.getElementById(id);if(e)e.classList.remove('visible')}
+function actualizarMapaTema(){if(!mapaIniciado||!mapa)return;mapa.setOptions({styles:[{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]}]})}
+function renderNav(){
+  const nav=document.getElementById('nav-inner');
+  const logoHtml='<div class="nav-logo" onclick="mostrarVista(\'home\')" style="cursor:pointer"><img src="icon-512.png" alt="Radiz" style="height:40px;width:40px;border-radius:10px;display:block"></div>';
+  if(usuarioActual){
+    const ini=usuarioActual.nombre.split(' ').map(p=>p[0]).join('').substring(0,2).toUpperCase();
+    nav.innerHTML=logoHtml+'<div class="nav-right"><div class="nav-user nav-user-menu"><div class="nav-user-avatar" onclick="toggleUserDropdown()">'+ini+'</div><div class="nav-user-name" onclick="toggleUserDropdown()">'+usuarioActual.nombre.split(' ')[0]+'</div><div class="nav-user-dropdown" id="nav-dropdown"><div class="nav-dd-item" onclick="if(usuarioActual.rol===\'mensajero\'){mostrarVista(\'panel-mensajero\');cargarPanelMensajero()}else{mostrarVista(\'panel\')};cerrarDropdown()">Mi panel</div><div class="nav-dd-item" onclick="mostrarVista(\'mensajeria\');cerrarDropdown()">Solicitar mensajería</div><div class="nav-dd-item" onclick="mostrarVista(\'domiciliario\');cerrarDropdown()">Solicitar domiciliario</div><div class="nav-dd-item" onclick="abrirModalRecarga();cerrarDropdown()">Recargar cuenta</div><div class="nav-dd-item danger" onclick="cerrarSesion()">Cerrar sesión</div></div></div></div>';
+  }else{
+    nav.innerHTML=logoHtml+'<div class="nav-right"><button class="nav-btn" onclick="abrirModalLogin()">Iniciar sesión</button></div>';
+  }
+}
+document.addEventListener('click',e=>{if(!e.target.closest('.nav-user-menu'))cerrarDropdown()});
+function toggleUserDropdown(){document.getElementById('nav-dropdown')?.classList.toggle('visible')}
+function cerrarDropdown(){document.getElementById('nav-dropdown')?.classList.remove('visible')}
+function mostrarVista(id){document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));const el=document.getElementById('vista-'+id);if(el){el.classList.add('activa');window.scrollTo({top:0,behavior:'smooth'})}if(id==='mensajeria'&&!mapaIniciado)iniciarMapa();if(id==='domiciliario'&&window.google)google.maps.importLibrary("places");if(id==='panel')cargarPanel()}
+function selTipo(el,t){document.querySelectorAll('.tipo-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');tipoEnvio=t}
+function selMoto(el,t){document.querySelectorAll('.moto-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');tipoMoto=t}
+function selHorario(m){modoHorario=m;document.getElementById('tab-ahora').classList.toggle('selected',m==='ahora');document.getElementById('tab-programar').classList.toggle('selected',m==='programar');document.getElementById('horario-hora-wrap').classList.toggle('visible',m==='programar')}
+function selTipoCliente(t){tipoCliente=t;document.getElementById('btn-natural').classList.toggle('selected',t==='natural');document.getElementById('btn-juridica').classList.toggle('selected',t==='juridica');document.getElementById('reg-nit-wrap').classList.toggle('visible',t==='juridica')}
+function selRegTipo(t){regTipoCliente=t;document.getElementById('reg-tipo-natural').classList.toggle('selected',t==='natural');document.getElementById('reg-tipo-juridica').classList.toggle('selected',t==='juridica');document.getElementById('modal-nit-wrap').classList.toggle('visible',t==='juridica')}
+function selCiudad(el,nombre,lat,lon){document.querySelectorAll('.ciudad-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');ciudadSeleccionada={nombre,lat,lon};document.getElementById('otra-ciudad-wrap').classList.remove('visible');habilitarDirecciones(true);if(mapaIniciado){mapa.setCenter({lat,lng:lon});mapa.setZoom(13);document.getElementById('mapa-instruccion').textContent=nombre+': ahora define el origen y el destino del servicio.'}}
+async function activarOtraCiudad(el){document.querySelectorAll('.ciudad-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');ciudadSeleccionada=null;habilitarDirecciones(false);const w=document.getElementById('otra-ciudad-wrap');w.classList.add('visible');const inp=document.getElementById('otra-ciudad-input');inp.value='';inp.focus();if(!otraCiudadAC&&window.google){const{Autocomplete}=await google.maps.importLibrary("places");otraCiudadAC=new Autocomplete(inp,{types:['(cities)'],componentRestrictions:{country:'co'},fields:['geometry','name']});otraCiudadAC.addListener('place_changed',()=>{const p=otraCiudadAC.getPlace();if(!p.geometry)return;const la=p.geometry.location.lat(),lo=p.geometry.location.lng(),nm=p.name||inp.value;ciudadSeleccionada={nombre:nm,lat:la,lon:lo};habilitarDirecciones(true);if(mapaIniciado){mapa.setCenter({lat:la,lng:lo});mapa.setZoom(13);document.getElementById('mapa-instruccion').textContent=nm+': ahora define el origen y el destino del servicio.'}})}}
+function habilitarDirecciones(ok){['origen-input','destino-input','origen-comp','destino-comp'].forEach(id=>{const e=document.getElementById(id);if(e)e.disabled=!ok});document.getElementById('btn-add-parada').disabled=!ok}
+async function iniciarAutocompleteCiudadDom(){if(ciudadDomAC)return;if(!window.google)return;const{Autocomplete}=await google.maps.importLibrary("places");const inp=document.getElementById('ciudad-op');ciudadDomAC=new Autocomplete(inp,{types:['(cities)'],componentRestrictions:{country:'co'},fields:['geometry','name']});ciudadDomAC.addListener('place_changed',()=>{const p=ciudadDomAC.getPlace();if(p&&p.name)inp.value=p.name})}
+function buscarDir(input,idx){if(window.google&&!acInstances[idx])iniciarAutocomplete(input,idx)}
+async function iniciarMapa(){try{mapa=new google.maps.Map(document.getElementById('mapa'),{center:{lat:4.7110,lng:-74.0721},zoom:5,disableDefaultUI:false,zoomControl:true,mapTypeControl:false,streetViewControl:false,fullscreenControl:false});geocoder=new google.maps.Geocoder();directionsService=new google.maps.DirectionsService();directionsRenderer=new google.maps.DirectionsRenderer({map:mapa,suppressMarkers:true,polylineOptions:{strokeColor:'#2563eb',strokeWeight:4,strokeOpacity:.92}});mapaIniciado=true;actualizarMapaTema();setTimeout(()=>{const o=document.getElementById('origen-input'),d=document.getElementById('destino-input');if(o)iniciarAutocomplete(o,0);if(d)iniciarAutocomplete(d,1)},300)}catch(err){console.error('Error mapa:',err)}}
+async function iniciarAutocomplete(input,idx){if(acInstances[idx])return;const{Autocomplete}=await google.maps.importLibrary("places");const opts={componentRestrictions:{country:'co'},fields:['geometry','name','formatted_address']};if(ciudadSeleccionada){opts.bounds=new google.maps.LatLngBounds(new google.maps.LatLng(ciudadSeleccionada.lat-0.25,ciudadSeleccionada.lon-0.25),new google.maps.LatLng(ciudadSeleccionada.lat+0.25,ciudadSeleccionada.lon+0.25));opts.strictBounds=false}const ac=new Autocomplete(input,opts);ac.addListener('place_changed',()=>{const p=ac.getPlace();if(!p.geometry)return;const la=p.geometry.location.lat(),lo=p.geometry.location.lng();coordenadas[idx]=[la,lo];ponerMarcador(idx,la,lo);document.getElementById('mapa-instruccion').style.display='none';if(Object.keys(coordenadas).length>=2)calcularRutaReal()});acInstances[idx]=ac}
+function ponerMarcador(idx,lat,lon){if(!mapaIniciado)return;if(marcadores[idx])marcadores[idx].setMap(null);const c={0:'#2563eb',1:'#f05a28'}[idx]||'#0f172a';marcadores[idx]=new google.maps.Marker({position:{lat,lng:lon},map:mapa,icon:{path:google.maps.SymbolPath.CIRCLE,scale:8,fillColor:c,fillOpacity:1,strokeColor:'#fff',strokeWeight:2.2},label:{text:String(idx+1),color:'#fff',fontSize:'11px',fontWeight:'700'}});mapa.panTo({lat,lng:lon});mapa.setZoom(14)}
+function calcularRutaReal(){if(!mapaIniciado||!directionsService)return;const keys=Object.keys(coordenadas).sort((a,b)=>a-b).map(Number);if(keys.length<2)return;const pts=keys.map(k=>coordenadas[k]),ori={lat:pts[0][0],lng:pts[0][1]},dest={lat:pts[pts.length-1][0],lng:pts[pts.length-1][1]},wp=pts.slice(1,-1).map(p=>({location:{lat:p[0],lng:p[1]},stopover:true})),df=conRegreso?ori:dest;if(conRegreso)wp.push({location:dest,stopover:true});directionsService.route({origin:ori,destination:df,waypoints:wp,travelMode:google.maps.TravelMode.DRIVING,region:'CO'},(r,s)=>{if(s==='OK'){directionsRenderer.setDirections(r);let m=0;r.routes[0].legs.forEach(l=>m+=l.distance.value);distanciaRutaMetros=m;document.getElementById('mapa-instruccion').style.display='none'}})}
+function agregarParada(){if(!ciudadSeleccionada){showToast('Selecciona primero la ciudad','error');return}if(numParadas>=6){showToast('Máximo 5 paradas permitidas','error');return}numParadas++;const idx=numParadas-1,w=document.getElementById('paradas-wrap'),d=document.createElement('div');d.className='parada-item';d.id='parada-extra-'+idx;d.innerHTML='<div class="parada-dot parada">'+(idx+1)+'</div><div class="parada-field"><input class="parada-input" placeholder="Parada '+idx+'" autocomplete="off" onfocus="iniciarAutocomplete(this,'+idx+')"><input class="parada-complemento" placeholder="Complemento"></div><button class="btn-remove" onclick="eliminarParada('+idx+')">×</button>';w.appendChild(d);if(numParadas>=6)document.getElementById('btn-add-parada').style.display='none';setTimeout(()=>{const i=d.querySelector('.parada-input');if(i)iniciarAutocomplete(i,idx)},100)}
+function eliminarParada(idx){const e=document.getElementById('parada-extra-'+idx);if(e)e.remove();if(marcadores[idx]){marcadores[idx].setMap(null);delete marcadores[idx]}delete coordenadas[idx];delete acInstances[idx];numParadas--;document.getElementById('btn-add-parada').style.display='flex';if(Object.keys(coordenadas).length>=2)calcularRutaReal()}
+function toggleRegreso(){conRegreso=!conRegreso;document.getElementById('check-regreso').classList.toggle('checked',conRegreso);if(Object.keys(coordenadas).length>=2)calcularRutaReal()}
+async function cotizarMensajeria(){if(!ciudadSeleccionada){showToast('Selecciona primero la ciudad','error');return}if(Object.keys(coordenadas).length<2){showToast('Define al menos origen y destino','error');return}if(distanciaRutaMetros===0){showToast('Espera a que se calcule la ruta','error');return}document.getElementById('btn-cotizar-mens').disabled=true;document.getElementById('loading-mens').classList.add('visible');document.getElementById('result-mens').classList.remove('visible');try{const km=(distanciaRutaMetros/1000).toFixed(2),r=await fetch(apiUrl({accion:'cotizar',km})),data=await r.json();if(!data.ok){showToast(data.error||'Error','error');return}const prop=parseInt(document.getElementById('propina-mens').value)||0,rec=tipoEnvio==='paquete_grande'?RECARGO_GRANDE:0;data._propina=prop;data._recargo=rec;data._distTotal=km;data._ciudad=ciudadSeleccionada.nombre;data._horario=modoHorario==='ahora'?'Inmediato':document.getElementById('hora-recogida').value;ultimaCotizacionMens=data;mostrarResultadoMens(data,km,prop,rec)}catch(e){showToast('Error de conexión','error')}finally{document.getElementById('btn-cotizar-mens').disabled=false;document.getElementById('loading-mens').classList.remove('visible')}}
+function mostrarResultadoMens(data,km,prop,rec){const tot=data.totalCliente+prop+rec,sub=data.subtotal+data.comisionCliente;let h='<div class="cotiz-row"><span class="cotiz-row-label">Ciudad</span><span class="cotiz-row-value">'+data._ciudad+'</span></div><div class="cotiz-row"><span class="cotiz-row-label">Distancia estimada</span><span class="cotiz-row-value">'+parseFloat(km).toFixed(1)+' km</span></div><div class="cotiz-row"><span class="cotiz-row-label">Subtotal por distancia</span><span class="cotiz-row-value">'+fmtCOP(sub)+'</span></div><div class="cotiz-row"><span class="cotiz-row-label">Horario</span><span class="cotiz-row-value">'+data._horario+'</span></div>';if(rec>0)h+='<div class="cotiz-row"><span class="cotiz-row-label">Recargo paquete grande</span><span class="cotiz-row-value">+ '+fmtCOP(rec)+'</span></div>';if(prop>0)h+='<div class="cotiz-row"><span class="cotiz-row-label">Propina</span><span class="cotiz-row-value" style="color:var(--green)">+ '+fmtCOP(prop)+'</span></div>';document.getElementById('detalle-mens').innerHTML=h;document.getElementById('total-mens-valor').textContent=fmtCOP(tot);document.getElementById('result-mens').classList.add('visible')}
+function reiniciarMensajeria(){Object.keys(marcadores).forEach(k=>marcadores[k].setMap(null));marcadores={};coordenadas={};distanciaRutaMetros=0;acInstances={};numParadas=2;conRegreso=false;ultimaCotizacionMens=null;['origen-input','destino-input','origen-comp','destino-comp'].forEach(id=>{const e=document.getElementById(id);if(e){e.value='';e.disabled=true}});document.querySelectorAll('[id^="parada-extra-"]').forEach(e=>e.remove());document.getElementById('btn-add-parada').style.display='flex';document.getElementById('btn-add-parada').disabled=true;if(directionsRenderer)directionsRenderer.setDirections({routes:[]});document.getElementById('propina-mens').value='';document.getElementById('indicaciones-mens').value='';document.getElementById('result-mens').classList.remove('visible');document.querySelectorAll('.ciudad-btn').forEach(b=>b.classList.remove('selected'));ciudadSeleccionada=null;document.getElementById('check-regreso').classList.remove('checked');document.getElementById('otra-ciudad-wrap').classList.remove('visible');document.getElementById('otra-ciudad-input').value='';const mi=document.getElementById('mapa-instruccion');mi.textContent='Selecciona una ciudad para comenzar y luego define origen y destino.';mi.style.display='block';if(mapaIniciado){mapa.setCenter({lat:4.7110,lng:-74.0721});mapa.setZoom(5)}window.scrollTo({top:0,behavior:'smooth'})}
+
+async function cotizarDomiciliario(){document.getElementById('btn-cotizar-dom').disabled=true;document.getElementById('loading-dom').classList.add('visible');document.getElementById('result-dom').classList.remove('visible');try{const horasExtras=parseInt(document.getElementById('horas-extras').value)||0;const r=await fetch(apiUrl({accion:'cotizar_domiciliario',dias:diasDomiciliario})),data=await r.json();if(!data.ok){showToast(data.error||'Error','error');return}const bd=parseInt(document.getElementById('propina-dom').value)||0,bt=bd*diasDomiciliario*cantMotorizados;data._propina=bt;data._bonoDiario=bd;data._cantMotorizados=cantMotorizados;data._horasExtras=horasExtras;ultimaCotizacionDom=data;const tb=data.totalCliente*cantMotorizados,tf=tb+bt;let h='';h+='<div class="cotiz-row"><span class="cotiz-row-label">Días contratados</span><span class="cotiz-row-value">'+data.dias+' día(s)</span></div><div class="cotiz-row"><span class="cotiz-row-label">Tarifa del domiciliario</span><span class="cotiz-row-value">'+fmtCOP(data.tarifaTotal*cantMotorizados)+'</span></div><div class="cotiz-row"><span class="cotiz-row-label">Tarifa de gestión Radiz</span><span class="cotiz-row-value">'+fmtCOP(data.comisionRadiz*cantMotorizados)+'</span></div><div class="cotiz-row"><span class="cotiz-row-label">Bono rodamiento</span><span class="cotiz-row-value">'+fmtCOP(data.bonoRodamiento*cantMotorizados)+'</span></div>';if(horasExtras>0)h+='<div class="cotiz-row"><span class="cotiz-row-label">Horas extras ('+horasExtras+'h × '+data.dias+' días)</span><span class="cotiz-row-value">A confirmar</span></div>';if(bd>0)h+='<div class="cotiz-row"><span class="cotiz-row-label">Bonificación</span><span class="cotiz-row-value" style="color:var(--green)">+ '+fmtCOP(bt)+'</span></div>';document.getElementById('detalle-dom').innerHTML=h;document.getElementById('total-dom-valor').textContent=fmtCOP(tf);document.getElementById('result-dom').classList.add('visible');setTimeout(()=>document.getElementById('result-dom').scrollIntoView({behavior:'smooth',block:'start'}),100)}catch(e){showToast('Error de conexión','error')}finally{document.getElementById('btn-cotizar-dom').disabled=false;document.getElementById('loading-dom').classList.remove('visible')}}
+function validarJornada(){const i=document.getElementById('hora-inicio').value,f=document.getElementById('hora-fin').value;if(!i||!f)return;const[hI,mI]=i.split(':').map(Number),[hF,mF]=f.split(':').map(Number),mins=(hF*60+mF)-(hI*60+mI),av=document.getElementById('jornada-aviso'),btn=document.getElementById('btn-cotizar-dom');if(mins>540||mins<=0){av.style.display='block';btn.disabled=true;btn.style.opacity='.4'}else{av.style.display='none';btn.disabled=false;btn.style.opacity='1'}}
+function actualizarBonoDom(){const b=parseInt(document.getElementById('propina-dom').value)||0,f=document.getElementById('bono-total-row');if(b>0){f.style.display='flex';document.getElementById('bono-dias-label').textContent=diasDomiciliario;document.getElementById('bono-total-valor').textContent=fmtCOP(b*diasDomiciliario*cantMotorizados)}else f.style.display='none'}
+function mostrarTerminosDom(){document.getElementById('modal-terminos').classList.add('visible')}
+function cerrarModalTerminos(e){if(!e||e.target===document.getElementById('modal-terminos'))document.getElementById('modal-terminos').classList.remove('visible')}
+function toggleTerminos(){terminosAceptados=!terminosAceptados;document.getElementById('check-terminos').classList.toggle('checked',terminosAceptados);const b=document.getElementById('btn-aceptar-terminos');b.disabled=!terminosAceptados;b.style.opacity=terminosAceptados?'1':'.4'}
+function aceptarTerminosYCotizar(){document.getElementById('modal-terminos').classList.remove('visible');cotizarDomiciliario()}
+function irARegistro(s){
+  servicioActivo=s;
+  if(usuarioActual){
+    iniciarBusquedaMensajero();
+  }else{
+    poblarResumen();
+    mostrarVista('registro');
+  }
+}
+function volverDesdePago(){mostrarVista(servicioActivo)}
+function poblarResumen(){let h='';if(servicioActivo==='mensajeria'&&ultimaCotizacionMens){const d=ultimaCotizacionMens,p=d._propina||0,r=d._recargo||0,t=d.totalCliente+p+r;h='<div class="reg-resumen-row"><span>Servicio</span><span>Mensajería punto a punto</span></div><div class="reg-resumen-row"><span>Ciudad</span><span>'+(d._ciudad||'')+'</span></div><div class="reg-resumen-row"><span>Distancia</span><span>'+parseFloat(d._distTotal).toFixed(1)+' km</span></div><div class="reg-resumen-row"><span>Modalidad</span><span>'+(d._horario||'Inmediato')+'</span></div>'+(p>0?'<div class="reg-resumen-row"><span>Propina</span><span>'+fmtCOP(p)+'</span></div>':'')+'<div class="reg-resumen-row total"><span>Total</span><span style="color:var(--blue-2)">'+fmtCOP(t)+'</span></div>'}else if(servicioActivo==='domiciliario'&&ultimaCotizacionDom){const d=ultimaCotizacionDom,p=d._propina||0,t=d.totalCliente*cantMotorizados+p;h='<div class="reg-resumen-row"><span>Servicio</span><span>Domiciliario por días</span></div>'+(cantMotorizados>1?'<div class="reg-resumen-row"><span>Motorizados</span><span>'+cantMotorizados+'</span></div>':'')+'<div class="reg-resumen-row"><span>Días</span><span>'+d.dias+' día(s)</span></div><div class="reg-resumen-row"><span>Equipamiento</span><span>'+tipoMoto+'</span></div>'+(p>0?'<div class="reg-resumen-row"><span>Bono</span><span>'+fmtCOP(p)+'</span></div>':'')+'<div class="reg-resumen-row total"><span>Total</span><span style="color:var(--orange)">'+fmtCOP(t)+'</span></div>'}document.getElementById('reg-resumen').innerHTML=h}
+function procesarPago(){const n=document.getElementById('reg-nombre').value.trim(),t=document.getElementById('reg-telefono').value.trim(),c=document.getElementById('reg-correo').value.trim();if(!n||!t||!c){showToast('Completa todos los campos','error');return}if(!c.includes('@')){showToast('Correo no válido','error');return}iniciarBusquedaMensajero()}
+function iniciarBusquedaMensajero(){mostrarVista('buscando');document.getElementById('buscando-card-activo').style.display='block';document.getElementById('buscando-card-notfound').style.display='none';document.getElementById('buscando-card-found').style.display='none';segundosBusqueda=300;actualizarTimer();clearInterval(timerBusqueda);setTimeout(()=>mostrarMensajeroEncontrado(),5000);timerBusqueda=setInterval(()=>{segundosBusqueda--;actualizarTimer();if(segundosBusqueda<=0){clearInterval(timerBusqueda);mostrarNoEncontrado()}},1000)}
+function actualizarTimer(){const m=Math.floor(segundosBusqueda/60),s=segundosBusqueda%60;document.getElementById('timer-label').textContent=m+':'+s.toString().padStart(2,'0');document.getElementById('timer-fill').style.width=((segundosBusqueda/300)*100)+'%';if(segundosBusqueda<=60){document.getElementById('timer-fill').style.background='linear-gradient(90deg,var(--orange),#ff8b5a)';document.getElementById('timer-label').style.color='var(--orange)'}}
+function mostrarNoEncontrado(){document.getElementById('buscando-card-activo').style.display='none';document.getElementById('buscando-card-notfound').style.display='block'}
+function mostrarMensajeroEncontrado(){
+  clearInterval(timerBusqueda);
+  document.getElementById('buscando-card-activo').style.display='none';
+  document.getElementById('buscando-card-found').style.display='block';
+  const mensajeros=[
+    {nombre:'Carlos Rodríguez',moto:'Honda CB 125 · 2022',rating:'4.9',servicios:'127',ini:'CR'},
+    {nombre:'Juan Pérez',moto:'Yamaha FZ 150 · 2021',rating:'4.8',servicios:'98',ini:'JP'},
+    {nombre:'Andrés Torres',moto:'Suzuki GN 125 · 2023',rating:'5.0',servicios:'214',ini:'AT'}
+  ];
+  const m=mensajeros[Math.floor(Math.random()*mensajeros.length)];
+  document.getElementById('mensajero-nombre').textContent=m.nombre;
+  document.getElementById('mensajero-moto').textContent=m.moto;
+  document.getElementById('mensajero-rating').textContent=m.rating;
+  document.getElementById('mensajero-avatar').textContent=m.ini;
+  const correoCliente=usuarioActual?usuarioActual.correo:(document.getElementById('reg-correo')?.value||'');
+  const totalPagar=ultimaCotizacionMens?Math.round((ultimaCotizacionMens.totalCliente+(ultimaCotizacionMens._propina||0)+(ultimaCotizacionMens._recargo||0))*100):ultimaCotizacionDom?Math.round((ultimaCotizacionDom.totalCliente*cantMotorizados+(ultimaCotizacionDom._propina||0))*100):100000;
+  const wrap=document.getElementById('wompi-btn-wrap');
+  wrap.innerHTML='';
+  const form=document.createElement('form');
+  form.method='GET';
+  form.action='https://checkout.wompi.co/p/';
+  const referencia='RADIZ-'+Date.now();
+  const campos={
+    'public-key':'pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06',
+    'currency':'COP',
+    'amount-in-cents':String(totalPagar),
+    'reference':referencia,
+    'signature:integrity':'prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN',
+    'redirect-url':window.location.href
+  };
+  Object.entries(campos).forEach(([k,v])=>{const i=document.createElement('input');i.type='hidden';i.name=k;i.value=v;form.appendChild(i)});
+  const btn=document.createElement('button');
+  btn.type='submit';
+  btn.className='btn-cotizar';
+  btn.style.marginTop='0';
+  btn.textContent='Pagar';
+  btn.addEventListener('click',()=>{
+    registrarPagoEnSheet(referencia,Math.round(totalPagar/100),usuarioActual?.nit||document.getElementById('reg-nit')?.value||'',correoCliente);
+  });
+  form.appendChild(btn);
+  wrap.appendChild(form);
+}
+function cancelarBusqueda(){clearInterval(timerBusqueda);mostrarVista('registro')}
+function reiniciarBusqueda(){iniciarBusquedaMensajero()}
+async function hashPass(p){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(p));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
+function abrirModalLogin(){document.getElementById('modal-login').classList.add('visible');switchTab('login')}
+function cerrarModalLogin(){document.getElementById('modal-login').classList.remove('visible')}
+function cerrarModalLoginOverlay(e){if(e.target===document.getElementById('modal-login'))cerrarModalLogin()}
+function switchTab(t){['login','registro','recuperar'].forEach(p=>{document.getElementById('panel-'+p).style.display=p===t?'block':'none'});['login-error','reg-error','rec-error','reset-error'].forEach(id=>{const e=document.getElementById(id);if(e)e.classList.remove('visible')})}
+function togglePass(id,btn){const i=document.getElementById(id),ip=i.type==='password';i.type=ip?'text':'password';btn.textContent=ip?'Ocultar':'Ver'}
+async function ejecutarLogin(){ocultarError('login-error');const c=document.getElementById('login-correo').value.trim(),p=document.getElementById('login-pass').value;if(!c||!p){mostrarError('login-error','Completa todos los campos.');return}if(!c.includes('@')){mostrarError('login-error','Correo no válido.');return}setBtnLoading('btn-login',true,'Entrar');try{const h=await hashPass(p),r=await fetch(apiUrl({accion:'login',correo:c,hash:h})),d=await r.json();if(!d.ok){mostrarError('login-error',d.error||'Error');return}usuarioActual=d.usuario;cerrarModalLogin();renderNav();showToast('Bienvenido, '+usuarioActual.nombre.split(' ')[0],'success');if(usuarioActual.rol==='mensajero'){mostrarVista('panel-mensajero');cargarPanelMensajero()}else{mostrarVista('panel')}}catch(e){mostrarError('login-error','Error de conexión.')}finally{setBtnLoading('btn-login',false,'Entrar')}}
+async function ejecutarRegistro(){ocultarError('reg-error');document.getElementById('reg-success').classList.remove('visible');const c=(document.getElementById('modal-reg-correo').value||'').trim(),p=document.getElementById('modal-reg-pass').value||'',p2=document.getElementById('modal-reg-pass2').value||'',nit=(document.getElementById('modal-reg-nit')?document.getElementById('modal-reg-nit').value.trim():''),raz=(document.getElementById('modal-reg-razon')?document.getElementById('modal-reg-razon').value.trim():'');let nom=(document.getElementById('modal-reg-nombre').value||'').trim();if(!nom&&c)nom=c.split('@')[0];if(!c){mostrarError('reg-error','El correo es requerido.');return}if(!c.includes('@')){mostrarError('reg-error','Correo no válido.');return}if(!p){mostrarError('reg-error','La contraseña es requerida.');return}if(p.length<8){mostrarError('reg-error','Mínimo 8 caracteres.');return}if(p!==p2){mostrarError('reg-error','Las contraseñas no coinciden.');return}if(regTipoCliente==='juridica'&&!nit){mostrarError('reg-error','NIT requerido para empresas.');return}setBtnLoading('btn-registro',true,'Crear cuenta');try{const h=await hashPass(p),params=new URLSearchParams({accion:'registrar',nombre:nom,correo:c,hash:h,tipo:regTipoCliente,nit,razon:raz,appToken:APP_TOKEN}),r=await fetch(API_BASE+'?'+params),d=await r.json();if(!d.ok){mostrarError('reg-error',d.error||'Error');return}document.getElementById('btn-registro').style.display='none';const s=document.getElementById('reg-success');s.innerHTML='Te enviamos un correo a <strong>'+c+'</strong>.<br>Haz clic en "Activar cuenta" para finalizar.';s.classList.add('visible')}catch(e){mostrarError('reg-error','Error de conexión.')}finally{setBtnLoading('btn-registro',false,'Crear cuenta')}}
+async function ejecutarRecuperar(){ocultarError('rec-error');document.getElementById('rec-success').classList.remove('visible');const c=document.getElementById('rec-correo').value.trim();if(!c||!c.includes('@')){mostrarError('rec-error','Correo no válido.');return}setBtnLoading('btn-recuperar',true,'Enviar enlace');try{await fetch(apiUrl({accion:'recuperar',correo:c}));const s=document.getElementById('rec-success');s.innerHTML='Si <strong>'+c+'</strong> está registrado, recibirás un enlace.';s.classList.add('visible');document.getElementById('btn-recuperar').style.display='none'}catch(e){mostrarError('rec-error','Error de conexión.')}finally{setBtnLoading('btn-recuperar',false,'Enviar enlace')}}
+(async function(){const params=new URLSearchParams(window.location.search),token=params.get('token'),accion=params.get('accion');if(!token)return;if(accion==='activar'){try{const r=await fetch(apiUrl({accion:'activar',token:encodeURIComponent(token)})),d=await r.json();if(d.ok){showToast('Cuenta activada. Inicia sesión.','success');setTimeout(()=>abrirModalLogin(),800)}else showToast('Enlace inválido.','error')}catch(e){}window.history.replaceState({},'',window.location.pathname)}if(accion==='reset'){abrirModalLogin();switchTab('recuperar');document.getElementById('panel-recuperar').innerHTML='<div class="mlogin-titulo">Nueva contraseña</div><div class="mlogin-sub">Define una nueva contraseña.</div><span class="mlogin-label">Nueva contraseña</span><div class="mlogin-pass-wrap"><input class="mlogin-input" id="reset-pass" type="password" placeholder="Mínimo 8 caracteres"><button class="mlogin-pass-toggle" type="button" onclick="togglePass(\'reset-pass\',this)">Ver</button></div><span class="mlogin-label" style="margin-top:14px">Confirmar</span><div class="mlogin-pass-wrap"><input class="mlogin-input" id="reset-pass2" type="password" placeholder="Repite"><button class="mlogin-pass-toggle" type="button" onclick="togglePass(\'reset-pass2\',this)">Ver</button></div><div class="mlogin-error-msg" id="reset-error"></div><div class="mlogin-success-msg" id="reset-success"></div><button class="mlogin-btn" id="btn-reset" onclick="ejecutarReset(\''+token+'\')">Guardar</button>';window.history.replaceState({},'',window.location.pathname)}})();
+async function ejecutarReset(token){ocultarError('reset-error');const p=document.getElementById('reset-pass').value,p2=document.getElementById('reset-pass2').value;if(p.length<8){mostrarError('reset-error','Mínimo 8 caracteres.');return}if(p!==p2){mostrarError('reset-error','No coinciden.');return}setBtnLoading('btn-reset',true,'Guardar');try{const h=await hashPass(p),r=await fetch(apiUrl({accion:'reset_pass',token:encodeURIComponent(token),hash:h})),d=await r.json();if(!d.ok){mostrarError('reset-error',d.error||'Error');return}document.getElementById('reset-success').innerHTML='Contraseña actualizada.';document.getElementById('reset-success').classList.add('visible');document.getElementById('btn-reset').style.display='none';setTimeout(()=>switchTab('login'),2500)}catch(e){mostrarError('reset-error','Error de conexión.')}finally{setBtnLoading('btn-reset',false,'Guardar')}}
+function cerrarSesion(){usuarioActual=null;motoUsuario=null;goActivo=false;saldoUsuario=0;serviciosUsuario=[];renderNav();mostrarVista('selector');showToast('Sesión cerrada')}
+async function cargarPanel(){if(!usuarioActual){mostrarVista('home');abrirModalLogin();return}const ini=usuarioActual.nombre.split(' ').map(p=>p[0]).join('').substring(0,2).toUpperCase();document.getElementById('panel-avatar').textContent=ini;document.getElementById('panel-nombre').textContent='Hola, '+usuarioActual.nombre.split(' ')[0];document.getElementById('panel-info').innerHTML='Cuenta <span>'+(usuarioActual.tipo==='juridica'?'empresarial':'personal')+'</span> · '+usuarioActual.correo;document.getElementById('panel-saldo').textContent=fmtCOP(saldoUsuario);document.getElementById('panel-hist-loading').style.display='block';document.getElementById('panel-tabla-wrap').style.display='none';document.getElementById('panel-empty').style.display='none';try{const r=await fetch(apiUrl({accion:'mis_servicios',correo:encodeURIComponent(usuarioActual.correo)})),d=await r.json();serviciosUsuario=d.ok?(d.servicios||[]):[]}catch(e){serviciosUsuario=[]}document.getElementById('panel-hist-loading').style.display='none';const comp=serviciosUsuario.filter(s=>normalizarEstado(s.estado)==='completado').length;document.getElementById('panel-total-servicios').textContent=serviciosUsuario.length;document.getElementById('panel-completados').textContent=comp;document.getElementById('panel-hist-count').textContent=serviciosUsuario.length;filtroActual='todos';document.querySelectorAll('.panel-filtro').forEach(f=>f.classList.remove('active'));document.querySelector('.panel-filtro').classList.add('active');renderizarTablaServicios(serviciosUsuario)}
+function normalizarEstado(e){if(!e)return'pendiente';const s=e.toString().toLowerCase().trim();if(s.includes('complet')||s.includes('entregado'))return'completado';if(s.includes('curso')||s.includes('activo')||s.includes('asignado'))return'en_curso';if(s.includes('cancel'))return'cancelado';return'pendiente'}
+function textoEstado(e){return{completado:'Completado',en_curso:'En curso',cancelado:'Cancelado',pendiente:'Pendiente'}[e]||'Pendiente'}
+function formatFecha(f){if(!f)return'—';try{const d=new Date(f);return isNaN(d.getTime())?f.toString().substring(0,10):d.toLocaleDateString('es-CO',{day:'2-digit',month:'short',year:'numeric'})}catch(e){return f}}
+function filtrarServicios(f,el){filtroActual=f;document.querySelectorAll('.panel-filtro').forEach(x=>x.classList.remove('active'));if(el)el.classList.add('active');renderizarTablaServicios(f==='todos'?serviciosUsuario:serviciosUsuario.filter(s=>normalizarEstado(s.estado)===f))}
+function renderizarTablaServicios(l){const tb=document.getElementById('panel-tabla-body'),w=document.getElementById('panel-tabla-wrap'),em=document.getElementById('panel-empty');if(!l.length){w.style.display='none';em.style.display='block';return}w.style.display='block';em.style.display='none';tb.innerHTML=l.map(s=>{const en=normalizarEstado(s.estado),tot=s.total?fmtCOP(Number(s.total)):'—',fu=s.factura_url||'',fh=fu?'<a href="'+fu+'" target="_blank" class="btn-factura">Ver</a>':'<span class="btn-factura disabled">Pendiente</span>';return'<tr><td style="font-weight:700">'+(s.id||'—')+'</td><td>'+(s.tipo_servicio||'—')+'</td><td>'+(s.ciudad||'—')+'</td><td>'+formatFecha(s.fecha)+'</td><td><span class="estado-badge '+en+'"><span class="estado-dot"></span>'+textoEstado(en)+'</span></td><td style="font-weight:800">'+tot+'</td><td>'+fh+'</td><td>'+(en==='completado'&&!s.calificacion?'<button class="btn-factura" onclick="abrirCalificacion(\''+s.id+'\')">Calificar</button>':en==='completado'&&s.calificacion?'★ '+s.calificacion:'—')+'</td></tr>'}).join('')}
+function abrirModalRecarga(){if(!usuarioActual){abrirModalLogin();return}document.getElementById('modal-recarga').classList.add('visible');document.getElementById('recarga-form-view').style.display='block';document.getElementById('recarga-success-view').classList.remove('visible');recargaMontoSel=0;document.querySelectorAll('.recarga-monto').forEach(m=>m.classList.remove('selected'));document.getElementById('recarga-custom-wrap').style.display='none'}
+function cerrarModalRecarga(){document.getElementById('modal-recarga').classList.remove('visible');if(document.getElementById('vista-panel').classList.contains('activa'))document.getElementById('panel-saldo').textContent=fmtCOP(saldoUsuario)}
+function cerrarModalRecargaOverlay(e){if(e.target===document.getElementById('modal-recarga'))cerrarModalRecarga()}
+function selRecargaMonto(el,m){document.querySelectorAll('.recarga-monto').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');recargaMontoSel=m;document.getElementById('recarga-custom-wrap').style.display=m===0?'block':'none';if(m===0)document.getElementById('recarga-custom').focus()}
+function selRecargaMetodo(el,m){document.querySelectorAll('.recarga-met-btn').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');recargaMetodo=m}
+function procesarRecarga(){
+  let m=recargaMontoSel;
+  if(m===0)m=parseInt(document.getElementById('recarga-custom').value)||0;
+  if(m<10000){showToast('Mínimo $10.000','error');return}
+  const referencia='RECARGA-'+Date.now();
+  const centavos=m*100;
+  const form=document.createElement('form');
+  form.method='GET';
+  form.action='https://checkout.wompi.co/p/';
+  const campos={
+    'public-key':'pub_prod_D1w0Ys7mW5OJOueJoMi1rA5aLYJvlN06',
+    'currency':'COP',
+    'amount-in-cents':String(centavos),
+    'reference':referencia,
+    'signature:integrity':'prod_integrity_zNC4ZqryuKzC75Cp72boasFFTLgzmhKN',
+    'redirect-url':window.location.href
+  };
+  Object.entries(campos).forEach(([k,v])=>{const i=document.createElement('input');i.type='hidden';i.name=k;i.value=v;form.appendChild(i)});
+  document.body.appendChild(form);
+  registrarPagoEnSheet(referencia,m,'','recarga');
+  form.submit();
+}
+async function registrarPagoEnSheet(referencia,monto,idContrato,correo){
+  try{
+    const payload={
+      accion:'publicar_pedido',
+      correo:correo||'',
+      ciudad:ciudadSeleccionada?ciudadSeleccionada.nombre:'',
+      puntos:[
+        document.getElementById('origen-input')?.value||'',
+        document.getElementById('destino-input')?.value||''
+      ],
+      loAntesPosible:modoHorario==='ahora',
+      programado:modoHorario==='programar'?document.getElementById('hora-recogida')?.value:'',
+      tipoPaqueteria:tipoEnvio||'documentos',
+      recorridoKm:distanciaRutaMetros?Math.round(distanciaRutaMetros/1000*100)/100:0,
+      indicaciones:document.getElementById('indicaciones-mens')?.value||'',
+      valorCobro:monto||0,
+      contactoCliente:document.getElementById('reg-telefono')?.value||'',
+      referencia:referencia,
+      idCliente:usuarioActual?usuarioActual.id:correo
+    };
+    await fetch(API_BASE,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
+  }catch(e){console.error('Error publicando pedido',e)}
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  renderNav();
+  flatpickr('#fecha-rango',{
+    mode:'range',
+    locale:'es',
+    minDate:'today',
+    dateFormat:'d M Y',
+    disableMobile:false,
+    onClose(selectedDates){
+      if(selectedDates.length===2){
+        const d1=selectedDates[0],d2=selectedDates[1];
+        diasDomiciliario=Math.round((d2-d1)/(1000*60*60*24))+1;
+        const res=document.getElementById('dias-resumen');
+        res.textContent=diasDomiciliario+' día(s) seleccionado(s)';
+        res.style.display='block';
+      }
+    }
+  });
+});
+function seleccionarRol(rol){
+  sessionStorage.setItem('radiz_rol',rol);
+  if(rol==='cliente'){
+    mostrarVista('home');
+  }else{
+    if(usuarioActual&&usuarioActual.rol==='mensajero'){
+      mostrarVista('panel-mensajero');
+      cargarPanelMensajero();
+    }else{
+      abrirModalLogin();
+      mostrarVista('home');
+    }
+  }
+}
+let regRolSeleccionado='cliente';
+
+function selRegRol(rol){
+  regRolSeleccionado=rol;
+  document.getElementById('reg-rol-cliente').classList.toggle('selected',rol==='cliente');
+  document.getElementById('reg-rol-mensajero').classList.toggle('selected',rol==='mensajero');
+  document.getElementById('reg-campos-mensajero').style.display=rol==='mensajero'?'block':'none';
+  if(rol==='mensajero'){mregCurrent=0;mregRender()}
+  const clienteFields=document.querySelectorAll('#panel-registro .mlogin-label:not([id]), #panel-registro .mlogin-tipo:not([style*="margin-bottom:14px"]), #panel-registro .mlogin-nit-wrap, #panel-registro .mlogin-pass-wrap, #panel-registro #modal-reg-nombre, #panel-registro #modal-reg-correo, #panel-registro #btn-registro, #panel-registro #reg-error, #panel-registro #reg-success');
+  if(rol==='mensajero'){
+    let el=document.getElementById('reg-campos-mensajero');
+    let sibling=el.nextElementSibling;
+    while(sibling){sibling.style.display='none';sibling=sibling.nextElementSibling}
+  }else{
+    let el=document.getElementById('reg-campos-mensajero');
+    let sibling=el.nextElementSibling;
+    while(sibling){sibling.style.display='';sibling=sibling.nextElementSibling}
+  }
+}
+const mregSteps=[
+  {id:'nombre',label:'Nombre completo',type:'text',placeholder:'Tu nombre completo',required:true},
+  {id:'correo',label:'Correo electrónico',type:'email',placeholder:'correo@ejemplo.com',required:true},
+  {id:'telefono',label:'Teléfono',type:'tel',placeholder:'3XX XXX XXXX',required:true},
+  {id:'pass',label:'Contraseña',type:'password',placeholder:'Mínimo 8 caracteres',required:true},
+  {id:'pass2',label:'Confirmar contraseña',type:'password',placeholder:'Repite la contraseña',required:true}
+];
+let mregCurrent=0;
+const mregData={};
+
+function mregRender(){
+  const s=mregSteps[mregCurrent];
+  const dots=document.querySelectorAll('.mreg-dot');
+  dots.forEach((d,i)=>d.style.background=i<=mregCurrent?'var(--blue-2)':'var(--border)');
+  const screen=document.getElementById('mreg-screen');
+  let h='<span class="mlogin-label">'+s.label+'</span>';
+  if(s.desc)h+='<p style="font-size:.84rem;color:var(--muted);line-height:1.65;margin-bottom:12px">'+s.desc+'</p>';
+  if(s.type==='file'){
+    h+='<input class="mlogin-input" id="mreg-field" type="file" accept="image/*" style="padding:10px">';
+  }else if(s.type==='password'){
+    h+='<div class="mlogin-pass-wrap"><input class="mlogin-input" id="mreg-field" type="password" placeholder="'+s.placeholder+'"><button class="mlogin-pass-toggle" type="button" onclick="togglePass(\'mreg-field\',this)">Ver</button></div>';
+  }else{
+    h+='<input class="mlogin-input" id="mreg-field" type="'+s.type+'" placeholder="'+s.placeholder+'"'+(s.style?' style="'+s.style+'"':'')+'>';
+  }
+  screen.innerHTML=h;
+  const field=document.getElementById('mreg-field');
+  if(s.type!=='file'&&mregData[s.id])field.value=mregData[s.id];
+  if(s.type!=='file')field.focus();
+  field.addEventListener('keydown',e=>{if(e.key==='Enter')mregNav(1)});
+  document.getElementById('mreg-btn-atras').style.display=mregCurrent>0?'':'none';
+  document.getElementById('mreg-btn-next').textContent=mregCurrent===mregSteps.length-1?'Enviar solicitud':'Continuar';
+  ocultarError('mreg-error');
+}
+
+function mregNav(dir){
+  const s=mregSteps[mregCurrent];
+  const field=document.getElementById('mreg-field');
+  if(dir===1){
+    if(s.type==='file'){
+      if(!field.files.length){showToast('Selecciona un archivo','error');return}
+      mregData[s.id]=field.files[0];
+    }else{
+      const v=field.value.trim();
+      if(!v){showToast('Este campo es obligatorio','error');return}
+      if(s.id==='correo'&&!v.includes('@')){showToast('Correo no válido','error');return}
+      if(s.id==='pass'&&v.length<8){showToast('Mínimo 8 caracteres','error');return}
+      if(s.id==='pass2'&&v!==mregData['pass']){showToast('Las contraseñas no coinciden','error');return}
+      mregData[s.id]=v;
+    }
+    if(mregCurrent===mregSteps.length-1){ejecutarRegistroMensajero();return}
+  }
+  mregCurrent=Math.max(0,Math.min(mregSteps.length-1,mregCurrent+dir));
+  mregRender();
+}
+
+function comprimirYConvertir(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=function(e){
+      const img=new Image();
+      img.onload=function(){
+        const canvas=document.createElement('canvas');
+        const MAX=800;
+        let w=img.width,h=img.height;
+        if(w>MAX||h>MAX){
+          if(w>h){h=Math.round(h*MAX/w);w=MAX}
+          else{w=Math.round(w*MAX/h);h=MAX}
+        }
+        canvas.width=w;canvas.height=h;
+        const ctx=canvas.getContext('2d');
+        ctx.drawImage(img,0,0,w,h);
+        const b64=canvas.toDataURL('image/jpeg',0.7).split(',')[1];
+        resolve(b64);
+      };
+      img.onerror=reject;
+      img.src=e.target.result;
+    };
+    reader.onerror=reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+async function ejecutarRegistroMensajero(){
+  setBtnLoading('mreg-btn-next',true,'Enviar solicitud');
+  try{
+    const h=await hashPass(mregData['pass']);
+    const payload={
+      accion:'registrar_mensajero',
+      nombre:mregData['nombre'],
+      correo:mregData['correo'],
+      hash:h,
+      telefono:mregData['telefono']
+    };
+    const r=await fetch(API_BASE,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)});
+    const d=await r.json();
+    if(!d.ok){mostrarError('mreg-error',d.error||'Error');return}
+    document.getElementById('mreg-screen').innerHTML='';
+    document.getElementById('mreg-btn-next').style.display='none';
+    document.getElementById('mreg-btn-atras').style.display='none';
+    document.getElementById('mreg-success').innerHTML='Cuenta creada. Revisa tu correo para confirmar y luego completa tu documentación desde tu panel.';
+    document.getElementById('mreg-success').classList.add('visible');
+  }catch(e){mostrarError('mreg-error','Error de conexión.')}
+  finally{setBtnLoading('mreg-btn-next',false,'Enviar solicitud')}
+}
+
+let goActivo=false,motoUsuario=null,motoPedidos=[],motoHistorial=[];
+
+function toggleGo(){
+  goActivo=!goActivo;
+  const ring=document.getElementById('go-ring');
+  const wrap=document.querySelector('.go-wrap');
+  const status=document.getElementById('go-status');
+  const btn=document.getElementById('go-btn');
+  const mapWrap=document.getElementById('moto-map-wrap');
+  ring.classList.toggle('activo',goActivo);
+  if(goActivo){
+    if(motoUsuario&&motoUsuario.estado!=='aprobado'){showToast('Completa tu documentación para activarte','error');goActivo=false;return}
+    wrap.classList.add('minimizado');
+    btn.textContent='OFF';
+    status.textContent='Conectando...';
+    status.classList.add('activo');
+    const pulse=ring.querySelector('.go-pulse');
+    if(pulse)pulse.remove();
+    mapWrap.classList.add('visible');
+    if(navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(
+        function(pos){
+          const lat=pos.coords.latitude,lng=pos.coords.longitude;
+          enviarGoBackend(true,lat,lng);
+          iniciarMapaMotoConCoords(lat,lng);
+          status.textContent='Conectado — toca OFF para desconectar';
+        },
+        function(){
+          enviarGoBackend(true,0,0);
+          iniciarMapaMoto();
+          status.textContent='Conectado (sin ubicación) — toca OFF para desconectar';
+        },
+        {enableHighAccuracy:true,timeout:10000}
+      );
+    }else{
+      enviarGoBackend(true,0,0);
+      iniciarMapaMoto();
+      status.textContent='Conectado — toca OFF para desconectar';
+    }
+    cargarServiciosDisponibles();
+  }else{
+    wrap.classList.remove('minimizado');
+    btn.textContent='GO';
+    status.textContent='Estás desconectado';
+    status.classList.remove('activo');
+    mapWrap.classList.remove('visible');
+    enviarGoBackend(false,0,0);
+  }
+}
+
+function cargarPanelMensajero(){
+  if(!usuarioActual||usuarioActual.rol!=='mensajero')return;
+  motoUsuario=usuarioActual;
+  document.getElementById('moto-nombre').textContent='Hola, '+motoUsuario.nombre.split(' ')[0];
+  document.getElementById('moto-ciudad').textContent=motoUsuario.ciudad||'Colombia';
+  const ini=motoUsuario.nombre.split(' ').map(p=>p[0]).join('').substring(0,2).toUpperCase();
+  document.getElementById('moto-avatar').textContent=ini;
+  motoUsuario.pasoDocumentos=motoUsuario.pasoDocumentos||0;
+  renderDocRuta();
+  renderMotoChart();
+  cargarHistorialMoto();
+  renderMotoPerfil();
+}
+
+function renderMotoChart(){
+  const meses=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  const hoy=new Date().getMonth();
+  const chart=document.getElementById('moto-chart');
+  let h='';
+  for(let i=0;i<6;i++){
+    const idx=(hoy-5+i+12)%12;
+    const val=Math.floor(Math.random()*80)+10;
+    h+='<div class="moto-chart-col"><div class="moto-chart-val">'+val+'</div><div class="moto-chart-fill" style="height:'+val+'%"></div><div class="moto-chart-label">'+meses[idx]+'</div></div>';
+  }
+  chart.innerHTML=h;
+}
+
+async function cargarServiciosDisponibles(){
+  const lista=document.getElementById('moto-servicios-lista');
+  lista.innerHTML='<div class="moto-empty">Buscando servicios...</div>';
+  try{
+    const ciudad=motoUsuario.ciudad||'';
+    const r=await fetch(apiUrl({accion:'pedidos_disponibles',ciudad:ciudad}));
+    const d=await r.json();
+    if(!d.ok||!d.pedidos.length){lista.innerHTML='<div class="moto-empty">No hay servicios disponibles en este momento</div>';return}
+    motoPedidos=d.pedidos;
+    lista.innerHTML=motoPedidos.map(p=>'<div class="moto-pedido-card"><div class="moto-pedido-row"><div><div class="moto-pedido-ruta">'+p.origen+' → '+p.destino+'</div><div class="moto-pedido-meta">'+p.ciudad+' · '+(p.tipo||'mensajería')+'</div></div><div class="moto-pedido-precio">'+fmtCOP(p.tarifa)+'</div></div><button class="moto-pedido-btn" onclick="aceptarServicio(\''+p.id+'\')">Aceptar servicio</button></div>').join('');
+  }catch(e){lista.innerHTML='<div class="moto-empty">Error de conexión</div>'}
+}
+
+
+async function cargarHistorialMoto(){
+  if(!motoUsuario)return;
+  try{
+    const r=await fetch(apiUrl({accion:'mis_pedidos_motor',idMotor:motoUsuario.id}));
+    const d=await r.json();
+    motoHistorial=d.ok?d.pedidos:[];
+    const lista=document.getElementById('moto-historial-lista');
+    if(!motoHistorial.length){lista.innerHTML='<div class="moto-empty">Aún no tienes entregas registradas</div>';return}
+    lista.innerHTML=motoHistorial.map(p=>{
+      const en=normalizarEstado(p.estado);
+      return'<div class="moto-pedido-card"><div class="moto-pedido-row"><div><div class="moto-pedido-ruta">'+p.origen+' → '+p.destino+'</div><div class="moto-pedido-meta">'+p.ciudad+' · '+formatFecha(p.fecha)+'</div></div><div><div class="moto-pedido-precio">'+fmtCOP(p.tarifa)+'</div><span class="estado-badge '+en+'" style="margin-top:4px"><span class="estado-dot"></span>'+textoEstado(en)+'</span></div></div></div>'
+    }).join('');
+    const totalKm=motoHistorial.length*8;
+    const totalDinero=motoHistorial.reduce((a,p)=>a+Number(p.tarifa||0),0);
+    document.getElementById('moto-km').textContent=totalKm;
+    document.getElementById('moto-entregas').textContent=motoHistorial.length;
+    document.getElementById('moto-dinero').textContent=fmtCOP(totalDinero);
+    document.getElementById('moto-recaudo-total').textContent=fmtCOP(totalDinero);
+  }catch(e){}
+}
+
+function renderMotoPerfil(){
+  if(!motoUsuario)return;
+  const datos=[
+    ['Nombre',motoUsuario.nombre],
+    ['Correo',motoUsuario.correo],
+    ['Ciudad',motoUsuario.ciudad||'—'],
+    ['Placa',motoUsuario.placa||'—'],
+    ['Moto',motoUsuario.moto||'—'],
+    ['Estado',motoUsuario.estado||'—']
+  ];
+  document.getElementById('moto-perfil-datos').innerHTML=datos.map(d=>'<div class="moto-perfil-row"><span class="moto-perfil-label">'+d[0]+'</span><span class="moto-perfil-val">'+d[1]+'</span></div>').join('');
+}
+
+function motoSubpanel(panel){
+  document.querySelectorAll('.moto-subpanel').forEach(s=>s.classList.remove('activa'));
+  const el=document.getElementById('moto-sub-'+panel);
+  if(el){el.classList.add('activa');el.scrollIntoView({behavior:'smooth',block:'start'})}
+  if(panel==='servicios')cargarServiciosDisponibles();
+}
+
+function motoVolverPanel(){
+  document.querySelectorAll('.moto-subpanel').forEach(s=>s.classList.remove('activa'));
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+let mapaMotor=null,mapaMotorIniciado=false;
+function iniciarMapaMoto(){
+  if(mapaMotorIniciado&&mapaMotor){mapaMotor.setCenter(getCiudadCoords());return}
+  const coords=getCiudadCoords();
+  mapaMotor=new google.maps.Map(document.getElementById('moto-mapa'),{
+    center:coords,
+    zoom:14,
+    disableDefaultUI:true,
+    zoomControl:false,
+    mapTypeControl:false,
+    streetViewControl:false,
+    fullscreenControl:false,
+    styles:[{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]}]
+  });
+  mapaMotorIniciado=true;
+}
+
+function getCiudadCoords(){
+  const ciudad=(motoUsuario&&motoUsuario.ciudad||'').toLowerCase().trim();
+  const ciudades={
+    'bogota':{lat:4.7110,lng:-74.0721},'bogotá':{lat:4.7110,lng:-74.0721},
+    'medellin':{lat:6.2442,lng:-75.5812},'medellín':{lat:6.2442,lng:-75.5812},
+    'cali':{lat:3.4516,lng:-76.5319},
+    'barranquilla':{lat:10.9639,lng:-74.7964},
+    'pereira':{lat:4.8133,lng:-75.6961},
+    'bucaramanga':{lat:7.1254,lng:-73.1198},
+    'cartagena':{lat:10.3910,lng:-75.5144}
+  };
+  return ciudades[ciudad]||{lat:4.7110,lng:-74.0721};
+}
+
+async function enviarGoBackend(activo,lat,lng){
+  if(!motoUsuario)return;
+  try{
+    await fetch(API_BASE,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({
+        accion:'go_toggle',
+        idMotor:motoUsuario.id,
+        activo:activo?'SI':'NO',
+        lat:lat,
+        lng:lng,
+        appToken:APP_TOKEN
+      })
+    });
+  }catch(e){console.log('Error GO:',e)}
+}
+
+function iniciarMapaMotoConCoords(lat,lng){
+  const coords={lat:lat,lng:lng};
+  if(mapaMotorIniciado&&mapaMotor){
+    mapaMotor.setCenter(coords);
+    mapaMotor.setZoom(15);
+    return;
+  }
+  mapaMotor=new google.maps.Map(document.getElementById('moto-mapa'),{
+    center:coords,
+    zoom:15,
+    disableDefaultUI:true,
+    zoomControl:false,
+    mapTypeControl:false,
+    streetViewControl:false,
+    fullscreenControl:false,
+    styles:[{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]}]
+  });
+  mapaMotorIniciado=true;
+  new google.maps.Marker({position:coords,map:mapaMotor,icon:{path:google.maps.SymbolPath.CIRCLE,scale:10,fillColor:'#16a34a',fillOpacity:1,strokeColor:'#fff',strokeWeight:2.5},title:'Tu ubicación'});
+}
+
+let servicioActivoMoto=null;
+let directionsServiceMoto=null,directionsRendererMoto=null;
+
+async function aceptarServicio(idPedido){
+  if(!motoUsuario)return;
+  try{
+    const r=await fetch(apiUrl({accion:'aceptar_pedido',idPedido:idPedido,idMotor:motoUsuario.id}));
+    const d=await r.json();
+    if(d.ok){
+      showToast('Servicio aceptado','success');
+      const pedido=motoPedidos.find(p=>p.id===idPedido);
+      if(pedido){
+        servicioActivoMoto=pedido;
+        mostrarServicioActivo(pedido);
+      }
+      cargarServiciosDisponibles();
+      cargarHistorialMoto();
+    }else showToast(d.error||'Error','error');
+  }catch(e){showToast('Error de conexión','error')}
+}
+
+function mostrarServicioActivo(pedido){
+  const wrap=document.getElementById('moto-servicio-activo-wrap');
+  wrap.innerHTML='<div class="moto-servicio-activo">'+
+    '<div class="moto-servicio-activo-title">Servicio en curso</div>'+
+    '<div class="moto-servicio-activo-ruta">'+pedido.origen+' → '+pedido.destino+'</div>'+
+    '<div class="moto-servicio-activo-meta">'+pedido.ciudad+' · '+fmtCOP(pedido.tarifa)+'</div>'+
+    '<div class="moto-finalizar-wrap">'+
+      '<input type="file" accept="image/*" class="moto-foto-entrega" id="foto-entrega-input">'+
+      '<button class="moto-finalizar-btn" onclick="finalizarServicio(\''+pedido.id+'\')">Confirmar entrega</button>'+
+    '</div>'+
+  '</div>';
+  dibujarRutaMoto(pedido);
+}
+
+function dibujarRutaMoto(pedido){
+  if(!mapaMotor||!mapaMotorIniciado)return;
+  if(!directionsServiceMoto)directionsServiceMoto=new google.maps.DirectionsService();
+  if(!directionsRendererMoto){
+    directionsRendererMoto=new google.maps.DirectionsRenderer({
+      map:mapaMotor,suppressMarkers:false,
+      polylineOptions:{strokeColor:'#2563eb',strokeWeight:4,strokeOpacity:.9}
+    });
+  }else{
+    directionsRendererMoto.setMap(mapaMotor);
+  }
+  const geocoder=new google.maps.Geocoder();
+  geocoder.geocode({address:pedido.origen+', Colombia'},function(resO,statO){
+    if(statO!=='OK')return;
+    geocoder.geocode({address:pedido.destino+', Colombia'},function(resD,statD){
+      if(statD!=='OK')return;
+      directionsServiceMoto.route({
+        origin:resO[0].geometry.location,
+        destination:resD[0].geometry.location,
+        travelMode:google.maps.TravelMode.DRIVING,
+        region:'CO'
+      },function(result,status){
+        if(status==='OK')directionsRendererMoto.setDirections(result);
+      });
+    });
+  });
+}
+
+async function finalizarServicio(idPedido){
+  const fotoInput=document.getElementById('foto-entrega-input');
+  if(!fotoInput||!fotoInput.files.length){showToast('Sube la foto de entrega','error');return}
+  try{
+    const fotoB64=await comprimirYConvertir(fotoInput.files[0]);
+    const r=await fetch(API_BASE,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({
+        accion:'finalizar_pedido',
+        idPedido:idPedido,
+        idMotor:motoUsuario.id,
+        fotoEntrega:fotoB64,
+        appToken:APP_TOKEN
+      })
+    });
+    const d=await r.json();
+    if(d.ok){
+      showToast('Entrega confirmada','success');
+      servicioActivoMoto=null;
+      document.getElementById('moto-servicio-activo-wrap').innerHTML='';
+      if(directionsRendererMoto)directionsRendererMoto.setMap(null);
+      cargarHistorialMoto();
+    }else showToast(d.error||'Error','error');
+  }catch(e){showToast('Error de conexión','error')}
+}
+
+let califEstrellas=0;
+
+function abrirCalificacion(idPedido){
+  califEstrellas=0;
+  document.getElementById('calif-pedido-id').value=idPedido;
+  document.getElementById('calif-comentario').value='';
+  document.querySelectorAll('#calif-estrellas .moto-estrella').forEach(s=>s.classList.remove('activa'));
+  document.getElementById('modal-calificacion').classList.add('visible');
+}
+
+function setCalificacion(n){
+  califEstrellas=n;
+  document.querySelectorAll('#calif-estrellas .moto-estrella').forEach((s,i)=>{
+    s.classList.toggle('activa',i<n);
+  });
+}
+
+async function enviarCalificacion(){
+  if(califEstrellas===0){showToast('Selecciona al menos una estrella','error');return}
+  const idPedido=document.getElementById('calif-pedido-id').value;
+  const comentario=document.getElementById('calif-comentario').value.trim();
+  try{
+    const r=await fetch(API_BASE,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({
+        accion:'calificar_pedido',
+        idPedido:idPedido,
+        calificacion:califEstrellas,
+        comentario:comentario,
+        appToken:APP_TOKEN
+      })
+    });
+    const d=await r.json();
+    if(d.ok){
+      showToast('Gracias por tu calificación','success');
+      document.getElementById('modal-calificacion').classList.remove('visible');
+      cargarPanel();
+    }else showToast(d.error||'Error','error');
+  }catch(e){showToast('Error de conexión','error')}
+}
+
+function renderDocRuta(){
+  if(!motoUsuario)return;
+  const estado=motoUsuario.estado||'pendiente';
+  if(estado==='aprobado')return;
+  const paso=parseInt(motoUsuario.pasoDocumentos)||0;
+  const pasos=[
+    {n:1,title:'Cédula de ciudadanía',desc:'Frontal y trasera',archivos:2},
+    {n:2,title:'SOAT vigente',desc:'Foto o documento',archivos:1},
+    {n:3,title:'Tarjeta de propiedad',desc:'Frontal y trasera',archivos:2},
+    {n:4,title:'Foto de rostro',desc:'Foto clara de tu cara',archivos:1}
+  ];
+  let h='<div class="doc-ruta"><div class="doc-ruta-title">Completa tu documentación</div><div class="doc-ruta-sub">Sube tus documentos para activar tu cuenta. Cada paso se valida antes de continuar.</div>';
+  pasos.forEach(function(p,i){
+    let cls='bloqueado',numIcon=p.n,statusTxt='Pendiente',statusCls='';
+    if(p.n<paso+1){cls='completado';numIcon='✓';statusTxt='Aprobado';statusCls='green'}
+    else if(p.n===paso+1){cls='activo';statusTxt='Listo para enviar';statusCls=''}
+    h+='<div class="doc-paso '+cls+'" id="doc-paso-'+p.n+'">';
+    h+='<div class="doc-paso-num">'+numIcon+'</div>';
+    h+='<div class="doc-paso-info"><div class="doc-paso-title">'+p.title+'</div>';
+    h+='<div class="doc-paso-status '+statusCls+'">'+statusTxt+'</div>';
+    if(p.n===paso+1){
+      h+='<div class="doc-paso-upload">';
+      if(p.archivos===2){
+        h+='<input type="file" accept="image/*" class="doc-paso-file" id="doc-file-'+p.n+'-a"'+(p.n<=2?' capture="environment"':'')+'>';
+        h+='<input type="file" accept="image/*" class="doc-paso-file" id="doc-file-'+p.n+'-b" style="margin-top:6px"'+(p.n<=2?' capture="environment"':'')+'>';
+      }else if(p.n===2){
+        h+='<input type="file" accept="image/*,.pdf" class="doc-paso-file" id="doc-file-'+p.n+'-a">';
+      }else{
+        h+='<input type="file" accept="image/*" class="doc-paso-file" id="doc-file-'+p.n+'-a"'+(p.n===4?' capture="user"':'')+'>';
+      }
+      h+='<button class="doc-paso-btn" onclick="enviarDocumento('+p.n+')">Enviar para validación</button>';
+      h+='</div>';
+    }
+    h+='</div></div>';
+    if(i<pasos.length-1)h+='<div class="doc-line"></div>';
+  });
+  h+='</div>';
+  document.getElementById('moto-doc-ruta-wrap').innerHTML=h;
+}
+
+async function enviarDocumento(paso){
+  const fileA=document.getElementById('doc-file-'+paso+'-a');
+  if(!fileA||!fileA.files.length){showToast('Selecciona el archivo','error');return}
+  let b64a='',b64b='';
+  try{
+    b64a=await comprimirYConvertir(fileA.files[0]);
+    const fileB=document.getElementById('doc-file-'+paso+'-b');
+    if(fileB&&fileB.files.length)b64b=await comprimirYConvertir(fileB.files[0]);
+  }catch(e){showToast('Error procesando imagen','error');return}
+  const btn=document.querySelector('#doc-paso-'+paso+' .doc-paso-btn');
+  if(btn){btn.disabled=true;btn.textContent='Enviando...'}
+  try{
+    const r=await fetch(API_BASE,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({
+        accion:'subir_documento',
+        idMotor:motoUsuario.id,
+        paso:paso,
+        archivoA:b64a,
+        archivoB:b64b
+      })
+    });
+    const d=await r.json();
+    if(d.ok){
+      showToast('Documento enviado','success');
+      motoUsuario.pasoDocumentos=paso;
+      renderDocRuta();
+    }else{showToast(d.error||'Error','error');if(btn){btn.disabled=false;btn.textContent='Enviar para validación'}}
+  }catch(e){showToast('Error de conexión','error');if(btn){btn.disabled=false;btn.textContent='Enviar para validación'}}
+}
+</script>
+</body>
+</html>
