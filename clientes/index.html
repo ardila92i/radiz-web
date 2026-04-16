@@ -407,6 +407,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 .doc-paso-btn{margin-top:8px;width:100%;padding:11px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;font-size:.82rem;font-weight:700;cursor:pointer}
 .doc-paso-btn:disabled{opacity:.5;cursor:not-allowed}
 .doc-line{width:2px;height:10px;background:var(--border);margin:0 0 0 33px}
+body.selector-activo{background:linear-gradient(rgba(243,246,251,.50),rgba(243,246,251,.50)),url('fondo-radiz.png');background-size:cover;background-position:center;background-attachment:fixed}
 </style>
 </head>
 <body data-theme="light">
@@ -898,7 +899,7 @@ function renderNav(){
 document.addEventListener('click',e=>{if(!e.target.closest('.nav-user-menu'))cerrarDropdown()});
 function toggleUserDropdown(){document.getElementById('nav-dropdown')?.classList.toggle('visible')}
 function cerrarDropdown(){document.getElementById('nav-dropdown')?.classList.remove('visible')}
-function mostrarVista(id){document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));const el=document.getElementById('vista-'+id);if(el){el.classList.add('activa');window.scrollTo({top:0,behavior:'smooth'})}if(id==='mensajeria'&&!mapaIniciado)iniciarMapa();if(id==='domiciliario'&&window.google)google.maps.importLibrary("places");if(id==='panel')cargarPanel()}
+function mostrarVista(id){document.querySelectorAll('.vista').forEach(v=>v.classList.remove('activa'));const el=document.getElementById('vista-'+id);if(el){el.classList.add('activa');window.scrollTo({top:0,behavior:'smooth'})}document.body.classList.toggle('selector-activo',id==='selector');if(id==='mensajeria'&&!mapaIniciado)iniciarMapa();if(id==='domiciliario'&&window.google)google.maps.importLibrary("places");if(id==='panel')cargarPanel()}
 function selTipo(el,t){document.querySelectorAll('.tipo-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');tipoEnvio=t;document.getElementById('block-horario').classList.remove('disabled')}
 function selMoto(el,t){document.querySelectorAll('.moto-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');tipoMoto=t;document.getElementById('dom-block-horario').classList.remove('disabled');validarJornada()}
 function selHorario(m){modoHorario=m;document.getElementById('tab-ahora').classList.toggle('selected',m==='ahora');document.getElementById('tab-programar').classList.toggle('selected',m==='programar');document.getElementById('horario-hora-wrap').classList.toggle('visible',m==='programar');document.getElementById('block-paradas').classList.remove('disabled');habilitarDirecciones(true)}
@@ -1058,6 +1059,7 @@ async function registrarPagoEnSheet(referencia,monto,idContrato,correo){
 }
 document.addEventListener('DOMContentLoaded',()=>{
   renderNav();
+  document.body.classList.add('selector-activo');
   flatpickr('#fecha-rango',{
     mode:'range',
     locale:'es',
