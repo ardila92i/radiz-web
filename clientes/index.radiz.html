@@ -7,7 +7,7 @@
 <link rel="icon" type="image/png" href="icon-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
@@ -28,7 +28,7 @@ body{
   --panel-shadow:0 10px 24px rgba(15,23,42,.06);--ring:0 0 0 3px rgba(37,99,235,.12)
 }
 
-html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden}
+html,body{min-height:100%;background:var(--bg);color:var(--text);font-family:'Poppins',sans-serif;overflow-x:hidden}
 body{position:relative}
 a{text-decoration:none;color:inherit}
 button,input,textarea,select{font:inherit}
@@ -117,11 +117,11 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 .otra-ciudad-wrap.visible{display:block}
 .paradas-wrap{display:flex;flex-direction:column;gap:10px}
 .parada-item{display:flex;align-items:flex-start;gap:12px;padding:14px;border:1px solid var(--border);border-radius:18px;background:var(--surface2)}
-.parada-dot{width:34px;height:34px;border-radius:12px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800}
-.parada-dot.origen{background:var(--blue-soft);color:var(--blue-2)}
-.parada-dot.destino{background:var(--orange-soft);color:var(--orange)}
-.parada-dot.parada{background:var(--surface3);color:var(--text)}
-.parada-field{flex:1;position:relative}
+.parada-dot{width:34px;height:34px;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;background:none}
+.parada-dot.origen{color:var(--blue-2)}
+.parada-dot.destino{color:var(--orange)}
+.parada-dot.parada{color:var(--text)}
+.parada-field{flex:1;position:relative}.parada-input{margin-bottom:8px}
 .btn-remove{width:34px;height:34px;border-radius:12px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
 .btn-remove:hover{background:var(--orange-soft);border-color:rgba(240,90,40,.24);color:var(--orange)}
 .btn-add-parada{width:100%;display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:0;background:none;border:none;border-top:1px dashed var(--border-strong);color:var(--muted);cursor:pointer;transition:.2s;margin-top:12px}
@@ -289,7 +289,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 .toast.visible{transform:translateX(-50%) translateY(0);opacity:1}
 .toast.error{border-color:rgba(240,90,40,.26);color:var(--orange)}
 .toast.success{border-color:rgba(22,163,74,.22);color:var(--green)}
-.flatpickr-calendar{border-radius:20px!important;border:1px solid var(--border)!important;box-shadow:var(--shadow)!important;font-family:'Inter',sans-serif!important}
+.flatpickr-calendar{border-radius:20px!important;border:1px solid var(--border)!important;box-shadow:var(--shadow)!important;font-family:'Poppins',sans-serif!important}
 .flatpickr-day.selected,.flatpickr-day.startRange,.flatpickr-day.endRange{background:var(--blue-2)!important;border-color:var(--blue-2)!important}
 .flatpickr-day.inRange{background:var(--blue-soft)!important;border-color:transparent!important;box-shadow:none!important}
 .flatpickr-day:hover{background:var(--surface2)!important}
@@ -435,13 +435,12 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
   <div class="page-wrap">
     <div class="home-hero">
       <h1>Mensajería<span class="azul"> express</span> y logística <span class="naranja">dedicada</span> de altísima confianza</h1>
-      <p>Contrate personas con alta disposición, maneje su presupuesto y descargue su facturación.</p>
     </div>
     <div class="home-cards">
       <div class="hcard azul" onclick="mostrarVista('mensajeria')">
         <div class="hcard-top"><div class="hcard-icon" style="background:none;padding:0"><img src="mensajeria_express.png" alt="Mensajería" style="width:54px;height:54px;object-fit:contain"></div><div class="hcard-arrow">→</div></div>
         <h2>Mensajería express</h2>
-        <p>El precio por kilometro más justo para ellos y para usted</p>
+        <p>El precio por kilometro más justo para ellos y para usted.</p>
         <div class="hcard-footer"><div class="hcard-price">Desde $6.450</div></div>
       </div>
       <div class="hcard naranja" onclick="mostrarVista('domiciliario')">
