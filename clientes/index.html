@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm0PzoGphUs1a3TME47zPorau74ubFuic&libraries=places,geocoding&language=es&region=CO"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCm0PzoGphUs1a3TME47zPorau74ubFuic&libraries=places,geocoding&language=es&region=CO&loading=async" async></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -793,12 +793,14 @@ body.selector-activo{}
       <div class="mlogin-tabs"><div class="mlogin-tab active" onclick="switchTab('login')">Iniciar sesión</div><div class="mlogin-tab" onclick="switchTab('registro')">Crear cuenta</div></div>
       <div class="mlogin-titulo">Accede a tu cuenta</div>
       <div class="mlogin-sub">Ingresa con tu correo y contraseña para gestionar servicios, historial y saldo.</div>
+      <form onsubmit="return false">
       <span class="mlogin-label">Correo electrónico</span><input class="mlogin-input" id="login-correo" type="email" placeholder="correo@ejemplo.com" onkeydown="if(event.key==='Enter')ejecutarLogin()">
       <span class="mlogin-label" style="margin-top:14px">Contraseña</span>
       <div class="mlogin-pass-wrap"><input class="mlogin-input" id="login-pass" type="password" placeholder="Tu contraseña" onkeydown="if(event.key==='Enter')ejecutarLogin()"><button class="mlogin-pass-toggle" type="button" onclick="togglePass('login-pass',this)">Ver</button></div>
       <div class="mlogin-forgot"><a onclick="switchTab('recuperar')">¿Olvidaste tu contraseña?</a></div>
       <div class="mlogin-error-msg" id="login-error"></div>
       <button class="mlogin-btn" id="btn-login" onclick="ejecutarLogin()">Entrar</button>
+      </form>
     </div>
     <div id="panel-registro" style="display:none">
       <div class="mlogin-tabs"><div class="mlogin-tab" onclick="switchTab('login')">Iniciar sesión</div><div class="mlogin-tab active" onclick="switchTab('registro')">Crear cuenta</div></div>
@@ -830,10 +832,12 @@ body.selector-activo{}
       <div class="mlogin-nit-wrap" id="modal-nit-wrap"><span class="mlogin-label" style="margin-top:14px">NIT de la empresa</span><input class="mlogin-input" id="modal-reg-nit" placeholder="900.123.456-7"><span class="mlogin-label" style="margin-top:14px">Razón social</span><input class="mlogin-input" id="modal-reg-razon" placeholder="Empresa S.A.S."></div>
       <span class="mlogin-label" style="margin-top:14px">Nombre completo</span><input class="mlogin-input" id="modal-reg-nombre" placeholder="Tu nombre completo">
       <span class="mlogin-label" style="margin-top:14px">Correo electrónico</span><input class="mlogin-input" id="modal-reg-correo" type="email" placeholder="correo@ejemplo.com">
+      <form onsubmit="return false">
       <span class="mlogin-label" style="margin-top:14px">Contraseña</span><div class="mlogin-pass-wrap"><input class="mlogin-input" id="modal-reg-pass" type="password" placeholder="Mínimo 8 caracteres"><button class="mlogin-pass-toggle" type="button" onclick="togglePass('modal-reg-pass',this)">Ver</button></div>
       <span class="mlogin-label" style="margin-top:14px">Confirmar contraseña</span><div class="mlogin-pass-wrap"><input class="mlogin-input" id="modal-reg-pass2" type="password" placeholder="Repite la contraseña"><button class="mlogin-pass-toggle" type="button" onclick="togglePass('modal-reg-pass2',this)">Ver</button></div>
       <div class="mlogin-error-msg" id="reg-error"></div><div class="mlogin-success-msg" id="reg-success"></div>
       <button class="mlogin-btn" id="btn-registro" onclick="ejecutarRegistro()">Crear cuenta</button>
+      </form>
     </div>
     <div id="panel-recuperar" style="display:none">
       <div class="mlogin-titulo">Recuperar contraseña</div>
@@ -1560,8 +1564,13 @@ async function enviarCalificacion(){
 function renderDocRuta(){
   if(!motoUsuario)return;
   const estado=motoUsuario.estado||'pendiente';
-  if(estado==='aprobado')return;
+  if(estado==='aprobado'||estado==='activo')return;
   const paso=parseInt(motoUsuario.pasoDocumentos)||0;
+  // Todos los documentos ya fueron subidos: mostrar mensaje de espera
+  if(paso>=4||estado==='pendiente_aprobacion'){
+    document.getElementById('moto-doc-ruta-wrap').innerHTML='<div class="doc-ruta"><div class="doc-ruta-title">Documentos en revisión</div><div class="doc-ruta-sub" style="margin-top:12px;font-size:0.97em">Todos tus documentos han sido recibidos. Estamos revisándolos y te notificaremos cuando tu cuenta sea activada.</div></div>';
+    return;
+  }
   const pasos=[
     {n:1,title:'Cédula de ciudadanía',desc:'Frontal y trasera',archivos:2},
     {n:2,title:'SOAT vigente',desc:'Foto o documento',archivos:1},
@@ -1571,7 +1580,7 @@ function renderDocRuta(){
   let h='<div class="doc-ruta"><div class="doc-ruta-title">Completa tu documentación</div><div class="doc-ruta-sub">Sube tus documentos para activar tu cuenta. Cada paso se valida antes de continuar.</div>';
   pasos.forEach(function(p,i){
     let cls='bloqueado',numIcon=p.n,statusTxt='Pendiente',statusCls='';
-    if(p.n<paso+1){cls='completado';numIcon='✓';statusTxt='Aprobado';statusCls='green'}
+    if(p.n<paso+1){cls='completado';numIcon='✓';statusTxt='En revisión';statusCls='green'}
     else if(p.n===paso+1){cls='activo';statusTxt='Listo para enviar';statusCls=''}
     h+='<div class="doc-paso '+cls+'" id="doc-paso-'+p.n+'">';
     h+='<div class="doc-paso-num">'+numIcon+'</div>';
