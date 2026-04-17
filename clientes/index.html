@@ -1233,7 +1233,7 @@ function toggleGo(){
   const mapWrap=document.getElementById('moto-map-wrap');
   ring.classList.toggle('activo',goActivo);
   if(goActivo){
-    if(motoUsuario&&motoUsuario.estado!=='aprobado'){showToast('Completa tu documentación para activarte','error');goActivo=false;return}
+    if(motoUsuario&&motoUsuario.estado!=='activo'){showToast('Completa tu documentación para activarte','error');goActivo=false;return}
     wrap.classList.add('minimizado');
     btn.textContent='OFF';
     status.textContent='Conectando...';
