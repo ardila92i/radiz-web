@@ -1295,7 +1295,11 @@ let goActivo=false,motoUsuario=null,motoPedidos=[],motoHistorial=[];
 
 function toggleGo(){
   if(!goActivo){
-    if(motoUsuario&&motoUsuario.estado!=='activo'){showToast('Completa tu documentación para activarte','error');return}
+    if(motoUsuario&&motoUsuario.estado!=='activo'){
+      renderDocRuta();
+      abrirDocSheet();
+      return;
+    }
     goActivo=true;
   }else{
     goActivo=false;
@@ -1331,6 +1335,7 @@ function cargarPanelMensajero(){
   motoUsuario.pasoDocumentos=motoUsuario.pasoDocumentos||0;
   if(Notification&&Notification.permission==='default')Notification.requestPermission();
   renderDocRuta();
+  setTimeout(renderDocRuta,400);
   if(motoUsuario.estado==='pendiente_aprobacion')iniciarPollingEstado();
   cargarHistorialMoto();
   iniciarMapaMotoBackground();
@@ -1711,7 +1716,7 @@ function abrirDocSheet(){
       <label class="moto-doc-upload-slot" id="doc-slot-${p.n}-${s.id}">
         <div class="moto-doc-upload-slot-icon">📷</div>
         <span class="moto-doc-upload-slot-label" id="doc-slot-lbl-${p.n}-${s.id}">${s.label}</span>
-        <input type="file" id="doc-file-${p.n}-${s.id}" accept="${s.accept||'image/*'}" capture="${s.capture}" onchange="marcarSlotCargado(${p.n},'${s.id}',this)">
+        <input type="file" id="doc-file-${p.n}-${s.id}" accept="${s.accept||'image/*'}" onchange="marcarSlotCargado(${p.n},'${s.id}',this)">
       </label>`).join('');
     bodyHTML+=`<div class="moto-doc-upload-area">${slotsHTML}</div>
     <button class="moto-doc-send-btn" id="doc-sheet-send-btn" onclick="enviarDocumento(${p.n})" disabled>Enviar para validación</button>`;
