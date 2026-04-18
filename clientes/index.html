@@ -383,7 +383,7 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 .moto-off-btn.visible{display:flex}
 /* Doc banner (franja naranja pulsante) */
 @keyframes docPulse{0%,100%{box-shadow:0 6px 22px rgba(240,90,40,.45)}55%{box-shadow:0 6px 32px rgba(240,90,40,.18)}}
-.moto-doc-banner{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 74px);left:14px;right:14px;z-index:20;background:var(--orange);color:#fff;border-radius:16px;padding:11px 14px 11px 16px;display:none;align-items:center;gap:12px;cursor:pointer;animation:docPulse 2s ease-in-out infinite}
+.moto-doc-banner{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 80px);left:50%;transform:translateX(-50%);width:calc(100% - 28px);max-width:402px;z-index:450;background:var(--orange);color:#fff;border-radius:16px;padding:11px 14px 11px 16px;display:none;align-items:center;gap:12px;cursor:pointer;animation:docPulse 2s ease-in-out infinite}
 .moto-doc-banner.visible{display:flex}
 .moto-doc-banner.gris{background:#475569;animation:none;box-shadow:0 4px 16px rgba(0,0,0,.28);cursor:default}
 .moto-doc-banner-icon{font-size:1.1rem;flex-shrink:0}
@@ -795,12 +795,6 @@ body.selector-activo{}
   </div>
   <!-- Servicio activo en curso -->
   <div class="moto-activo-bar" id="moto-activo-bar"></div>
-  <!-- Franja documentos pendientes -->
-  <div class="moto-doc-banner" id="moto-doc-banner" onclick="abrirDocSheet()">
-    <div class="moto-doc-banner-icon">📋</div>
-    <div class="moto-doc-banner-text" id="moto-doc-banner-text">¡Ya casi! Cargue su documentación aquí</div>
-    <div class="moto-doc-banner-arrow">›</div>
-  </div>
   <!-- Bottom bar -->
   <div class="moto-bottombar">
     <div class="moto-bottom-side" onclick="abrirMotoDrawer('historial')">
@@ -826,6 +820,12 @@ body.selector-activo{}
     <div class="moto-drawer-body" id="moto-drawer-body"></div>
   </div>
 </div><!-- /moto-frame -->
+<!-- Franja documentos pendientes (fixed, fuera del frame) -->
+<div class="moto-doc-banner" id="moto-doc-banner" onclick="abrirDocSheet()">
+  <div class="moto-doc-banner-icon">📋</div>
+  <div class="moto-doc-banner-text" id="moto-doc-banner-text">¡Ya casi! Cargue su documentación aquí</div>
+  <div class="moto-doc-banner-arrow">›</div>
+</div>
 <!-- Sheet documentos (fixed, fuera del frame) -->
 <div class="moto-doc-sheet-bg" id="moto-doc-sheet-bg" onclick="cerrarDocSheet()"></div>
 <div class="moto-doc-sheet" id="moto-doc-sheet">
