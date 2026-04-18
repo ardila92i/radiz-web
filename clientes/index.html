@@ -300,88 +300,150 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 @media(max-width:900px){.panel-stats,.panel-acciones,.grid-2{grid-template-columns:1fr}.ciudad-selector{grid-template-columns:repeat(2,1fr)}.tipo-envio,.tipo-moto-grid,.recarga-montos{grid-template-columns:1fr}.page-wrap{padding:0 18px}.dom-qty-grid{grid-template-columns:1fr 1fr}.dom-fechas-grid{grid-template-columns:1fr!important}.grid-2.horario-grid{grid-template-columns:1fr 1fr!important}}
 @media(max-width:760px){.home-cards{grid-template-columns:1fr!important;gap:12px}.home-stats{grid-template-columns:1fr 1fr!important;gap:10px}.home-stats .stat-chip:last-child{grid-column:span 2}}
 @media(max-width:640px){.nav-inner{padding:12px 16px}.nav-right{gap:8px}.nav-user-name{display:none}.home-hero{padding:24px 0 14px}.home-hero h1{font-size:1.9rem;letter-spacing:-.03em}.home-hero p{font-size:.9rem}.vista-header{padding-top:22px}.vista-titulo{font-size:1.24rem}.propina-row{align-items:flex-start;flex-direction:column}.mapa-wrap{min-height:320px}#mapa{height:320px}.modal-card,.mlogin-card,.recarga-card,.buscando-card{padding:22px}.cotiz-total{flex-direction:column;align-items:flex-start}.panel-tabla{min-width:620px}.vista{padding-bottom:36px}}
-.moto-panel{max-width:480px;margin:0 auto;padding:0 20px 80px}
-.moto-top{display:flex;align-items:center;justify-content:space-between;padding:20px 0 8px}
-.moto-greeting{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
-.moto-city{font-size:.78rem;color:var(--muted);margin-top:2px}
-.moto-avatar-sm{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--orange),#ff8b5a);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.82rem}
-.go-wrap{display:flex;flex-direction:column;align-items:center;padding:36px 0 28px}
-.go-ring{width:140px;height:140px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--surface);border:3px solid var(--border);box-shadow:0 8px 32px rgba(15,23,42,.06);cursor:pointer;transition:.3s;position:relative}
-.go-ring.activo{border-color:var(--green);box-shadow:0 8px 32px rgba(22,163,74,.18)}
-.go-ring.activo .go-btn{background:linear-gradient(135deg,var(--green),#22c55e);box-shadow:0 12px 28px rgba(22,163,74,.32)}
-.go-btn{width:108px;height:108px;border-radius:50%;background:linear-gradient(135deg,var(--green),#22c55e);display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:900;color:#fff;letter-spacing:.06em;transition:.3s;box-shadow:0 12px 28px rgba(22,163,74,.24)}
-.go-status{margin-top:14px;font-size:.82rem;font-weight:700;color:var(--muted)}
-.go-status.activo{color:var(--green)}
-.go-pulse{position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--green);opacity:0;animation:goPulse 2s ease-out infinite}
-@keyframes goPulse{0%{transform:scale(.95);opacity:.6}100%{transform:scale(1.15);opacity:0}}
-.moto-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
-.moto-stat{text-align:center;padding:16px 8px;background:var(--surface);border:1px solid var(--border);border-radius:18px}
-.moto-stat-val{font-size:1.3rem;font-weight:800;letter-spacing:-.03em}
-.moto-stat-val.blue{color:var(--blue-2)}
-.moto-stat-val.orange{color:var(--orange)}
-.moto-stat-val.green{color:var(--green)}
-.moto-stat-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:4px}
-.moto-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px}
-.moto-action{display:flex;align-items:center;gap:12px;padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:18px;cursor:pointer;transition:.2s}
-.moto-action:hover{border-color:var(--border-strong);transform:translateY(-2px)}
-.moto-action-icon{width:42px;height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:800;flex:0 0 auto}
-.moto-action-icon.blue{background:var(--blue-soft);color:var(--blue-2)}
-.moto-action-icon.orange{background:var(--orange-soft);color:var(--orange)}
-.moto-action-icon.green{background:var(--green-soft);color:var(--green)}
-.moto-action-icon.gray{background:var(--surface2);color:var(--muted)}
-.moto-action-text{font-size:.84rem;font-weight:700;line-height:1.3}
-.moto-action-sub{font-size:.72rem;color:var(--muted);font-weight:500;margin-top:2px}
-.moto-section-title{font-size:.92rem;font-weight:800;letter-spacing:-.02em;margin-bottom:14px}
-.moto-chart-wrap{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:20px;margin-bottom:22px}
-.moto-chart-bar{display:flex;align-items:flex-end;gap:6px;height:120px;padding-top:10px}
-.moto-chart-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
-.moto-chart-fill{width:100%;border-radius:8px 8px 4px 4px;background:linear-gradient(180deg,var(--blue-2),rgba(37,99,235,.5));min-height:4px;transition:.4s}
-.moto-chart-label{font-size:.6rem;color:var(--muted);font-weight:600}
-.moto-chart-val{font-size:.62rem;font-weight:800;color:var(--text)}
-.moto-subpanel{display:none;padding-bottom:40px}
-.moto-subpanel.activa{display:block}
-.moto-sub-header{display:flex;align-items:center;gap:12px;padding:16px 0 20px}
-.moto-sub-back{width:38px;height:38px;border-radius:12px;background:var(--surface);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:.9rem;color:var(--text)}
-.moto-sub-title{font-size:1.1rem;font-weight:800;letter-spacing:-.02em}
-.moto-pedido-card{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-bottom:10px;transition:.2s}
-.moto-pedido-card:hover{border-color:var(--border-strong)}
-.moto-pedido-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-.moto-pedido-ruta{font-size:.82rem;font-weight:700;line-height:1.5}
-.moto-pedido-meta{font-size:.72rem;color:var(--muted);margin-top:6px}
-.moto-pedido-precio{font-size:1rem;font-weight:800;color:var(--green);white-space:nowrap}
-.moto-pedido-btn{width:100%;margin-top:12px;padding:12px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--green),#22c55e);color:#fff;font-size:.84rem;font-weight:700;cursor:pointer;box-shadow:0 8px 20px rgba(22,163,74,.2)}
-.moto-pedido-btn:hover{transform:translateY(-1px)}
-.moto-pedido-estado{display:inline-flex;padding:4px 10px;border-radius:999px;font-size:.68rem;font-weight:700}
-.moto-perfil-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--border);font-size:.86rem}
-.moto-perfil-label{color:var(--muted)}
-.moto-perfil-val{font-weight:700;text-align:right;max-width:60%}
-.moto-recaudo-big{text-align:center;padding:30px 0}
-.moto-recaudo-amount{font-size:2.4rem;font-weight:900;letter-spacing:-.04em;color:var(--green)}
-.moto-recaudo-label{font-size:.82rem;color:var(--muted);margin-top:6px}
-.moto-empty{text-align:center;padding:40px 20px;color:var(--muted);font-size:.86rem}
-.moto-servicio-activo{background:var(--surface);border:1px solid var(--green);border-radius:20px;padding:18px;margin-bottom:18px;box-shadow:0 8px 24px rgba(22,163,74,.1)}
-.moto-servicio-activo-title{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--green);margin-bottom:12px}
-.moto-servicio-activo-ruta{font-size:.9rem;font-weight:700;line-height:1.5;margin-bottom:8px}
-.moto-servicio-activo-meta{font-size:.78rem;color:var(--muted);margin-bottom:14px}
-.moto-finalizar-wrap{margin-top:14px}
-.moto-finalizar-btn{width:100%;padding:14px;border:none;border-radius:14px;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;font-size:.88rem;font-weight:700;cursor:pointer;box-shadow:0 8px 20px rgba(37,99,235,.2)}
-.moto-finalizar-btn.naranja{background:linear-gradient(135deg,var(--orange),#ff8b5a);box-shadow:0 8px 20px rgba(240,90,40,.18)}
-.moto-foto-entrega{width:100%;margin-top:10px;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:14px}
-.moto-calificacion{background:var(--surface);border:1px solid var(--border);border-radius:18px;padding:16px;margin-top:12px;text-align:center}
+/* ===== PANEL MENSAJERO — DISEÑO FULLSCREEN MOBILE ===== */
+#vista-panel-mensajero.activa{position:fixed;inset:0;z-index:400;overflow:hidden;padding-bottom:0;background:#000;display:flex;align-items:stretch;justify-content:center}
+.moto-frame{position:relative;width:100%;height:100%;overflow:hidden;background:#0d0d14}
+@media(min-width:600px){
+  #vista-panel-mensajero.activa{align-items:center}
+  .moto-frame{width:430px;max-width:430px;height:100%;border-radius:0;box-shadow:0 0 80px rgba(0,0,0,.9)}
+}
+.moto-mapa-full{position:absolute;inset:0;z-index:0}
+#moto-mapa{width:100%;height:100%}
+.moto-map-inactive{position:absolute;inset:0;z-index:1;background:rgba(8,8,20,.58);pointer-events:none;transition:.5s ease}
+.moto-map-inactive.oculto{opacity:0}
+/* Top bar */
+.moto-topbar{position:absolute;top:0;left:0;right:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:calc(env(safe-area-inset-top,0px) + 14px) 20px 50px;background:linear-gradient(to bottom,rgba(0,0,0,.78) 0%,transparent 100%)}
+.moto-topbar-logo{font-size:1.15rem;font-weight:900;letter-spacing:-.02em;color:#fff}
+.moto-topbar-logo span{color:#f05a28}
+.moto-topbar-right{display:flex;align-items:center;gap:10px}
+.moto-topbar-name{font-size:.82rem;font-weight:600;color:rgba(255,255,255,.72)}
+.moto-menu-btn{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.13);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.18);color:#fff;font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;line-height:1}
+/* Dropdown */
+.moto-menu-dd{position:absolute;top:64px;right:16px;z-index:20;background:rgba(14,14,22,.97);backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.12);border-radius:18px;min-width:210px;overflow:hidden;display:none}
+.moto-menu-dd.open{display:block;animation:mFadeDown .2s ease}
+@keyframes mFadeDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+.moto-menu-dd-item{padding:14px 18px;color:rgba(255,255,255,.85);font-size:.88rem;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:12px;border-bottom:1px solid rgba(255,255,255,.07);transition:background .15s}
+.moto-menu-dd-item:last-child{border-bottom:none}
+.moto-menu-dd-item:hover{background:rgba(255,255,255,.07)}
+.moto-menu-dd-item.red{color:#f87171}
+.moto-menu-dd-icon{font-size:.95rem;opacity:.75;width:18px;text-align:center}
+/* GO center */
+.moto-go-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-58%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:14px;transition:.35s cubic-bezier(.16,1,.3,1)}
+.moto-go-center.oculto{opacity:0;pointer-events:none;transform:translate(-50%,-58%) scale(.85)}
+.go-ring{width:168px;height:168px;border-radius:50%;background:rgba(255,255,255,.07);backdrop-filter:blur(12px);border:2px solid rgba(255,255,255,.16);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:.3s;box-shadow:0 0 64px rgba(34,197,94,.13),0 24px 48px rgba(0,0,0,.4)}
+.go-btn{width:126px;height:126px;border-radius:50%;background:linear-gradient(145deg,#22c55e,#16a34a);display:flex;align-items:center;justify-content:center;font-size:2rem;font-weight:900;color:#fff;letter-spacing:.05em;box-shadow:0 16px 40px rgba(22,163,74,.52),0 4px 12px rgba(0,0,0,.3);transition:.3s;position:relative;z-index:2}
+.go-status{color:rgba(255,255,255,.62);font-size:.8rem;font-weight:600;text-align:center;letter-spacing:.02em;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.go-pulse{position:absolute;inset:-10px;border-radius:50%;border:2px solid rgba(34,197,94,.42);opacity:0;animation:goPulse 2.5s ease-out infinite}
+.go-pulse2{position:absolute;inset:-22px;border-radius:50%;border:2px solid rgba(34,197,94,.18);opacity:0;animation:goPulse 2.5s ease-out infinite .9s}
+@keyframes goPulse{0%{transform:scale(.9);opacity:.55}100%{transform:scale(1.12);opacity:0}}
+/* Cards de servicio */
+.moto-cards-stack{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 88px);left:0;right:0;z-index:12;padding:0 14px;display:flex;flex-direction:column;gap:9px}
+.moto-srv-card{background:rgba(14,14,22,.9);backdrop-filter:blur(22px);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:15px 17px;cursor:pointer;position:relative;overflow:hidden;animation:slideUpCard .35s cubic-bezier(.16,1,.3,1);transition:.15s}
+.moto-srv-card:active{transform:scale(.985)}
+.moto-card-timer-bar{position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#22c55e,#16a34a);transform-origin:left;animation:timerShrink 25s linear forwards}
+@keyframes timerShrink{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@keyframes slideUpCard{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:translateY(0)}}
+.moto-card-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+.moto-card-tipo{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#f05a28}
+.moto-card-precio{font-size:1.12rem;font-weight:800;color:#22c55e}
+.moto-card-ruta{font-size:.88rem;font-weight:600;color:#fff;line-height:1.5;margin-bottom:5px}
+.moto-card-meta{font-size:.73rem;color:rgba(255,255,255,.45);display:flex;gap:12px}
+/* Detalle de servicio */
+.moto-detail-overlay{position:absolute;inset:0;z-index:22;display:flex;flex-direction:column;transform:translateY(100%);transition:.36s cubic-bezier(.16,1,.3,1)}
+.moto-detail-overlay.open{transform:translateY(0)}
+.moto-detail-mapa{flex:1;position:relative}
+#moto-mapa-ruta{width:100%;height:100%}
+.moto-detail-sheet{background:rgba(10,10,18,.97);backdrop-filter:blur(24px);border-radius:26px 26px 0 0;padding:22px 22px 42px;border-top:1px solid rgba(255,255,255,.1);min-height:230px}
+.moto-detail-close{position:absolute;top:14px;right:14px;z-index:23;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.14);backdrop-filter:blur(8px);border:none;color:#fff;font-size:.88rem;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.moto-detail-precio{font-size:1.9rem;font-weight:900;color:#22c55e;margin-bottom:3px}
+.moto-detail-ruta{font-size:.92rem;font-weight:600;color:#fff;line-height:1.6;margin-bottom:10px}
+.moto-detail-chips{display:flex;gap:18px;margin-bottom:18px}
+.moto-detail-chip{display:flex;flex-direction:column;gap:2px}
+.moto-detail-chip-val{font-size:.86rem;font-weight:800;color:#fff}
+.moto-detail-chip-lbl{font-size:.68rem;color:rgba(255,255,255,.42);text-transform:uppercase;letter-spacing:.06em}
+.moto-detail-btns{display:grid;grid-template-columns:1fr 2fr;gap:10px}
+.moto-detail-btn-no{padding:15px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:14px;color:rgba(255,255,255,.65);font-size:.87rem;font-weight:700;cursor:pointer}
+.moto-detail-btn-si{padding:15px;background:linear-gradient(135deg,#22c55e,#16a34a);border:none;border-radius:14px;color:#fff;font-size:.87rem;font-weight:700;cursor:pointer;box-shadow:0 8px 24px rgba(22,163,74,.36)}
+/* Servicio activo en curso */
+.moto-activo-bar{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 86px);left:14px;right:14px;z-index:12;background:rgba(10,10,18,.94);backdrop-filter:blur(22px);border:1px solid rgba(34,197,94,.25);border-radius:20px;padding:14px 16px;display:none}
+.moto-activo-bar.visible{display:block}
+.moto-activo-lbl{font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#22c55e;margin-bottom:5px}
+.moto-activo-ruta{font-size:.87rem;font-weight:700;color:#fff;line-height:1.5;margin-bottom:12px}
+.moto-activo-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.moto-activo-btn{padding:11px;border:none;border-radius:12px;font-size:.82rem;font-weight:700;cursor:pointer;text-align:center;display:block}
+.moto-activo-btn.foto{background:rgba(255,255,255,.09);color:#fff;border:1px solid rgba(255,255,255,.18)}
+.moto-activo-btn.finalizar{background:linear-gradient(135deg,#3b82f6,#1d4ed8);color:#fff;box-shadow:0 6px 16px rgba(37,99,235,.3)}
+/* Bottom bar */
+.moto-bottombar{position:absolute;bottom:0;left:0;right:0;z-index:10;display:flex;align-items:center;padding:12px 28px calc(env(safe-area-inset-bottom,0px) + 18px);background:linear-gradient(to top,rgba(0,0,0,.9) 0%,rgba(0,0,0,.55) 65%,transparent 100%)}
+.moto-bottom-side{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer}
+.moto-bottom-side img{width:26px;height:26px;object-fit:contain;filter:brightness(0) invert(1);opacity:.72}
+.moto-bottom-side span{font-size:.67rem;font-weight:600;color:rgba(255,255,255,.58);letter-spacing:.02em}
+.moto-bottom-center{flex:0 0 auto;display:flex;align-items:center;justify-content:center;width:72px}
+.moto-off-btn{width:62px;height:62px;border-radius:50%;background:linear-gradient(145deg,#ef4444,#b91c1c);display:none;align-items:center;justify-content:center;font-size:.78rem;font-weight:900;color:#fff;letter-spacing:.05em;cursor:pointer;box-shadow:0 8px 28px rgba(239,68,68,.5);border:2.5px solid rgba(255,255,255,.2)}
+.moto-off-btn.visible{display:flex}
+/* Doc banner (franja naranja pulsante) */
+@keyframes docPulse{0%,100%{box-shadow:0 6px 22px rgba(240,90,40,.45)}55%{box-shadow:0 6px 32px rgba(240,90,40,.18)}}
+.moto-doc-banner{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 74px);left:14px;right:14px;z-index:20;background:var(--orange);color:#fff;border-radius:16px;padding:11px 14px 11px 16px;display:none;align-items:center;gap:12px;cursor:pointer;animation:docPulse 2s ease-in-out infinite}
+.moto-doc-banner.visible{display:flex}
+.moto-doc-banner.gris{background:#475569;animation:none;box-shadow:0 4px 16px rgba(0,0,0,.28);cursor:default}
+.moto-doc-banner-icon{font-size:1.1rem;flex-shrink:0}
+.moto-doc-banner-text{flex:1;font-size:.82rem;font-weight:700;line-height:1.3}
+.moto-doc-banner-arrow{width:26px;height:26px;border-radius:9px;background:rgba(255,255,255,.22);display:flex;align-items:center;justify-content:center;font-size:.88rem;flex-shrink:0}
+/* Doc sheet (bottom sheet modal) */
+.moto-doc-sheet-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(7px);z-index:600;display:none}
+.moto-doc-sheet-bg.visible{display:block}
+.moto-doc-sheet{position:fixed;bottom:0;left:0;right:0;margin:0 auto;max-width:480px;z-index:601;background:var(--surface);border-radius:28px 28px 0 0;padding:0 22px calc(env(safe-area-inset-bottom,0px) + 28px);transform:translateY(100%);transition:transform .38s cubic-bezier(.32,0,.15,1)}
+.moto-doc-sheet.visible{transform:translateY(0)}
+.moto-doc-sheet-handle{width:40px;height:4px;border-radius:4px;background:var(--border-strong);margin:16px auto 22px}
+.moto-doc-sheet-close{position:absolute;top:16px;right:18px;width:32px;height:32px;border-radius:12px;border:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--muted);cursor:pointer;font-size:.8rem}
+.moto-doc-step-progress{display:flex;gap:7px;justify-content:center;margin-bottom:22px}
+.moto-doc-step-dot{height:6px;border-radius:3px;background:var(--border-strong);transition:.3s;width:6px}
+.moto-doc-step-dot.hecho{background:var(--green)}
+.moto-doc-step-dot.activo{background:var(--orange);width:22px}
+.moto-doc-step-badge{width:60px;height:60px;border-radius:20px;background:var(--orange-soft);color:var(--orange);font-size:1.5rem;font-weight:900;display:flex;align-items:center;justify-content:center;margin:0 auto 14px}
+.moto-doc-step-title{font-size:1.14rem;font-weight:800;letter-spacing:-.03em;text-align:center;margin-bottom:7px}
+.moto-doc-step-sub{font-size:.85rem;color:var(--muted);text-align:center;line-height:1.65;margin-bottom:22px;max-width:320px;margin-left:auto;margin-right:auto}
+.moto-doc-upload-area{display:grid;gap:10px;margin-bottom:18px}
+.moto-doc-upload-slot{position:relative;display:flex;align-items:center;gap:13px;padding:14px 15px;background:var(--surface2);border:1.5px dashed var(--border-strong);border-radius:16px;cursor:pointer;transition:.22s;overflow:hidden}
+.moto-doc-upload-slot.loaded{border-color:var(--green);background:var(--green-soft)}
+.moto-doc-upload-slot input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;font-size:0;width:100%;height:100%}
+.moto-doc-upload-slot-icon{width:38px;height:38px;border-radius:13px;background:var(--surface3);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;transition:.22s}
+.moto-doc-upload-slot.loaded .moto-doc-upload-slot-icon{background:rgba(22,163,74,.12)}
+.moto-doc-upload-slot-label{font-size:.84rem;font-weight:600;color:var(--muted);transition:.22s}
+.moto-doc-upload-slot.loaded .moto-doc-upload-slot-label{color:var(--green)}
+.moto-doc-send-btn{width:100%;border:none;border-radius:16px;padding:15px;background:linear-gradient(135deg,var(--orange),#d94510);color:#fff;font-size:.94rem;font-weight:800;cursor:pointer;box-shadow:0 12px 28px rgba(240,90,40,.3);transition:.2s}
+.moto-doc-send-btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.moto-doc-terms-wrap{margin-bottom:20px;padding:18px;background:var(--surface2);border:1px solid var(--border);border-radius:16px}
+.moto-doc-terms-row{display:flex;align-items:flex-start;gap:13px;cursor:pointer}
+.moto-doc-terms-row input[type=checkbox]{width:22px;height:22px;flex-shrink:0;margin-top:2px;accent-color:var(--orange);cursor:pointer}
+.moto-doc-terms-row span{font-size:.86rem;color:var(--muted);line-height:1.65}
+.moto-doc-terms-row a{color:var(--orange);font-weight:600;text-decoration:none}
+/* Drawer */
+.moto-drawer-bg{position:absolute;inset:0;z-index:25;background:rgba(0,0,0,.55);display:none}
+.moto-drawer-bg.open{display:block}
+.moto-drawer{position:absolute;bottom:0;left:0;right:0;z-index:26;background:#0d0d16;border-radius:24px 24px 0 0;border-top:1px solid rgba(255,255,255,.1);transform:translateY(100%);transition:.38s cubic-bezier(.16,1,.3,1);max-height:80vh;overflow-y:auto}
+.moto-drawer.open{transform:translateY(0)}
+.moto-drawer-handle{width:38px;height:4px;border-radius:2px;background:rgba(255,255,255,.18);margin:13px auto 5px;cursor:pointer}
+.moto-drawer-hdr{display:flex;align-items:center;justify-content:space-between;padding:6px 20px 14px}
+.moto-drawer-title{font-size:1.05rem;font-weight:800;color:#fff}
+.moto-drawer-close{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.09);border:none;color:rgba(255,255,255,.65);cursor:pointer;font-size:.82rem}
+.moto-drawer-body{padding:0 20px 44px}
+.moto-perfil-row{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:.86rem}
+.moto-perfil-label{color:rgba(255,255,255,.45)}
+.moto-perfil-val{font-weight:700;color:#fff;text-align:right;max-width:60%}
+.moto-recaudo-big{text-align:center;padding:28px 0}
+.moto-recaudo-amount{font-size:2.5rem;font-weight:900;letter-spacing:-.04em;color:#22c55e}
+.moto-recaudo-label{font-size:.8rem;color:rgba(255,255,255,.45);margin-top:6px}
+.moto-hist-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:15px;padding:13px;margin-bottom:9px}
+.moto-hist-ruta{font-size:.83rem;font-weight:700;color:#fff;margin-bottom:3px}
+.moto-hist-meta{font-size:.73rem;color:rgba(255,255,255,.45);display:flex;justify-content:space-between}
+.moto-empty-dark{text-align:center;padding:40px 20px;color:rgba(255,255,255,.3);font-size:.85rem}
+/* Estrellas (calificación) */
 .moto-estrellas{display:flex;justify-content:center;gap:6px;margin:12px 0}
 .moto-estrella{font-size:1.6rem;cursor:pointer;color:var(--border-strong);transition:.15s}
 .moto-estrella.activa{color:#f59e0b}
 .moto-comentario{width:100%;margin-top:10px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--surface2);resize:none;font-size:.84rem;color:var(--text)}
-.moto-map-wrap{display:none;width:100%;height:280px;border-radius:20px;overflow:hidden;border:1px solid var(--border);margin-bottom:18px;position:relative}
-.moto-map-wrap.visible{display:block}
-#moto-mapa{width:100%;height:100%}
-.go-wrap.minimizado{padding:12px 0 8px}
-.go-wrap.minimizado .go-ring{width:56px;height:56px;border-color:var(--border);box-shadow:0 4px 12px rgba(15,23,42,.06)}
-.go-wrap.minimizado .go-ring.activo{border-color:var(--border);box-shadow:0 4px 12px rgba(15,23,42,.06)}
-.go-wrap.minimizado .go-ring.activo .go-btn{background:linear-gradient(135deg,#94a3b8,#64748b);box-shadow:none}
-.go-wrap.minimizado .go-btn{width:44px;height:44px;font-size:.82rem;font-weight:800;letter-spacing:.04em;background:linear-gradient(135deg,#94a3b8,#64748b);box-shadow:none}
-.go-wrap.minimizado .go-pulse{display:none}
-.go-wrap.minimizado .go-status{font-size:.74rem;margin-top:8px}
+/* Doc ruta base */
 .doc-ruta{padding:0}
 .doc-ruta-title{font-size:.92rem;font-weight:800;margin-bottom:6px}
 .doc-ruta-sub{font-size:.78rem;color:var(--muted);line-height:1.6;margin-bottom:20px}
@@ -389,19 +451,13 @@ nav{position:sticky;top:0;z-index:300;background:rgba(255,255,255,.92);backdrop-
 .doc-paso.bloqueado{opacity:.45;pointer-events:none}
 .doc-paso.activo{border-color:var(--blue-2);box-shadow:0 4px 16px rgba(37,99,235,.1)}
 .doc-paso.completado{border-color:var(--green);background:rgba(22,163,74,.03)}
-.doc-paso.revision{border-color:#f59e0b;background:rgba(245,158,11,.03)}
-.doc-paso.rechazado{border-color:var(--orange);background:var(--orange-soft)}
 .doc-paso-num{width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:800;flex:0 0 auto;background:var(--surface2);color:var(--muted)}
 .doc-paso.activo .doc-paso-num{background:var(--blue-soft);color:var(--blue-2)}
 .doc-paso.completado .doc-paso-num{background:var(--green-soft);color:var(--green)}
-.doc-paso.revision .doc-paso-num{background:rgba(245,158,11,.12);color:#f59e0b}
-.doc-paso.rechazado .doc-paso-num{background:var(--orange-soft);color:var(--orange)}
 .doc-paso-info{flex:1}
 .doc-paso-title{font-size:.86rem;font-weight:700}
 .doc-paso-status{font-size:.72rem;color:var(--muted);margin-top:3px}
 .doc-paso-status.green{color:var(--green)}
-.doc-paso-status.yellow{color:#f59e0b}
-.doc-paso-status.red{color:var(--orange)}
 .doc-paso-upload{margin-top:10px}
 .doc-paso-file{width:100%;padding:8px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;font-size:.82rem}
 .doc-paso-btn{margin-top:8px;width:100%;padding:11px;border:none;border-radius:12px;background:linear-gradient(135deg,var(--blue),var(--blue-2));color:#fff;font-size:.82rem;font-weight:700;cursor:pointer}
@@ -701,69 +757,82 @@ body.selector-activo{}
   </div>
 </div>
 <div class="vista" id="vista-panel-mensajero">
-  <div class="moto-panel">
-    <div class="moto-top">
-      <div>
-        <div class="moto-greeting" id="moto-nombre">Hola, Mensajero</div>
-        <div class="moto-city" id="moto-ciudad">Ciudad</div>
-      </div>
-      <div class="moto-avatar-sm" id="moto-avatar" onclick="motoSubpanel('perfil')">M</div>
+<div class="moto-frame">
+  <!-- Mapa fullscreen -->
+  <div class="moto-mapa-full"><div id="moto-mapa"></div></div>
+  <!-- Overlay oscuro cuando inactivo -->
+  <div class="moto-map-inactive" id="moto-map-inactive"></div>
+  <!-- Top bar -->
+  <div class="moto-topbar">
+    <div class="moto-topbar-logo">RADI<span>Z</span></div>
+    <div class="moto-topbar-right">
+      <div class="moto-topbar-name" id="moto-nombre">Mensajero</div>
+      <button class="moto-menu-btn" onclick="toggleMotoMenu()">⋮</button>
     </div>
-    <div class="go-wrap">
-      <div class="go-ring" id="go-ring" onclick="toggleGo()">
-        <div class="go-btn" id="go-btn">GO</div>
-      </div>
-      <div class="go-status" id="go-status">Estás desconectado</div>
+  </div>
+  <!-- Menú desplegable -->
+  <div class="moto-menu-dd" id="moto-menu-dd">
+    <div class="moto-menu-dd-item" onclick="abrirMotoDrawer('perfil')"><span class="moto-menu-dd-icon">👤</span>Mi perfil</div>
+    <div class="moto-menu-dd-item" onclick="abrirMotoDrawer('recaudo')"><span class="moto-menu-dd-icon">💳</span>Historial de pagos</div>
+    <div class="moto-menu-dd-item red" onclick="cerrarSesion()"><span class="moto-menu-dd-icon">↪</span>Cerrar sesión</div>
+  </div>
+  <!-- Botón GO central -->
+  <div class="moto-go-center" id="moto-go-center">
+    <div class="go-ring" id="go-ring" onclick="toggleGo()">
+      <div class="go-pulse"></div>
+      <div class="go-pulse2"></div>
+      <div class="go-btn" id="go-btn">GO</div>
     </div>
-    <div class="moto-map-wrap" id="moto-map-wrap"><div id="moto-mapa"></div></div>
-    <div id="moto-doc-ruta-wrap"></div>
-    <div id="moto-servicio-activo-wrap"></div>
-    <div class="moto-stats">
-      <div class="moto-stat"><div class="moto-stat-val blue" id="moto-km">0</div><div class="moto-stat-label">Km este mes</div></div>
-      <div class="moto-stat"><div class="moto-stat-val orange" id="moto-entregas">0</div><div class="moto-stat-label">Entregas</div></div>
-      <div class="moto-stat"><div class="moto-stat-val green" id="moto-dinero">$0</div><div class="moto-stat-label">Generado</div></div>
+    <div class="go-status" id="go-status">Toca para activarte</div>
+  </div>
+  <!-- Cards de servicio -->
+  <div class="moto-cards-stack" id="moto-cards-stack"></div>
+  <!-- Detalle de servicio (slide up) -->
+  <div class="moto-detail-overlay" id="moto-detail-overlay">
+    <div class="moto-detail-mapa"><div id="moto-mapa-ruta"></div></div>
+    <button class="moto-detail-close" onclick="cerrarServicioDetail()">✕</button>
+    <div class="moto-detail-sheet" id="moto-detail-sheet"></div>
+  </div>
+  <!-- Servicio activo en curso -->
+  <div class="moto-activo-bar" id="moto-activo-bar"></div>
+  <!-- Franja documentos pendientes -->
+  <div class="moto-doc-banner" id="moto-doc-banner" onclick="abrirDocSheet()">
+    <div class="moto-doc-banner-icon">📋</div>
+    <div class="moto-doc-banner-text" id="moto-doc-banner-text">¡Ya casi! Cargue su documentación aquí</div>
+    <div class="moto-doc-banner-arrow">›</div>
+  </div>
+  <!-- Bottom bar -->
+  <div class="moto-bottombar">
+    <div class="moto-bottom-side" onclick="abrirMotoDrawer('historial')">
+      <img src="historial-entregas.png" alt="Entregas">
+      <span>Entregas</span>
     </div>
-    <div class="moto-actions">
-      <div class="moto-action" onclick="motoSubpanel('servicios')">
-        <div class="moto-action-icon blue">⚡</div>
-        <div><div class="moto-action-text">Servicios</div><div class="moto-action-sub">Pedidos activos</div></div>
-      </div>
-      <div class="moto-action" onclick="motoSubpanel('historial')">
-        <div class="moto-action-icon orange">📋</div>
-        <div><div class="moto-action-text">Historial</div><div class="moto-action-sub">Mis entregas</div></div>
-      </div>
-      <div class="moto-action" onclick="motoSubpanel('recaudo')">
-        <div class="moto-action-icon green">💰</div>
-        <div><div class="moto-action-text">Recaudo</div><div class="moto-action-sub">Mi dinero</div></div>
-      </div>
-      <div class="moto-action" onclick="motoSubpanel('perfil')">
-        <div class="moto-action-icon gray">👤</div>
-        <div><div class="moto-action-text">Perfil</div><div class="moto-action-sub">Mis datos</div></div>
-      </div>
+    <div class="moto-bottom-center">
+      <div class="moto-off-btn" id="moto-off-btn" onclick="toggleGo()">OFF</div>
     </div>
-    <div class="moto-section-title">Actividad del mes</div>
-    <div class="moto-chart-wrap">
-      <div class="moto-chart-bar" id="moto-chart"></div>
+    <div class="moto-bottom-side" onclick="abrirMotoDrawer('recaudo')">
+      <img src="historial-pagos.png" alt="Recaudo">
+      <span>Recaudo</span>
     </div>
-    <div id="moto-main-content"></div>
   </div>
-  <div class="moto-panel moto-subpanel" id="moto-sub-servicios">
-    <div class="moto-sub-header"><div class="moto-sub-back" onclick="motoVolverPanel()">←</div><div class="moto-sub-title">Servicios disponibles</div></div>
-    <div id="moto-servicios-lista"><div class="moto-empty">Cargando servicios...</div></div>
+  <!-- Drawer inferior -->
+  <div class="moto-drawer-bg" id="moto-drawer-bg" onclick="cerrarMotoDrawer()"></div>
+  <div class="moto-drawer" id="moto-drawer">
+    <div class="moto-drawer-handle" onclick="cerrarMotoDrawer()"></div>
+    <div class="moto-drawer-hdr">
+      <div class="moto-drawer-title" id="moto-drawer-title">Panel</div>
+      <button class="moto-drawer-close" onclick="cerrarMotoDrawer()">✕</button>
+    </div>
+    <div class="moto-drawer-body" id="moto-drawer-body"></div>
   </div>
-  <div class="moto-panel moto-subpanel" id="moto-sub-historial">
-    <div class="moto-sub-header"><div class="moto-sub-back" onclick="motoVolverPanel()">←</div><div class="moto-sub-title">Historial de entregas</div></div>
-    <div id="moto-historial-lista"><div class="moto-empty">Cargando historial...</div></div>
-  </div>
-  <div class="moto-panel moto-subpanel" id="moto-sub-recaudo">
-    <div class="moto-sub-header"><div class="moto-sub-back" onclick="motoVolverPanel()">←</div><div class="moto-sub-title">Mi recaudo</div></div>
-    <div class="moto-recaudo-big"><div class="moto-recaudo-amount" id="moto-recaudo-total">$ 0</div><div class="moto-recaudo-label">Disponible para retiro</div></div>
-    <div id="moto-recaudo-detalle"></div>
-  </div>
-  <div class="moto-panel moto-subpanel" id="moto-sub-perfil">
-    <div class="moto-sub-header"><div class="moto-sub-back" onclick="motoVolverPanel()">←</div><div class="moto-sub-title">Mi perfil</div></div>
-    <div id="moto-perfil-datos"></div>
-  </div>
+</div><!-- /moto-frame -->
+<!-- Sheet documentos (fixed, fuera del frame) -->
+<div class="moto-doc-sheet-bg" id="moto-doc-sheet-bg" onclick="cerrarDocSheet()"></div>
+<div class="moto-doc-sheet" id="moto-doc-sheet">
+  <button class="moto-doc-sheet-close" onclick="cerrarDocSheet()">✕</button>
+  <div class="moto-doc-sheet-handle"></div>
+  <div id="moto-doc-sheet-body"></div>
+</div>
 </div>
 <div class="recarga-overlay" id="modal-recarga" onclick="cerrarModalRecargaOverlay(event)">
   <div class="recarga-card">
@@ -870,7 +939,7 @@ body.selector-activo{}
 <div class="toast" id="toast"></div>
 <script>
 // ── CONFIGURACIÓN ──
-const API_BASE='https://script.google.com/macros/s/AKfycby8HxUKgfRc4-nTKC6AokZPSLAyPoEHdVuMVedLCJ4sNRkcdYgpNrRy8wHF5Boqqz0r/exec';
+const API_BASE='https://script.google.com/macros/s/AKfycbxpqPg9ChaNEP_thf1W_popTPPmT6qcBeTpgi9Y9w0fAjpI0GbOXnF-oVOaHUQP8f2y/exec';
 const APP_TOKEN='radiz_v2_2026_seguro';
 function apiUrl(params){return API_BASE+'?'+new URLSearchParams({appToken:APP_TOKEN,...params})}
 
@@ -1225,49 +1294,32 @@ async function ejecutarRegistroMensajero(){
 let goActivo=false,motoUsuario=null,motoPedidos=[],motoHistorial=[];
 
 function toggleGo(){
-  goActivo=!goActivo;
-  const ring=document.getElementById('go-ring');
-  const wrap=document.querySelector('.go-wrap');
-  const status=document.getElementById('go-status');
-  const btn=document.getElementById('go-btn');
-  const mapWrap=document.getElementById('moto-map-wrap');
-  ring.classList.toggle('activo',goActivo);
+  if(!goActivo){
+    if(motoUsuario&&motoUsuario.estado!=='activo'){showToast('Completa tu documentación para activarte','error');return}
+    goActivo=true;
+  }else{
+    goActivo=false;
+  }
+  const goCenter=document.getElementById('moto-go-center');
+  const offBtn=document.getElementById('moto-off-btn');
+  const overlay=document.getElementById('moto-map-inactive');
   if(goActivo){
-    if(motoUsuario&&motoUsuario.estado!=='activo'){showToast('Completa tu documentación para activarte','error');goActivo=false;return}
-    wrap.classList.add('minimizado');
-    btn.textContent='OFF';
-    status.textContent='Conectando...';
-    status.classList.add('activo');
-    const pulse=ring.querySelector('.go-pulse');
-    if(pulse)pulse.remove();
-    mapWrap.classList.add('visible');
+    goCenter.classList.add('oculto');
+    offBtn.classList.add('visible');
+    overlay.classList.add('oculto');
     if(navigator.geolocation){
       navigator.geolocation.getCurrentPosition(
-        function(pos){
-          const lat=pos.coords.latitude,lng=pos.coords.longitude;
-          enviarGoBackend(true,lat,lng);
-          iniciarMapaMotoConCoords(lat,lng);
-          status.textContent='Conectado — toca OFF para desconectar';
-        },
-        function(){
-          enviarGoBackend(true,0,0);
-          iniciarMapaMoto();
-          status.textContent='Conectado (sin ubicación) — toca OFF para desconectar';
-        },
+        pos=>{const {latitude:lat,longitude:lng}=pos.coords;enviarGoBackend(true,lat,lng);iniciarMapaMotoConCoords(lat,lng)},
+        ()=>{enviarGoBackend(true,0,0);iniciarMapaMoto()},
         {enableHighAccuracy:true,timeout:10000}
       );
-    }else{
-      enviarGoBackend(true,0,0);
-      iniciarMapaMoto();
-      status.textContent='Conectado — toca OFF para desconectar';
-    }
+    }else{enviarGoBackend(true,0,0);iniciarMapaMoto()}
     cargarServiciosDisponibles();
   }else{
-    wrap.classList.remove('minimizado');
-    btn.textContent='GO';
-    status.textContent='Estás desconectado';
-    status.classList.remove('activo');
-    mapWrap.classList.remove('visible');
+    goCenter.classList.remove('oculto');
+    offBtn.classList.remove('visible');
+    overlay.classList.remove('oculto');
+    document.getElementById('moto-cards-stack').innerHTML='';
     enviarGoBackend(false,0,0);
   }
 }
@@ -1275,41 +1327,108 @@ function toggleGo(){
 function cargarPanelMensajero(){
   if(!usuarioActual||usuarioActual.rol!=='mensajero')return;
   motoUsuario=usuarioActual;
-  document.getElementById('moto-nombre').textContent='Hola, '+motoUsuario.nombre.split(' ')[0];
-  document.getElementById('moto-ciudad').textContent=motoUsuario.ciudad||'Colombia';
-  const ini=motoUsuario.nombre.split(' ').map(p=>p[0]).join('').substring(0,2).toUpperCase();
-  document.getElementById('moto-avatar').textContent=ini;
+  document.getElementById('moto-nombre').textContent=motoUsuario.nombre.split(' ')[0];
   motoUsuario.pasoDocumentos=motoUsuario.pasoDocumentos||0;
+  if(Notification&&Notification.permission==='default')Notification.requestPermission();
   renderDocRuta();
-  renderMotoChart();
+  if(motoUsuario.estado==='pendiente_aprobacion')iniciarPollingEstado();
   cargarHistorialMoto();
-  renderMotoPerfil();
-}
-
-function renderMotoChart(){
-  const meses=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-  const hoy=new Date().getMonth();
-  const chart=document.getElementById('moto-chart');
-  let h='';
-  for(let i=0;i<6;i++){
-    const idx=(hoy-5+i+12)%12;
-    const val=Math.floor(Math.random()*80)+10;
-    h+='<div class="moto-chart-col"><div class="moto-chart-val">'+val+'</div><div class="moto-chart-fill" style="height:'+val+'%"></div><div class="moto-chart-label">'+meses[idx]+'</div></div>';
-  }
-  chart.innerHTML=h;
+  iniciarMapaMotoBackground();
 }
 
 async function cargarServiciosDisponibles(){
-  const lista=document.getElementById('moto-servicios-lista');
-  lista.innerHTML='<div class="moto-empty">Buscando servicios...</div>';
+  if(!goActivo||!motoUsuario)return;
   try{
     const ciudad=motoUsuario.ciudad||'';
     const r=await fetch(apiUrl({accion:'pedidos_disponibles',ciudad:ciudad}));
     const d=await r.json();
-    if(!d.ok||!d.pedidos.length){lista.innerHTML='<div class="moto-empty">No hay servicios disponibles en este momento</div>';return}
+    if(!d.ok||!d.pedidos||!d.pedidos.length)return;
     motoPedidos=d.pedidos;
-    lista.innerHTML=motoPedidos.map(p=>'<div class="moto-pedido-card"><div class="moto-pedido-row"><div><div class="moto-pedido-ruta">'+p.origen+' → '+p.destino+'</div><div class="moto-pedido-meta">'+p.ciudad+' · '+(p.tipo||'mensajería')+'</div></div><div class="moto-pedido-precio">'+fmtCOP(p.tarifa)+'</div></div><button class="moto-pedido-btn" onclick="aceptarServicio(\''+p.id+'\')">Aceptar servicio</button></div>').join('');
-  }catch(e){lista.innerHTML='<div class="moto-empty">Error de conexión</div>'}
+    const stack=document.getElementById('moto-cards-stack');
+    const max=Math.min(motoPedidos.length,3);
+    stack.innerHTML=motoPedidos.slice(0,max).map(p=>`
+      <div class="moto-srv-card" id="moto-card-${p.id}" onclick="abrirServicioDetail('${p.id}')">
+        <div class="moto-card-timer-bar"></div>
+        <div class="moto-card-head">
+          <span class="moto-card-tipo">${p.tipo||'Mensajería'}</span>
+          <span class="moto-card-precio">${fmtCOP(p.tarifa)}</span>
+        </div>
+        <div class="moto-card-ruta">${p.origen} → ${p.destino}</div>
+        <div class="moto-card-meta"><span>📍 ${p.ciudad}</span>${p.distancia_km?`<span>🛣 ${p.distancia_km} km</span>`:''}</div>
+      </div>`).join('');
+    setTimeout(()=>{if(stack)stack.innerHTML=''},25000);
+  }catch(e){}
+}
+
+function abrirServicioDetail(idPedido){
+  const p=motoPedidos.find(x=>x.id===idPedido);
+  if(!p)return;
+  document.getElementById('moto-detail-sheet').innerHTML=`
+    <div class="moto-detail-precio">${fmtCOP(p.tarifa)}</div>
+    <div class="moto-detail-ruta">${p.origen} → ${p.destino}</div>
+    <div class="moto-detail-chips">
+      ${p.distancia_km?`<div class="moto-detail-chip"><div class="moto-detail-chip-val">${p.distancia_km} km</div><div class="moto-detail-chip-lbl">Distancia</div></div>`:''}
+      <div class="moto-detail-chip"><div class="moto-detail-chip-val">${p.tipo||'Mensajería'}</div><div class="moto-detail-chip-lbl">Tipo</div></div>
+      <div class="moto-detail-chip"><div class="moto-detail-chip-val">${p.ciudad}</div><div class="moto-detail-chip-lbl">Ciudad</div></div>
+    </div>
+    ${p.descripcion?`<div style="font-size:.81rem;color:rgba(255,255,255,.5);margin-bottom:16px">${p.descripcion}</div>`:''}
+    <div class="moto-detail-btns">
+      <button class="moto-detail-btn-no" onclick="cerrarServicioDetail()">Rechazar</button>
+      <button class="moto-detail-btn-si" onclick="aceptarServicio('${p.id}')">Aceptar servicio</button>
+    </div>`;
+  document.getElementById('moto-detail-overlay').classList.add('open');
+  setTimeout(()=>dibujarRutaDetail(p),300);
+}
+function cerrarServicioDetail(){document.getElementById('moto-detail-overlay').classList.remove('open')}
+
+let mapaDetail=null,directionsServiceDetail=null,directionsRendererDetail=null;
+function dibujarRutaDetail(pedido){
+  const el=document.getElementById('moto-mapa-ruta');if(!el)return;
+  const coords=getCiudadCoords();
+  if(!mapaDetail){mapaDetail=new google.maps.Map(el,{center:coords,zoom:13,disableDefaultUI:true,styles:[{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]}]})}
+  if(!directionsServiceDetail)directionsServiceDetail=new google.maps.DirectionsService();
+  if(!directionsRendererDetail){directionsRendererDetail=new google.maps.DirectionsRenderer({map:mapaDetail,suppressMarkers:false,polylineOptions:{strokeColor:'#22c55e',strokeWeight:5}})}
+  else{directionsRendererDetail.setMap(mapaDetail)}
+  const gc=new google.maps.Geocoder();
+  gc.geocode({address:pedido.origen+', Colombia'},function(rO,sO){
+    if(sO!=='OK')return;
+    gc.geocode({address:pedido.destino+', Colombia'},function(rD,sD){
+      if(sD!=='OK')return;
+      directionsServiceDetail.route({origin:rO[0].geometry.location,destination:rD[0].geometry.location,travelMode:google.maps.TravelMode.DRIVING,region:'CO'},function(res,st){if(st==='OK')directionsRendererDetail.setDirections(res)});
+    });
+  });
+}
+
+function toggleMotoMenu(){
+  const dd=document.getElementById('moto-menu-dd');
+  dd.classList.toggle('open');
+  if(dd.classList.contains('open')){
+    setTimeout(()=>document.addEventListener('click',function fn(e){if(!dd.contains(e.target)){dd.classList.remove('open');document.removeEventListener('click',fn)}},),50);
+  }
+}
+function abrirMotoDrawer(panel){
+  document.getElementById('moto-menu-dd').classList.remove('open');
+  const titulos={historial:'Historial de entregas',recaudo:'Mi recaudo',perfil:'Mi perfil'};
+  document.getElementById('moto-drawer-title').textContent=titulos[panel]||'Panel';
+  const body=document.getElementById('moto-drawer-body');
+  if(panel==='perfil')body.innerHTML=renderMotoPerfilHTML();
+  else if(panel==='historial')body.innerHTML=renderHistorialHTML();
+  else if(panel==='recaudo')body.innerHTML=renderRecaudoHTML();
+  document.getElementById('moto-drawer').classList.add('open');
+  document.getElementById('moto-drawer-bg').classList.add('open');
+}
+function cerrarMotoDrawer(){document.getElementById('moto-drawer').classList.remove('open');document.getElementById('moto-drawer-bg').classList.remove('open')}
+function renderMotoPerfilHTML(){
+  if(!motoUsuario)return'';
+  return[['Nombre',motoUsuario.nombre],['Correo',motoUsuario.correo],['Ciudad',motoUsuario.ciudad||'—'],['Placa',motoUsuario.placa||'—'],['Moto',motoUsuario.moto||'—'],['Estado',motoUsuario.estado||'—']].map(d=>`<div class="moto-perfil-row"><span class="moto-perfil-label">${d[0]}</span><span class="moto-perfil-val">${d[1]}</span></div>`).join('');
+}
+function renderHistorialHTML(){
+  if(!motoHistorial.length)return'<div class="moto-empty-dark">Aún no tienes entregas registradas</div>';
+  return motoHistorial.map(p=>`<div class="moto-hist-card"><div class="moto-hist-ruta">${p.origen} → ${p.destino}</div><div class="moto-hist-meta"><span>${formatFecha(p.fecha)}</span><span>${fmtCOP(p.tarifa)}</span></div></div>`).join('');
+}
+function renderRecaudoHTML(){
+  const total=motoHistorial.reduce((a,p)=>a+Number(p.tarifa||0),0);
+  return`<div class="moto-recaudo-big"><div class="moto-recaudo-amount">${fmtCOP(total)}</div><div class="moto-recaudo-label">Total generado</div></div>`;
 }
 
 
@@ -1319,61 +1438,38 @@ async function cargarHistorialMoto(){
     const r=await fetch(apiUrl({accion:'mis_pedidos_motor',idMotor:motoUsuario.id}));
     const d=await r.json();
     motoHistorial=d.ok?d.pedidos:[];
-    const lista=document.getElementById('moto-historial-lista');
-    if(!motoHistorial.length){lista.innerHTML='<div class="moto-empty">Aún no tienes entregas registradas</div>';return}
-    lista.innerHTML=motoHistorial.map(p=>{
-      const en=normalizarEstado(p.estado);
-      return'<div class="moto-pedido-card"><div class="moto-pedido-row"><div><div class="moto-pedido-ruta">'+p.origen+' → '+p.destino+'</div><div class="moto-pedido-meta">'+p.ciudad+' · '+formatFecha(p.fecha)+'</div></div><div><div class="moto-pedido-precio">'+fmtCOP(p.tarifa)+'</div><span class="estado-badge '+en+'" style="margin-top:4px"><span class="estado-dot"></span>'+textoEstado(en)+'</span></div></div></div>'
-    }).join('');
-    const totalKm=motoHistorial.length*8;
-    const totalDinero=motoHistorial.reduce((a,p)=>a+Number(p.tarifa||0),0);
-    document.getElementById('moto-km').textContent=totalKm;
-    document.getElementById('moto-entregas').textContent=motoHistorial.length;
-    document.getElementById('moto-dinero').textContent=fmtCOP(totalDinero);
-    document.getElementById('moto-recaudo-total').textContent=fmtCOP(totalDinero);
   }catch(e){}
 }
 
-function renderMotoPerfil(){
-  if(!motoUsuario)return;
-  const datos=[
-    ['Nombre',motoUsuario.nombre],
-    ['Correo',motoUsuario.correo],
-    ['Ciudad',motoUsuario.ciudad||'—'],
-    ['Placa',motoUsuario.placa||'—'],
-    ['Moto',motoUsuario.moto||'—'],
-    ['Estado',motoUsuario.estado||'—']
-  ];
-  document.getElementById('moto-perfil-datos').innerHTML=datos.map(d=>'<div class="moto-perfil-row"><span class="moto-perfil-label">'+d[0]+'</span><span class="moto-perfil-val">'+d[1]+'</span></div>').join('');
-}
-
-function motoSubpanel(panel){
-  document.querySelectorAll('.moto-subpanel').forEach(s=>s.classList.remove('activa'));
-  const el=document.getElementById('moto-sub-'+panel);
-  if(el){el.classList.add('activa');el.scrollIntoView({behavior:'smooth',block:'start'})}
-  if(panel==='servicios')cargarServiciosDisponibles();
-}
-
-function motoVolverPanel(){
-  document.querySelectorAll('.moto-subpanel').forEach(s=>s.classList.remove('activa'));
-  window.scrollTo({top:0,behavior:'smooth'});
-}
-
 let mapaMotor=null,mapaMotorIniciado=false;
-function iniciarMapaMoto(){
-  if(mapaMotorIniciado&&mapaMotor){mapaMotor.setCenter(getCiudadCoords());return}
-  const coords=getCiudadCoords();
+const MAPA_ESTILOS_OSCURO=[
+  {elementType:'geometry',stylers:[{color:'#1c1c2e'}]},
+  {elementType:'labels.text.fill',stylers:[{color:'#3d3d60'}]},
+  {elementType:'labels.text.stroke',stylers:[{color:'#1c1c2e'}]},
+  {featureType:'road',elementType:'geometry',stylers:[{color:'#26263e'}]},
+  {featureType:'road',elementType:'geometry.stroke',stylers:[{color:'#1c1c2e'}]},
+  {featureType:'road.arterial',elementType:'geometry',stylers:[{color:'#2e2e48'}]},
+  {featureType:'water',elementType:'geometry',stylers:[{color:'#0e0e1c'}]},
+  {featureType:'poi',stylers:[{visibility:'off'}]},
+  {featureType:'transit',stylers:[{visibility:'off'}]}
+];
+const MAPA_ESTILOS_ACTIVO=[
+  {featureType:'poi',stylers:[{visibility:'off'}]},
+  {featureType:'transit',stylers:[{visibility:'off'}]},
+  {featureType:'road',elementType:'labels',stylers:[{visibility:'simplified'}]}
+];
+function iniciarMapaMotoBackground(){
+  if(mapaMotorIniciado&&mapaMotor)return;
   mapaMotor=new google.maps.Map(document.getElementById('moto-mapa'),{
-    center:coords,
-    zoom:14,
-    disableDefaultUI:true,
-    zoomControl:false,
-    mapTypeControl:false,
-    streetViewControl:false,
-    fullscreenControl:false,
-    styles:[{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]}]
+    center:getCiudadCoords(),zoom:13,disableDefaultUI:true,styles:MAPA_ESTILOS_OSCURO
   });
   mapaMotorIniciado=true;
+}
+function iniciarMapaMoto(){
+  if(!mapaMotorIniciado||!mapaMotor)iniciarMapaMotoBackground();
+  mapaMotor.setOptions({styles:MAPA_ESTILOS_ACTIVO});
+  mapaMotor.setCenter(getCiudadCoords());
+  mapaMotor.setZoom(14);
 }
 
 function getCiudadCoords(){
@@ -1409,24 +1505,12 @@ async function enviarGoBackend(activo,lat,lng){
 }
 
 function iniciarMapaMotoConCoords(lat,lng){
-  const coords={lat:lat,lng:lng};
-  if(mapaMotorIniciado&&mapaMotor){
-    mapaMotor.setCenter(coords);
-    mapaMotor.setZoom(15);
-    return;
-  }
-  mapaMotor=new google.maps.Map(document.getElementById('moto-mapa'),{
-    center:coords,
-    zoom:15,
-    disableDefaultUI:true,
-    zoomControl:false,
-    mapTypeControl:false,
-    streetViewControl:false,
-    fullscreenControl:false,
-    styles:[{featureType:'poi',stylers:[{visibility:'off'}]},{featureType:'transit',stylers:[{visibility:'off'}]}]
-  });
-  mapaMotorIniciado=true;
-  new google.maps.Marker({position:coords,map:mapaMotor,icon:{path:google.maps.SymbolPath.CIRCLE,scale:10,fillColor:'#16a34a',fillOpacity:1,strokeColor:'#fff',strokeWeight:2.5},title:'Tu ubicación'});
+  const coords={lat,lng};
+  if(!mapaMotorIniciado||!mapaMotor)iniciarMapaMotoBackground();
+  mapaMotor.setOptions({styles:MAPA_ESTILOS_ACTIVO});
+  mapaMotor.setCenter(coords);
+  mapaMotor.setZoom(15);
+  new google.maps.Marker({position:coords,map:mapaMotor,icon:{path:google.maps.SymbolPath.CIRCLE,scale:10,fillColor:'#22c55e',fillOpacity:1,strokeColor:'#fff',strokeWeight:2.5},title:'Tu ubicación'});
 }
 
 let servicioActivoMoto=null;
@@ -1451,16 +1535,17 @@ async function aceptarServicio(idPedido){
 }
 
 function mostrarServicioActivo(pedido){
-  const wrap=document.getElementById('moto-servicio-activo-wrap');
-  wrap.innerHTML='<div class="moto-servicio-activo">'+
-    '<div class="moto-servicio-activo-title">Servicio en curso</div>'+
-    '<div class="moto-servicio-activo-ruta">'+pedido.origen+' → '+pedido.destino+'</div>'+
-    '<div class="moto-servicio-activo-meta">'+pedido.ciudad+' · '+fmtCOP(pedido.tarifa)+'</div>'+
-    '<div class="moto-finalizar-wrap">'+
-      '<input type="file" accept="image/*" class="moto-foto-entrega" id="foto-entrega-input">'+
-      '<button class="moto-finalizar-btn" onclick="finalizarServicio(\''+pedido.id+'\')">Confirmar entrega</button>'+
-    '</div>'+
-  '</div>';
+  const bar=document.getElementById('moto-activo-bar');
+  bar.className='moto-activo-bar visible';
+  bar.innerHTML=`<div class="moto-activo-lbl">Servicio en curso</div>
+    <div class="moto-activo-ruta">${pedido.origen} → ${pedido.destino} · ${fmtCOP(pedido.tarifa)}</div>
+    <div class="moto-activo-btns">
+      <label class="moto-activo-btn foto" for="foto-entrega-input">📷 Foto entrega</label>
+      <input type="file" accept="image/*" id="foto-entrega-input" capture="environment" style="display:none">
+      <button class="moto-activo-btn finalizar" onclick="finalizarServicio('${pedido.id}')">Confirmar entrega</button>
+    </div>`;
+  cerrarServicioDetail();
+  document.getElementById('moto-cards-stack').innerHTML='';
   dibujarRutaMoto(pedido);
 }
 
@@ -1512,7 +1597,7 @@ async function finalizarServicio(idPedido){
     if(d.ok){
       showToast('Entrega confirmada','success');
       servicioActivoMoto=null;
-      document.getElementById('moto-servicio-activo-wrap').innerHTML='';
+      document.getElementById('moto-activo-bar').className='moto-activo-bar';
       if(directionsRendererMoto)directionsRendererMoto.setMap(null);
       cargarHistorialMoto();
     }else showToast(d.error||'Error','error');
@@ -1561,49 +1646,151 @@ async function enviarCalificacion(){
   }catch(e){showToast('Error de conexión','error')}
 }
 
+const DOC_PASOS=[
+  {n:1,title:'Cédula de ciudadanía',sub:'Toma una foto de la cara frontal y trasera de tu cédula.',slots:[{id:'a',label:'Cara frontal',capture:'environment'},{id:'b',label:'Cara trasera',capture:'environment'}]},
+  {n:2,title:'SOAT vigente',sub:'Fotografía tu SOAT o sube el documento en PDF.',slots:[{id:'a',label:'SOAT (foto o PDF)',capture:'environment',accept:'image/*,.pdf'}]},
+  {n:3,title:'Licencia de conducción',sub:'Toma una foto de la cara frontal y trasera de tu licencia.',slots:[{id:'a',label:'Cara frontal',capture:'environment'},{id:'b',label:'Cara trasera',capture:'environment'}]},
+  {n:4,title:'Tarjeta de propiedad',sub:'Toma una foto de la cara frontal y trasera de la tarjeta.',slots:[{id:'a',label:'Cara frontal',capture:'environment'},{id:'b',label:'Cara trasera',capture:'environment'}]},
+  {n:5,title:'Términos y condiciones',sub:'Lee y acepta los términos, condiciones y disposiciones legales para continuar con tu proceso de activación en Radiz.',terms:true}
+];
+
 function renderDocRuta(){
   if(!motoUsuario)return;
+  const banner=document.getElementById('moto-doc-banner');
+  const bannerText=document.getElementById('moto-doc-banner-text');
+  const bannerIcon=document.getElementById('moto-doc-banner-icon');
+  const bannerArrow=document.querySelector('.moto-doc-banner-arrow');
   const estado=motoUsuario.estado||'pendiente';
-  if(estado==='aprobado'||estado==='activo')return;
+  if(estado==='aprobado'||estado==='activo'){banner.classList.remove('visible','gris');return;}
   const paso=parseInt(motoUsuario.pasoDocumentos)||0;
-  // Todos los documentos ya fueron subidos: mostrar mensaje de espera
-  if(paso>=4||estado==='pendiente_aprobacion'){
-    document.getElementById('moto-doc-ruta-wrap').innerHTML='<div class="doc-ruta"><div class="doc-ruta-title">Documentos en revisión</div><div class="doc-ruta-sub" style="margin-top:12px;font-size:0.97em">Todos tus documentos han sido recibidos. Estamos revisándolos y te notificaremos cuando tu cuenta sea activada.</div></div>';
+  banner.classList.add('visible');
+  if(paso>=5||estado==='pendiente_aprobacion'){
+    banner.classList.add('gris');
+    banner.onclick=null;
+    bannerIcon.textContent='🕐';
+    bannerText.textContent='Estamos validando tus documentos';
+    bannerArrow.style.display='none';
+    iniciarPollingEstado();
     return;
   }
-  const pasos=[
-    {n:1,title:'Cédula de ciudadanía',desc:'Frontal y trasera',archivos:2},
-    {n:2,title:'SOAT vigente',desc:'Foto o documento',archivos:1},
-    {n:3,title:'Tarjeta de propiedad',desc:'Frontal y trasera',archivos:2},
-    {n:4,title:'Foto de rostro',desc:'Foto clara de tu cara',archivos:1}
+  banner.classList.remove('gris');
+  banner.onclick=abrirDocSheet;
+  bannerIcon.textContent='📋';
+  bannerArrow.style.display='';
+  const msgs=[
+    '¡Ya casi! Cargue su documentación aquí',
+    '¡Muy bien! Ahora cargue el SOAT',
+    '¡Perfecto! Pásanos tu licencia',
+    '¡Eso es! Ahora la tarjeta de propiedad',
+    '¡Último paso! Lee y acepta los términos'
   ];
-  let h='<div class="doc-ruta"><div class="doc-ruta-title">Completa tu documentación</div><div class="doc-ruta-sub">Sube tus documentos para activar tu cuenta. Cada paso se valida antes de continuar.</div>';
-  pasos.forEach(function(p,i){
-    let cls='bloqueado',numIcon=p.n,statusTxt='Pendiente',statusCls='';
-    if(p.n<paso+1){cls='completado';numIcon='✓';statusTxt='En revisión';statusCls='green'}
-    else if(p.n===paso+1){cls='activo';statusTxt='Listo para enviar';statusCls=''}
-    h+='<div class="doc-paso '+cls+'" id="doc-paso-'+p.n+'">';
-    h+='<div class="doc-paso-num">'+numIcon+'</div>';
-    h+='<div class="doc-paso-info"><div class="doc-paso-title">'+p.title+'</div>';
-    h+='<div class="doc-paso-status '+statusCls+'">'+statusTxt+'</div>';
-    if(p.n===paso+1){
-      h+='<div class="doc-paso-upload">';
-      if(p.archivos===2){
-        h+='<input type="file" accept="image/*" class="doc-paso-file" id="doc-file-'+p.n+'-a"'+(p.n<=2?' capture="environment"':'')+'>';
-        h+='<input type="file" accept="image/*" class="doc-paso-file" id="doc-file-'+p.n+'-b" style="margin-top:6px"'+(p.n<=2?' capture="environment"':'')+'>';
-      }else if(p.n===2){
-        h+='<input type="file" accept="image/*,.pdf" class="doc-paso-file" id="doc-file-'+p.n+'-a">';
-      }else{
-        h+='<input type="file" accept="image/*" class="doc-paso-file" id="doc-file-'+p.n+'-a"'+(p.n===4?' capture="user"':'')+'>';
-      }
-      h+='<button class="doc-paso-btn" onclick="enviarDocumento('+p.n+')">Enviar para validación</button>';
-      h+='</div>';
+  bannerText.textContent=msgs[paso]||msgs[0];
+}
+
+function abrirDocSheet(){
+  const paso=parseInt(motoUsuario.pasoDocumentos)||0;
+  if(paso>=5)return;
+  const p=DOC_PASOS[paso];
+  const dots=DOC_PASOS.map((_,i)=>`<div class="moto-doc-step-dot ${i<paso?'hecho':i===paso?'activo':''}"></div>`).join('');
+  let bodyHTML=`
+    <div class="moto-doc-step-progress">${dots}</div>
+    <div class="moto-doc-step-badge">${p.terms?'📋':p.n}</div>
+    <div class="moto-doc-step-title">${p.title}</div>
+    <div class="moto-doc-step-sub">${p.sub}</div>`;
+  if(p.terms){
+    bodyHTML+=`
+    <div class="moto-doc-terms-wrap">
+      <label class="moto-doc-terms-row">
+        <input type="checkbox" id="doc-terms-check" onchange="document.getElementById('doc-sheet-send-btn').disabled=!this.checked">
+        <span>He leído y acepto los <a href="https://radizco.com/terminos" target="_blank">términos y condiciones</a> y las disposiciones legales de Radiz</span>
+      </label>
+    </div>
+    <button class="moto-doc-send-btn" id="doc-sheet-send-btn" onclick="aceptarTerminos()" disabled>Aceptar y finalizar</button>`;
+  }else{
+    const slotsHTML=p.slots.map(s=>`
+      <label class="moto-doc-upload-slot" id="doc-slot-${p.n}-${s.id}">
+        <div class="moto-doc-upload-slot-icon">📷</div>
+        <span class="moto-doc-upload-slot-label" id="doc-slot-lbl-${p.n}-${s.id}">${s.label}</span>
+        <input type="file" id="doc-file-${p.n}-${s.id}" accept="${s.accept||'image/*'}" capture="${s.capture}" onchange="marcarSlotCargado(${p.n},'${s.id}',this)">
+      </label>`).join('');
+    bodyHTML+=`<div class="moto-doc-upload-area">${slotsHTML}</div>
+    <button class="moto-doc-send-btn" id="doc-sheet-send-btn" onclick="enviarDocumento(${p.n})" disabled>Enviar para validación</button>`;
+  }
+  document.getElementById('moto-doc-sheet-body').innerHTML=bodyHTML;
+  document.getElementById('moto-doc-sheet').classList.add('visible');
+  document.getElementById('moto-doc-sheet-bg').classList.add('visible');
+}
+
+function cerrarDocSheet(){
+  document.getElementById('moto-doc-sheet').classList.remove('visible');
+  document.getElementById('moto-doc-sheet-bg').classList.remove('visible');
+}
+
+function marcarSlotCargado(paso,id,input){
+  if(!input.files.length)return;
+  const slot=document.getElementById('doc-slot-'+paso+'-'+id);
+  const lbl=document.getElementById('doc-slot-lbl-'+paso+'-'+id);
+  if(slot)slot.classList.add('loaded');
+  if(lbl)lbl.textContent='Archivo seleccionado';
+  const inputs=[...document.querySelectorAll('#moto-doc-sheet-body input[type=file]')];
+  const btn=document.getElementById('doc-sheet-send-btn');
+  if(btn)btn.disabled=!inputs.every(i=>i.files&&i.files.length>0);
+}
+
+async function aceptarTerminos(){
+  const btn=document.getElementById('doc-sheet-send-btn');
+  if(btn){btn.disabled=true;btn.textContent='Procesando...'}
+  try{
+    const r=await fetch(API_BASE,{
+      method:'POST',
+      headers:{'Content-Type':'text/plain'},
+      body:JSON.stringify({accion:'aceptar_terminos',idMotor:motoUsuario.id})
+    });
+    const texto=await r.text();
+    let d;
+    try{d=JSON.parse(texto);}catch(_){
+      console.error('[aceptarTerminos] Respuesta no JSON:',texto);
+      showToast('Error del servidor','error');
+      if(btn){btn.disabled=false;btn.textContent='Aceptar y finalizar'}
+      return;
     }
-    h+='</div></div>';
-    if(i<pasos.length-1)h+='<div class="doc-line"></div>';
-  });
-  h+='</div>';
-  document.getElementById('moto-doc-ruta-wrap').innerHTML=h;
+    if(d.ok){
+      motoUsuario.pasoDocumentos=5;
+      motoUsuario.estado='pendiente_aprobacion';
+      cerrarDocSheet();
+      renderDocRuta();
+      showToast('¡Listo! Estamos revisando tu documentación','success');
+    }else{
+      showToast(d.error||'Error','error');
+      if(btn){btn.disabled=false;btn.textContent='Aceptar y finalizar'}
+    }
+  }catch(e){
+    console.error('[aceptarTerminos] Fetch falló:',e);
+    showToast('Sin conexión con el servidor','error');
+    if(btn){btn.disabled=false;btn.textContent='Aceptar y finalizar'}
+  }
+}
+
+let _pollingInterval=null;
+function iniciarPollingEstado(){
+  if(_pollingInterval||!motoUsuario||motoUsuario.estado==='activo')return;
+  if(Notification&&Notification.permission==='default')Notification.requestPermission();
+  _pollingInterval=setInterval(async()=>{
+    if(!motoUsuario||motoUsuario.estado==='activo'){clearInterval(_pollingInterval);_pollingInterval=null;return;}
+    try{
+      const r=await fetch(apiUrl({accion:'verificar_estado',idMotor:motoUsuario.id}));
+      const d=await r.json();
+      if(d.ok&&d.estado==='activo'){
+        motoUsuario.estado='activo';
+        clearInterval(_pollingInterval);_pollingInterval=null;
+        renderDocRuta();
+        showToast('¡Tu cuenta fue aprobada! Ya puedes recibir servicios.','success');
+        if(Notification&&Notification.permission==='granted'){
+          new Notification('¡Radiz te aprobó! 🎉',{body:'Ya puedes activarte y comenzar a recibir servicios.',icon:'icon-192.png'});
+        }
+      }
+    }catch(e){}
+  },60000);
 }
 
 async function enviarDocumento(paso){
@@ -1615,27 +1802,37 @@ async function enviarDocumento(paso){
     const fileB=document.getElementById('doc-file-'+paso+'-b');
     if(fileB&&fileB.files.length)b64b=await comprimirYConvertir(fileB.files[0]);
   }catch(e){showToast('Error procesando imagen','error');return}
-  const btn=document.querySelector('#doc-paso-'+paso+' .doc-paso-btn');
+  const btn=document.getElementById('doc-sheet-send-btn');
   if(btn){btn.disabled=true;btn.textContent='Enviando...'}
   try{
     const r=await fetch(API_BASE,{
       method:'POST',
       headers:{'Content-Type':'text/plain'},
-      body:JSON.stringify({
-        accion:'subir_documento',
-        idMotor:motoUsuario.id,
-        paso:paso,
-        archivoA:b64a,
-        archivoB:b64b
-      })
+      body:JSON.stringify({accion:'subir_documento',idMotor:motoUsuario.id,paso:paso,archivoA:b64a,archivoB:b64b})
     });
-    const d=await r.json();
+    const texto=await r.text();
+    let d;
+    try{d=JSON.parse(texto);}catch(_){
+      console.error('[subir_documento] Respuesta no JSON del servidor:',texto);
+      showToast('Error del servidor. Ver consola.','error');
+      if(btn){btn.disabled=false;btn.textContent='Enviar para validación'}
+      return;
+    }
     if(d.ok){
       showToast('Documento enviado','success');
       motoUsuario.pasoDocumentos=paso;
+      cerrarDocSheet();
       renderDocRuta();
-    }else{showToast(d.error||'Error','error');if(btn){btn.disabled=false;btn.textContent='Enviar para validación'}}
-  }catch(e){showToast('Error de conexión','error');if(btn){btn.disabled=false;btn.textContent='Enviar para validación'}}
+    }else{
+      console.error('[subir_documento] Error backend:',d.error);
+      showToast(d.error||'Error del servidor','error');
+      if(btn){btn.disabled=false;btn.textContent='Enviar para validación'}
+    }
+  }catch(e){
+    console.error('[subir_documento] Fetch falló:',e);
+    showToast('Sin conexión con el servidor','error');
+    if(btn){btn.disabled=false;btn.textContent='Enviar para validación'}
+  }
 }
 </script>
 </body>
