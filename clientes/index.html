@@ -939,7 +939,7 @@ body.selector-activo{}
 <div class="toast" id="toast"></div>
 <script>
 // ── CONFIGURACIÓN ──
-const API_BASE='https://script.google.com/macros/s/AKfycbxpqPg9ChaNEP_thf1W_popTPPmT6qcBeTpgi9Y9w0fAjpI0GbOXnF-oVOaHUQP8f2y/exec';
+const API_BASE='https://script.google.com/macros/s/AKfycbzerAEXqOuhgnUTLs0PTEi_TeNJSMee1xjLQrGpZZfg5s763WQUNPsnjcCLkQmInuXR/exec';
 const APP_TOKEN='radiz_v2_2026_seguro';
 function apiUrl(params){return API_BASE+'?'+new URLSearchParams({appToken:APP_TOKEN,...params})}
 
@@ -1830,6 +1830,20 @@ async function enviarDocumento(paso){
     }
   }catch(e){
     console.error('[subir_documento] Fetch falló:',e);
+    // Apps Script hace redirect CORS en POST — el doc puede haber subido igual.
+    // Verificar el paso real desde el servidor antes de mostrar error.
+    try{
+      const vr=await fetch(apiUrl({accion:'verificar_estado',idMotor:motoUsuario.id}));
+      const vd=await vr.json();
+      if(vd.ok && vd.pasoDocumentos>=(paso)){
+        motoUsuario.pasoDocumentos=vd.pasoDocumentos;
+        if(vd.estado)motoUsuario.estado=vd.estado;
+        cerrarDocSheet();
+        renderDocRuta();
+        showToast('Documento enviado','success');
+        return;
+      }
+    }catch(_){}
     showToast('Sin conexión con el servidor','error');
     if(btn){btn.disabled=false;btn.textContent='Enviar para validación'}
   }
